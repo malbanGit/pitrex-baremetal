@@ -1,0 +1,94 @@
+EMU_NAME := gravitar
+
+
+# I prefer "handmade" make files, it is a little bit of more worktime to start with
+# but I can read them, others can, and I know what they do!
+#
+# export PATH=/home/chrissalo/gcc-arm/bin:$PATH
+
+
+# -DLOADER_START=0x4000000
+# must also be defined/changed in *.S files, since they do not parse defines
+# REMEMBER in bcm2835
+# MEM_COHERENT_REGION s defined now as 0x3f00000 !!!!
+
+BUILD_DIR_PURE := build.baremetal
+BUILD_DIR := $(BUILD_DIR_PURE)/
+
+BAREMETAL_DIR := ../pitrex/baremetal/
+VECTREX_DIR := ../pitrex/vectrex/
+LOADER_DIR := ../pitrex/loader/
+VECX_DIR := ../vectrexBase/
+SIM_DIR := ../sim/
+
+LIB_DIR :=../pitrex/lib
+INC_DIR_PITREX := ../pitrex
+INC_DIR_LIBRARY := ../pitrex/baremetal/lib2835
+INC_DIR_USPI := $(VECTREX_DIR)uspi/include
+
+CFLAGS := -Ofast -I$(INC_DIR_PITREX) -I$(INC_DIR_LIBRARY) -I$(INC_DIR_USPI) -L$(LIB_DIR) -mfloat-abi=hard -nostartfiles -mfpu=vfp -march=armv6zk -mtune=arm1176jzf-s \
+	-DRPI0 -DFREESTANDING -DPITREX_DEBUG -DMHZ1000 -DLOADER_START=0x4000000
+CC	= arm-none-eabi-gcc
+GCC	= gcc
+AS	= $(CC)
+LD	= arm-none-eabi-ld
+AR	= arm-none-eabi-ar
+
+.PHONY: baremetalLib
+.PHONY: vectrexLib
+.PHONY: loader
+.PHONY: simLib
+
+all:	dirCheck baremetalLib vectrexLib loader $(EMU_NAME).img
+
+dirCheck:
+	if [ ! -d $(BUILD_DIR_PURE) ]; then mkdir $(BUILD_DIR_PURE); fi
+
+baremetalLib: dirCheck
+	$(MAKE) -C $(BAREMETAL_DIR) -f Makefile all
+
+vectrexLib: dirCheck
+	$(MAKE) -C $(VECTREX_DIR) -f Makefile.baremetal all
+
+simLib:
+	$(MAKE) -C $(SIM_DIR) -f Makefile.baremetal all
+
+loader:
+	$(MAKE) -C $(LOADER_DIR) -f Makefile all
+
+$(BUILD_DIR)sim.o: $(EMU_NAME).c $(SIM_DIR)framework.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)sim.o -DSINGLE_GAME="\"$(EMU_NAME)\"" -DGAME_INC="\"../$(EMU_NAME)/$(EMU_NAME).c\"" -c $(SIM_DIR)framework.c
+
+$(BUILD_DIR)main.o: main.c  $(EMU_NAME).c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)main.o -c main.c -DSINGLE_GAME="\"$(EMU_NAME)\""
+
+$(EMU_NAME).img: baremetalLib vectrexLib loader simLib $(BUILD_DIR)sim.o $(BUILD_DIR)main.o
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(EMU_NAME).elf.img \
+	$(BUILD_DIR)main.o \
+	$(BUILD_DIR)sim.o \
+	$(SIM_DIR)$(BUILD_DIR)display.o \
+	$(SIM_DIR)$(BUILD_DIR)vx_interface.o \
+	$(SIM_DIR)$(BUILD_DIR)memory.o \
+	$(SIM_DIR)$(BUILD_DIR)game.o \
+	$(SIM_DIR)$(BUILD_DIR)debugger.o \
+	$(SIM_DIR)$(BUILD_DIR)dis6502.o \
+	$(SIM_DIR)$(BUILD_DIR)mathbox.o \
+	$(SIM_DIR)$(BUILD_DIR)pokey.o \
+	 -lvectrexInterface  -luspi -lm -lff12c  -ldebug  -lhal -lutils -lconsole -lff12c -lbob -li2c -lbaremetal -larm -lbcm2835 $(LIB_DIR)/linkerHeapDefBoot.ld
+	$(RM) $(EMU_NAME).img
+	arm-none-eabi-objcopy $(BUILD_DIR)$(EMU_NAME).elf.img -O binary $(EMU_NAME).img
+ifdef MAKE_IMAGE
+	cp $(EMU_NAME).img /media/sf_ubuntu
+	cp $(EMU_NAME).img /media/sf_E_DRIVE
+endif
+
+clean: dirCheck
+	$(RM) $(BUILD_DIR)*.*
+	$(RM) $(EMU_NAME).img
+
+clean-all: dirCheck
+	$(MAKE) -C $(BAREMETAL_DIR) -f Makefile clean
+	$(MAKE) -C $(LOADER_DIR) -f Makefile clean
+	$(MAKE) -C $(VECTREX_DIR) -f Makefile.baremetal clean
+	$(RM) $(BUILD_DIR)*.*
+	$(RM) $(EMU_NAME).img

@@ -1,0 +1,147 @@
+# I prefer "handmade" make files, it is a little bit of more worktime to start with
+# but I can read them, others can, and I know what they do!
+#
+# export PATH=/home/chrissalo/gcc-arm/bin:$PATH
+
+
+# -DLOADER_START=0x4000000
+# must also be defined/changed in *.S files, since they do not parse defines
+# REMEMBER in bcm2835
+# MEM_COHERENT_REGION s defined now as 0x3f00000 !!!!
+BUILD_DIR_PURE := build.baremetal
+BUILD_DIR := $(BUILD_DIR_PURE)/
+
+BAREMETAL_DIR := ../pitrex/baremetal/
+VECTREX_DIR := ../pitrex/vectrex/
+LOADER_DIR := ../pitrex/loader/
+
+LIB_DIR :=../pitrex/lib
+INC_DIR_PITREX := ../pitrex
+INC_DIR_LIBRARY := ../pitrex/baremetal/lib2835
+INC_DIR_USPI := $(VECTREX_DIR)uspi/include
+
+CFLAGS := -Ofast -I$(INC_DIR_PITREX) -I$(INC_DIR_LIBRARY) -I$(INC_DIR_USPI) -L$(LIB_DIR) -mfloat-abi=hard -nostartfiles -mfpu=vfp -march=armv6zk -mtune=arm1176jzf-s \
+	-DRPI0 -DFREESTANDING -DPITREX_DEBUG -DMHZ1000 -DLOADER_START=0x4000000
+CC	= arm-none-eabi-gcc
+GCC	= gcc
+AS	= $(CC)
+LD	= arm-none-eabi-ld
+AR	= arm-none-eabi-ar
+
+.PHONY: baremetalLib
+.PHONY: vectrexLib
+.PHONY: loader
+
+all:	dirCheck baremetalLib vectrexLib loader newkind.img
+
+dirCheck:
+	if [ ! -d $(BUILD_DIR_PURE) ]; then mkdir $(BUILD_DIR_PURE); fi
+
+baremetalLib: dirCheck
+	$(MAKE) -C $(BAREMETAL_DIR) -f Makefile all
+
+vectrexLib: dirCheck
+	$(MAKE) -C $(VECTREX_DIR) -f Makefile.baremetal all
+
+loader:
+	$(MAKE) -C $(LOADER_DIR) -f Makefile all
+
+OBJS = $(BUILD_DIR)alg_gfx.o $(BUILD_DIR)alg_main.o $(BUILD_DIR)docked.o $(BUILD_DIR)elite.o \
+	$(BUILD_DIR)intro.o $(BUILD_DIR)planet.o $(BUILD_DIR)shipdata.o $(BUILD_DIR)shipface.o $(BUILD_DIR)sound.o $(BUILD_DIR)space.o \
+	$(BUILD_DIR)swat.o $(BUILD_DIR)threed.o $(BUILD_DIR)vector.o $(BUILD_DIR)random.o $(BUILD_DIR)trade.o $(BUILD_DIR)options.o \
+	$(BUILD_DIR)stars.o $(BUILD_DIR)missions.o $(BUILD_DIR)pilot.o $(BUILD_DIR)file.o $(BUILD_DIR)keyboard.o $(BUILD_DIR)allegro_dummy.o
+
+$(BUILD_DIR)allegro_dummy.o: allegro_dummy.c allegro_dummy.h
+	$(CC) $(CFLAGS) $(allegro_dummy) -c allegro_dummy.c -o $(BUILD_DIR)allegro_dummy.o
+
+$(BUILD_DIR)alg_gfx.o: alg_gfx.c alg_data.h config.h elite.h planet.h gfx.h
+	$(CC) $(CFLAGS) $(alg_gfx) -c alg_gfx.c -o $(BUILD_DIR)alg_gfx.o
+
+$(BUILD_DIR)alg_main.o: alg_main.c alg_data.h config.h elite.h planet.h gfx.h docked.h\
+	intro.h shipdata.h shipface.h space.h main.h pilot.h file.h keyboard.h
+	$(CC) $(CFLAGS) -c alg_main.c -o $(BUILD_DIR)alg_main.o
+
+$(BUILD_DIR)docked.o: docked.c config.h elite.h planet.h gfx.h
+	$(CC) $(CFLAGS) -c docked.c -o $(BUILD_DIR)docked.o
+
+$(BUILD_DIR)elite.o: elite.c config.h elite.h planet.h vector.h shipdata.h
+	$(CC) $(CFLAGS) -c elite.c -o $(BUILD_DIR)elite.o
+
+$(BUILD_DIR)intro.o: intro.c space.h config.h elite.h planet.h gfx.h vector.h\
+	shipdata.h shipface.h threed.h
+	$(CC) $(CFLAGS) -c intro.c -o $(BUILD_DIR)intro.o
+
+$(BUILD_DIR)planet.o: planet.c config.h elite.h planet.h
+	$(CC) $(CFLAGS) -c planet.c -o $(BUILD_DIR)planet.o
+
+$(BUILD_DIR)shipdata.o: shipdata.c shipdata.h vector.h
+	$(CC) $(CFLAGS) -c shipdata.c -o $(BUILD_DIR)shipdata.o
+
+$(BUILD_DIR)shipface.o: shipface.c config.h elite.h planet.h shipface.h gfx.h
+	$(CC) $(CFLAGS) -c shipface.c -o $(BUILD_DIR)shipface.o
+
+$(BUILD_DIR)threed.o: threed.c space.h config.h elite.h planet.h gfx.h vector.h shipdata.h\
+	shipface.h threed.h
+	$(CC) $(CFLAGS) -c threed.c -o $(BUILD_DIR)threed.o
+
+$(BUILD_DIR)vector.o: vector.c config.h vector.h
+	$(CC) $(CFLAGS) -c vector.c -o $(BUILD_DIR)vector.o
+
+$(BUILD_DIR)sound.o: sound.c sound.h
+	$(CC) $(CFLAGS) -c sound.c -o $(BUILD_DIR)sound.o
+
+$(BUILD_DIR)space.o: space.c space.h vector.h alg_data.h config.h elite.h planet.h\
+	gfx.h docked.h intro.h shipdata.h shipface.h main.h random.h
+	$(CC) $(CFLAGS) -c space.c -o $(BUILD_DIR)space.o
+
+$(BUILD_DIR)swat.o: swat.c swat.h elite.h config.h main.h gfx.h alg_data.h shipdata.h\
+	random.h pilot.h
+	$(CC) $(CFLAGS) -c swat.c -o $(BUILD_DIR)swat.o
+
+$(BUILD_DIR)random.o: random.c random.h
+	$(CC) $(CFLAGS) -c random.c -o $(BUILD_DIR)random.o
+
+$(BUILD_DIR)trade.o: trade.c trade.h elite.h config.h
+	$(CC) $(CFLAGS) -c trade.c -o $(BUILD_DIR)trade.o
+
+$(BUILD_DIR)options.o: options.c options.h elite.h config.h gfx.h file.h
+	$(CC) $(CFLAGS) -c options.c -o $(BUILD_DIR)options.o
+
+$(BUILD_DIR)stars.o: stars.c stars.h elite.h config.h gfx.h random.h
+	$(CC) $(CFLAGS) -c stars.c -o $(BUILD_DIR)stars.o
+
+$(BUILD_DIR)missions.o: missions.c missions.h config.h elite.h gfx.h planet.h main.h\
+	vector.h space.h
+	$(CC) $(CFLAGS) -c missions.c -o $(BUILD_DIR)missions.o
+
+$(BUILD_DIR)pilot.o: pilot.c pilot.h config.h elite.h gfx.h vector.h space.h main.h
+	$(CC) $(CFLAGS) -c pilot.c -o $(BUILD_DIR)pilot.o
+
+$(BUILD_DIR)file.o: file.c file.h config.h elite.h
+	$(CC) $(CFLAGS) -c file.c -o $(BUILD_DIR)file.o
+
+$(BUILD_DIR)keyboard.o: keyboard.c keyboard.h
+	$(CC) $(CFLAGS) -c keyboard.c -o $(BUILD_DIR)keyboard.o
+
+
+newkind.img: baremetalLib vectrexLib loader $(OBJS)
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)newkind.elf.img $(OBJS) \
+	 -lvectrexInterface  -luspi -lm -lff12c  -ldebug  -lhal -lutils -lconsole -lff12c -lbob -li2c -lbaremetal -larm -lbcm2835 $(LIB_DIR)/linkerHeapDefBoot.ld
+	$(RM) newkind.img
+	arm-none-eabi-objcopy $(BUILD_DIR)newkind.elf.img -O binary newkind.img
+#	arm-none-eabi-objdump -l -S -D $(BUILD_DIR)newkind.elf.img > $(BUILD_DIR)newkind.img.s
+ifdef MAKE_IMAGE
+	cp newkind.img /media/sf_ubuntu
+	cp newkind.img /media/sf_E_DRIVE
+endif
+
+clean: dirCheck
+	$(RM) $(BUILD_DIR)*.*
+	$(RM) newkind.img
+
+clean-all: dirCheck
+	$(MAKE) -C $(BAREMETAL_DIR) -f Makefile clean
+	$(MAKE) -C $(LOADER_DIR) -f Makefile clean
+	$(MAKE) -C $(VECTREX_DIR) -f Makefile.baremetal clean
+	$(RM) $(BUILD_DIR)*.*
+	$(RM) newkind.img

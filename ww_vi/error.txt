@@ -1,0 +1,13 @@
+639072+0 Datensätze ein
+1248+1 Datensätze aus
+639072 bytes (639 kB, 624 KiB) copied, 0,387095 s, 1,7 MB/s
+wordwarvi.c: In function 'wwviaudio_add_sound':
+wordwarvi.c:13829:5: warning: implicit declaration of function 'v_addIRQMultiSample'; did you mean 'v_playIRQSample'? [-Wimplicit-function-declaration]
+     v_addIRQMultiSample(wwviSamples[which_sound].data, wwviSamples[which_sound].size, PLAY_ONCE);
+     ^~~~~~~~~~~~~~~~~~~
+     v_playIRQSample
+wordwarvi.c: In function 'main':
+wordwarvi.c:13876:3: warning: implicit declaration of function 'initMultiSamples'; did you mean 'loadAllSamples'? [-Wimplicit-function-declaration]
+   initMultiSamples(12000);
+   ^~~~~~~~~~~~~~~~
+   loadAllSamples

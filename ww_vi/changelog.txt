@@ -1,0 +1,873 @@
+Changelog for wordwarvi:
+
+Fri Oct 12 17:58:05 CDT 2012
+-------------------------------------------------------------------------------
+Changes between version 1.00 and 1.01
+
+*   Changed license of lucky-holiday-cornbread-stuffing-mono.ogg and
+    lucky13-steve-mono-mix.ogg from CC BY-SA 2.0 from CC BY-SA 3.0
+    with permission of all copyright holders (Marty Keil, Skip Kavanaugh,
+    and Stephen Cameron.)
+*   Tweak the colors of explosions a bit (make them brighter)
+*   Make explosions spherical
+*   added .gitignore
+*   Replaced references to sourceforge with corresponding references to github.
+*   Added -W flag to warnings, and fixed all the warnings that it found
+*   Made spherical explosions be the default
+
+Wed Jun  8 22:44:00 CDT 2011
+-------------------------------------------------------------------------------
+Changes between version 0.26 and 1.00
+
+* Simplified draw_objs function in a variety of ways
+* Made audio file reading code honor the DATADIR setting.  Three people
+  involved in this patch, myself, Ingo Ruhnke back in May of 2010, and
+  "Denis 'GNUtoo' Carikli" in May of 2011.
+* Changed Makefile to allow for cross compiling.  This patch is from
+  "Denis 'GNUtoo' Carikli" who ported Word War vi to the OpenPandora.
+* Made round explosions the default and changed the --roundexplosions
+  option and .exrc command to be "squareexplosions"
+
+Sun Aug  9 09:28:23 CDT 2009
+-------------------------------------------------------------------------------
+Changes between version 0.25 and 0.26
+
+* Now the --bw option renders the game in white plus 2 shades of gray, rather than just
+  strictly black and white (so you can read the "FUEL" sign on the fuel tanks now), and
+* Added code to try to inhibit the screensaver.  It is not currently
+  activated by default, as for example, on Fedora Core 5,
+  xdg-screensaver is broken.
+* Don't bother to decode the audio data unless portaudio started up ok.
+* Cleaned up ogg_to_pcm.c and ogg_to_pcm.h slightly.  No significant
+  functionality changes.
+* More clean up of ogg_to_pcm.c
+* a little more minor cleanup of ogg_to_pcm.[ch].  Cosmetic changes really.
+* Cleaned up wwviaudio.c wwviaudio.h a little bit
+* Cosmetic code changes... added ARRAY_SIZE macro and setup_vect macro
+  to eliminate some verbose and repetitive code.
+* Reduced level of nesting of braces a couple levels in the octopus
+  creating code by judicious use of "continue".
+* Added idempotent preserving ifdefs for rumble.h, changed some
+  functions that took () to take (void) insteadh.
+* Pulled definitions of struct my_point and struct my_vect_obj out of wordwarvi.c
+  and put them in my_point.h
+* Pulled font related code out into wwvi_font.[ch]
+* include wwvi_font.[ch] in the tarball
+* Add LINE_BREAK and COLOR_CHANGE to my_point.h
+* If two minutes elapse in attract mode with no user interaction, turn off sound.
+  At the first user interaction (e.g. keypress) turn sound back on.  (Basically,
+  cut down the annoyance factor of attract mode.)
+* Fixed a bug in the attract mode audio muting code.
+* Removed some unused #define's
+* Fixed bug that jet pilots weren't in the score_table[] array.
+  (so you didn't get the floating score thingy when you shot them.)
+* Made drawing sparks slightly more efficient by moving the test
+  for brightsparks into the add_spark function and out of the draw_spark
+  function, and adding a bright_spark_draw function.
+* Now, when you die, the explosion is rendered extra bright.
+* Make airships have better explosions
+* Added underscore glyph.
+* Added a starfield in the background of the intermission screen.
+* Made intermission starfield more "hyper-spacey"
+* made intermission starfield more tripped out and psychedelic.
+* Fixed problem that if audio was silenced due to user inaction during
+  "attract mode," putting in a quarter failed to resume the music.
+* Made the default "levelwarp" be 1, so as to skip the boring first level by default.
+  It is still accessible by putting "set levelwarp=0" in ~/.wordwarvi/.exrc, or,
+  by using the "--levelwarp 0" option.  In displaying level numbers, 1 is no
+  longer added, so that "Rocket Alley" is now level 1, rather than 2, and
+  "Welcome, Noob!" is now level 0, rather than level 1.
+* Don't put bridges across the top of the freakin' volcano.
+* Don't put buildings in the volcano.
+
+Sun Jan 18 11:56:52 CST 2009
+-------------------------------------------------------------------------------
+Changes between version 0.24 and 0.25
+
+
+* Make octopus tentacles move in a more organic looking way.
+* Make the cron job's beams brighter.
+* Add sound effects for radar state transitions.
+* Add radar_fail.ogg, radar_ready.ogg
+* Fixed a bug in the aiming of the gun turrets.  The turrets were 20 units
+  off in the y axis for their own position when calculating aiming.
+* Add a little note that gets put out when a screen saver is running and
+  a joystick is detected, warning the user that the screen saver is apt to
+  interrupt their game.
+* Reduce radar bootup time from 5 to 3 seconds.
+* Make the legs of the space octopus more uniform in length.
+* Leave the bottom of the octopus head open
+* Permit octopi to have different color schemes.
+* Totally pimped out the octopus.
+* make the tips of octopus tentacles move relatively more slowly than
+  the part that attaches to the head.
+* Change prototype of get_coords_func function pointer type to permit
+  attaching multiple laser guns to objects.
+* Added code for big gunwheels (didn't activate yet though.).
+* Activated gunwheels
+* generalize the shape of the trusses so they don't always have to be squares
+  of a fixed size, but can be various sizes, and tapered.
+* Factored out the code for adding a stack of trusses into a separate function.
+* Allowed for such stacked towers to be tapered.
+* Made the truss tower tapering code actually work.
+* Activated the truss tower tapering code for the kernel guns.
+* Now the gunwheel tower is constructed from individual trusses instead of
+  one single-object tower, and is destructible.
+* Make gunwheels fully destructible.
+* Fixed a bug that the central beam of the gunwheels always disappeared
+  when the tower was destroyed, and the chans of trusses were getting
+  screwed up because I forgot to disconnect the gunwheel from the truss
+  it was attached to.
+* Added tesla towers.
+* Noticed at this point there is some nasty bug in the game.
+  I think it was intrudoced when I made the gunwheels fully
+  destructible, and I think it's in the area of truss_cut_loose_whats_below().
+* Make the trusses which hold the kernel guns back to squares.
+* Fixed up some problems with how the tesla towers fired lightning
+* Fixed a very hard bug.  There were some problems with shooting down the
+  trusses such that the ->tsd.truss.above and ->tsd.truss.below pointers were
+  not getting NULLed out in every case they needed to be.  This meant that if
+  you shot down a truss, then later came and shot it or bombed it again when
+  it was on the ground, the truss_cut_loose_whats_below would go cycling through
+  objects that it had no business cycling through, as what those pointers were
+  previously pointing at had now likely been reused (often, as a spark).
+
+  Possible that there are still issues with tesla towers and gun wheels, but
+  I think the kernel guns are fixed.
+* Prevent more than two bomb impact sounds from being added to the audio queue
+  in a single frame, as allowing that is too loud.
+* Revert accidentally committed "infinite" health.
+* Fixed bug that blown-apart gunwheels didn't initialize bank_shot_factor
+  for released guns, beams, etc. and so prevent spurious "nice bank shot"
+  sounds.
+* Added Tesla tower sound effect
+* Fixed bug that tesla towers would continue to discharge even while
+  falling after they were shot down.
+* Updated help screen to contain a brief summary of the object of the game.
+  Some people seem to react to the game in this way: "What am I supposed
+  to do?"  The help screen probably won't help such people, but, not sure
+  what else to do.
+* Fixed bug that player_fire_laser wasn't checking result of find_free_obj to
+  make sure it succeeded.  The result of this was that game_state.humaniods --
+  the count of how many humans had been rescued so far -- got corrupted.
+  This appears to be the only place in the program at this time which was not
+  checking the return value of find_free_obj.
+
+  This may indicate a need to have a "low_priority_find_free_obj" which will
+  reserve some space.  This low prioirty one would be used by sparks, say,
+  to keep from exhausting the supply of objects.
+* Fixed bug with chaff that draw method wasn't initialized.
+  One of these days I'm just going to remove chaff altogether.
+* Remove remnants of some old code that put "Credits:xxx Lives:xxx" up in the lop
+  left portion of the screen for a single frame at the beginning of a new level.
+* Tweaked levels to try to make difficulty gradually increase.
+* Now levels are named, rather than just numbered.
+* Update to version 0.25
+* Shorten duration of rumble effects to make them correspond more closely
+  with the events which caused them.
+
+Thu Dec 11 20:22:27 CST 2008
+-------------------------------------------------------------------------------
+Changes between version 0.23 and 0.24
+
+* Fixed a bunch of compiler warnings with "-pedantic" turned on.
+* Cater to Apple's weird placement of malloc.h
+* Fix bug that terrian was always perfectly flat in the first attract mode
+  level due to incomplete initialization of level related variables
+* Improved (to my ear) the sound of the laser guns.
+* Fixed a typo
+* Make octopus so they don't die if they hit the ground.
+* Attached frickin' lasers onto the heads of the space octopi.
+* Attached fricken lasers to Stallman's airship.
+* Fixed a problem that the guns mounted on the airships were not shootable.
+* Made octopi fly around a bit better (more like gdbs).
+* Changed the attachment point of tentacles slightly.
+* Made laser turrets harder to kill in later levels, and when
+  attached to octopus head, or airship.
+* Fixed a bug that PA_terminate() was called unconditionally (how audio
+  continued to work despite this is quite mysterious.)  Hans de Goede found
+  this while integrating with pulseaudio on Fedora 10.  Thanks Hans!
+* Make sure that when anything gets the bomb_move movement method,
+  (e.g. falling turrets, shot down jets, etc.) they get the bank_shot_factor
+  properly initialized to avoid spurious "Nice Bank Shot!" sounds.
+* Fix problem that jet pilots would shoot at you even if they
+  were miles away.
+* thought better of using goto... old fashioned "no goto" way seemed better
+  in this instance.
+* Shrink the x-axis dead zone.  With the xbox 360 controller, it was too
+  easy to miss a reverse if the stick was a little off axis in y.  This
+  was, I think due to the round gates, while the logitech dual action
+  rumble has square gates, so being off axis in y doesn't affect the
+  maximum possible x value as it does on the xbox controller.
+* Draw lightning thicker
+* Made cron jobs slightly easier to shoot.
+* Tightened up the laser/target collision detection code.
+* Adjusted hitzones of some enemies to make some of them
+  very slightly easier to hit..
+* Knock health back down to sensible level (fix accidental commit).
+* Fuel tanks, ground mounted turret guns, and radar jammers now leave
+  behind permanent debris corpses when they are destroyed.
+
+Sat Nov 29 09:19:15 CST 2008
+-------------------------------------------------------------------------------
+Changes between version 0.22 and 0.23
+
+* Added --roundexplosions option.
+* Added explosionfactor option
+* Added "xmas mode."
+* Add Skip Kavanaugh into the music credits.
+* Made the xmas mode sort of work.
+* Fixed bug that missiles fired by blimps targeted rudolph, rather
+  than the sleigh, and when they killed poor rudolph, they ended
+  the reindeer game.
+* Added a big green bag of toys to Santa's sleigh.
+* Added pixie dust coming off the back of Santa's sleigh.
+* Made volcano eruption a tad bigger.
+* Added houses in xmas mode.
+* Made the ground white (snow) for xmas mode.
+* Now you can drop presents on the houses.
+* Made presents landed at houses count towards score
+* Made 'drop gift' key show up in the help screen.
+* Made key to drop presents remappable.
+* Renamed 'drop gift' to 'gift' to make key remapping work.
+* Added 'gift' as valid action to man page section on key remapping
+* Added "floater messages" to indicate points scored for dropping gifts
+* Made delivering gifts to every house worth a million points
+* Added a red ribbon on the presents.
+* Made reindeer legs move.
+* Now you can't drop presents unless xmas mode is active.
+* Fixed problem that "set xmas" in .exrc file was reported as a syntax error.
+* Added timpani_boing.ogg, and nice_bank_shot.ogg
+* Now you get extra points for bombing stuff by making a bank shot off
+  a blimp.  And when you bounce a bomb off a blimp, you get a nice
+  timpani boing.
+* Added hohoho.ogg hohoho_merry_xmas.ogg yay_santa.ogg
+* Now santa says 'hohoho' or 'hohoho merry xmas' sometimes when
+  you drop presents.
+* When presents land on a house, now you hear, 'Yay! Santa!'
+* Make bomb/blimb bank shots be recognized when bombs hit trusses and
+  cut loose a kernel gun.
+* Added ifdef around include of <malloc.h> for apple, as apparently
+  apple doesn't need that (and it's not in the right place so it doesn't
+  find it) and it gets the prototype for malloc() from stdlib.h.
+* Added comments near add_buildings() call for FreeBSD users.
+* Finally put Santa in his sleigh.
+* Made Rudolph's nose blink.
+* Made men ride on the rails of the sleigh.
+* Fixed a long standing bug that caused a segfault whenever a Richard Stallman's
+  airship emitted a double-quote character while it was on screen.  The problem
+  was the font did not have a double quote character in it, and we ended up with
+  a bad pointer as a result.  Took a long time to find because a) not many blimps
+  and b) blimps don't emit very many double-quotes, and c) if they did emit one
+  usually they were off screen at the time.
+* Pulled all the audio code out into a separate module.
+* Fix a compiler warning.
+* Fix the --nomusic option which was subtly broken by recent change
+  that pulled audio code out of wordwarvi.c
+* Canonicalized all the object draw and move function names.
+* Documented the interfaces to the audio code.
+* Improved documentation of wwviaudio functions.
+* Moved the MAX_CONCURRENT_SOUNDS constant int wordwarvi and out of
+  wwviaudio code.  In wwviaudio code, this is now adjustable at
+  initialization.
+* Moved the NCLIPS constant out of the wwviaudio code and into wordwarvi.c
+  and for the wwviaudio code made the maximum number of sound clips be
+  adjustable at initialization.
+* Free the audio sample data when the audio engine is stopped.
+* Fixed a bug that the number of houses to which gifts had been
+  delivered was not reset to zero when you died.
+* Fixed regression that moving left with the joystick had quit working.
+* Mapped a joystick button to action of dropping presents.
+* Added new obstacle, "big" rockets that explode into shrapnel.
+* Made laser speed vary by level.
+
+Sat Aug  2 22:56:04 CDT 2008
+-------------------------------------------------------------------------------
+Changes between version 0.21 and 0.22
+* Added --thicklines option.
+* Add --thicklines option to man page.
+* Added icons
+* Keep track of how many objects there are instead of just looping over
+  MAX_OBJS objects for moving and drawing.  Gives a slight boost to the
+  acheivable frame rate, depending on your system.
+* Surrounded linux specific rumble code with ifdefs.
+* Added a comment about some failed optimization attempt in find_free_obj()
+* Made bombs bounce off of blimps.
+
+Sun Jul 27 00:17:42 CDT 2008
+-------------------------------------------------------------------------------
+Changes between version 0.20 and 0.21
+
+* Remove the 'in game' inserting of quarter by joystick button.
+  (no single button on both logitech and xbox 360 controllers
+  maps sanely for this.)
+* deal with xbox 360 having 11 buttons.
+* Mention 'q' and 'F1' keys more prominently so people don't have a hard
+  time figuring out how to start the game, find out what keys are what.
+* Made stars move... not sure I like it, not sure I'm going to keep it.
+* Fixed a bug in the calculations for star motion.  Was shifting right
+  too early, and losing precision in calculation of worldx, worldy, which
+  made the motion of the stars kind of jerky and weird.
+* Use shorts and chars rather than ints where possible in star
+  drawing/moving algorithm.
+* Added the version and a mention of the man page and the website
+  into the help screen.
+* Fixed bug that star motion was tied to player rather than to viewport.
+* Update some info about the Xbox 360 wired controller and rumble effects
+* Added --nstars and --starmotion options (and corresponding "set" commands
+  for .exrc file.)
+* very slightly improve spark_move()
+* Improved how "bright" lines are drawn, and esp. how they are scaled.
+* Make the bullets which are shot out by the cron jobs
+  (green robots) throw off sparks.
+
+Sat Jul 19 07:48:18 CDT 2008
+-------------------------------------------------------------------------------
+Changes between version 0.19 and 0.29
+* Make the game work better with the xbox 360 controller
+* Make -1 a valid value for joystick axes (to disable).
+* Added support for xbox 360 controller rumble effects.
+* Added --norumble and --rumbledevice options.
+* Make rockets hitting you cause rumble effect to trigger (had forgetten them.)
+
+Mon Jul 14 19:44:33 CDT 2008
+-------------------------------------------------------------------------------
+Changes between version 0.18 and 0.19
+* Make missile exhaust emit from closer to the right spot
+* Improved the precision with which collisions between the player's laser
+  and various targets are evaluated.
+* Made it easier to enter the "socket" at the end of each level.
+* Use new, and I hope, less annoying missile alarm sound.
+* Make missile turn a bit more realisitcally (they can't stop midair now.)
+* Tweak the exhaust of the small missiles a bit.
+* Changed point structure to use shorts instead of ints (very slightly
+  better performance.)
+* Now high scores get saved in ~/.wordwarvi/.highscores
+
+
+Sun Jul  6 22:27:48 CDT 2008
+-------------------------------------------------------------------------------
+Changes between version 0.17 and 0.18
+
+* Improved motion of jetpack pilots, fixed problem where jetpack pilots
+  exhaust offset (left or right) could be uninitialized.
+* Made ***MISSILE LOCK ON DETECTED*** message blink.
+* Added "--difficulty" option with new difficulty levels, easy, medium, hard,
+  insane, and batshit-insane.
+
+
+Sun Jun 29 07:48:40 CDT 2008
+-------------------------------------------------------------------------------
+Changes between version 0.16 and 0.17
+
+* Lose dependency of ogg_to_pcm.o on fake target HAS_VORBISFILE as
+  this caused "make install" to rebuild it, which is a no-go for
+  certain things (e.g. Fedora live-cd environment).   Thanks to
+  Hans de Goede for this correction.
+* Added a DESTDIR variable into the makefile to make packaging for
+  CRUX linux easier.  Thanks to Danny Rawlins for this patch.
+* Add changelog.txt and file describing how to make new levels
+  into the tarball.
+* Add some sanity checks of the VERSION string and version.h file
+  to help prevent me from screwing up the version numbers in released
+  tarballs.
+* Added little guys with jetpacks who shoot lasers at you.
+* Fixed bug that when you got killed and consequently drop the guys you'd been
+  carrying, the guys thought you just picked them up, and consequently shouted
+  in unison, "woohoo!", even though you just got killed, which was kind of cruel
+  of them.
+* When you get killed, the comments in the code say you get a 30 sec
+  breather (which is incredibly long.)   Actually, you got a 30 frame
+  breather -- a one second breather -- which was a bit too short.  Fixed
+  the code to give you a 4 second breather, which seems about right.
+* Improved the appearance of the jetpack guys.
+* Fixed a problem with the drawing of the jet pilots.
+* Now the jet pilots eject a lot faster, and so survive
+  the ejection (don't get immediately shot) more frequently.
+* Changed how sparks are drawn a bit to make exhaust of jetpacks
+  look better.
+* Changed how jetpack guys move to make them less robotic.
+* Reduce ejection speed of jetpilots so that you can kind of see
+  them and they don't seem to just come out of nowhere.
+* updated version.h to 0.17
+
+Sun Jun 22 09:23:32 CDT 2008
+-------------------------------------------------------------------------------
+Changes between version 0.15 and 0.16
+
+* Added a confirmation screen when quitting, so you don't accidentally
+  quit a game by a single keystroke/button press..
+* Add apostrophe glyph
+* Added asterisk glyph.
+* Fixed bug that selecting 'Don't Quit' with the joystick tended to
+  also put a quarter in.
+* Make joystick selection of quit screen buttons use only the laser button.
+  This is so that if a joystick button is mapped to quit, the button will
+  not also select 'Don't Quit' almost immediately, making the quit screen
+  rapidly appear and disappear.
+* Now, if a joystick quit button is mapped, pressing it
+  while in attract mode doesn't put in a quarter instead.
+* Made quit screen work in high score screen, and also during
+  between-level intermissions.
+* Updated blimp messages to include the stuff you put at the front
+  of GPL'ed source files.
+* Fixed bug that negative scores would get counted as high scores.
+* Fixed bug that an octopus killing itself by smashing into the ground
+  would currupt the target list, crashing, or making things unshootable.
+* When player is killed, now humans that he's carrying are dropped
+  in a more random way.
+* Fixed bug that keyboard input of high scores was not allowing enough time
+  between keystrokes.
+* Support .exrc file comments via " character, a la vi.
+* Fixed a bug that the viewport could become unsynchronized from the player's
+  y-position via contact with the ground.
+* Make player's ship's exhaust behave a bit differently
+  -- take y velocity into account.
+* Improvements to makefile so "make install" doesn't always rebuild
+  (Thanks to Seth Klein for this.)
+* Fixed problem that if project made WITHAUDIO=no, compressed man page
+  wasn't built (for no apparent reason.)  Thanks to Seth Klein for pointing
+  this out.
+
+
+Sun Jun 15 05:19:30 CDT 2008
+-------------------------------------------------------------------------------
+Changes between version 0.14 and 0.15
+
+* Fixed bug that humanoids that were picked up by cron jobs no
+  longer said "Help up here!" or "Help down here."
+* Previous "fix" for the missing "up here!" "down here!" sounds had
+  made it so that you could steal a humanoid from a cron job just by
+  passing over them.  Fixed that.
+* Added "--nomissilealarm" option, which suppresses the audio alarm
+  you usually get when missiles lock on.
+* Now, the '1' key toggles the missile alarm on/off.
+* Now, the radar (if it's working) shows "MISSILE LOCK ON DETECTED" in red
+  when a missile has locked on, so if the audio alarm is suppressed, there
+  is still some warning.
+* Changed color of gdb's missiles from magenta to red.  This is so that
+  whan you shoot them, and magenta debris flies all around, the humanoids
+  on the main screen, and on the radar, will be easier to see.
+* Doubled the blink rate on the radar screen of the humanoids and the
+  players ship.  Also, on the radar, the humans and player are represented
+  by an x with a box around it.  It used to be, the x part didn't blink,
+  only the box.  Now, the x and the surrounding box both blink.  This is
+  to make the humans and player easier to see.
+* Draw the 4 corners of the viewport on the radar screen
+* Change mouse cursor to something more unobtrusive.
+* Now, default options can be set via a config file: ~/.wordwarvi/.exrc
+* Make .wordwarvi/.exrc file format more consitent with vi's .exrc format
+* Now you can remap keyboard controls how you like via .exrc "map" command.
+* Fix line counting of .exrc file, and allow shell style comments
+* Fixed error in example .exrc file
+* Added a couple more levels.
+* Fixed bug that terrain roughness settings in level descriptors didn't
+  actually take effect for any but the first level.
+* Made the "attract mode" pick a random level instead of always using the
+  first level.
+* Now joystick controls are customizable via ~/.wordwarvi/.exrc file.
+* Added a note about dealing with the lack of left/right/up/down joystick
+  button customizability.
+* Updated version.h
+
+Sat Jun  7 21:48:01 CDT 2008
+-------------------------------------------------------------------------------
+Changes between version 0.13 and 0.14
+
+* Fixed a horrible bug which made cron jobs unshootable.
+
+Sat Jun  7 20:38:24 CDT 2008
+-------------------------------------------------------------------------------
+Changes between version 0.12 and 0.13
+
+* Added "--retrogreen" option.  (Does exactly what it sounds like.)
+* Updated usage message to include some new options which had been
+  left out.
+* Removed a couple debug printfs that had been accidentally left in.
+* Fixed a bug that the intro screen would turn sound effects back on even
+  after they had been manually switched off.
+* removed unused variable sail_segment.
+* Fixed usage message about "--nostarfield" option.
+* Fixed a memory leak due to the old building data not being freed
+  when a level begins.
+* Got rid of a memory leak from the tentacle code (by simply
+  making the tentacle segments a static array.)
+* Added new enemy: jets.
+* Fixed bug that smashing into the ground, or sides, or roof, could
+  displace the player's ship relative to the edges of the screen,
+  throwing the viewport off a bit.
+* Improved y-axis viewport tracking.  The player is constrained
+  to an area in the center of the viewport such that he can't get
+  higher than 3/8ths of the way down the screen, nor lower than 5/8ths.
+  When moving down, the viewport moves down faster, revealing more of
+  what's below, and when moving up, the viewport moves up faster,
+  revealing more of what's above.  Seems to work ok.  Also, eliminated
+  gravity (used to be, if you slowed down, your ship sank down.
+  This made the viewport code push the player up the screen which
+  was a bit weird, so I took it out.
+* Added more jets, and made them buzz closer to the player.
+* Added --randomize and --randomseed options.
+* Added (in debug code) a level warp option
+* Added jetwash.ogg
+* Added jet sound.
+* Put in infrastructure for customizing the levels a bit rather than
+  having them be 100% procedurally generated.  There's more levers and
+  knobs to influence the procedural code now. (see levels.h).
+* Fixed the bug that "Prepare to die!!!" would sometimes appear in
+  the small font, rather than the big font (I think I fixed it anyway.)
+* Added instructions in case people want to make their own levels.
+* Fixed a bug in the tentacle placing code.
+* Moved some constants out of wordwarvi.c which belonged in levels.h
+* Changed the Ready/Set/Prepare to die!!! message so it tells you what
+  level you're on.
+* Fixed regression that ground color didn't change with each level.
+* Make humanoids and player blink on the radar screen.
+* Tweaking of levels
+* Now, sometimes jets will crash instead of exploding when hit.
+
+
+Sat May 24 03:48:04 CDT 2008
+-------------------------------------------------------------------------------
+Changes between version 0.11 and 0.12
+* Fixed bug that we called g_threads_init() without first checking
+  to see if it had already been called (it must not be called more than
+  once.)  Apparently (some versions of?) portaudio call g_threads_init(),
+  and on such systems, the program aborted.  Thanks to Hans de Goede for
+  this fix.
+* Made the --fullscreen option override the --height and --width option
+  and just scale the graphics to fill the screen.  Fixed the problem that
+  the window border was specified as 10 pixels, leaving a white border
+  around the edges.  (There is still a thin white line at the top of the
+  screen... don't know where that's coming from.)
+* Deleted some unused button related stuff.
+* Fixed white line at top of screen in fullscreen mode
+  (Was due to box packing padding.)
+* Now F11 key can be used to toggle between windowed and
+  fullscreen mode.
+* Now dynamic on-the-fly resize (shrink or expand freely
+  in x and y dimensions) of window is allowed and re-scaling
+  happens on the fly, and when in native resolution (800x600)
+  the non-scaling line drawing/rectangle drawing functions
+  are used.
+* Added --joystick option to allow devices other than /dev/input/js0 to
+  be used.
+
+Tue May 20 06:20:09 CDT 2008
+-------------------------------------------------------------------------------
+Changes between version 0.10 and 0.11
+* Put the pointers for linking together the target list directly in the game
+  object structure, instead of having a separate target list node structure.
+  This saves having to allocate/free the target list nodes.   Also forced me
+  to notice, find, and fix some target list related bugs that were previously
+  very hard to notice..
+* Disable the kguns requiring more than 1 hit, too hard.
+* Fixed the "editor now??? Where is your" bug.
+* Removed debris from the target list.  This reduces the count of items
+  on the target list significantly, with very little impact on the game.
+  (bombs no longer shift debris around.  Big deal.)
+* Added some debug code for the target list (shows target list length
+  when DEBUG_TARGET_LIST is defined)
+* Added highscoremusic.ogg
+* Added a "high score" thingy.
+* Fixed captial 'F' glyph, which was goofy looking.
+* Added --fullscreen option
+* Center high score in the high score screen.
+* Added --nomusic option (mainly for the memory savings, as
+  music could already be turned off with 'm' key.  --nomusic
+  causes the .ogg files for music not to even be decoded into
+  memory.)
+
+Sun May 11 20:59:10 CDT 2008
+-------------------------------------------------------------------------------
+Changes between version 0.09 and 0.10
+
+* Credit Michael Smith (xiph.org) for my hacked version of
+  oggdec.c (ogg_to_pcm.c)
+* Added a little easter egg worth a million bonus points.
+* Changed type of variable needing to hold seconds since long ago to
+  and unsigned long long, instead of an int.
+* Fixed bug that if an invalid sound device was specified via --sounddevice
+  option, a segfault resulted.
+* Fixed problem that the ogg decoding stuff broke WITHAUDIO=no
+* Remove reference to libsndfile
+* Added omitted file "zzzt.ogg" to the list of files in Attribution.txt.
+* Corrected minor grammar errors
+* Removed mention of freesound, since no files from freesound
+  are used any more.
+* Mention vorbiscomment -l.
+* Fixed bug that sometimes humanoids in the midst of falling
+  would suddenly and instantly appear on the ground.  Problem
+  was the humanoid_move function was calling find_ground_level()
+  to figure out the y value of the terrain underneath the humanoid,
+  and trying to see if that function failed by checking its return
+  value against -1.  Problem is, -1 is a perfectly valid y value for
+  terrain to have.  Should have been checking against GROUND_OOPS.
+* Now the guns exhibit recoil.
+* Fixed the recoil motion, which was sort of backwards.
+* Added --blueprint rendering option.
+* Tremendously improved keyboard support
+* Improved keyboard support a bit more, I think.
+* Added some debug code to debug the target list
+* Added a new weapon for the player -- he gets 3 gravity bombs.
+  Not sure it's a good idea, but it's in for now..
+* fixed type-punned pointer warning in pcm_to_ogg call.
+* Now gravity bombs fall more slowly, get more air.
+* Rockets and gdbs are awakened by gravity bombs, so they
+  aren't left hanging in space.
+* rockets smashed into the ground by gravity bombs get destroyed.
+* commented out 'n' and 'i' keys -- they are supposed to be for debugging.
+* Now guns do not lead the player in y direction, only x.  This
+  eliminates weird "bobbing" behavior.
+* Elminated some unused code left over from the old flak guns.
+* Make bullets from cron jobs a little brighter, easier to see.
+* Try to make the gravity bomb look slightly cooler
+* Make octo-virus heads a little bit bigger.
+* Made cron jobs look a tiny bit better.
+* Made humanoids ride along with their carriers in
+  a bit better relative position
+* When in pause mode, pause the sound too.
+* When in pause mode, the radar screen displays "Time warp activated."
+  like Parsec, on the ti99/4a.
+* Document --blueprint option
+* Fix warning about type-punned pointer (again)
+* Put in infrastructure so that Now enemies can conceivably take
+  more than one hit to kill.
+* Cleaned up the scoring and kill tally code a bit.
+* added gravity_bomb.ogg
+* Added sound for gravity bomb
+* Moved "attract mode" autopilot stuff into its own function
+* Added insane intro "Destiny Face Down."
+
+Sat May  3 18:46:16 CDT 2008
+-------------------------------------------------------------------------------
+Changes between version 0.08 and 0.09
+
+* Removed unused code (old_kgun_draw function.)
+* Fixed a longstanding bug that the vxy_2_dxy array had wrong
+  values when x index == 0 (was wrong sign in y value.)
+  (That is what caused the guns to be drawn, and to shoot in
+  the wrong direction (down instead of up, and vice versa) if
+  player->x == gun->x.  IN that case, dx == 0, and the wrong
+  value for y came out of vxy_2_dxy.
+* Refined gun aiming to compare dy to 20, rather than 0, as
+  the gun's center is at y + 20.
+* Removed dependency on libsndfile, added dependency on libvorbisfile.
+  Removed dependency on oggdec (by including hunks of code from oggdec).
+  (Now it decodes the ogg files itself at run time.)
+
+Fri May  2 18:03:39 CDT 2008
+-------------------------------------------------------------------------------
+Changes between version 0.07 and 0.08
+
+* Fixed very minor bug in draw_spark() function.
+* When drawing stars, optimize the method by which it is
+  determined whether the star is above or below the horizon.
+* Make it so buildings are not so prone to being "underground" on steep
+  terrain, and make them taller, on average.
+* Added "kernel defense guns"
+* Fix bug that portaudio can seemingly sometimes report > 0 sound devices,
+  yet report the default device as -1, which caused seg fault.
+* Revert accidental lowering of default frame rate.
+* Fixed my previous "fix" for the sound core dump... still untested.
+* Undo botched frame rate *again*.   D'oh.
+* Fix bug that passing an unknown option on the command line caused a segfault.
+* Bump up gcc optimization level to -O3
+* Put the kernel guns dangling from trusses which can be shot apart.
+* Make falling kernel guns act like bombs (explode on impact).
+* Made kernel guns look really bad ass.
+* The kernel guns were making the ground-based guns look bad,
+  so, reused the kernel guns for the ground based guns.
+* Remove debug message.
+
+Tue Apr 29 09:05:23 CDT 2008
+-------------------------------------------------------------------------------
+Changes between version 0.06 and 0.07
+
+* Made drawing of sparks sligtly more efficient (assuming compiler
+  didn't already do those optimizations.)
+* Changed how laserbolts from "flak guns" are drawn.
+* Rearranged the dashboard, got rid of obtrusive stuff at top of screen.
+* Now blimps shoot laser bolts at you.
+* Fixed (i think) problem with text overlays caused by
+  previous commit (rearranging the dashboard).
+* mkdir the man page directory
+* added "aaaah_it_burns.ogg"
+* Humanoids are now incinerated when they get dropped into the volcano.
+* As a fun experiment, put in infrastructure to allow entire game's
+  display coordinates to be remapped arbitrarily (e.g. spin the
+  whole display, make it disappear into space, like the words at the
+  beginning of Star Wars, map it onto the side of a spinning cube...
+  whatever.  Not very useful, but kind of interesting.
+* Don't put things near the volcano
+* Get rid of the silly mappaple draw line routine -- too
+  expensive cpu-wise.
+* added --brightsparks option to control how sparks are rendered.
+* Make the lightning which the tentacles shoot out more glow-y.
+* Make the lightning do damage to the player.
+* Make the tentacles killable (by bombs, not lasers though.)
+* Limit amount of thunder played.
+* Increase chance and distance of lightning discharge.
+* Added low priority sound function which only adds the sound if at least 5
+  slots for sound are free.  This is used for the sounds which falling debris
+  makes on hitting the ground.  Reasoning is, whenever there is falling
+  debris, there is a lot of it, so a lot of sound slots are used up,
+  sometimes all of them, which would make other sounds (explosions)
+  fail to be added to the sound list.  Nobody's going to notice if a few
+  falling rocks fail to make the falling rock impact sounds -- hell you
+  can barely tell the video and audio are correlated -- though they are
+  -- in this area.  So just give those sounds a low priority and reserve
+  5 empty slots that they cannot use, so they'll be open to other things.
+* Added --width and --height options to allow game to be scaled.
+* Added --framerate command line option.
+* Added worms.
+* Made tentacles thicker.
+* Now when you shoot the worms, they split in half,
+  becomng two smaller worms.
+* Made worms color independent of one another, and, psychedelically rainbow.
+* Prevent worms from going underground
+* Made worms tapered on the ends.
+* Made worms harm the player, if touched.
+* Made worms follow the player, if he comes close
+* Made worms move a bit less erratically
+* Added "zzzt!" sound effect when worms touch player
+* Fixed bug that initially, there were WAY too many blimps.
+  (bad initialization of the "level" structure.)
+* Improved the appearance of the dumb rockets.
+* Added the notion of "airship pressure."  When you shoot the blimps, they
+  become hyper-pressurized, and kind of get fat with pressure and leak lisp
+  code at an accelerated rate.
+* When blimps explode, they throw debris, and make a sound.
+* Reduced number of blimps and worms to something sensible.
+* Prevent core dump if portaudio finds zero sound devices.
+* Optimized finding of ground level in bridge_move function.
+* Fixed a bug that debris didn't always stop moving when it was
+  supposed to.
+* Corrected an error in the debris bouncing algorithm.
+* Fixed bug that debris became immortal.
+* Calculate all the slopes of all the terrain segments ahead of time
+  rather than each time we need them.
+* Removed unused variables.
+* Fixed up drawings of flak guns.
+* Fixed a pernicious bug in the audio playback code.  (Was cycling through
+  NCLIPS audio queues when there were only MAX_CONCURRENT_SOUNDS audio
+  queues.)
+* Added a starfield.
+* Made the octo-viruses shoot lightning half-as often -- they were too hard
+  (probably still are.)
+* Added --nostarfield option.
+* Made gdb's look a bit better
+* Edited vocal sounds to make them sound like radio tranmissions.
+
+Fri Apr 11 09:09:04 CDT 2008
+-------------------------------------------------------------------------------
+
+Changes between version 0.05 and 0.06
+* Now lasers look a bit cooler
+* Humanoids drop a little slower... easier to catch in midair.
+* Fixed a couple of compiler warnings.
+* Cleaned up the "intermission" screen between levels
+* fixed bug that bonus points didn't actually apply to your score.
+* Give player 1000 pt bonus for catching guys in midair.
+* Make sure the humanoids don't say anything while falling
+  (too busy screaming).
+* Fixed a bug that add_bullet didn't set o->v to
+  point to the bullet's drawing vectors.
+  Sometimes (why not always????) causing a crash.
+  Thanks to Hans de Goede for this patch.
+* Added "install" target to makefile, and made program look in a sensible
+  place for sound files if installed.  Thanks to Hans de Goede for this
+  patch.
+* Fixed a bug that the radar jammers could be subverted just by flying
+  really high.
+* Added dtox3monomix.ogg, which I'd accidentally left out.
+* Allow "quarters" to be put in with the joystick buttons.
+* Added "uninstall" target to Makefile
+* Included man page in tarball
+* "install" target installs man page now.
+* Improved the way GDB's fly around.
+
+Tue Apr  8 09:23:50 CDT 2008
+-------------------------------------------------------------------------------
+
+Changes between version 0.04 and 0.05
+* Added a new volcano eruption sound.
+* Replaced all CC Sampling 1.0 licensed sound files from freesound
+  with sound files of my own devising, licensed under CC Attribution-Share
+  Alike 3.0.
+
+-------------------------------------------------------------------------------
+Wed Mar 12 07:17:15 CST 2008
+Changes between version 0.03 and 0.04:
+
+* Added radar jamming stations.
+* Made drawing of sparks a bit more efficient
+* Fix compiler warnings, turn on optimization in make file
+* Calculate frame rate
+* Tighten up test to avoid drawing things off screen.
+Log:
+* Got rid of the floating point calculations in the random number generation
+  in the "real time" areas of the code.
+* Speeded up the object allocator
+* Factored out code to choose initial locations of objects
+* Set clipping rectangle for drawing area (I think this gets
+  rid of some weird things that happen with gdk_draw_line with
+  segments that go out of bounds.)
+* Removed unused old debris making code which was superceded by
+  the new code.
+* Added a black and white mode, just for the hell of it.
+* Setup to replace gdk_draw_line with whatever I want
+* Changed the behavior of fuel tanks on the ground.  Now, instead of bombing
+  the fuel tanks to repair damage, you hover over them, and suck out fuel,
+  which powers your sheilds.  This makes a hell of a lot more sense than
+  somehow getting damage repaired by bombing fuel tanks, a concept which
+  I've always hated, but put in out of laziness, and trying to make the game
+  work a bit better.  This change really affects the game play, because it's
+  no longer a good strategy to just sort of randomly carpet bomb, as you'll
+  destroy your fuel source.  Not sure if it's better or worse game play.
+  Will have to live with this for awhile and see.
+* Now the blimp has scrolling messages on its side.  :-D
+* Made flaming debris bounce around a bit when it hits the ground.
+* Now, press 'n' to go immediately to next humanoid.  (for debugging only).
+* Made the player's ship interact with the ground a bit better (got rid of
+  vibrating).
+* Added support for joysticks.  Doesn't really work very well though.
+  Not sure this game is suited to using a joystick, but it if is, my
+  code needs considerable tweaking, I think.
+* Try two stick joystick control... not much better, meh.
+* Increase number of "cron jobs"
+* Increase refueling rate to jack up the action factor a bit
+  (not sitting around on fuel tanks waiting to refuel so much)
+* Added a lot of comments.
+* Fixed Makefile problem that wordwarvi wasn't set to depend on joystick.o
+* Now ground color changes each time you advance a level.
+* Added a big volcano
+* Reduced the bounciness of debris... looked a little too bouncy.
+* Made the rockets slightly less predictable.  They're still pretty lame.
+* I think I made the joystick controls a bit better.
+* Fixed bug that you could snatch a human right from a cron job
+  just by running over him.
+* Improved appearance of humanoids.
+* Fixed bug that humans x velocity was not inherited from their
+  abductor when their abductor was shot.
+* Now the cron jobs pick up the humans then drop them into the
+  volcano.
+* Fixed bug, uninitialized variabe.  Occasionally made blimps shoot out
+  too many missiles, I think.
+* Ship is now damaged by volcano's corrosive atmosphere.
+* Radar warns of corrosive atmosphere.
+* Fixed a bug that prevented humans from being picked up by the player.
+* Made humans line up under player's ship a bit more sensibly.
+* Made the missiles which gdb's fire shorter, and ablt to turn faster
+  and accellerate faster.
+* Prevent the "Ow! My spine!" sound from playing more than once per 3 seconds.
+* Put Bill Gates' state of the art warship inside a WINE bottle.
+* Added --version option.
+* Updated man page
+* Updated copyright notices.
+* Make the .swp files scream when the cron jobs drop them into the
+  caldera of Mount /dev/null.
+* Now, when debris hits the ground and bounces, it makes a sound.
+
+Changelog begins after version 0.03
+-------------------------------------------------------------------------------
+

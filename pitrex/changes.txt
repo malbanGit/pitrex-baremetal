@@ -1,0 +1,148 @@
+Changelog:
+
+7th of May 2021
+
+    added GS BASIC (https://vectrex32.com/)
+    BASIC starts in the directory “/basic” – since no directory changes can be done from BASIC, this is the BASIC “home”
+    gsbasic.ini for some “option”, more information in the file:
+    GS_BASIC.txtm OtherTitle.txt VXTRON.txt
+    GS BASIC Copyright (c) 2021 Robert E. Alexander
+    Usage and distribution is granted under the MIT licence, see MIT_licence.txt
+    THX! Bob!
+    also included (amongst others) is VxTRON
+    VxTron32 (c) 2020, Jaymz Julian
+    in s slightly modified version
+    added support of USB keyboards (see source code distribution: usb_readme.txt)
+    I started the USB keyboard thing, because I wanted to control “Elite a new Kind” via keyboard, rather than invent tricky button double/tripple usages.
+    Elite a new Kind is as of now only included as a “demo” version (start screen), since GS BASIC came along an stole my time 🙂 – actually the whole game is compiled, but I haven’t configured the keyboard in, and didn’t look at/fix any of the non vector gfx yet
+    I started porting the MAME z80 processor emulation to be used in AAE, it compiles now without flaws, but I have as yet not changed the API to fit AAE. Once I have done, almost all SEGA games should work.
+    I am also thinking about (as a quick hack) to add USB keyboard to AAE, than the default keyboard
+    settings should work for all games out of the box, and they would be playable via keyboard – not optimal, but better than “waiting” to manually configuring each and every game to the vectrex controls
+    Asteroids (sbt) can now in the ini file be configured to use/not use samples
+    during the above changes… some bugs were discovered and fixed in the vectrexInterface, can’t remember them all
+    osWrapper.c is “wrappier” than before 🙂 e.g. if keyboard is configured you can use fgetc() to “wait” for keyboard input
+    vectrexInterface can be configured to use two sample channels, these will be mixed. Default this is “off” – but it DOES work!
+    started looking at bitmaps again, one of the next things will be to add bitmap output to the IRQMode (as of now, this os not yet supported)
+    changed the “structure” of the baremetal directories, vectrexInterface (and others) are now build as libraries, not several object files. All Makefiles were changed (slightly)
+    I like it, when include files are kept WITH their respective sources, so I did not create a dedicated include directory, the "INC_DIR" must be set in the makefiles to the correct locations
+    GS BASIC is written in c++, thus c++ is now supported to be built.
+    As an example look at GS BASIC. For now, the global/static constructors must be called “manually” in the main() function (6 lines of code), if you intend to program c++, these lines must be copied!
+    added emulation of the TMS5220 to sample out (Star Wars), although since star wars is to slow, the output is rather choppy
+
+12th of April 2021
+
+    added the possibilty to play samples alongside vectordisplay
+    (digitized sound will be barely audiable on noBuzz vectrex – there is nothing I can do about it!)
+    added for asteroids 2 samples (explosions)
+    tweaked battlezone, for “english” settings output might be smoother than before (other languages not supported yet)
+    added “1 joystick mode” for battlezone, this is the new default
+    for battlezone added dipswitches
+    for battlezone highscore saving/loading added
+    added sound to battlezone (except the engine sound)
+    added the start of AAE emulation the aae emulator can be access from the menu (last arcade emulator)
+    then you can chose which game to “play”
+    loadable and with “input”: Star Wars (6809) and Major Havoc (6502), but I have not really tried optimizing them – and one can see that!
+    Cinematronics games (ccpu) are loadable as well, but I have not configured input
+    I forgott to switch IRQ mode on for the AAE emulator, so if configured right, there would be a probably more than 20% speed increase
+    I am still waiting on feedback in relation to the Z80 CPU. Once I get a working copy, probably all SEGA games can be supported as well.
+    AAE roms are not included – and I don’t know what version you need, but “clues” can be found in the readme in the ROM directory
+    many tweaks to the vectrexInterface…
+
+26th of March 2021
+
+    default calibration is back to zero, on the todo list -> calibration for noBuzz vectrex
+    added configuration (ini file) for input settings, as of now asteroids only, look at the ini file
+    added dipswitch settings (ini file), as of now asteroids only, look at ini file, in game these can be called with button 1+4 on joypad 1
+    fixed asteroids output to accomodate the 4 different languages
+    fixed a “calibration 0” bug with in the vectrex library, y pos could be always “0” after calibration (visible with asteroids shots)
+    fixed “speedy vectrex” raster output
+    added ini setting “IN_GAME_SETTINGS” which enables or disables Button 2 of Joypad 2 to invoke settings menu. Per default this is OFF
+    vectrex save state, if enabled (ini setting HANDLE_STATES), it asks you whether to save or not, also shows a “SAVING…”.
+    Saving seems to take sometimes up to 18 seconds (with my SD cart, less than a second…)
+
+I have to further evaluate the “speed”.
+I have measured the piZero speed, and as far as I can measure:
+1 Mhz timer is pretty exact
+Cycle timer is pretty exact
+Vectrex T2 timer is pretty exact
+The reason I mention this… although “programmatically” and reports during game support this… the games are running all at the correct speed.
+However …
+
+    if I compare the games with MAME or the VecFever – it seems they are to slow
+    Kevin mentioned ZBlast as being to slow
+    the sample tests… seem output of the samples are to slow
+
+I am at a loss what may cause that. As said timing measurements are correct – somehow I must be doing something wrong here… 
+but measuring speed with several timers, is not really THAT complicated, that one would easily mess it up…
+
+24th of March 2021
+
+    IRQ mode implemented, vectrex output about 20% faster
+    if you are a PiTrex baremetal programmer, contact me, to get notified of changes you have to be aware of!
+    game update frequency is disjunct from the vectrex display frequency
+    asteroids now has a “hyperjump” button
+    asteroids saves / loads highscores
+    XSH delay is now correctly implemented, that should “correct” the last seen screen garbles on some vectrex
+
+15th of March 2021
+
+    removed all settings files
+    removed all “old” ini files
+    the “main” ini file is now vectrexInterface.ini
+    Settings can be changed from the menu, if reached via the menu, the settings will be saved to sd drive
+    settings “in game” can be called by pressing button 2 of joystick 2, these will be active but not saved (yet)
+    games/ emulators can still have own ini files, but I did not create default ones
+    all games/emulators have now sensible default values to start with
+    Settings are now applied in following order
+    a) Settings from vectrexInterface.ini
+    b) default settings inside the emulator
+    c) Settings from the emulator specific ini file
+    Navigation within the “settings”:
+    Joystick port one:
+    UP/DOWN – change configuration item
+    LEFT/RIGHT – change the settings for the current item
+    Button 1 – show help for the current selected item
+    Button 2 – change the shown vector list
+    Button 4 – exit (and save)
+    Button 2+3 together – reset current configuration item to default settings
+    Button 3+Joystick – move vector list
+    Button 2+Joystick LEFT/RIGHT – change settings value in larger steps
+    vectorblade bugfix (emulation, not vector blade)
+    added config to battle zone (see battlezone.ini)
+    corrected after “calibration” weirdness
+    corrected “after dot move”
+    added config to leave dots in there list position
+    added clipping to some emulators
+    changed the intro + “bouncing PiTrex”
+
+Settings explained here: https://www.youtube.com/watch?v=buAxW5p1g9c
+
+11th of March 2021
+
+    added additional logging on save state of vectrex – pls test that again and send me the output
+    additionally on vectrex Joypad 2- button 1 saves the state, Button 4 loads the state.
+    Does this also crash? – Pls report back!
+    the pipeline “timing” in vectrex interface was changed from using the pi TIMER to using the pi cycle timer, which is much more exact (100 times!). Thus internally seemingly a lot changed!
+    I spent much time with improving asteroids.
+    The display should be much more stable. The Asteroids should move much smoother!
+    The display should not shake or wobble (as much) when a UFO appears, bright shots are fired or the “PUSH START” appears. Still left to do: speed up (so the game over text appears flicker free), save highscores.
+    This – although it cannot really be seen – proved to be not really “simple” – but this also layed the ground work for improving other emulators. We now have the ability to identify vector clusters and react to them “outside” of the emulation. As a showcase for that, you can configure in the ini file whether you want to see the atari copyright in game or not.
+    added the before only on raspbian available game “ZBLAST”, including high score save, sound and background music. The music was given to me by Roald Strauss, who also has a website (IndieGameMusic.com), where he offers free – and royalty based – music scores of different kinds. From chip tunes and mod files to MP3. Thank you!
+    added the before only on raspbian available game “Hyperoids”, including sound.
+    both additions would not have been possible without the vectrexInterface / svgalib interface programmed by Kevin Koster. Using his base it was a matter of a couple of hours to support these two games.
+    added several “icons” to the menu.
+
+02nd of March 2021
+
+    I have completed the dumb/stupid/boring task, to change ALL needed arcade emulation roms to MAME compatible roms (I tested loading with MAME roms 201 and 229, so “everything” newer than 2 years old should work)
+    also supported are ZIP files, thus – just copying MAME roms to the “roms” folder is enough to get started with arcade emulations
+    This means to run arcade emulation, you MUST provide new zip/rom files!
+    I have added all “current” emulators that appear to at least run a little bit. I have not found many “cinematronics” emulations that run really well.
+    best is probably tailgunner, starhawk, barrier…
+    also added all “sim” emulators most of them boot up and are actually playable – although without sound
+    I am astonished, that the “sim” asteroids emulation actually crashes after a while… there must still be something wrong in the 6502 emulation core… (the roms are identical to to sbt version)
+    “icons” for those are missing… I have to get some more podcast to star drawing again… this will be put off for a time
+    all emulators support now “ini” files, these can also be specific for each emulated rom
+    I added a new option to the ini file “LOG_OUTPUT=1; if different than 0 – than log all “printf” outputs also to SD”, once you can test the new version and the
+    screen still goes black upon returning – I hope the captured output can help me identify the problem 
+    for the “atari”/sim emulators I added “sensible” ini files

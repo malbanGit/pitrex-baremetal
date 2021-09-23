@@ -1,0 +1,7 @@
+# Ignore everything in this directory
+tgunner.p70
+tgunner.p71
+tgunner.t70
+tgunner.t71
+# Except this file
+!.gitignore

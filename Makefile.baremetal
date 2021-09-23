@@ -1,0 +1,177 @@
+# I prefer "handmade" make files, it is a little bit of more worktime to start with (small change)
+# but I can read them, others can, and I know what they do!
+#
+# export PATH=/home/chrissalo/gcc-arm/bin:$PATH
+
+
+all:	loaderMake vecxMake1 vecxMake2 vecxMake3 vecxMake4 vecxMake5 redbaronMake hyperoidMake \
+	gyrocksMake battlezoneMake gravitarMake spaceduelMake tempestMake blackwidowMake deluxeMake \
+	astMake lunarMake CineMake zblastMake helloWorldMake aaeMake NewKindMake chessMake basicMake \
+	asteroidsMake tailgunnerMake wwviMake
+	
+	
+loaderMake: 
+	cd pitrex/loader; make -f Makefile
+	cd ..
+
+redbaronMake: 
+	cd redbaron; make -f Makefile.baremetal
+	cd ..
+
+lunarMake: 
+	cd lunar; make -f Makefile.baremetal
+	cd ..
+
+astMake: 
+	cd asteroids; make -f Makefile.baremetal
+	cd ..
+
+deluxeMake: 
+	cd deluxe; make -f Makefile.baremetal
+	cd ..
+
+blackwidowMake: 
+	cd blackwidow; make -f Makefile.baremetal
+	cd ..
+
+tailgunnerMake: 
+	cd tailgunner; make -f Makefile.baremetal
+	cd ..
+
+basicMake: 
+	cd gsBasic; make -f Makefile.baremetal
+	cd ..
+
+vecxMake1: 
+	cd vecx.audioplayer; make -f Makefile.baremetal
+	cd ..
+
+vecxMake2: 
+	cd vecx.exact; make -f Makefile.baremetal
+	cd ..
+
+vecxMake3: 
+	cd vecx.speedy; make -f Makefile.baremetal
+	cd ..
+
+vecxMake4: 
+	cd vecx.vectorblade; make -f Makefile.baremetal
+	cd ..
+
+vecxMake5: 
+	cd vecx.videoplayer; make -f Makefile.baremetal
+	cd ..
+
+asteroidsMake: 
+	cd asteroids_sbt; make -f Makefile.baremetal
+	cd ..
+
+gyrocksMake: 
+	cd gyrocks; make -f Makefile.baremetal
+	cd ..
+
+battlezoneMake: 
+	cd battlezone; make -f Makefile.baremetal
+	cd ..
+
+gravitarMake: 
+	cd gravitar; make -f Makefile.baremetal
+	cd ..
+
+spaceduelMake: 
+	cd spaceduel; make -f Makefile.baremetal
+	cd ..
+	
+tempestMake: 
+	cd tempest; make -f Makefile.baremetal
+	cd ..
+	
+CineMake:
+	cd cinematronics; make -f Makefile.baremetal
+	cd ..
+
+helloWorldMake:
+	cd hello_world; make -f Makefile.baremetal
+	cd ..
+
+aaeMake:
+	cd aae; make -f Makefile.baremetal
+	cd ..
+
+zblastMake:
+	cd zblast; make -f Makefile.baremetal
+	cd ..
+
+hyperoidMake:
+	cd xhyperoid; make -f Makefile.baremetal
+	cd ..
+
+NewKindMake:
+	cd NewKind; make -f Makefile.baremetal
+	cd ..
+
+chessMake:
+	cd chess; make -f Makefile.baremetal
+	cd ..
+
+wwviMake:
+	cd ww_vi; make -f Makefile.baremetal
+	cd ..
+
+clean:
+	cd pitrex/loader; make -f Makefile clean-all
+	cd ..
+	cd gsBasic; make -f Makefile.baremetal clean
+	cd ..
+	cd lunar; make -f Makefile.baremetal clean
+	cd ..
+	cd redbaron; make -f Makefile.baremetal clean
+	cd ..
+	cd asteroids; make -f Makefile.baremetal clean
+	cd ..
+	cd deluxe; make -f Makefile.baremetal clean
+	cd ..
+	cd blackwidow; make -f Makefile.baremetal clean
+	cd ..
+	cd tailgunner; make -f Makefile.baremetal clean
+	cd ..
+	cd vecx.audioplayer; make -f Makefile.baremetal clean
+	cd ..
+	cd vecx.exact; make -f Makefile.baremetal clean
+	cd ..
+	cd vecx.speedy; make -f Makefile.baremetal clean
+	cd ..
+	cd vecx.vectorblade; make -f Makefile.baremetal clean
+	cd ..
+	cd vecx.videoplayer; make -f Makefile.baremetal clean
+	cd ..
+	cd asteroids_sbt; make -f Makefile.baremetal clean
+	cd ..
+	cd gyrocks; make -f Makefile.baremetal clean
+	cd ..
+	cd battlezone; make -f Makefile.baremetal clean
+	cd ..
+	cd gravitar; make -f Makefile.baremetal clean
+	cd ..
+	cd spaceduel; make -f Makefile.baremetal clean
+	cd ..
+	cd tempest; make -f Makefile.baremetal clean
+	cd ..
+	cd sim; make -f Makefile.baremetal clean
+	cd ..
+	cd cinematronics; make -f Makefile.baremetal clean
+	cd ..
+	cd hello_world; make -f Makefile.baremetal clean
+	cd ..
+	cd zblast; make -f Makefile.baremetal clean
+	cd ..
+	cd xhyperoid; make -f Makefile.baremetal clean
+	cd ..
+	cd NewKind; make -f Makefile.baremetal clean
+	cd ..
+	cd chess; make -f Makefile.baremetal clean
+	cd ..
+	cd aae; make -f Makefile.baremetal clean
+	cd ..
+	cd ww_vi; make -f Makefile.baremetal clean
+	cd ..

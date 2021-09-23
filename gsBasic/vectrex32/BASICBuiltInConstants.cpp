@@ -1,0 +1,122 @@
+#include "../BuiltInConstants.h"
+#include "../GSBCommon.h"
+#include "VectrexInterface.h"
+#include "VectrexSound.h"
+#include "Camera.h"
+
+/*
+VectrexMusicBuiltin BerzerkMusic(VectrexInterface::Berzerk);
+VectrexMusicBuiltin MelodyMasterMusic(VectrexInterface::MelodyMaster);
+VectrexMusicBuiltin Music1Music(VectrexInterface::Music1);
+VectrexMusicBuiltin Music2Music(VectrexInterface::Music2);
+VectrexMusicBuiltin Music3Music(VectrexInterface::Music3);
+VectrexMusicBuiltin Music4Music(VectrexInterface::Music4);
+VectrexMusicBuiltin Music5Music(VectrexInterface::Music5);
+VectrexMusicBuiltin Music6Music(VectrexInterface::Music6);
+VectrexMusicBuiltin Music7Music(VectrexInterface::Music7);
+VectrexMusicBuiltin Music8Music(VectrexInterface::Music8);
+VectrexMusicBuiltin PowerOnMusic(VectrexInterface::PowerOn);
+VectrexMusicBuiltin ScrambleMusic(VectrexInterface::Scramble);
+VectrexMusicBuiltin SolarQuestMusic(VectrexInterface::SolarQuest);
+*/
+void RegisterVectrexBuiltInConstants()
+{
+	// THIS LIST MUST BE IN ALPHABETICAL ORDER!!!!
+	static BuiltInConstantInfo vectrexBuiltInConstants[] = {
+		{"Berzerk", Value(&VS_BerzerkMusic)},
+		{"Camera", Value(&camera)},
+		{"Controller1", Value(1)},
+		{"Controller2", Value(2)},
+		{"ControllerNone", Value(0)},
+		{"DrawTo", Value(1)},
+		{"JoystickAnalog", Value(2)},
+		{"JoystickDigital", Value(1)},
+		{"JoystickNone", Value(0)},
+		{"JoystickX", Value(1)},
+		{"JoystickY", Value(2)},
+		{"MelodyMaster", Value(&VS_MelodyMasterMusic)},
+		{"MoveTo", Value(0)},
+		{"Music1", Value(&VS_Music1Music)},
+		{"Music2", Value(&VS_Music2Music)},
+		{"Music3", Value(&VS_Music3Music)},
+		{"Music4", Value(&VS_Music4Music)},
+		{"Music5", Value(&VS_Music5Music)},
+		{"Music6", Value(&VS_Music6Music)},
+		{"Music7", Value(&VS_Music7Music)},
+		{"Music8", Value(&VS_Music8Music)},
+		{"NA2", Value(0x02)},
+		{"NA3", Value(0x0E)},
+		{"NA4", Value(0x1A)},
+		{"NA5", Value(0x26)},
+		{"NA6", Value(0x32)},
+		{"NA7", Value(0x3E)},
+		{"NAS2", Value(0x03)},
+		{"NAS3", Value(0x0F)},
+		{"NAS4", Value(0x1B)},
+		{"NAS5", Value(0x27)},
+		{"NAS6", Value(0x33)},
+		{"NAS7", Value(0x3F)},
+		{"NB2", Value(0x04)},
+		{"NB3", Value(0x10)},
+		{"NB4", Value(0x1C)},
+		{"NB5", Value(0x28)},
+		{"NB6", Value(0x34)},
+		{"NC3", Value(0x05)},
+		{"NC4", Value(0x11)},
+		{"NC5", Value(0x1D)},
+		{"NC6", Value(0x29)},
+		{"NC7", Value(0x35)},
+		{"NCS3", Value(0x06)},
+		{"NCS4", Value(0x12)},
+		{"NCS5", Value(0x1E)},
+		{"NCS6", Value(0x2A)},
+		{"NCS7", Value(0x36)},
+		{"ND3", Value(0x07)},
+		{"ND4", Value(0x13)},
+		{"ND5", Value(0x1F)},
+		{"ND6", Value(0x2B)},
+		{"ND7", Value(0x37)},
+		{"NDS3", Value(0x08)},
+		{"NDS4", Value(0x14)},
+		{"NDS5", Value(0x20)},
+		{"NDS6", Value(0x2C)},
+		{"NDS7", Value(0x38)},
+		{"NE3", Value(0x09)},
+		{"NE4", Value(0x15)},
+		{"NE5", Value(0x21)},
+		{"NE6", Value(0x2D)},
+		{"NE7", Value(0x39)},
+		{"NF3", Value(0x0A)},
+		{"NF4", Value(0x16)},
+		{"NF5", Value(0x22)},
+		{"NF6", Value(0x2E)},
+		{"NF7", Value(0x3A)},
+		{"NFS3", Value(0x0B)},
+		{"NFS4", Value(0x17)},
+		{"NFS5", Value(0x23)},
+		{"NFS6", Value(0x2F)},
+		{"NFS7", Value(0x3B)},
+		{"NG2", Value(0x00)},
+		{"NG3", Value(0x0C)},
+		{"NG4", Value(0x18)},
+		{"NG5", Value(0x24)},
+		{"NG6", Value(0x30)},
+		{"NG7", Value(0x3C)},
+		{"NGS2", Value(0x01)},
+		{"NGS3", Value(0x0D)},
+		{"NGS4", Value(0x19)},
+		{"NGS5", Value(0x25)},
+		{"NGS6", Value(0x31)},
+		{"NGS7", Value(0x3D)},
+		{"NOctave", Value(12)},
+        {"PowerOn", Value(&VS_PowerOnMusic)},
+		{"Scramble", Value(&VS_ScrambleMusic)},
+        {"SEEK_CUR", Value(1)},
+        {"SEEK_END", Value(2)},
+        {"SEEK_SET", Value(0)},
+		{"SolarQuest", Value(&VS_SolarQuestMusic)},
+		{"Stdin", Value(new FilePointer(stdin))},
+		{"Stdout", Value(new FilePointer(stdout))},
+	};
+	RegisterBuiltInConstants(vectrexBuiltInConstants, countof(vectrexBuiltInConstants));
+}

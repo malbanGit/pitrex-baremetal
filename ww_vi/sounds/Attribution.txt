@@ -1,0 +1,101 @@
+
+Here is the attribution of audio files which I used.
+
+The same information is available by inspecting each ogg file
+with "vorbiscomment -l"
+
+* lucky13-steve-mono-mix.ogg is composed and recorded
+  by me (Stephen M. Cameron) and Marty Kiel.  I did the
+  guitar, Marty did the synth and drums.  It is 
+  licensed under the Creative Commons Attribution 3.0 license
+  http://creativecommons.org/licenses/by/3.0/
+  (Note, this is different than the other audio clips.)
+
+* lucky-holiday-cornbread-stuffing-mono.ogg is composed and
+  recorded by m (Stephen M. Cameron, rhythm guitar), Skip
+  Kavanaugh (lead guitar) and Marty Kiel (everything else).
+  It is licensed under the Creative Commons Attribution 3.0 license
+  http://creativecommons.org/licenses/by/3.0/
+  (Note, this is different than the other audio clips.)
+
+* dtox3monomix.ogg was composed, performed, and recorded by me
+  (Stephen M. Cameron).  It is licensed under the Creative
+  Commons Attribution-Share Alike 3.0 license.
+  See: http://creativecommons.org/licenses/by-sa/3.0/
+  (Incidentally the drums (not that they're anything special) 
+  were done with Gneutronica, a MIDI-drum sequencer which 
+  I wrote, see: http://gneutronica.sourceforge.net )
+
+* destiny_facedown.ogg was composed, written, performed, and
+  recorded by me (Stephen M. Cameron)  It is licensed under the
+  Creative Commons Attribution-Share Alike 3.0 license.
+  See: http://creativecommons.org/licenses/by-sa/3.0/
+
+* highscoremusic.ogg was composed, written, performed, and
+  recorded by me (Stephen M. Cameron)  It is licensed under the
+  Creative Commons Attribution-Share Alike 3.0 license.
+  See: http://creativecommons.org/licenses/by-sa/3.0/
+
+The sounds below are all (c) Copyright 2008 Stephen M. Cameron
+and released under Creative Commons Attribution-Share Alike unported 3.0
+license.  See: http://creativecommons.org/licenses/by-sa/3.0/
+
+	us_quarter.ogg
+	woohoo.ogg
+	ow_my_spine.ogg
+	help_down_here.ogg
+	clang.ogg
+	abducted.ogg
+	help_up_here.ogg
+	UseTheSource.ogg
+	ooooof.ogg
+	fallingscreamhi.ogg
+	bodyslam.ogg
+	stonebang8.ogg
+	stonebang7.ogg
+	stonebang6.ogg
+	stonebang5.ogg
+	stonebang4.ogg
+	stonebang3.ogg
+	stonebang1.ogg
+	stonebang2.ogg
+	metalbang8.ogg
+	metalbang7.ogg
+	metalbang6.ogg
+	metalbang5.ogg
+	metalbang4.ogg
+	metalbang3.ogg
+	metalbang2.ogg
+	metalbang1.ogg
+	volcano_eruption.ogg
+	toyota_celica_cardoor_sample.ogg
+	synthetic_thunder_short.ogg
+	synthetic_laser.ogg
+	synthetic_gunshot_2.ogg
+	synthetic_bomb.ogg
+	rocket_exhaust_1.ogg
+	new_ground_smack.ogg
+	missile_launch_2.ogg
+	missile_explosion.ogg
+	missile_alarm.ogg
+	missile_alarm_2.ogg
+	flak_hit.ogg
+	flak_gun_sound.ogg
+	bombexplosion.ogg
+	big_explosion.ogg
+	dtox3monomix.ogg 
+	zzzt.ogg
+	gravity_bomb.ogg
+	destiny_facedown.ogg
+	highscoremusic.ogg
+	jetwash.ogg
+	timpani_boing.ogg
+	nice_bank_shot.ogg
+	hohoho.ogg
+	hohoho_merry_xmas.ogg
+	yay_santa.ogg
+	radar_fail.ogg
+	radar_ready.ogg
+	gunwheel_sound.ogg
+	tesla_tower.ogg
+

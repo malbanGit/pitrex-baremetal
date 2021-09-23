@@ -1,0 +1,7 @@
+# Ignore everything in this directory
+035127-02.np3
+035143-02.j2
+035144-02.h2
+035145-02.ef2
+# Except this file
+!.gitignore

@@ -1,0 +1,412 @@
+.TH WORDWARVI "6" "Jul 2008" "wordwarvi" "Games"
+.SH NAME
+wordwarvi \- Old school '80's style side scrolling space shoot'em up game.
+.SH SYNOPSIS
+.B wordwarvi [ --bw ] [ --blueprint ] [ --brightsparks  ]
+[ --difficulty easy|medium|hard|insane|batshit-insane ]
+[ --explosionfactor n ]
+[ --fullscreen ] [ --joystick device ] [ --nomusic ]
+[ --nomissilealarm ] [ --norumble ] [ --nostarfield ]
+[ --nstars n ] [ --randomize ] [ --randomseed n ] [ --squareexplosions ]
+[ --rumbledevice device ] [ --sounddevice n ] [ --thicklines ]
+[ --width w ] [ --height h ] [ --framerate f ]
+[ --retrogreen ] [ --version ] [ --xmas ]
+.SH DESCRIPTION
+.\" Add any additional description here
+.warn 511
+.PP
+wordwarvi, or "Word War vi", is an old school '80's style side 
+scrolling space shoot'em up video game.
+.PP 
+You pilot your "vi-per" craft through core memory, trying to
+avoid OS defenses and wipe out the memory hogging emacs processes
+and rescue lost vi-per pilots (.swp files) stranded from crashed 
+vi sessions before heading through the socket to the next node 
+in the cluster to do it all over again.
+.SH Options:
+.TP
+\fB\--bw\fR
+Render the game in black and white, as if on graph paper.
+.TP
+\fB\--blueprint\fR
+Render the game to look like a blueprint.
+.TP
+\fB\--brightsparks\fR
+Enables a visual effect for sparks to be rendered bigger 
+and brighter than usual, at the cost of some performance.
+It is a matter of personal preference whether it looks better
+or worse.
+.TP
+\fB\--difficulty easy|medium|hard|insane|batshit-insane\fR
+Sets the difficulty level to one of easy, medium, hard, insane,
+or batshit-insane.
+.TP
+\fB\--explosionfactor n\fR
+Produce explosions with the number of sparks
+multiplied by n.  Default is 1, integers up
+to 5 are permitted.  Performance may suffer
+with large values of n.  This option only has
+an effect when the squareexplosions option is
+not in effect.
+.TP
+\fB\--framerate f\fR
+Sets the target frame rate to f frames per second.
+The default is 30 frames per second.  If your computer is
+too slow to achieve the specified (or default) frame rate at 
+the specified (or default) resolution, decreasing the frame 
+rate may make the game respond better.  Likewise, at lower 
+resolutions, higher framerates may be possible, or lower resolutions
+may make the game perform better at a given frame rate. 
+It should be noted that The game is designed (and tested) 
+to be played at 30 frames per second.
+.TP
+\fB\--fullscreen\fR
+Expand the window to fill the screen.  This option overrides the 
+--width and --height options, if either of those are also specified, 
+and scales the graphics to the size of the screen.  You can also
+use the F11 key to toggle between  fullscreen and windowed mode 
+after the program is started.  If the --fullscreen option is 
+used, then the F11 key has no effect.
+.TP
+\fB\--height h\fR
+Sets the window size to h pixels high, scaling all
+graphics as necessary.  The default is 600 pixels.
+.TP
+\fB\--joystick joystick-device\fR
+Use the specified device node joystick-device to access
+the joystick.  The default device if this option is not used
+is /dev/input/js0.  If you have more than one joystick, or if
+your OS presents joysticks at device nodes other than 
+/dev/input/js0, that's what this option is for.
+.TP
+\fB\--nomusic\fR
+Don't play music, or even decode the music files into memory.
+Cuts down considerably on memory usage.
+.TP
+\fB\--nomissilealarm\fR
+Don't sound an alarm when a missile locks on to your ship. 
+Some people find the sound of the alarm incredibly annoying.  
+(Alarms are supposed to be annoying.)  The audio alarm can 
+also be toggled on and off with the '1' key.
+.TP
+\fB\--norumble\fR
+Don't use joystick rumble effects.
+.TP
+\fB\--nostarfield\fR
+Don't draw a starfield in the background.
+.TP
+\fB\--nstars n\fR
+Controls how many stars are rendered.  Valid
+values for n must be greater than or equal to
+zero, and less than or equal to 600.
+.TP
+\fB\--randomize\fR
+Uses the microseconds value of the clock as the random seed
+for generating terrain, enemy placement etc.  If you get tired
+of the regular levels, and knowing where everything is, this
+will get you levels that you haven't seen before.
+.TP
+\fB\--randomseed n\fR
+Uses the specified value, n, as the random seed
+for generating terrain, enemy placement etc.  This
+allows access to new levels which you may play again by 
+specifying the same random seed value.  The default
+random seed value the game uses if none is specified
+is 31415927.
+.TP
+\fB\--squareexplosions\fR
+Makes explosions square rather than round.  By default
+spark velocities are chosen by simply assigning independent 
+uniformly distributed random angle and velocity (polar
+coordinates). This results in an explosion which is round
+in shape.  If there aren't too many sparks, you don't really
+notice.  With larger numbers of sparks, this round shape
+can become apparent.  The squareexplosions options causes
+a uniformly distributed random x and y and velocity to be
+chosen for each spark.  This saves the computation of
+converting polar coordinates to cartesian.  The default
+used to be square explosions, with round explosions available
+only through the old --roundexplosions option.  Now round
+explosions are the default, and the --roundexplosions option
+was inverted and renamed --squareexplosions.
+
+.TP
+\fB\--rumbledevice d\fR
+Use the specified device for rumble effects (XBox 360 wired
+controller only, and linux 2.6.26 or better required.)  
+The default is /dev/input/event5.  Your controller may show up
+elsewhere, like /dev/input/event6, for example.  
+Also, you will have to (as root) chown this device node
+to the user you're running the game as, and do this again after
+each boot, and each time you hotplug the controller.  There
+is probably a way to get udev to do this for you automatically 
+every time, but I don't know what it is offhand, and it may 
+differ from distro to distro.
+.TP
+\fB\--retrogreen\fR
+Does exactly what it sounds like.
+.TP
+\fB\--sounddevice n\fR
+Use alternate sound device n, where n is an integer.  
+By default, wordwarvi uses the "default" sound device as 
+estimated by the PortAudio library, which is 0.  
+You can specify other numbers if you have other sound cards, or
+a multichannel sound card.
+.TP
+\fB\--starmotion x\fR
+Controls how the starfield moves.  Possible values of x
+are 'astronomically-correct', 'wrong', 'wronger', and 'wrongest'.
+.TP
+\fB\--thicklines\fR
+Render everything with extra thick lines.
+.TP
+\fB\--version\fR
+Print the program's version number and exit.
+.TP
+\fB\--width w\fR
+Sets the window size to w pixels wide, scaling all graphics
+as necessary.  The default is 800 pixels.
+.TP
+\fB\--xmas\fR
+Runs the program in xmas mode, if it is not near Christmas.
+If it is near Christmas, runs the program in non-xmas mode.
+.SH Controls:
+.PP 
+Arrow keys control movement (or vi's hjkl keys will work too,
+of course.)
+.PP
+Q puts in a quarter, and starts the game.
+.PP
+Z fires a laser
+.PP
+C drops chaff (to confuse heat seeking missiles).
+.PP
+B drops bombs.
+.PP
+G drops a gravity bomb, of which you start with 3.
+.PP
+Additionally, a game pad or joystick may be used.  I have only tried
+two controllers, the Microsoft XBox 360 wired controller, and 
+a Logitech Dual Action Rumble USB gamepad.  On these, the first
+(left) joystick controls your ship.  For other controls, 
+just press all the buttons to see what they do, as it's not
+the same from one controller to the next.  The rumble effect
+only works with the XBox 360 wired controller, and then only
+if you have linux kernel 2.6.26 or better.  See also
+the "--rumbledevice" option.
+.PP
+m toggles music on/off.
+.PP
+s toggles sound effects on/off.
+.PP
+1 toggles the audio missile lock-on alarm on/off.
+.SH ENEMIES AND OTHER THINGS YOU MAY ENCOUNTER
+.PP 
+Rockets.  Avoid hitting them.
+.PP 
+Jets, which fire heat seeking missiles.  Avoid the missiles.
+.PP
+Heat seeking SAMs.  Avoid.
+.PP 
+Octo-viruses and tentacles.  Shoot lightning.  Avoid.
+.PP 
+Blimps (representing emacs).  Will shoot heat seeking missiles.  
+Will leak LISP code.
+.PP 
+GDB processes.  Will attempt to ptrace you with heat seeking probes.  Avoid and/or kill.
+.PP 
+Cron Jobs.  Will shoot projectiles at you.  Will attempt to collect the vi .swp files
+and carry them to caldera of the volcano, Mount /dev/null. 
+.PP
+Fuel tanks.  Refuel by hovering over the fuel tanks momentarily.
+.PP 
+Laser cannons.  They will shoot laser bolts at you (obviously).
+.PP
+WINE bottles.  Bill Gates's finest warship is outfitted with a
+giant WINE bottle to enable it to travel through the linux CORE.
+Beware of viruses which may be living inside.
+.PP 
+.SH FILES
+.PP
+/dev/input/js0, the joystick device node.
+.PP
+/dev/input/event5, the rumble effect device. 
+.PP
+/usr/share/wordwarvi/sounds/*.ogg contain the audio data used by the game.
+.PP
+~/.wordwarvi/.highscores
+Contains high score data.
+.PP
+~/.wordwarvi/.exrc
+This file can be used to customize default settings for the game.
+Each line of the file controls one aspect of the game.  The following
+commands are understood.
+
+.TP
+set bw
+Render in black and white.
+.TP
+set blueprint
+Render in the style of a blueprint.
+.TP
+set brightsparks
+Render sparks brighter than usual.
+.TP
+set difficulty=x
+Sets the difficulty level.  Valid values are
+easy, medium, hard, insane, and batshit-insane.
+.TP
+set explosionfactor=n
+Produce explosions with the number of sparks
+multiplied by n.  Default is 1, integers up
+to 5 are permitted.  Performance may suffer
+with large values of n.  This option only has
+an effect when the squareexplosions option is
+not in effect. 
+.TP
+set framerate=n
+Attempt to render the game at n frames per second.
+.TP
+set fullscreen
+Render the game in full screen mode.
+.TP
+set height y
+Render the game y pixels high.
+.TP
+set joystick=dev
+Use joystick input device dev.
+.TP
+set levelwarp=n
+Warp ahead n levels (if compiled in). 
+.TP
+set nomusic
+Do not play, or even decode music data.
+.TP
+set nomissilealarm
+Do not sound alarm for missile lock on.
+.TP
+set nostarfield
+Do not render the background starfield.
+.TP
+set norumble
+Do not use joystick rumble effects.
+.TP
+set nstars=n
+Controls how many stars are rendered.  Valid
+values for n must be greater than or equal to
+zero, and less than or equal to 600.
+.TP
+set retrogreen
+Render in the manner of a vector display from the '70's.
+.TP
+set randomize
+Use a clock generated random seed to initialize levels.
+.TP
+set randomseed=n
+Use the specified random seed to initialize levels.
+.TP
+set rumbledeviced=d
+Use the specified device for rumble effects (XBox 360 wired
+controller only, and linux 2.6.26 or better required.)  
+The default is /dev/input/event5.  Your controller may show up
+elsewhere, like /dev/input/event6, for example.  
+Also, you will have to (as root) chown this device node
+to the user you're running the game as, and do this again after
+each boot, and each time you hotplug the controller.  There
+is probably a way to get udev to do this for you automatically 
+every time, but I don't know what it is offhand, and it may 
+differ from distro to distro.
+.TP
+set squareexplosions
+Makes explosions rectangular rather than round.  See the
+description of the --squareexplosions option for some
+explanation of why this even exists.
+.TP
+set sounddevice=n
+Use the nth sound device for audio output.
+.TP
+set starmotion=x
+Controls how the starfield moves.  Possible values 
+are 'astronomically-correct', 'wrong', 'wronger', and 'wrongest'.
+.TP
+set thicklines
+Render everything with extra thick lines. 
+.TP
+set width=x
+Render the game x pixels wide.
+.TP
+map key action
+valid actions are:
+.DI
+     soundeffect  down  up       left      right
+     missilealarm bomb  chaff    quarter   pause
+     2x           3x    4x       5x        6x
+     7x           8x    suicide  thrust    music  
+     fullscreen   quit  laser    none      reverse
+     gift
+.DE
+.br
+Valid keys are:
+a-z, A-Z, 0-9, and most printable characters.  Keypad numerals
+0-9 may be specified as kp_0 through kp_9, and function keys f1 through f12
+can be specified f1 through f12 (obviously).  In addition
+the following strings may be used to specify the corresponding keys:
+.DI
+     space       enter         return   backspace    delete
+     pause       scrolllock    escape   sysreq       left 
+     right       up            down     kp_home      kp_down
+     kp_up       kp_left       kp_right kp_end       kp_delete
+     kp_insert   home          down     end          delete  
+     insert
+.DE
+.TP
+map button n action
+maps joystick button n (where 0 <= n <= 9) to the specified action.
+Actions are the same as describe above, with the exception of 
+left, right, up and down, which are not yet implemented due to
+laziness on my part.  In any case, if your joystick has a
+button pad you want to use to control the motion of the ship
+(left/right/up/down), most likely it also has some sort of
+switch to make this pad active instead of one of the sets of
+x/y joystick axes. (e.g. my Logitech Dual Action Rumble is 
+like that.)  If that's the case, then you don't need this
+feature anyway, as the joystick will map those button presses
+onto the appropriate axes for you.
+.TP
+set joystick-[xy]-axis=n.  Allows specifying different axes for 
+control of the players ship for multi axis joysticks.  By default,
+the first x and first y axes are used (n = 0 for x, n=1 for y)
+A value of -1 disables control of an axis.  See example .exrc 
+file below to find out why you might want to do that.  There are
+pictures at http://smcameron.github.com/wordwarvi which show how 
+the axis numbers and button numbers map to the physical
+controls for the Microsoft XBox 360 controller and the 
+Logitech Dual Action Rumble controller
+
+.TP
+Example .exrc file:
+.DI
+      set fullscreen
+      set retrogreen
+      map z chaff
+      map x bomb
+      map c laser
+      #
+      # to set up "Defender" style joystick
+      # controls, vertical motion controlled 
+      # by joystick axis, horizontal motion 
+      # controlled only by "reverse", and 
+      # "thrust" buttons, with x axis joystick
+      # control disabled.
+      #
+      set joystick-x-axis=-1
+      set joystick-y-axis=0
+      map button 0 thrust
+      map button 1 reverse
+.DE
+.SH GOOD LUCK
+.PP
+You'll need it.
+.SH AUTHOR
+Written by Stephen M. Cameron 
+.br
