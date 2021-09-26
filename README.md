@@ -14,6 +14,8 @@ To develop baremetal PiTrex you can download a prepared virtual machine for Virt
 All stuff under the directory "pitrex" is the actual "baremetal boot source" to build baremetal programs. For a short description of the "bootup" look at: [PiTrex – Baremetal knowledge](http://vide.malban.de/pitrex/pitrex-baremetal-knowledge).
 
 ## Baremetal "vectrexInterface"
-All stuff under the directory "pitrex/vectrex" is the actual "interface" to the vectrex. For a short description at: [PiTrex – Baremetal knowledge](http://vide.malban.de/pitrex/pitrex-baremetal-vectrexinterface-c).
+All stuff under the directory "pitrex/vectrex" is the actual "interface" to the vectrex. For a short description at: [
+PiTrex baremetal: vectrexInterface.c](http://vide.malban.de/pitrex/pitrex-baremetal-vectrexinterface-c).
 
+## Other
 All other "single" directories within the repository represent single "programs" runnable under the baremetal environment. Within each directory is a single Makefiles.baremetal to create baremetal images.
