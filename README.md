@@ -5,7 +5,7 @@ Read more about PiTrex in general at: [PiTrex Wiki](http://www.ombertech.com/cnk
 
 Read more about PiTrex Baremetal at  in general at: [Malbans PiTrex baremetal pages](http://vide.malban.de/pitrex) (and the pages accessable by the menu).
 
-To develop baremetal PiTrex you can download a prepard virtual machine for Virtual box (Ubuntu 16.04). Don't forget to update the sources with the ones found here (on github):  [PiTrex baremetal development virtual machine](http://vide.malban.de/pitrex/pitrex-baremetal-quick-start-unfinished).
+To develop baremetal PiTrex you can download a prepared virtual machine for Virtual box (Ubuntu 16.04). Don't forget to update the sources with the ones found here (on github):  [PiTrex baremetal development virtual machine](http://vide.malban.de/pitrex/pitrex-baremetal-quick-start-unfinished).
 
 
 # Structure of this repository
