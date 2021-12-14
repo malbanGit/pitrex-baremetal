@@ -21,7 +21,5 @@ Thumbs.db
 
 # Make output
 *.o
-m68kmake
-m68kops.?
 sim
 tags
