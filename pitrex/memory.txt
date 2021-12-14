@@ -1,0 +1,17 @@
+PiZero 1+2
+0x0000 		    The exception vectors reside here
+0x0100-0x010c	    R0-R2 are saved upon start to this location.
+0x010c +4		    a pointer to the "loaderSettings" is stored here by the loader
+0x8000 		    The "normal" start kernel is loaded to 0x8000.
+         -0x3cfffff Memory our program can use (nearly 64MB, normal memory)
+
+0x3d00000-0x3d10000 IRQ-stack core 0 is located here, it seems speeder if this stack is also device memory (alignemnt check!)
+
+0x3e00000	    MEM_COHERENT_REGION is located here, a rediculous 1MB, this region is flagged as "device" memory (alignemnt check!)
+
+0x3f00000-0x3f08000 UND-stack core 0 is located here normal memory (no alignemnt check!)
+0x3f08000-0x3f10000 ABT-stack core 0 is located here normal memory (no alignemnt check!)
+0x3f10000-0x3f18000 FIQ-stack core 0 is located here normal memory (no alignemnt check!)
+0x3f20000-0x3f40000 SVC-stack core 0 is located here normal memory (no alignemnt check!) - out program runs in service mode!
+
+0x4000000	    The "loader.pit" is loaded to this location.

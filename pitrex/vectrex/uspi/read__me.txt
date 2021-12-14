@@ -1,0 +1,13 @@
+
+Re: Introducing USPi - A bare metal USB driver written in C
+
+Tue Mar 22, 2016 9:56 pm
+USPi has been updated to run on the Raspberry Pi 3 in 32-bit mode. You have to define
+
+Code: Select all
+
+RASPPI = 3
+
+in Rules.mk or Config.mk to build this version.
+
+The USPi library itself is unchanged but the USPi Environment has been updated.

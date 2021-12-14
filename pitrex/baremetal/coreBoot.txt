@@ -1,0 +1,47 @@
+On a Pi Zero 2
+
+In baremetalEntry_7.S on the first start the "global" variables are initialized.
+The global variables reside in a memory area, that is not ever overwritten by any loaded program and are
+as thus "save" even when starting and loading different programs.
+The global variables are in general used for keeping track of the different core stages.
+The area is largely defined by the values in "globalVars.h"
+
+For each core there are "globals" for:
+#define CORE_UNKOWN 0
+#define CORE_GRABBED 1
+#define CORE_PARKING 2
+#define CORE_RUNNING 3
+->COREX_STATE 
+
+
+there respective "park" routines: 
+COREX_PARK
+
+
+Within the MMU setup of the first core, the other cores are woken up and put to their respective park routines.
+This is done with several steps:
+- woken up from the ARM Stub with address set to multicore_start (within baremetalEntry.s)
+- the state of the core is than CORE_GRABBED
+- than the stack is set for the current core
+- and from "support.c" the function: recognizeCore() is called,
+- which sets up the FPU and MMU of the core and resets the mailbox system
+- back to the assembler routine, the cycle counter(s) are setup
+- than the position independend "park" routine is copied to the global area
+- the core is sent to its own global parking routine
+- one within the parking routine the core is set to state CORE_PARKING
+- the core can be woken from that parking lot with the usual mailbox calling (with an address to start at)
+- the parking routine will put the state of the core to CORE_RUNNING before jumping to the given address
+
+
+STARTING
+you can use the function "void startCore1(unsigned int coreStart)" to start a core at the given address
+
+PARKING
+Before loading new programs and starting them - the core must be put to "parking" again, this can be done with the function:
+"parkCore1()". 
+This function however MUST be called from its OWN core! So you probably need some message passing.
+
+---
+
+OTHER
+The printf() statement is semaphore wrapped, so that each single printf statement will FULLY be printed and not disturbed by other cores output!
