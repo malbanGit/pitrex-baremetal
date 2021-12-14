@@ -31,7 +31,7 @@ enum
 	COLOR_QB3
 };
 
-UINT8 bSwapXY;
+extern UINT8 bSwapXY;
 
 int init_cinemat(void);
 void run_cinemat();

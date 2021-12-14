@@ -49,7 +49,7 @@ multitasking environment.
 This is very much like the original GS BASIC on the Vectrex32 PIC cartridge.
 
 There is "literaly" one big difference between the Vectrex32 and the PiTrex.
-The PiTrex has 1Gb RAM.
+The PiTrex has 512MB RAM.
 As of now I allow user programs to be a size of about 60MB (one has to have some memory in reserve :-) ).
 That also means, that BASIC programs could be of ENORMOUS size!
 

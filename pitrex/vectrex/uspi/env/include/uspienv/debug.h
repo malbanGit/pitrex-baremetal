@@ -26,7 +26,7 @@
 extern "C" {
 #endif
 
-#ifndef NDEBUG
+#ifdef USPIDEBUG
 
 void debug_hexdump (const void *pStart, unsigned nBytes, const char *pSource /* = 0 */);
 

@@ -17,6 +17,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
  
 #include <vectrex/vectrexInterface.h>
 
@@ -69,6 +70,10 @@ int kbd_keyboard_startup (void)
 {
 //	set_keyboard_rate(2000, 2000);
     v_initKeyboard();
+    if (usbKeyboardAvailable != 1)
+    {
+      v_message("ERROR! USB KEYBOARD NOT FOUND!");
+    }
 	return 0;
 }
 
@@ -82,6 +87,12 @@ extern int physicalKeyDown[127]; // usbkeyboard.c
 
 void kbd_poll_keyboard (void)
 {
+    if (usbKeyboardAvailable != 1)
+    {
+      return;
+    }
+  
+  
     kbd_any = 0;
     unsigned char key =USBKeyboardLastPhysicalKeyDown();
     if (key != 0) 
@@ -94,7 +105,7 @@ void kbd_poll_keyboard (void)
 //    I have to implement that in USPI lib
     kbd_ascii = 0;
     
-    char *cc = USPiKeyboardPhysicalToKeyboard(key,0);
+    const char *cc = USPiKeyboardPhysicalToKeyboard(key,0);
     char c = toupper(cc[0]);
     if ((c>=32) && (c<=126)) kbd_ascii =c;
     

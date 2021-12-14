@@ -17,9 +17,36 @@ int fputs(const char *str, FILE *stream);
 #include <stdio.h>
 #include <errno.h>
 #undef errno
-//extern int errno;
-extern int errno;
-#include <ff.h>
+
+// from cstubs
+extern int ___errno___;
+#define errno ___errno___
+
+extern char *__env[1];
+extern char **__environ__;
+#define environ __environ__
+
+/*
+extern int ___fork___( void );
+#define fork ___fork___
+
+extern int ___wait___( int *status );
+#define wait ___wait___
+*/
+
+/* Required include for fstat() */
+#include <sys/stat.h>
+
+/* Required include for times() */
+#include <sys/times.h>
+
+/* Prototype for the UART write function */
+#include <baremetal/pi_support.h>
+
+/* A pointer to a list of environment variables and their values. For a minimal
+   environment, this empty list is adequate: */
+
+#include <baremetal/ff.h>
 
 #define MAX_FILE_OPEN 10
 
@@ -128,7 +155,7 @@ DIR *__opendir(char *name);
 dirent *__readdir(DIR *cd);
 int __closedir(DIR *cd);
 char *__fgets(char *str, int n, FILE *stream);
-char * ff_getErrorText(int errNo);
+//char * ff_getErrorText(int errNo);
 int __fgetc(FILE *_f);
 int __feof(FILE *_f);
 int __fputs(const char *str, FILE *stream);
@@ -209,18 +236,6 @@ static inline int stricmp(const char *s1, const char *s2) {
 
 // returns -1 for "out of radix"
 int bm_atoi(char* str, int radix);
-/*
-static inline int isspace(int c)
-{
-   return c == ' ' || c == '\t'; // || whatever other char you consider space
-}
-static inline int islower(int c) {
-  return (c >= (int) 'a' && c <= (int) 'z') ? 1 : 0;
-}
-static inline int toupper(int c) {
-  return ((islower(c) != 0) ? (c - 32) : c);
-}
-*/
 
 int usleep(useconds_t microSeconds);
 
@@ -236,51 +251,10 @@ int crc32(const void *data, size_t n_bytes, uint32_t* crc);
 // big endian (to be used for constants only)
 #define BE(value)   ((((value) & 0xFF00) >> 8) | (((value) & 0x00FF) << 8))
 
-/* circle */
-// some same defines... but I don't care!
+extern void bcm2835_delayMicroseconds(uint64_t micros);
+#define usDelay bcm2835_delayMicroseconds
+#define MsDelay(millis) bcm2835_delayMicroseconds((uint64_t)((uint64_t)1000 * (uint64_t)millis))
 
-#define EnableInterrupts()  __asm volatile ("cpsie i")
-#define DisableInterrupts() __asm volatile ("cpsid i")
-
-//
-// Cache control
-//
-#define InvalidateInstructionCache()    \
-                __asm volatile ("mcr p15, 0, %0, c7, c5,  0" : : "r" (0) : "memory")
-#define FlushPrefetchBuffer()   __asm volatile ("mcr p15, 0, %0, c7, c5,  4" : : "r" (0) : "memory")
-#define FlushBranchTargetCache()    \
-                __asm volatile ("mcr p15, 0, %0, c7, c5,  6" : : "r" (0) : "memory")
-#define InvalidateDataCache()   __asm volatile ("mcr p15, 0, %0, c7, c6,  0" : : "r" (0) : "memory")
-#define CleanDataCache()    __asm volatile ("mcr p15, 0, %0, c7, c10, 0" : : "r" (0) : "memory")
-
-//
-// Barriers
-//
-#define DataSyncBarrier()   __asm volatile ("mcr p15, 0, %0, c7, c10, 4" : : "r" (0) : "memory")
-#define DataMemBarrier()    __asm volatile ("mcr p15, 0, %0, c7, c10, 5" : : "r" (0) : "memory")
-
-#define InstructionSyncBarrier() FlushPrefetchBuffer()
-#define InstructionMemBarrier() FlushPrefetchBuffer()
-
-#define CompilerBarrier()   __asm volatile ("" ::: "memory")
-
-
-void EnterCritical (void);
-void LeaveCritical (void);
-
-/* do I need anown implementation?
-void mem_init (unsigned long ulBase, unsigned long ulSize);
-unsigned long mem_get_size (void);
-
-void *__malloc (unsigned long ulSize);
-void __free (void *pBlock);
-
-#define malloc __malloc
-#define free __free
-*/
-
-void MsDelay (unsigned nMilliSeconds);  
-void usDelay (unsigned nMicroSeconds);
 
 #include <sys/time.h> // for __gettimeofday
 #define gettimeofday __gettimeofday

@@ -24,7 +24,10 @@
 #include <stdlib.h>
 #include "m6809_1.h"
 
+void (**m6809_1_writeHandler)(int,int);
+int (**m6809_1_readHandler)(int);
 
+ 
 int cpu_interrupt_1(void);
 static void m6809_1_FIRQ( void );
 

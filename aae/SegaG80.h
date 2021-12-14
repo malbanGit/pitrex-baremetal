@@ -11,9 +11,9 @@
 #define NUM_ZEKTOR_SPEECH 19
 #define NUM_STARTREK_SPEECH 23
 
-int NUM_SPEECH_SAMPLES;
+extern int NUM_SPEECH_SAMPLES;
 
-static int roarPlaying;	/* Is the ship roar noise playing? */
+//static int roarPlaying;	/* Is the ship roar noise playing? */
 
 //TACSCAN SOUND CONSTANTS
 #define	shipStop 0x10
@@ -78,7 +78,7 @@ void Zektor2_sh_w(UINT16 port, UINT8 data, struct z80PortWrite *pPW);
 void Zektor_AY8910_w(UINT16 port, UINT8 data, struct z80PortWrite *pPW);
 //void sega_switch_w(UINT16 port, UINT8 data, struct z80PortWrite *pPW);
 void TacScan_sh_w(UINT16 port, UINT8 data, struct z80PortWrite *pPW);
-void (*sega_decrypt)(int,unsigned int *);
+extern void (*sega_decrypt)(int,unsigned int *);
 //int check_sega_hi(int gamenum);
 /*
 int zektor_loadhi();

@@ -1,5 +1,18 @@
 #pragma once
 
+/*
+extern int currentSwitch;
+extern int currentRead;
+extern int currentWrite;
+extern int currentWait;
+extern int currentStage;
+extern int currentt1Counter;
+*/
+
+// seems, since PiZero2 is faster, we must adjust the cylce equivalent
+// I don'T relly undertstand, since the Mhz is the same... but fuck it...
+#define RASPPI3_CYCLE_OFFSET 7
+
 // if defined, all printf outputs 
 // are also written in a log printf.log
 // (as long as the file system is activated)
@@ -9,14 +22,42 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <pitrex/pitrexio-gpio.h>
-#include "baremetalUtil.h"
+#include <baremetal/pi_support.h>
 #include <vectrex/osWrapper.h>
 #include <uspi.h>
 
 
 #ifdef DEBUG_TO_FILE
 extern FILE *__debugf;
+
+extern volatile unsigned int isSMPMode;
+#if RASPPI != 1 
+
+extern volatile int printSemaphore;
+#define printf(...) do \
+{ \
+  int __ss = errno;\
+  if (isSMPMode){ while (printSemaphore);\
+  printSemaphore=1;}\
+  char __buff[256];\
+  sprintf(__buff,__VA_ARGS__);\
+  fprintf(stdout,__buff); \
+  if (logOutput)\
+  { \
+    if (!__debugf) {__debugf = fopen("../../../printf.log", "a"); \
+      {if (!__debugf) __debugf = fopen("../../printf.log", "a"); \
+         {if (!__debugf) __debugf = fopen("../printf.log", "a"); \
+            if (!__debugf) __debugf = fopen("printf.log", "a"); }}}\
+    if (__debugf) \
+    { \
+      fprintf(__debugf,__buff); \
+      fflush(__debugf); \
+    } \
+  }\
+  errno=__ss;printSemaphore=0;} while(0)
+
+#else
+
 #define printf(...) do \
 { \
   int __ss = errno;\
@@ -36,6 +77,16 @@ extern FILE *__debugf;
     } \
   }\
   errno=__ss;} while(0)
+
+#endif
+  
+  
+  
+  
+  
+  
+  
+  
 #endif
 
 
@@ -79,6 +130,7 @@ void v_enableJoystickDigital(int yesNoX1,int yesNoY1,int yesNoX2,int yesNoY2); /
 void v_enableJoystickAnalog(int yesNoX1,int yesNoY1,int yesNoX2,int yesNoY2);  // resets digital
 void v_enable50HzSync(int yesNo);
 void v_disableReturnToLoader();
+void v_enablePipelineCleanup(int e);
 
 
 #ifdef USE_PERSISTENT_VECTORS
@@ -466,13 +518,6 @@ do {\
 // delay value in vectrex cycles
 //#define DELAY_NANO(n) delayNano((n))
 
-/*
-#ifdef MHZ1000
-  #define DELAY_PI_CYCLE_EQUIVALENT 940//940 // nano seconds
-#else
-  #define DELAY_PI_CYCLE_EQUIVALENT 660 // nano seconds
-#endif
-*/
 
 
 /* possibly add:
@@ -721,11 +766,13 @@ typedef struct {
   char debug[240]; // reused for raster strings!
 } VectorPipelineBase;
 
+
+// used e.g. with commonHints
 typedef enum {
   PL_BASE_NO_FORCE = 0,
   PL_BASE_FORCE_ZERO = 1,
-  PL_BASE_FORCE_NO_ZERO = 2,
-  PL_BASE_FORCE_DEFLOK = 4,
+  PL_BASE_FORCE_NO_ZERO = 2, // this DOES draw the instruction it belongs to!
+  PL_BASE_FORCE_DEFLOK = 4, // this does NOT draw the instruction it belongs to!
   PL_BASE_FORCE_RESET_ZERO_REF = 8, 
   PL_BASE_FORCE_CALIBRATE_INTEGRATORS = 16, 
   PL_BASE_FORCE_STABLE = 32,                // < does never "move" - should be at the start of  drawingsr
@@ -805,23 +852,10 @@ extern VectorPipelineBase *cpb;
 //extern VectorPipelineBase pb[MAX_PIPELINE];
 extern int pipelineCounter; // used in aae to test, whether pipeline is areadly filled!
 
-extern int commonHints;
+extern int commonHints; // hints that are allways applied to the next "inserted" vector
 
 #define GLOBAL_FLAG_IS_INIT 1  // bit 0
 
-// 0x0000008c is a pointer to a structur of->
-typedef struct {
-  unsigned char flags;
-  void (*loader)(void);
-  unsigned char orientation;
-  void *lastSelection; // in loader menu
-  char parameter1[127];
-  char parameter2[127];
-  char parameter3[127];
-  char parameter4[127];
-} GlobalMemSettings;
-
-extern GlobalMemSettings *settings;
 
 
 inline static void v_resetIntegratorOffsets0()
@@ -966,3 +1000,20 @@ void itemListScrollDown(int step);
 void itemListAdd(char* text, int brightness);
 void itemListClear();
 void itemListSetPos(int x, int y);
+
+
+
+void v_setupSMPHandling();
+void v_removeMultiCore();
+
+
+
+
+
+
+
+
+
+
+
+

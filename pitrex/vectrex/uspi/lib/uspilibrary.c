@@ -32,66 +32,65 @@ static TUSPiLibrary *s_pLibrary = 0;
 int USPiInitialize (void)
 {
     if (s_pLibrary != 0) return 1;
-	LogWrite (FromUSPi, LOG_DEBUG, "Initializing " USPI_NAME " " USPI_VERSION_STRING);
+    
+    LogWrite (FromUSPi, LOG_DEBUG, "Initializing " USPI_NAME " " USPI_VERSION_STRING);
 
-	assert (s_pLibrary == 0);
-	s_pLibrary = (TUSPiLibrary *) malloc (sizeof (TUSPiLibrary));
-	assert (s_pLibrary != 0);
+    assert (s_pLibrary == 0);
+    s_pLibrary = (TUSPiLibrary *) malloc (sizeof (TUSPiLibrary));
+    assert (s_pLibrary != 0);
 
-	DeviceNameService (&s_pLibrary->NameService);
-	DWHCIDevice (&s_pLibrary->DWHCI);
-	s_pLibrary->pEth0 = 0;
-	s_pLibrary->pEth10 = 0;
+    DeviceNameService (&s_pLibrary->NameService);
+    DWHCIDevice (&s_pLibrary->DWHCI);
+    s_pLibrary->pEth0 = 0;
+    s_pLibrary->pEth10 = 0;
+    if (!DWHCIDeviceInitialize (&s_pLibrary->DWHCI))
+    {
+	    LogWrite (FromUSPi, LOG_ERROR, "Cannot initialize USB host controller interface");
 
-	if (!DWHCIDeviceInitialize (&s_pLibrary->DWHCI))
-	{
-		LogWrite (FromUSPi, LOG_ERROR, "Cannot initialize USB host controller interface");
+	    _DWHCIDevice (&s_pLibrary->DWHCI);
+	    _DeviceNameService (&s_pLibrary->NameService);
+	    free (s_pLibrary);
+	    s_pLibrary = 0;
 
-		_DWHCIDevice (&s_pLibrary->DWHCI);
-		_DeviceNameService (&s_pLibrary->NameService);
-		free (s_pLibrary);
-		s_pLibrary = 0;
+	    return 0;
+    }
+    s_pLibrary->pUKBD1 = (TUSBKeyboardDevice *) DeviceNameServiceGetDevice (DeviceNameServiceGet (), "ukbd1", FALSE);
 
-		return 0;
-	}
+    s_pLibrary->pUMouse1 = (TUSBMouseDevice *) DeviceNameServiceGetDevice (DeviceNameServiceGet (), "umouse1", FALSE);
 
-	s_pLibrary->pUKBD1 = (TUSBKeyboardDevice *) DeviceNameServiceGetDevice (DeviceNameServiceGet (), "ukbd1", FALSE);
+    s_pLibrary->pMIDI1 = (TUSBMIDIDevice *) DeviceNameServiceGetDevice (DeviceNameServiceGet (), "umidi1", FALSE);
 
-	s_pLibrary->pUMouse1 = (TUSBMouseDevice *) DeviceNameServiceGetDevice (DeviceNameServiceGet (), "umouse1", FALSE);
+    for (unsigned i = 0; i < MAX_DEVICES; i++)
+    {
+	    TString DeviceName;
+	    String  (&DeviceName);
+	    StringFormat (&DeviceName, "umsd%u", i+1);
 
-	s_pLibrary->pMIDI1 = (TUSBMIDIDevice *) DeviceNameServiceGetDevice (DeviceNameServiceGet (), "umidi1", FALSE);
+	    s_pLibrary->pUMSD[i] = (TUSBBulkOnlyMassStorageDevice *)
+		    DeviceNameServiceGetDevice (DeviceNameServiceGet (), StringGet (&DeviceName), TRUE);
 
-	for (unsigned i = 0; i < MAX_DEVICES; i++)
-	{
-		TString DeviceName;
-		String  (&DeviceName);
-		StringFormat (&DeviceName, "umsd%u", i+1);
+	    _String  (&DeviceName);
+    }
 
-		s_pLibrary->pUMSD[i] = (TUSBBulkOnlyMassStorageDevice *)
-			DeviceNameServiceGetDevice (DeviceNameServiceGet (), StringGet (&DeviceName), TRUE);
+    s_pLibrary->pEth0 = (TSMSC951xDevice *) DeviceNameServiceGetDevice (DeviceNameServiceGet (), "eth0", FALSE);
 
-		_String  (&DeviceName);
-	}
+    s_pLibrary->pEth10 = (TLAN7800Device *) DeviceNameServiceGetDevice (DeviceNameServiceGet (), "eth10", FALSE);
 
-	s_pLibrary->pEth0 = (TSMSC951xDevice *) DeviceNameServiceGetDevice (DeviceNameServiceGet (), "eth0", FALSE);
+    for (unsigned i = 0; i < MAX_DEVICES; i++)
+    {
+	    TString DeviceName;
+	    String  (&DeviceName);
+	    StringFormat (&DeviceName, "upad%u", i+1);
 
-	s_pLibrary->pEth10 = (TLAN7800Device *) DeviceNameServiceGetDevice (DeviceNameServiceGet (), "eth10", FALSE);
+	    s_pLibrary->pUPAD[i] = (TUSBGamePadDevice *)
+		    DeviceNameServiceGetDevice (DeviceNameServiceGet (), StringGet (&DeviceName), FALSE);
 
-	for (unsigned i = 0; i < MAX_DEVICES; i++)
-	{
-		TString DeviceName;
-		String  (&DeviceName);
-		StringFormat (&DeviceName, "upad%u", i+1);
+	    _String  (&DeviceName);
+    }
 
-		s_pLibrary->pUPAD[i] = (TUSBGamePadDevice *)
-			DeviceNameServiceGetDevice (DeviceNameServiceGet (), StringGet (&DeviceName), FALSE);
+    LogWrite (FromUSPi, LOG_DEBUG, USPI_NAME " successfully initialized");
 
-		_String  (&DeviceName);
-	}
-
-	LogWrite (FromUSPi, LOG_DEBUG, USPI_NAME " successfully initialized");
-
-	return 1;
+    return 1;
 }
 
 int USPiKeyboardAvailable (void)

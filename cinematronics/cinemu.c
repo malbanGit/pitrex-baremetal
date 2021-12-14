@@ -10,9 +10,7 @@
 #include <ctype.h>
 #include <errno.h>
 
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
-//#include <vectrex/osWrapper.h>
 
 
 

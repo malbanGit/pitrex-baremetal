@@ -1,0 +1,18 @@
+hash-djb2.o: hash-djb2.c /usr/include/stdc-predef.h ../config.h \
+ /usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h ../gnulib/c-ctype.h \
+ /usr/lib/gcc/x86_64-linux-gnu/9/include/stdbool.h ../gnulib/c-strcase.h \
+ hash-djb2.h
+
+/usr/include/stdc-predef.h:
+
+../config.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h:
+
+../gnulib/c-ctype.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/9/include/stdbool.h:
+
+../gnulib/c-strcase.h:
+
+hash-djb2.h:

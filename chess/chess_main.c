@@ -4,10 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef FREESTANDING
-#include <pthread.h>
-#endif
-
 // MARK: -  Chess engine calls
 
 void chess_last_move(int* from_col, int* from_row, int* to_col, int* to_row);
@@ -578,7 +574,6 @@ void animate_computer() {
 }
 
 
-#ifdef FREESTANDING
 
 // MARK: - Chess
 void computer_move() 
@@ -588,36 +583,6 @@ void computer_move()
     chess_last_move(&game_comp_from_x, &game_comp_from_y, &game_comp_to_x, &game_comp_to_y);
     game_change_state(COMPUTER_MOVED);
 }
-#else
-void* threadFunction(void* args) {
-	printf("Start thinking in thread\n");
-	chess_computer_move();
-	printf("End of thinking in thread\n");
-
-    chess_last_move(&game_comp_from_x, &game_comp_from_y, &game_comp_to_x, &game_comp_to_y);
-    
-    game_change_state(COMPUTER_MOVED);
-
-    return 0;
-}
-
-void computer_move() {
-	pthread_t id;
-    int ret;
-    
-    // creating thread
-    ret = pthread_create(&id, NULL, &threadFunction,NULL);
-    if (ret == 0) {
-    	printf("Thinking thread created successfully.\n");
-
-        game_change_state(COMPUTER_THINK);
-        sprintf(comp_info, "THINKING");
-    }
-    else {
-        printf("Thread not created.\n");
-    }
-}
-#endif
 
 boolean user_move() {
     int from = game_from_y*8+game_from_x;

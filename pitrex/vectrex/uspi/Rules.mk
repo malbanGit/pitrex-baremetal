@@ -58,7 +58,7 @@ OPTIMIZE ?= -O2
 
 AFLAGS	+= $(ARCH) -DRASPPI=$(RASPPI)
 CFLAGS	+= $(ARCH) -Wall -Wno-psabi -fsigned-char -fno-builtin -nostdinc -nostdlib \
-	   -std=gnu99 -undef -DRASPPI=$(RASPPI) -I $(USPIHOME)/include $(OPTIMIZE) #-DNDEBUG
+	   -std=gnu99 -undef -DRASPPI=$(RASPPI) -I $(USPIHOME)/include $(OPTIMIZE) #-DUSPIDEBUG
 
 %.o: %.S
 	@echo "  AS    $@"

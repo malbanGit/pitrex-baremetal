@@ -29,7 +29,6 @@
 #include <stdbool.h>
 #include <pthread.h>
 
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
 
 #define MAXSTACK 4

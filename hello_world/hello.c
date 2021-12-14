@@ -1,4 +1,3 @@
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
 
 void startFrame()

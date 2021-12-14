@@ -59,7 +59,7 @@
 UINT32 z80intAddr;
 UINT32 z80pc;
 
-
+struct mz80context RETRO_PACKED ;
 
 
 /* Modular global variables go here*/

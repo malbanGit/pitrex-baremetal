@@ -49,9 +49,9 @@ struct CCPUConfig
 /**************************************************************************
     PUBLIC VARS
 **************************************************************************/
- UINT8 MUX_VAL;
- UINT8 SOUNDBITS;
- UINT8 CCPUROMSIZE;
+extern  UINT8 MUX_VAL;
+extern  UINT8 SOUNDBITS;
+extern  UINT8 CCPUROMSIZE;
 
 /***************************************************************************
     PUBLIC FUNCTIONS

@@ -1,0 +1,3 @@
+ 
+21.11.2021
+ - TODO IRQ ALL NON PIPELINE stuff is not using WAIT!!!

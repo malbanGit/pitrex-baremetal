@@ -1,13 +1,3 @@
-/*
-    Part of the Raspberry-Pi Bare Metal Tutorials
-    https://www.valvers.com/rpi/bare-metal/
-    Copyright (c) 2013-2018, Brian Sidebotham
-
-    This software is licensed under the MIT License.
-    Please see the LICENSE file included with this software.
-
-*/
-
 /* For more information about this file, please visit:
    https://sourceware.org/newlib/libc.html#Stubs
 
@@ -34,8 +24,8 @@
 */
 #include <errno.h>
 #undef errno
-//extern int errno;
-int errno;
+int ___errno___;
+#define errno ___errno___
 
 /* Required include for fstat() */
 #include <sys/stat.h>
@@ -44,13 +34,12 @@ int errno;
 #include <sys/times.h>
 
 /* Prototype for the UART write function */
-#include "rpi-aux.h"
-#include "rpi-systimer.h"
+#include "pi_support.h"
 
 /* A pointer to a list of environment variables and their values. For a minimal
    environment, this empty list is adequate: */
 char *__env[1] = {0};
-char **environ = __env;
+char **__environ__ = __env;
 
 /* A helper function written in assembler to aid us in allocating memory */
 extern caddr_t _get_stack_pointer(void);
@@ -88,7 +77,14 @@ int _open(const char *name, int flags, int mode)
 
 /* Transfer control to a new process. Minimal implementation (for a system
    without processes): */
+/*
 int execve( char *name, char **argv, char **env )
+{
+    errno = ENOMEM;
+    return -1;
+}
+*/
+int _execve( char *name, char **argv, char **env )
 {
     errno = ENOMEM;
     return -1;
@@ -97,7 +93,15 @@ int execve( char *name, char **argv, char **env )
 
 /* Create a new process. Minimal implementation (for a system without
    processes): */
+//int ___fork___( void )
+/*
 int fork( void )
+{
+    errno = EAGAIN;
+    return -1;
+}
+*/
+int _fork( void )
 {
     errno = EAGAIN;
     return -1;
@@ -176,12 +180,32 @@ int _read( int file, char *ptr, int len )
 {
     return 0;
 }
-
+/*
+// Read from a file. Minimal implementation: 
+int read( int file, char *ptr, int len )
+{
+    return 0;
+}
+*/
 
 /* Increase program data space. As malloc and related functions depend on this,
    it is useful to have a working implementation. The following suffices for a
    standalone system; it exploits the symbol _end automatically defined by the
    GNU linker. */
+caddr_t sbrk( int incr )
+{
+    extern char _end;
+    static char* heap_end = 0;
+    char* prev_heap_end;
+
+    if( heap_end == 0 )
+        heap_end = &_end;
+
+     prev_heap_end = heap_end;
+     heap_end += incr;
+
+     return (caddr_t)prev_heap_end;
+}
 caddr_t _sbrk( int incr )
 {
     extern char _end;
@@ -222,7 +246,13 @@ int unlink( char *name )
 
 
 /* Wait for a child process. Minimal implementation: */
+//int ___wait___( int *status )
 int wait( int *status )
+{
+    errno = ECHILD;
+    return -1;
+}
+int _wait( int *status )
 {
     errno = ECHILD;
     return -1;
@@ -258,5 +288,6 @@ int _gettimeofday( struct timeval *tv, void *tzvp )
     t = t*1000;  // get uptime in nanoseconds
     tv->tv_sec = t / 1000000000;  // convert to seconds
     tv->tv_usec = ( t % 1000000000 ) / 1000;  // get remaining microseconds
+    
     return 0;  // return non-zero for error
 } // end _gettimeofday()

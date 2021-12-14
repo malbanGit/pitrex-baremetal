@@ -23,7 +23,7 @@
 #include <uspienv/debug.h>
 #include <uspienv/types.h>
 
-#ifndef NDEBUG
+#ifdef USPIDEBUG
 
 void assertion_failed (const char *pExpr, const char *pFile, unsigned nLine)
 {

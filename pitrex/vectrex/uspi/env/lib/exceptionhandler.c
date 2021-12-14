@@ -108,7 +108,7 @@ void ExceptionHandlerThrow2 (TExceptionHandler *pThis, unsigned nException, TAbo
 		sp = pFrame->sp_irq;
 	}
 	
-#ifndef NDEBUG
+#ifdef USPIDEBUG
 	debug_stacktrace ((u32 *) sp, FromExcept);
 #endif
 

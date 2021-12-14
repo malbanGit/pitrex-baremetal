@@ -21,6 +21,7 @@
 //
 #ifndef _uspios_h
 #define _uspios_h
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -61,8 +62,19 @@ void free (void *pBlock);
 //
 // Timer
 //
-void MsDelay (unsigned nMilliSeconds);	
-void usDelay (unsigned nMicroSeconds);
+//void MsDelay (unsigned nMilliSeconds);	
+//void usDelay (unsigned nMicroSeconds);
+
+
+// pitrexio-gpio.c
+extern void bcm2835_delayMicroseconds(uint64_t micros);
+#ifndef usDelay
+#define usDelay bcm2835_delayMicroseconds
+#endif
+#ifndef MsDelay
+#define MsDelay(millis) bcm2835_delayMicroseconds((uint64_t)((uint64_t)1000 * (uint64_t)millis))
+#endif
+
 
 #ifndef AARCH64
 	typedef unsigned TKernelTimerHandle;
@@ -116,7 +128,7 @@ void LogWrite (const char *pSource,		// short name of module
 //
 // Debug support
 //
-#ifndef NDEBUG
+#ifdef USPIDEBUG
 
 // display "assertion failed" message and halt
 void uspi_assertion_failed (const char *pExpr, const char *pFile, unsigned nLine);

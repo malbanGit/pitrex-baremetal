@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
 #ifndef TRUE
 #define TRUE (0==0)

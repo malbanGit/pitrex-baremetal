@@ -1,0 +1,3 @@
+man_MANS = asm6809.1
+
+EXTRA_DIST = asm6809.1

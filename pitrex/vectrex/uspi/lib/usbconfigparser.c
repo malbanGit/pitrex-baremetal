@@ -207,7 +207,7 @@ void USBConfigurationParserError (TUSBConfigurationParser *pThis, const char *pS
 	LogWrite (pSource, LOG_ERROR,
 		     "Invalid configuration descriptor (offset 0x%X)",
 		     (unsigned) ((uintptr) pThis->m_pErrorPosition - (uintptr) pThis->m_pBuffer));
-#ifndef NDEBUG
+#ifdef USPIDEBUG
 	DebugHexdump (pThis->m_pBuffer, pThis->m_nBufLen, pSource);
 #endif
 }

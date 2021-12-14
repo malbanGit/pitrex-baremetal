@@ -126,7 +126,7 @@ boolean USBStandardHubConfigure (TUSBFunction *pUSBFunction)
 		return FALSE;
 	}
 
-#ifndef NDEBUG
+#ifdef USPIDEBUG
 	//DebugHexdump (pThis->m_pHubDesc, sizeof *pThis->m_pHubDesc, FromHub);
 #endif
 

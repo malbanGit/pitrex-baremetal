@@ -2,9 +2,7 @@
 #include <stdint.h>
 
 #include "vecx.h"
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
-#include <vectrex/baremetalUtil.h>
 
 #include "e6809.h"
 extern int isShallowRead;
@@ -125,7 +123,7 @@ static __inline void set_reg_d(uint16_t value)
  * while the upper bits are all zero.
  */
 
-static __inline uint8_t read8(uint16_t address)
+static __inline uint8_t vx_read8(uint16_t address)
 {
 	return (*e6809_read8) (address);
 }
@@ -134,7 +132,7 @@ static __inline uint8_t read8(uint16_t address)
  * is written. the upper bits are ignored.
  */
 
-static __inline void write8(uint16_t address, uint8_t data)
+static __inline void vx_write8(uint16_t address, uint8_t data)
 {
 	(*e6809_write8) (address, data);
 }
@@ -149,7 +147,7 @@ void via_write(uint16_t address, uint8_t data);
 
 
 
-static __inline  uint8_t read8(uint16_t address)
+static __inline  uint8_t vx_read8(uint16_t address)
 {
     uint8_t data = 0xff;
 
@@ -186,7 +184,7 @@ static __inline  uint8_t read8(uint16_t address)
     return data;
 }
 
-static __inline void  write8(uint16_t address, uint8_t data)
+static __inline void  vx_write8(uint16_t address, uint8_t data)
 {
     if ((address & 0xe000) == 0xe000)
     {
@@ -231,28 +229,28 @@ static __inline void  write8(uint16_t address, uint8_t data)
 
 
 
-static __inline uint16_t read16(uint16_t address)
+static __inline uint16_t vx_read16(uint16_t address)
 {
-	return (read8(address) << 8) | read8(address + 1);
+	return (vx_read8(address) << 8) | vx_read8(address + 1);
 }
 
-static __inline void write16(uint16_t address, uint16_t data)
+static __inline void vx_write16(uint16_t address, uint16_t data)
 {
-	write8(address, (uint8_t)(data >> 8));
-	write8(address + 1, (uint8_t)data);
+	vx_write8(address, (uint8_t)(data >> 8));
+	vx_write8(address + 1, (uint8_t)data);
 }
 
 static __inline void push8(uint16_t *sp, uint8_t data)
 {
 	(*sp)--;
-	write8(*sp, data);
+	vx_write8(*sp, data);
 }
 
 static __inline uint8_t pull8(uint16_t *sp)
 {
 	uint8_t data;
 
-	data = read8(*sp);
+	data = vx_read8(*sp);
 	(*sp)++;
 
 	return data;
@@ -272,18 +270,18 @@ static __inline uint16_t pull16(uint16_t *sp)
 
 /* read a byte from the address pointed to by the pc */
 
-static __inline uint8_t pc_read8(void)
+static __inline uint8_t pc_vx_read8(void)
 {
-	return read8(CPU.reg_pc++);
+	return vx_read8(CPU.reg_pc++);
 }
 
 /* read a word from the address pointed to by the pc */
 
-static __inline uint16_t pc_read16(void)
+static __inline uint16_t pc_vx_read16(void)
 {
 	uint16_t data;
 
-	data = read16(CPU.reg_pc);
+	data = vx_read16(CPU.reg_pc);
 	CPU.reg_pc += 2;
 
 	return data;
@@ -303,7 +301,7 @@ static __inline uint16_t sign_extend(uint16_t data)
 
 static __inline uint16_t ea_direct(void)
 {
-	return (CPU.reg_dp << 8) | pc_read8();
+	return (CPU.reg_dp << 8) | pc_vx_read8();
 }
 
 /* extended addressing, address is obtained from 2 bytes following
@@ -312,7 +310,7 @@ static __inline uint16_t ea_direct(void)
 
 static __inline uint16_t ea_extended(void)
 {
-	return pc_read16();
+	return pc_vx_read16();
 }
 
 /* indexed addressing */
@@ -323,7 +321,7 @@ static __inline uint16_t ea_indexed(uint16_t *cycles)
 
 	/* post byte */
 
-	uint16_t op = pc_read8();
+	uint16_t op = pc_vx_read8();
 
 	uint16_t r = (op >> 5) & 3;
 
@@ -387,7 +385,7 @@ static __inline uint16_t ea_indexed(uint16_t *cycles)
 	case 0xf0: case 0xf1:
 		/* [,R+] ??? / [,R++] */
 
-		ea = read16(*CPU.rptr_xyus[r]);
+		ea = vx_read16(*CPU.rptr_xyus[r]);
 		*CPU.rptr_xyus[r] += 1 + (op & 1);
 		*cycles += 5 + (op & 1);
 		break;
@@ -409,7 +407,7 @@ static __inline uint16_t ea_indexed(uint16_t *cycles)
 		/* [,-R] ??? / [,--R] */
 
 		*CPU.rptr_xyus[r] -= 1 + (op & 1);
-		ea = read16(*CPU.rptr_xyus[r]);
+		ea = vx_read16(*CPU.rptr_xyus[r]);
 		*cycles += 5 + (op & 1);
 		break;
 	case 0x84: case 0xa4:
@@ -422,7 +420,7 @@ static __inline uint16_t ea_indexed(uint16_t *cycles)
 	case 0xd4: case 0xf4:
 		/* [,R] */
 
-		ea = read16(*CPU.rptr_xyus[r]);
+		ea = vx_read16(*CPU.rptr_xyus[r]);
 		*cycles += 3;
 		break;
 	case 0x85: case 0xa5:
@@ -436,7 +434,7 @@ static __inline uint16_t ea_indexed(uint16_t *cycles)
 	case 0xd5: case 0xf5:
 		/* [B,R] */
 
-		ea = read16(*CPU.rptr_xyus[r] + sign_extend(CPU.reg_b));
+		ea = vx_read16(*CPU.rptr_xyus[r] + sign_extend(CPU.reg_b));
 		*cycles += 4;
 		break;
 	case 0x86: case 0xa6:
@@ -450,35 +448,35 @@ static __inline uint16_t ea_indexed(uint16_t *cycles)
 	case 0xd6: case 0xf6:
 		/* [A,R] */
 
-		ea = read16(*CPU.rptr_xyus[r] + sign_extend(CPU.reg_a));
+		ea = vx_read16(*CPU.rptr_xyus[r] + sign_extend(CPU.reg_a));
 		*cycles += 4;
 		break;
 	case 0x88: case 0xa8:
 	case 0xc8: case 0xe8:
 		/* byte,R */
 
-		ea = *CPU.rptr_xyus[r] + sign_extend(pc_read8());
+		ea = *CPU.rptr_xyus[r] + sign_extend(pc_vx_read8());
 		*cycles += 1;
 		break;
 	case 0x98: case 0xb8:
 	case 0xd8: case 0xf8:
 		/* [byte,R] */
 
-		ea = read16(*CPU.rptr_xyus[r] + sign_extend(pc_read8()));
+		ea = vx_read16(*CPU.rptr_xyus[r] + sign_extend(pc_vx_read8()));
 		*cycles += 4;
 		break;
 	case 0x89: case 0xa9:
 	case 0xc9: case 0xe9:
 		/* word,R */
 
-		ea = *CPU.rptr_xyus[r] + pc_read16();
+		ea = *CPU.rptr_xyus[r] + pc_vx_read16();
 		*cycles += 4;
 		break;
 	case 0x99: case 0xb9:
 	case 0xd9: case 0xf9:
 		/* [word,R] */
 
-		ea = read16(*CPU.rptr_xyus[r] + pc_read16());
+		ea = vx_read16(*CPU.rptr_xyus[r] + pc_vx_read16());
 		*cycles += 7;
 		break;
 	case 0x8b: case 0xab:
@@ -492,14 +490,14 @@ static __inline uint16_t ea_indexed(uint16_t *cycles)
 	case 0xdb: case 0xfb:
 		/* [D,R] */
 
-		ea = read16(*CPU.rptr_xyus[r] + get_reg_d());
+		ea = vx_read16(*CPU.rptr_xyus[r] + get_reg_d());
 		*cycles += 7;
 		break;
 	case 0x8c: case 0xac:
 	case 0xcc: case 0xec:
 		/* byte, PC */
 
-		r = sign_extend(pc_read8());
+		r = sign_extend(pc_vx_read8());
 		ea = CPU.reg_pc + r;
 		*cycles += 1;
 		break;
@@ -507,15 +505,15 @@ static __inline uint16_t ea_indexed(uint16_t *cycles)
 	case 0xdc: case 0xfc:
 		/* [byte, PC] */
 
-		r = sign_extend(pc_read8());
-		ea = read16(CPU.reg_pc + r);
+		r = sign_extend(pc_vx_read8());
+		ea = vx_read16(CPU.reg_pc + r);
 		*cycles += 4;
 		break;
 	case 0x8d: case 0xad:
 	case 0xcd: case 0xed:
 		/* word, PC */
 
-		r = pc_read16();
+		r = pc_vx_read16();
 		ea = CPU.reg_pc + r;
 		*cycles += 5;
 		break;
@@ -523,14 +521,14 @@ static __inline uint16_t ea_indexed(uint16_t *cycles)
 	case 0xdd: case 0xfd:
 		/* [word, PC] */
 
-		r = pc_read16();
-		ea = read16(CPU.reg_pc + r);
+		r = pc_vx_read16();
+		ea = vx_read16(CPU.reg_pc + r);
 		*cycles += 8;
 		break;
 	case 0x9f:
 		/* [address] */
 
-		ea = read16(pc_read16());
+		ea = vx_read16(pc_vx_read16());
 		*cycles += 5;
 		break;
 	default:
@@ -867,7 +865,7 @@ static __inline uint16_t inst_sub16(uint16_t data0, uint16_t data1)
 
 static __inline void inst_bra8(uint16_t test, uint16_t op, uint16_t *cycles)
 {
-	uint16_t offset = pc_read8();
+	uint16_t offset = pc_vx_read8();
 
 	/* trying to avoid an if statement */
 
@@ -881,7 +879,7 @@ static __inline void inst_bra8(uint16_t test, uint16_t op, uint16_t *cycles)
 
 static __inline void inst_bra16(uint16_t test, uint16_t op, uint16_t *cycles)
 {
-	uint16_t offset = pc_read16();
+	uint16_t offset = pc_vx_read16();
 
 	/* trying to avoid an if statement */
 
@@ -1090,7 +1088,7 @@ static __inline void exgtfr_write(uint16_t reg, uint16_t data)
 
 static __inline void inst_exg(void)
 {
-	uint16_t op = pc_read8();
+	uint16_t op = pc_vx_read8();
 
 	uint16_t tmp = exgtfr_read(op & 0xf);
 	exgtfr_write(op & 0xf, exgtfr_read(op >> 4));
@@ -1101,7 +1099,7 @@ static __inline void inst_exg(void)
 
 static __inline void inst_tfr(void)
 {
-	uint16_t op = pc_read8();
+	uint16_t op = pc_vx_read8();
 
 	exgtfr_write(op & 0xf, exgtfr_read(op >> 4));
 }
@@ -1128,7 +1126,7 @@ void e6809_reset(void)
 	CPU.rptr_xyus[2] = &CPU.reg_u;
 	CPU.rptr_xyus[3] = &CPU.reg_s;
 
-	CPU.reg_pc = read16(0xfffe);
+	CPU.reg_pc = vx_read16(0xfffe);
 }
 
 /* execute a single instruction or handle interrupts and return */
@@ -1150,7 +1148,7 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 			set_cc(FLAG_I, 1);
 			set_cc(FLAG_F, 1);
 
-			CPU.reg_pc = read16(0xfff6);
+			CPU.reg_pc = vx_read16(0xfff6);
 			CPU.irq_status = IRQ_NORMAL;
 			cycles += 7;
 		}
@@ -1175,7 +1173,7 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 
 			set_cc(FLAG_I, 1);
 
-			CPU.reg_pc = read16(0xfff8);
+			CPU.reg_pc = vx_read16(0xfff8);
 			CPU.irq_status = IRQ_NORMAL;
 			cycles += 7;
 		}
@@ -1193,7 +1191,7 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		return cycles + 1;
 	}
 
-	uint16_t op = pc_read8();
+	uint16_t op = pc_vx_read8();
 	uint16_t ea, i0, i1, r;
 
 	switch (op)
@@ -1204,9 +1202,9 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 	case 0x00:
 		ea = ea_direct();
         isShallowRead = 1;
-		r = inst_neg(read8(ea));
+		r = inst_neg(vx_read8(ea));
         isShallowRead = 0;
-		write8(ea, (uint8_t)r);
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x40:
@@ -1219,23 +1217,23 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		break;
 	case 0x60:
 		ea = ea_indexed(&cycles);
-		r = inst_neg(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_neg(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x70:
 		ea = ea_extended();
         isShallowRead = 1;
-		r = inst_neg(read8(ea));
+		r = inst_neg(vx_read8(ea));
         isShallowRead = 0;
-		write8(ea, (uint8_t)r);
+		vx_write8(ea, (uint8_t)r);
 		cycles += 7;
 		break;
 		/* com, coma, comb */
 	case 0x03:
 		ea = ea_direct();
-		r = inst_com(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_com(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x43:
@@ -1248,21 +1246,21 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		break;
 	case 0x63:
 		ea = ea_indexed(&cycles);
-		r = inst_com(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_com(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x73:
 		ea = ea_extended();
-		r = inst_com(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_com(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 7;
 		break;
 		/* lsr, lsra, lsrb */
 	case 0x04:
 		ea = ea_direct();
-		r = inst_lsr(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_lsr(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x44:
@@ -1275,21 +1273,21 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		break;
 	case 0x64:
 		ea = ea_indexed(&cycles);
-		r = inst_lsr(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_lsr(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x74:
 		ea = ea_extended();
-		r = inst_lsr(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_lsr(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 7;
 		break;
 		/* ror, rora, rorb */
 	case 0x06:
 		ea = ea_direct();
-		r = inst_ror(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_ror(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x46:
@@ -1302,21 +1300,21 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		break;
 	case 0x66:
 		ea = ea_indexed(&cycles);
-		r = inst_ror(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_ror(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x76:
 		ea = ea_extended();
-		r = inst_ror(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_ror(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 7;
 		break;
 		/* asr, asra, asrb */
 	case 0x07:
 		ea = ea_direct();
-		r = inst_asr(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_asr(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x47:
@@ -1329,21 +1327,21 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		break;
 	case 0x67:
 		ea = ea_indexed(&cycles);
-		r = inst_asr(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_asr(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x77:
 		ea = ea_extended();
-		r = inst_asr(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_asr(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 7;
 		break;
 		/* asl, asla, aslb */
 	case 0x08:
 		ea = ea_direct();
-		r = inst_asl(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_asl(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x48:
@@ -1356,21 +1354,21 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		break;
 	case 0x68:
 		ea = ea_indexed(&cycles);
-		r = inst_asl(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_asl(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x78:
 		ea = ea_extended();
-		r = inst_asl(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_asl(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 7;
 		break;
 		/* rol, rola, rolb */
 	case 0x09:
 		ea = ea_direct();
-		r = inst_rol(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_rol(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x49:
@@ -1383,23 +1381,23 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		break;
 	case 0x69:
 		ea = ea_indexed(&cycles);
-		r = inst_rol(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_rol(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x79:
 		ea = ea_extended();
-		r = inst_rol(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_rol(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 7;
 		break;
 		/* dec, deca, decb */
 	case 0x0a:
 		ea = ea_direct();
         isShallowRead = 1;
-		r = inst_dec(read8(ea));
+		r = inst_dec(vx_read8(ea));
         isShallowRead = 0;
-		write8(ea, (uint8_t)r);
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x4a:
@@ -1412,25 +1410,25 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		break;
 	case 0x6a:
 		ea = ea_indexed(&cycles);
-		r = inst_dec(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_dec(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x7a:
 		ea = ea_extended();
         isShallowRead = 1;
-		r = inst_dec(read8(ea));
+		r = inst_dec(vx_read8(ea));
         isShallowRead = 0;
-		write8(ea, (uint8_t)r);
+		vx_write8(ea, (uint8_t)r);
 		cycles += 7;
 		break;
 		/* inc, inca, incb */
 	case 0x0c:
 		ea = ea_direct();
         isShallowRead = 1;
-        r = inst_inc(read8(ea));
+        r = inst_inc(vx_read8(ea));
         isShallowRead = 0;
-		write8(ea, (uint8_t)r);
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x4c:
@@ -1443,22 +1441,22 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		break;
 	case 0x6c:
 		ea = ea_indexed(&cycles);
-		r = inst_inc(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_inc(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 6;
 		break;
 	case 0x7c:
         isShallowRead = 1;
 		ea = ea_extended();
         isShallowRead = 0;
-		r = inst_inc(read8(ea));
-		write8(ea, (uint8_t)r);
+		r = inst_inc(vx_read8(ea));
+		vx_write8(ea, (uint8_t)r);
 		cycles += 7;
 		break;
 		/* tst, tsta, tstb */
 	case 0x0d:
 		ea = ea_direct();
-		inst_tst8(read8(ea));
+		inst_tst8(vx_read8(ea));
 		cycles += 6;
 		break;
 	case 0x4d:
@@ -1471,12 +1469,12 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		break;
 	case 0x6d:
 		ea = ea_indexed(&cycles);
-		inst_tst8(read8(ea));
+		inst_tst8(vx_read8(ea));
 		cycles += 6;
 		break;
 	case 0x7d:
 		ea = ea_extended();
-		inst_tst8(read8(ea));
+		inst_tst8(vx_read8(ea));
 		cycles += 7;
 		break;
 		/* jmp */
@@ -1498,7 +1496,7 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
         isShallowRead = 1;
 		inst_clr();
         isShallowRead = 0;
-		write8(ea, 0);
+		vx_write8(ea, 0);
 		cycles += 6;
 		break;
 	case 0x4f:
@@ -1514,7 +1512,7 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 	case 0x6f:
 		ea = ea_indexed(&cycles);
 		inst_clr();
-		write8(ea, 0);
+		vx_write8(ea, 0);
 		cycles += 6;
 		break;
 	case 0x7f:
@@ -1522,641 +1520,641 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
         isShallowRead = 1;
 		inst_clr();
         isShallowRead = 0;
-		write8(ea, 0);
+		vx_write8(ea, 0);
 		cycles += 7;
 		break;
 		/* suba */
 	case 0x80:
-		CPU.reg_a = inst_sub8(CPU.reg_a, pc_read8());
+		CPU.reg_a = inst_sub8(CPU.reg_a, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0x90:
 		ea = ea_direct();
-		CPU.reg_a = inst_sub8(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_sub8(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xa0:
 		ea = ea_indexed(&cycles);
-		CPU.reg_a = inst_sub8(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_sub8(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xb0:
 		ea = ea_extended();
-		CPU.reg_a = inst_sub8(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_sub8(CPU.reg_a, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* subb */
 	case 0xc0:
-		CPU.reg_b = inst_sub8(CPU.reg_b, pc_read8());
+		CPU.reg_b = inst_sub8(CPU.reg_b, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0xd0:
 		ea = ea_direct();
-		CPU.reg_b = inst_sub8(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_sub8(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xe0:
 		ea = ea_indexed(&cycles);
-		CPU.reg_b = inst_sub8(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_sub8(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xf0:
 		ea = ea_extended();
-		CPU.reg_b = inst_sub8(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_sub8(CPU.reg_b, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* cmpa */
 	case 0x81:
-		inst_sub8(CPU.reg_a, pc_read8());
+		inst_sub8(CPU.reg_a, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0x91:
 		ea = ea_direct();
-		inst_sub8(CPU.reg_a, read8(ea));
+		inst_sub8(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xa1:
 		ea = ea_indexed(&cycles);
-		inst_sub8(CPU.reg_a, read8(ea));
+		inst_sub8(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xb1:
 		ea = ea_extended();
-		inst_sub8(CPU.reg_a, read8(ea));
+		inst_sub8(CPU.reg_a, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* cmpb */
 	case 0xc1:
-		inst_sub8(CPU.reg_b, pc_read8());
+		inst_sub8(CPU.reg_b, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0xd1:
 		ea = ea_direct();
-		inst_sub8(CPU.reg_b, read8(ea));
+		inst_sub8(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xe1:
 		ea = ea_indexed(&cycles);
-		inst_sub8(CPU.reg_b, read8(ea));
+		inst_sub8(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xf1:
 		ea = ea_extended();
-		inst_sub8(CPU.reg_b, read8(ea));
+		inst_sub8(CPU.reg_b, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* sbca */
 	case 0x82:
-		CPU.reg_a = inst_sbc(CPU.reg_a, pc_read8());
+		CPU.reg_a = inst_sbc(CPU.reg_a, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0x92:
 		ea = ea_direct();
-		CPU.reg_a = inst_sbc(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_sbc(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xa2:
 		ea = ea_indexed(&cycles);
-		CPU.reg_a = inst_sbc(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_sbc(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xb2:
 		ea = ea_extended();
-		CPU.reg_a = inst_sbc(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_sbc(CPU.reg_a, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* sbcb */
 	case 0xc2:
-		CPU.reg_b = inst_sbc(CPU.reg_b, pc_read8());
+		CPU.reg_b = inst_sbc(CPU.reg_b, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0xd2:
 		ea = ea_direct();
-		CPU.reg_b = inst_sbc(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_sbc(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xe2:
 		ea = ea_indexed(&cycles);
-		CPU.reg_b = inst_sbc(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_sbc(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xf2:
 		ea = ea_extended();
-		CPU.reg_b = inst_sbc(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_sbc(CPU.reg_b, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* anda */
 	case 0x84:
-		CPU.reg_a = inst_and(CPU.reg_a, pc_read8());
+		CPU.reg_a = inst_and(CPU.reg_a, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0x94:
 		ea = ea_direct();
-		CPU.reg_a = inst_and(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_and(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xa4:
 		ea = ea_indexed(&cycles);
-		CPU.reg_a = inst_and(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_and(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xb4:
 		ea = ea_extended();
-		CPU.reg_a = inst_and(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_and(CPU.reg_a, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* andb */
 	case 0xc4:
-		CPU.reg_b = inst_and(CPU.reg_b, pc_read8());
+		CPU.reg_b = inst_and(CPU.reg_b, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0xd4:
 		ea = ea_direct();
-		CPU.reg_b = inst_and(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_and(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xe4:
 		ea = ea_indexed(&cycles);
-		CPU.reg_b = inst_and(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_and(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xf4:
 		ea = ea_extended();
-		CPU.reg_b = inst_and(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_and(CPU.reg_b, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* bita */
 	case 0x85:
-		inst_and(CPU.reg_a, pc_read8());
+		inst_and(CPU.reg_a, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0x95:
 		ea = ea_direct();
-		inst_and(CPU.reg_a, read8(ea));
+		inst_and(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xa5:
 		ea = ea_indexed(&cycles);
-		inst_and(CPU.reg_a, read8(ea));
+		inst_and(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xb5:
 		ea = ea_extended();
-		inst_and(CPU.reg_a, read8(ea));
+		inst_and(CPU.reg_a, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* bitb */
 	case 0xc5:
-		inst_and(CPU.reg_b, pc_read8());
+		inst_and(CPU.reg_b, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0xd5:
 		ea = ea_direct();
-		inst_and(CPU.reg_b, read8(ea));
+		inst_and(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xe5:
 		ea = ea_indexed(&cycles);
-		inst_and(CPU.reg_b, read8(ea));
+		inst_and(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xf5:
 		ea = ea_extended();
-		inst_and(CPU.reg_b, read8(ea));
+		inst_and(CPU.reg_b, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* lda */
 	case 0x86:
-		CPU.reg_a = pc_read8();
+		CPU.reg_a = pc_vx_read8();
 		inst_tst8(CPU.reg_a);
 		cycles += 2;
 		break;
 	case 0x96:
 		ea = ea_direct();
-		CPU.reg_a = read8(ea);
+		CPU.reg_a = vx_read8(ea);
 		inst_tst8(CPU.reg_a);
 		cycles += 4;
 		break;
 	case 0xa6:
 		ea = ea_indexed(&cycles);
-		CPU.reg_a = read8(ea);
+		CPU.reg_a = vx_read8(ea);
 		inst_tst8(CPU.reg_a);
 		cycles += 4;
 		break;
 	case 0xb6:
 		ea = ea_extended();
-		CPU.reg_a = read8(ea);
+		CPU.reg_a = vx_read8(ea);
 		inst_tst8(CPU.reg_a);
 		cycles += 5;
 		break;
 		/* ldb */
 	case 0xc6:
-		CPU.reg_b = pc_read8();
+		CPU.reg_b = pc_vx_read8();
 		inst_tst8(CPU.reg_b);
 		cycles += 2;
 		break;
 	case 0xd6:
 		ea = ea_direct();
-		CPU.reg_b = read8(ea);
+		CPU.reg_b = vx_read8(ea);
 		inst_tst8(CPU.reg_b);
 		cycles += 4;
 		break;
 	case 0xe6:
 		ea = ea_indexed(&cycles);
-		CPU.reg_b = read8(ea);
+		CPU.reg_b = vx_read8(ea);
 		inst_tst8(CPU.reg_b);
 		cycles += 4;
 		break;
 	case 0xf6:
 		ea = ea_extended();
-		CPU.reg_b = read8(ea);
+		CPU.reg_b = vx_read8(ea);
 		inst_tst8(CPU.reg_b);
 		cycles += 5;
 		break;
 		/* sta */
 	case 0x97:
 		ea = ea_direct();
-		write8(ea, CPU.reg_a);
+		vx_write8(ea, CPU.reg_a);
 		inst_tst8(CPU.reg_a);
 		cycles += 4;
 		break;
 	case 0xa7:
 		ea = ea_indexed(&cycles);
-		write8(ea, CPU.reg_a);
+		vx_write8(ea, CPU.reg_a);
 		inst_tst8(CPU.reg_a);
 		cycles += 4;
 		break;
 	case 0xb7:
 		ea = ea_extended();
-		write8(ea, CPU.reg_a);
+		vx_write8(ea, CPU.reg_a);
 		inst_tst8(CPU.reg_a);
 		cycles += 5;
 		break;
 		/* stb */
 	case 0xd7:
 		ea = ea_direct();
-		write8(ea, CPU.reg_b);
+		vx_write8(ea, CPU.reg_b);
 		inst_tst8(CPU.reg_b);
 		cycles += 4;
 		break;
 	case 0xe7:
 		ea = ea_indexed(&cycles);
-		write8(ea, CPU.reg_b);
+		vx_write8(ea, CPU.reg_b);
 		inst_tst8(CPU.reg_b);
 		cycles += 4;
 		break;
 	case 0xf7:
 		ea = ea_extended();
-		write8(ea, CPU.reg_b);
+		vx_write8(ea, CPU.reg_b);
 		inst_tst8(CPU.reg_b);
 		cycles += 5;
 		break;
 		/* eora */
 	case 0x88:
-		CPU.reg_a = inst_eor(CPU.reg_a, pc_read8());
+		CPU.reg_a = inst_eor(CPU.reg_a, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0x98:
 		ea = ea_direct();
-		CPU.reg_a = inst_eor(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_eor(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xa8:
 		ea = ea_indexed(&cycles);
-		CPU.reg_a = inst_eor(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_eor(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xb8:
 		ea = ea_extended();
-		CPU.reg_a = inst_eor(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_eor(CPU.reg_a, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* eorb */
 	case 0xc8:
-		CPU.reg_b = inst_eor(CPU.reg_b, pc_read8());
+		CPU.reg_b = inst_eor(CPU.reg_b, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0xd8:
 		ea = ea_direct();
-		CPU.reg_b = inst_eor(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_eor(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xe8:
 		ea = ea_indexed(&cycles);
-		CPU.reg_b = inst_eor(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_eor(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xf8:
 		ea = ea_extended();
-		CPU.reg_b = inst_eor(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_eor(CPU.reg_b, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* adca */
 	case 0x89:
-		CPU.reg_a = inst_adc(CPU.reg_a, pc_read8());
+		CPU.reg_a = inst_adc(CPU.reg_a, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0x99:
 		ea = ea_direct();
-		CPU.reg_a = inst_adc(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_adc(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xa9:
 		ea = ea_indexed(&cycles);
-		CPU.reg_a = inst_adc(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_adc(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xb9:
 		ea = ea_extended();
-		CPU.reg_a = inst_adc(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_adc(CPU.reg_a, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* adcb */
 	case 0xc9:
-		CPU.reg_b = inst_adc(CPU.reg_b, pc_read8());
+		CPU.reg_b = inst_adc(CPU.reg_b, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0xd9:
 		ea = ea_direct();
-		CPU.reg_b = inst_adc(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_adc(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xe9:
 		ea = ea_indexed(&cycles);
-		CPU.reg_b = inst_adc(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_adc(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xf9:
 		ea = ea_extended();
-		CPU.reg_b = inst_adc(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_adc(CPU.reg_b, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* ora */
 	case 0x8a:
-		CPU.reg_a = inst_or(CPU.reg_a, pc_read8());
+		CPU.reg_a = inst_or(CPU.reg_a, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0x9a:
 		ea = ea_direct();
-		CPU.reg_a = inst_or(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_or(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xaa:
 		ea = ea_indexed(&cycles);
-		CPU.reg_a = inst_or(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_or(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xba:
 		ea = ea_extended();
-		CPU.reg_a = inst_or(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_or(CPU.reg_a, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* orb */
 	case 0xca:
-		CPU.reg_b = inst_or(CPU.reg_b, pc_read8());
+		CPU.reg_b = inst_or(CPU.reg_b, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0xda:
 		ea = ea_direct();
-		CPU.reg_b = inst_or(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_or(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xea:
 		ea = ea_indexed(&cycles);
-		CPU.reg_b = inst_or(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_or(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xfa:
 		ea = ea_extended();
-		CPU.reg_b = inst_or(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_or(CPU.reg_b, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* adda */
 	case 0x8b:
-		CPU.reg_a = inst_add8(CPU.reg_a, pc_read8());
+		CPU.reg_a = inst_add8(CPU.reg_a, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0x9b:
 		ea = ea_direct();
-		CPU.reg_a = inst_add8(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_add8(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xab:
 		ea = ea_indexed(&cycles);
-		CPU.reg_a = inst_add8(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_add8(CPU.reg_a, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xbb:
 		ea = ea_extended();
-		CPU.reg_a = inst_add8(CPU.reg_a, read8(ea));
+		CPU.reg_a = inst_add8(CPU.reg_a, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* addb */
 	case 0xcb:
-		CPU.reg_b = inst_add8(CPU.reg_b, pc_read8());
+		CPU.reg_b = inst_add8(CPU.reg_b, pc_vx_read8());
 		cycles += 2;
 		break;
 	case 0xdb:
 		ea = ea_direct();
-		CPU.reg_b = inst_add8(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_add8(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xeb:
 		ea = ea_indexed(&cycles);
-		CPU.reg_b = inst_add8(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_add8(CPU.reg_b, vx_read8(ea));
 		cycles += 4;
 		break;
 	case 0xfb:
 		ea = ea_extended();
-		CPU.reg_b = inst_add8(CPU.reg_b, read8(ea));
+		CPU.reg_b = inst_add8(CPU.reg_b, vx_read8(ea));
 		cycles += 5;
 		break;
 		/* subd */
 	case 0x83:
-		set_reg_d(inst_sub16(get_reg_d(), pc_read16()));
+		set_reg_d(inst_sub16(get_reg_d(), pc_vx_read16()));
 		cycles += 4;
 		break;
 	case 0x93:
 		ea = ea_direct();
-		set_reg_d(inst_sub16(get_reg_d(), read16(ea)));
+		set_reg_d(inst_sub16(get_reg_d(), vx_read16(ea)));
 		cycles += 6;
 		break;
 	case 0xa3:
 		ea = ea_indexed(&cycles);
-		set_reg_d(inst_sub16(get_reg_d(), read16(ea)));
+		set_reg_d(inst_sub16(get_reg_d(), vx_read16(ea)));
 		cycles += 6;
 		break;
 	case 0xb3:
 		ea = ea_extended();
-		set_reg_d(inst_sub16(get_reg_d(), read16(ea)));
+		set_reg_d(inst_sub16(get_reg_d(), vx_read16(ea)));
 		cycles += 7;
 		break;
 		/* cmpx */
 	case 0x8c:
-		inst_sub16(CPU.reg_x, pc_read16());
+		inst_sub16(CPU.reg_x, pc_vx_read16());
 		cycles += 4;
 		break;
 	case 0x9c:
 		ea = ea_direct();
-		inst_sub16(CPU.reg_x, read16(ea));
+		inst_sub16(CPU.reg_x, vx_read16(ea));
 		cycles += 6;
 		break;
 	case 0xac:
 		ea = ea_indexed(&cycles);
-		inst_sub16(CPU.reg_x, read16(ea));
+		inst_sub16(CPU.reg_x, vx_read16(ea));
 		cycles += 6;
 		break;
 	case 0xbc:
 		ea = ea_extended();
-		inst_sub16(CPU.reg_x, read16(ea));
+		inst_sub16(CPU.reg_x, vx_read16(ea));
 		cycles += 7;
 		break;
 		/* ldx */
 	case 0x8e:
-		CPU.reg_x = pc_read16();
+		CPU.reg_x = pc_vx_read16();
 		inst_tst16(CPU.reg_x);
 		cycles += 3;
 		break;
 	case 0x9e:
 		ea = ea_direct();
-		CPU.reg_x = read16(ea);
+		CPU.reg_x = vx_read16(ea);
 		inst_tst16(CPU.reg_x);
 		cycles += 5;
 		break;
 	case 0xae:
 		ea = ea_indexed(&cycles);
-		CPU.reg_x = read16(ea);
+		CPU.reg_x = vx_read16(ea);
 		inst_tst16(CPU.reg_x);
 		cycles += 5;
 		break;
 	case 0xbe:
 		ea = ea_extended();
-		CPU.reg_x = read16(ea);
+		CPU.reg_x = vx_read16(ea);
 		inst_tst16(CPU.reg_x);
 		cycles += 6;
 		break;
 		/* ldu */
 	case 0xce:
-		CPU.reg_u = pc_read16();
+		CPU.reg_u = pc_vx_read16();
 		inst_tst16(CPU.reg_u);
 		cycles += 3;
 		break;
 	case 0xde:
 		ea = ea_direct();
-		CPU.reg_u = read16(ea);
+		CPU.reg_u = vx_read16(ea);
 		inst_tst16(CPU.reg_u);
 		cycles += 5;
 		break;
 	case 0xee:
 		ea = ea_indexed(&cycles);
-		CPU.reg_u = read16(ea);
+		CPU.reg_u = vx_read16(ea);
 		inst_tst16(CPU.reg_u);
 		cycles += 5;
 		break;
 	case 0xfe:
 		ea = ea_extended();
-		CPU.reg_u = read16(ea);
+		CPU.reg_u = vx_read16(ea);
 		inst_tst16(CPU.reg_u);
 		cycles += 6;
 		break;
 		/* stx */
 	case 0x9f:
 		ea = ea_direct();
-		write16(ea, CPU.reg_x);
+		vx_write16(ea, CPU.reg_x);
 		inst_tst16(CPU.reg_x);
 		cycles += 5;
 		break;
 	case 0xaf:
 		ea = ea_indexed(&cycles);
-		write16(ea, CPU.reg_x);
+		vx_write16(ea, CPU.reg_x);
 		inst_tst16(CPU.reg_x);
 		cycles += 5;
 		break;
 	case 0xbf:
 		ea = ea_extended();
-		write16(ea, CPU.reg_x);
+		vx_write16(ea, CPU.reg_x);
 		inst_tst16(CPU.reg_x);
 		cycles += 6;
 		break;
 		/* stu */
 	case 0xdf:
 		ea = ea_direct();
-		write16(ea, CPU.reg_u);
+		vx_write16(ea, CPU.reg_u);
 		inst_tst16(CPU.reg_u);
 		cycles += 5;
 		break;
 	case 0xef:
 		ea = ea_indexed(&cycles);
-		write16(ea, CPU.reg_u);
+		vx_write16(ea, CPU.reg_u);
 		inst_tst16(CPU.reg_u);
 		cycles += 5;
 		break;
 	case 0xff:
 		ea = ea_extended();
-		write16(ea, CPU.reg_u);
+		vx_write16(ea, CPU.reg_u);
 		inst_tst16(CPU.reg_u);
 		cycles += 6;
 		break;
 		/* addd */
 	case 0xc3:
-		set_reg_d(inst_add16(get_reg_d(), pc_read16()));
+		set_reg_d(inst_add16(get_reg_d(), pc_vx_read16()));
 		cycles += 4;
 		break;
 	case 0xd3:
 		ea = ea_direct();
-		set_reg_d(inst_add16(get_reg_d(), read16(ea)));
+		set_reg_d(inst_add16(get_reg_d(), vx_read16(ea)));
 		cycles += 6;
 		break;
 	case 0xe3:
 		ea = ea_indexed(&cycles);
-		set_reg_d(inst_add16(get_reg_d(), read16(ea)));
+		set_reg_d(inst_add16(get_reg_d(), vx_read16(ea)));
 		cycles += 6;
 		break;
 	case 0xf3:
 		ea = ea_extended();
-		set_reg_d(inst_add16(get_reg_d(), read16(ea)));
+		set_reg_d(inst_add16(get_reg_d(), vx_read16(ea)));
 		cycles += 7;
 		break;
 		/* ldd */
 	case 0xcc:
-		set_reg_d(pc_read16());
+		set_reg_d(pc_vx_read16());
 		inst_tst16(get_reg_d());
 		cycles += 3;
 		break;
 	case 0xdc:
 		ea = ea_direct();
-		set_reg_d(read16(ea));
+		set_reg_d(vx_read16(ea));
 		inst_tst16(get_reg_d());
 		cycles += 5;
 		break;
 	case 0xec:
 		ea = ea_indexed(&cycles);
-		set_reg_d(read16(ea));
+		set_reg_d(vx_read16(ea));
 		inst_tst16(get_reg_d());
 		cycles += 5;
 		break;
 	case 0xfc:
 		ea = ea_extended();
-		set_reg_d(read16(ea));
+		set_reg_d(vx_read16(ea));
 		inst_tst16(get_reg_d());
 		cycles += 6;
 		break;
 		/* std */
 	case 0xdd:
 		ea = ea_direct();
-		write16(ea, get_reg_d());
+		vx_write16(ea, get_reg_d());
 		inst_tst16(get_reg_d());
 		cycles += 5;
 		break;
 	case 0xed:
 		ea = ea_indexed(&cycles);
-		write16(ea, get_reg_d());
+		vx_write16(ea, get_reg_d());
 		inst_tst16(get_reg_d());
 		cycles += 5;
 		break;
 	case 0xfd:
 		ea = ea_extended();
-		write16(ea, get_reg_d());
+		vx_write16(ea, get_reg_d());
 		inst_tst16(get_reg_d());
 		cycles += 6;
 		break;
@@ -2225,20 +2223,20 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		break;
 		/* lbra */
 	case 0x16:
-		r = pc_read16();
+		r = pc_vx_read16();
 		CPU.reg_pc += r;
 		cycles += 5;
 		break;
 		/* lbsr */
 	case 0x17:
-		r = pc_read16();
+		r = pc_vx_read16();
 		push16(&CPU.reg_s, CPU.reg_pc);
 		CPU.reg_pc += r;
 		cycles += 9;
 		break;
 		/* bsr */
 	case 0x8d:
-		r = pc_read8();
+		r = pc_vx_read8();
 		push16(&CPU.reg_s, CPU.reg_pc);
 		CPU.reg_pc += sign_extend(r);
 		cycles += 7;
@@ -2286,22 +2284,22 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		break;
 		/* pshs */
 	case 0x34:
-		inst_psh(pc_read8(), &CPU.reg_s, CPU.reg_u, &cycles);
+		inst_psh(pc_vx_read8(), &CPU.reg_s, CPU.reg_u, &cycles);
 		cycles += 5;
 		break;
 		/* puls */
 	case 0x35:
-		inst_pul(pc_read8(), &CPU.reg_s, &CPU.reg_u, &cycles);
+		inst_pul(pc_vx_read8(), &CPU.reg_s, &CPU.reg_u, &cycles);
 		cycles += 5;
 		break;
 		/* pshu */
 	case 0x36:
-		inst_psh(pc_read8(), &CPU.reg_u, CPU.reg_s, &cycles);
+		inst_psh(pc_vx_read8(), &CPU.reg_u, CPU.reg_s, &cycles);
 		cycles += 5;
 		break;
 		/* pulu */
 	case 0x37:
-		inst_pul(pc_read8(), &CPU.reg_u, &CPU.reg_s, &cycles);
+		inst_pul(pc_vx_read8(), &CPU.reg_u, &CPU.reg_s, &cycles);
 		cycles += 5;
 		break;
 		/* rts */
@@ -2316,12 +2314,12 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		break;
 		/* orcc */
 	case 0x1a:
-		CPU.reg_cc |= pc_read8();
+		CPU.reg_cc |= pc_vx_read8();
 		cycles += 3;
 		break;
 		/* andcc */
 	case 0x1c:
-		CPU.reg_cc &= pc_read8();
+		CPU.reg_cc &= pc_vx_read8();
 		cycles += 3;
 		break;
 		/* sex */
@@ -2360,7 +2358,7 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		inst_psh(0xff, &CPU.reg_s, CPU.reg_u, &cycles);
 		set_cc(FLAG_I, 1);
 		set_cc(FLAG_F, 1);
-		CPU.reg_pc = read16(0xfffa);
+		CPU.reg_pc = vx_read16(0xfffa);
 		cycles += 7;
 		break;
 		/* sync */
@@ -2398,7 +2396,7 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		break;
 		/* cwai */
 	case 0x3c:
-		CPU.reg_cc &= pc_read8();
+		CPU.reg_cc &= pc_vx_read8();
 		set_cc(FLAG_E, 1);
 		inst_psh(0xff, &CPU.reg_s, CPU.reg_u, &cycles);
 		CPU.irq_status = IRQ_CWAI;
@@ -2408,7 +2406,7 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		/* page 1 instructions */
 
 	case 0x10:
-		op = pc_read8();
+		op = pc_vx_read8();
 
 		switch (op)
 		{
@@ -2463,127 +2461,127 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 			break;
 			/* cmpd */
 		case 0x83:
-			inst_sub16(get_reg_d(), pc_read16());
+			inst_sub16(get_reg_d(), pc_vx_read16());
 			cycles += 5;
 			break;
 		case 0x93:
 			ea = ea_direct();
-			inst_sub16(get_reg_d(), read16(ea));
+			inst_sub16(get_reg_d(), vx_read16(ea));
 			cycles += 7;
 			break;
 		case 0xa3:
 			ea = ea_indexed(&cycles);
-			inst_sub16(get_reg_d(), read16(ea));
+			inst_sub16(get_reg_d(), vx_read16(ea));
 			cycles += 7;
 			break;
 		case 0xb3:
 			ea = ea_extended();
-			inst_sub16(get_reg_d(), read16(ea));
+			inst_sub16(get_reg_d(), vx_read16(ea));
 			cycles += 8;
 			break;
 			/* cmpy */
 		case 0x8c:
-			inst_sub16(CPU.reg_y, pc_read16());
+			inst_sub16(CPU.reg_y, pc_vx_read16());
 			cycles += 5;
 			break;
 		case 0x9c:
 			ea = ea_direct();
-			inst_sub16(CPU.reg_y, read16(ea));
+			inst_sub16(CPU.reg_y, vx_read16(ea));
 			cycles += 7;
 			break;
 		case 0xac:
 			ea = ea_indexed(&cycles);
-			inst_sub16(CPU.reg_y, read16(ea));
+			inst_sub16(CPU.reg_y, vx_read16(ea));
 			cycles += 7;
 			break;
 		case 0xbc:
 			ea = ea_extended();
-			inst_sub16(CPU.reg_y, read16(ea));
+			inst_sub16(CPU.reg_y, vx_read16(ea));
 			cycles += 8;
 			break;
 			/* ldy */
 		case 0x8e:
-			CPU.reg_y = pc_read16();
+			CPU.reg_y = pc_vx_read16();
 			inst_tst16(CPU.reg_y);
 			cycles += 4;
 			break;
 		case 0x9e:
 			ea = ea_direct();
-			CPU.reg_y = read16(ea);
+			CPU.reg_y = vx_read16(ea);
 			inst_tst16(CPU.reg_y);
 			cycles += 6;
 			break;
 		case 0xae:
 			ea = ea_indexed(&cycles);
-			CPU.reg_y = read16(ea);
+			CPU.reg_y = vx_read16(ea);
 			inst_tst16(CPU.reg_y);
 			cycles += 6;
 			break;
 		case 0xbe:
 			ea = ea_extended();
-			CPU.reg_y = read16(ea);
+			CPU.reg_y = vx_read16(ea);
 			inst_tst16(CPU.reg_y);
 			cycles += 7;
 			break;
 			/* sty */
 		case 0x9f:
 			ea = ea_direct();
-			write16(ea, CPU.reg_y);
+			vx_write16(ea, CPU.reg_y);
 			inst_tst16(CPU.reg_y);
 			cycles += 6;
 			break;
 		case 0xaf:
 			ea = ea_indexed(&cycles);
-			write16(ea, CPU.reg_y);
+			vx_write16(ea, CPU.reg_y);
 			inst_tst16(CPU.reg_y);
 			cycles += 6;
 			break;
 		case 0xbf:
 			ea = ea_extended();
-			write16(ea, CPU.reg_y);
+			vx_write16(ea, CPU.reg_y);
 			inst_tst16(CPU.reg_y);
 			cycles += 7;
 			break;
 			/* lds */
 		case 0xce:
-			CPU.reg_s = pc_read16();
+			CPU.reg_s = pc_vx_read16();
 			inst_tst16(CPU.reg_s);
 			cycles += 4;
 			break;
 		case 0xde:
 			ea = ea_direct();
-			CPU.reg_s = read16(ea);
+			CPU.reg_s = vx_read16(ea);
 			inst_tst16(CPU.reg_s);
 			cycles += 6;
 			break;
 		case 0xee:
 			ea = ea_indexed(&cycles);
-			CPU.reg_s = read16(ea);
+			CPU.reg_s = vx_read16(ea);
 			inst_tst16(CPU.reg_s);
 			cycles += 6;
 			break;
 		case 0xfe:
 			ea = ea_extended();
-			CPU.reg_s = read16(ea);
+			CPU.reg_s = vx_read16(ea);
 			inst_tst16(CPU.reg_s);
 			cycles += 7;
 			break;
 			/* sts */
 		case 0xdf:
 			ea = ea_direct();
-			write16(ea, CPU.reg_s);
+			vx_write16(ea, CPU.reg_s);
 			inst_tst16(CPU.reg_s);
 			cycles += 6;
 			break;
 		case 0xef:
 			ea = ea_indexed(&cycles);
-			write16(ea, CPU.reg_s);
+			vx_write16(ea, CPU.reg_s);
 			inst_tst16(CPU.reg_s);
 			cycles += 6;
 			break;
 		case 0xff:
 			ea = ea_extended();
-			write16(ea, CPU.reg_s);
+			vx_write16(ea, CPU.reg_s);
 			inst_tst16(CPU.reg_s);
 			cycles += 7;
 			break;
@@ -2591,7 +2589,7 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		case 0x3f:
 			set_cc(FLAG_E, 1);
 			inst_psh(0xff, &CPU.reg_s, CPU.reg_u, &cycles);
-			CPU.reg_pc = read16(0xfff4);
+			CPU.reg_pc = vx_read16(0xfff4);
 			cycles += 8;
 			break;
 		default:
@@ -2604,55 +2602,55 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		/* page 2 instructions */
 
 	case 0x11:
-		op = pc_read8();
+		op = pc_vx_read8();
 
 		switch (op)
 		{
 			/* cmpu */
 		case 0x83:
-			inst_sub16(CPU.reg_u, pc_read16());
+			inst_sub16(CPU.reg_u, pc_vx_read16());
 			cycles += 5;
 			break;
 		case 0x93:
 			ea = ea_direct();
-			inst_sub16(CPU.reg_u, read16(ea));
+			inst_sub16(CPU.reg_u, vx_read16(ea));
 			cycles += 7;
 			break;
 		case 0xa3:
 			ea = ea_indexed(&cycles);
-			inst_sub16(CPU.reg_u, read16(ea));
+			inst_sub16(CPU.reg_u, vx_read16(ea));
 			cycles += 7;
 			break;
 		case 0xb3:
 			ea = ea_extended();
-			inst_sub16(CPU.reg_u, read16(ea));
+			inst_sub16(CPU.reg_u, vx_read16(ea));
 			cycles += 8;
 			break;
 			/* cmps */
 		case 0x8c:
-			inst_sub16(CPU.reg_s, pc_read16());
+			inst_sub16(CPU.reg_s, pc_vx_read16());
 			cycles += 5;
 			break;
 		case 0x9c:
 			ea = ea_direct();
-			inst_sub16(CPU.reg_s, read16(ea));
+			inst_sub16(CPU.reg_s, vx_read16(ea));
 			cycles += 7;
 			break;
 		case 0xac:
 			ea = ea_indexed(&cycles);
-			inst_sub16(CPU.reg_s, read16(ea));
+			inst_sub16(CPU.reg_s, vx_read16(ea));
 			cycles += 7;
 			break;
 		case 0xbc:
 			ea = ea_extended();
-			inst_sub16(CPU.reg_s, read16(ea));
+			inst_sub16(CPU.reg_s, vx_read16(ea));
 			cycles += 8;
 			break;
 			/* swi3 */
 		case 0x3f:
 			set_cc(FLAG_E, 1);
 			inst_psh(0xff, &CPU.reg_s, CPU.reg_u, &cycles);
-			CPU.reg_pc = read16(0xfff2);
+			CPU.reg_pc = vx_read16(0xfff2);
 			cycles += 8;
 			break;
 		default:

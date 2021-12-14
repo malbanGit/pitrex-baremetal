@@ -167,6 +167,12 @@ int main(int argc, char *argv[])
     v_enableExtendedSoundOut(1);
     v_enableButtons(1);
     
+    if (usbKeyboardAvailable != 1)
+    {
+      char msg[] = "ERROR! USB KEYBOARD NOT FOUND!";
+      v_message(msg);
+    }
+
     ::notifications = notifications;
 	static Executive exec(notifications, echoOn, consoleNewlineChar);
 	exec.Main(argc, argv);

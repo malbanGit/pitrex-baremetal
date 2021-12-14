@@ -1,0 +1,6114 @@
+ORG 8000
+data  6000-6001
+data  8003-8024
+label 8003 byte_8003
+data  8025-803F
+label 8025 byte_8025
+data  8040-804C
+data  804D-8065
+label 804D byte_804D
+data  8066-807E
+label 8066 byte_8066
+data  807F-809A
+label 807F byte_807F
+data  809B-80C5
+label 809B byte_809B
+data  80C6-80ED
+label 80C6 byte_80C6
+data  80EE-8109
+label 80EE byte_80EE
+data  810A-8134
+label 810A byte_810A
+data  8135-8153
+label 8135 byte_8135
+data  8154-8175
+label 8154 byte_8154
+data  8176-81A0
+label 8176 byte_8176
+data  81A1-81C2
+label 81A1 byte_81A1
+data  81C3-81E1
+label 81C3 byte_81C3
+data  81E2-8200
+label 81E2 byte_81E2
+data  8201-8225
+label 8201 byte_8201
+data  8226-8241
+label 8226 byte_8226
+data  8242-8266
+label 8242 byte_8242
+data  8267-8285
+label 8267 byte_8267
+data  8286-82A4
+label 8286 byte_8286
+data  82A5-82BD
+label 82A5 byte_82A5
+data  82BE-82C7
+label 82BE byte_82BE
+data  82C8-82D1
+label 82C8 byte_82C8
+data  82D2-82DB
+label 82D2 byte_82D2
+data  82DC-82E5
+label 82DC byte_82DC
+data  82E6-82EF
+label 82E6 byte_82E6
+data  82F0-82F9
+label 82F0 byte_82F0
+data  82FA-8324
+label 82FA byte_82FA
+data  8325-8340
+label 8325 byte_8325
+code 8341
+label 8341 L8341
+code 834C
+label 834C L834C
+code 8365
+label 8365 L8365
+code 8367
+label 8367 L8367
+code 838F
+label 838F L838F
+code 8399
+label 8399 L8399
+code 83A4
+label 83A4 L83A4
+code 83AA
+label 83AA L83AA
+code 83AB
+label 83AB L83AB
+code 83BA
+label 83BA L83BA
+code 83CE
+label 83CE L83CE
+code 83E2
+label 83E2 L83E2
+code 83ED
+label 83ED L83ED
+code 83F6
+label 83F6 L83F6
+code 83F9
+label 83F9 L83F9
+code 8407
+label 8407 locret_8407
+code 8408
+label 8408 L8408
+code 8416
+label 8416 L8416
+code 8419
+label 8419 L8419
+code 8425
+label 8425 L8425
+code 8431
+label 8431 L8431
+code 8432
+label 8432 L8432
+code 8434
+label 8434 L8434
+code 8438
+label 8438 L8438
+code 8447
+label 8447 L8447
+code 846A
+label 846A L846A
+code 8475
+label 8475 L8475
+code 8478
+label 8478 L8478
+code 8495
+label 8495 L8495
+code 84A2
+label 84A2 L84A2
+code 84B5
+label 84B5 locret_84B5
+data  84B6-84C5
+label 84B6 byte_84B6
+code 84C6
+label 84C6 L84C6
+code 84D1
+label 84D1 L84D1
+code 84EE
+label 84EE L84EE
+code 84FE
+label 84FE L84FE
+code 8503
+label 8503 L8503
+code 850D
+label 850D L850D
+code 850F
+label 850F L850F
+code 8521
+label 8521 L8521
+code 8522
+label 8522 L8522
+code 8544
+label 8544 L8544
+code 8563
+label 8563 L8563
+code 8565
+label 8565 L8565
+code 8578
+label 8578 L8578
+code 859B
+label 859B L859B
+code 85B3
+label 85B3 L85B3
+code 85BA
+label 85BA L85BA
+code 85BB
+label 85BB L85BB
+code 85BD
+label 85BD L85BD
+code 85C5
+label 85C5 L85C5
+code 85CF
+label 85CF L85CF
+code 85D2
+label 85D2 L85D2
+code 85DE
+label 85DE L85DE
+code 85F1
+label 85F1 L85F1
+code 85F8
+label 85F8 locret_85F8
+code 85F9
+label 85F9 L85F9
+code 8607
+label 8607 L8607
+code 8618
+label 8618 L8618
+code 861B
+label 861B L861B
+code 8623
+label 8623 L8623
+code 864E
+label 864E L864E
+code 8657
+label 8657 L8657
+code 865B
+label 865B L865B
+code 8663
+label 8663 L8663
+code 866C
+label 866C L866C
+code 868A
+label 868A L868A
+data  8696-8697
+label 8696 word_8696
+data  8698-8699
+data  869A-869B
+data  869C-869D
+code 869D
+label 869D L869D
+data  869E-869F
+data  86A0-86A1
+data  86A2-86A3
+data  86A4-86A5
+data  86A6-86A7
+data  86A8-86A9
+code 86AA
+data  86AA-86AB
+label 86AA L86AA
+data  86AC-86AD
+code 86AE
+label 86AE L86AE
+code 86B3
+label 86B3 L86B3
+code 86CD
+label 86CD L86CD
+code 86D0
+label 86D0 L86D0
+code 86F3
+label 86F3 L86F3
+code 8711
+label 8711 L8711
+code 8715
+label 8715 L8715
+code 871B
+label 871B L871B
+data  8725-8726
+label 8725 word_8725
+data  8727-8728
+data  8729-872A
+data  872B-872C
+data  872D-872E
+data  872F-8730
+data  8731-8732
+data  8733-8734
+code 8735
+label 8735 L8735
+code 873F
+label 873F L873F
+code 8748
+label 8748 L8748
+code 874B
+label 874B L874B
+code 8755
+label 8755 L8755
+code 875E
+label 875E L875E
+code 8761
+label 8761 L8761
+code 8773
+label 8773 L8773
+code 877D
+label 877D L877D
+code 8783
+label 8783 L8783
+code 8786
+label 8786 L8786
+code 87A2
+label 87A2 L87A2
+code 87A9
+label 87A9 L87A9
+code 87CB
+label 87CB L87CB
+code 87DD
+label 87DD L87DD
+code 87EA
+label 87EA L87EA
+code 87F0
+label 87F0 L87F0
+code 87F5
+label 87F5 L87F5
+code 8801
+label 8801 L8801
+code 880E
+label 880E L880E
+code 882F
+label 882F L882F
+code 8866
+label 8866 L8866
+code 8874
+label 8874 L8874
+code 8877
+label 8877 L8877
+code 887C
+label 887C L887C
+code 8888
+label 8888 L8888
+code 8898
+label 8898 L8898
+code 889E
+label 889E locret_889E
+code 889F
+label 889F L889F
+code 88D0
+label 88D0 L88D0
+code 88EE
+label 88EE L88EE
+code 88F1
+label 88F1 L88F1
+code 88F4
+label 88F4 locret_88F4
+code 88F5
+label 88F5 L88F5
+code 8911
+label 8911 L8911
+code 8914
+label 8914 L8914
+code 8950
+label 8950 locret_8950
+code 8951
+label 8951 L8951
+code 8959
+label 8959 L8959
+code 8961
+label 8961 L8961
+code 8969
+label 8969 L8969
+code 8971
+label 8971 L8971
+code 8979
+label 8979 L8979
+code 8981
+label 8981 L8981
+code 8993
+label 8993 L8993
+data  89A8-89C7
+label 89A8 word_89A8
+code 89C8
+label 89C8 L89C8
+code 89D3
+label 89D3 L89D3
+code 89DE
+label 89DE L89DE
+code 89E9
+label 89E9 L89E9
+code 8A05
+label 8A05 L8A05
+code 8A21
+label 8A21 L8A21
+code 8A3D
+label 8A3D L8A3D
+code 8A59
+label 8A59 L8A59
+code 8A7E
+label 8A7E L8A7E
+data  8AA3-8AB5
+code 8AB6
+label 8AB6 L8AB6
+code 8ABE
+label 8ABE L8ABE
+code 8AC6
+label 8AC6 L8AC6
+code 8ACE
+label 8ACE locret_8ACE
+code 8ACF
+label 8ACF L8ACF
+code 8ADB
+label 8ADB locret_8ADB
+code 8ADC
+label 8ADC L8ADC
+code 8AED
+label 8AED L8AED
+code 8B18
+label 8B18 L8B18
+code 8B33
+label 8B33 L8B33
+code 8B45
+label 8B45 L8B45
+code 8B47
+label 8B47 L8B47
+code 8B57
+label 8B57 L8B57
+code 8B66
+label 8B66 L8B66
+code 8B6D
+label 8B6D L8B6D
+code 8B70
+label 8B70 L8B70
+code 8B7B
+label 8B7B L8B7B
+code 8B86
+label 8B86 L8B86
+code 8B89
+label 8B89 L8B89
+code 8B9B
+label 8B9B L8B9B
+code 8BA1
+label 8BA1 L8BA1
+code 8BAB
+label 8BAB L8BAB
+code 8BB1
+label 8BB1 L8BB1
+code 8BBE
+label 8BBE L8BBE
+code 8BC4
+label 8BC4 L8BC4
+code 8BCE
+label 8BCE L8BCE
+code 8BD6
+label 8BD6 L8BD6
+code 8BE1
+label 8BE1 L8BE1
+code 8C15
+label 8C15 L8C15
+code 8C21
+label 8C21 L8C21
+code 8C28
+label 8C28 L8C28
+code 8C2F
+label 8C2F L8C2F
+code 8C36
+label 8C36 L8C36
+code 8C3D
+label 8C3D L8C3D
+code 8C44
+label 8C44 L8C44
+code 8C81
+label 8C81 L8C81
+code 8C86
+label 8C86 L8C86
+code 8CAE
+label 8CAE L8CAE
+code 8CD4
+label 8CD4 L8CD4
+code 8CDB
+label 8CDB L8CDB
+code 8CEA
+label 8CEA L8CEA
+code 8CFD
+label 8CFD L8CFD
+code 8D05
+label 8D05 L8D05
+code 8D1C
+label 8D1C L8D1C
+code 8D1F
+label 8D1F L8D1F
+code 8D37
+label 8D37 L8D37
+code 8D3A
+label 8D3A L8D3A
+code 8D48
+label 8D48 L8D48
+code 8D4B
+label 8D4B L8D4B
+code 8D63
+label 8D63 L8D63
+code 8D66
+label 8D66 L8D66
+data  8D71-8D98
+label 8D71 byte_8D71
+data  8D99-8D9C
+label 8D99 byte_8D99
+code 8D9D
+label 8D9D L8D9D
+code 8DBC
+label 8DBC L8DBC
+code 8DC3
+label 8DC3 L8DC3
+code 8DCA
+label 8DCA L8DCA
+code 8DD1
+label 8DD1 L8DD1
+code 8DD8
+label 8DD8 L8DD8
+code 8DDF
+label 8DDF L8DDF
+code 8DE3
+label 8DE3 L8DE3
+code 8DEE
+label 8DEE L8DEE
+code 8DF5
+label 8DF5 L8DF5
+code 8E00
+label 8E00 L8E00
+code 8E07
+label 8E07 L8E07
+code 8E12
+label 8E12 L8E12
+code 8E19
+label 8E19 L8E19
+code 8E1C
+label 8E1C L8E1C
+code 8E22
+label 8E22 locret_8E22
+code 8E23
+label 8E23 L8E23
+code 8E32
+label 8E32 L8E32
+code 8E3A
+label 8E3A L8E3A
+code 8E51
+label 8E51 L8E51
+code 8E5C
+label 8E5C L8E5C
+code 8E5E
+label 8E5E L8E5E
+data  8E68-8E69
+label 8E68 JumpTable8E68
+data  8E6A-8E6B
+data  8E6C-8E6D
+data  8E6E-8E6F
+data  8E70-8E71
+data  8E72-8E73
+data  8E74-8E75
+data  8E76-8E77
+code 8E78
+label 8E78 L8E78
+code 8E79
+label 8E79 L8E79
+code 8E7B
+label 8E7B L8E7B
+code 8E89
+label 8E89 L8E89
+code 8E94
+label 8E94 L8E94
+code 8E9B
+label 8E9B L8E9B
+code 8EA4
+label 8EA4 L8EA4
+code 8EB2
+label 8EB2 L8EB2
+code 8EBA
+label 8EBA L8EBA
+code 8ECE
+label 8ECE L8ECE
+code 8ED6
+label 8ED6 L8ED6
+code 8EF1
+label 8EF1 L8EF1
+code 8EF4
+label 8EF4 L8EF4
+code 8EFE
+label 8EFE L8EFE
+code 8F08
+label 8F08 L8F08
+code 8F29
+label 8F29 L8F29
+code 8F34
+label 8F34 L8F34
+code 8F7B
+label 8F7B L8F7B
+code 8F83
+label 8F83 L8F83
+code 8F9D
+label 8F9D L8F9D
+code 8FA0
+label 8FA0 L8FA0
+code 8FAA
+label 8FAA L8FAA
+code 8FB1
+label 8FB1 L8FB1
+code 8FB4
+label 8FB4 L8FB4
+code 8FC6
+label 8FC6 L8FC6
+code 9023
+label 9023 locret_9023
+data  9024-9025
+label 9024 byte_9024
+data  9026-9027
+label 9026 byte_9026
+data  9028-902D
+label 9028 byte_9028
+data  902E-9033
+label 902E byte_902E
+data  9034-9039
+label 9034 byte_9034
+data  903A-903F
+label 903A byte_903A
+data  9040-9045
+label 9040 byte_9040
+code 9041
+label 9041 L9041
+data  9046-904B
+label 9046 byte_9046
+data  904C-9051
+label 904C byte_904C
+data  9052-9057
+label 9052 byte_9052
+data  9058-905D
+label 9058 byte_9058
+data  905E-9063
+label 905E byte_905E
+data  9064-9069
+label 9064 byte_9064
+data  906A-906F
+label 906A byte_906A
+data  9070-9077
+label 9070 off_9070
+data  9078-9079
+label 9078 off_9078
+data  907A-907B
+label 907A off_907A
+data  907C-907C
+label 907C byte_907C
+data  907D-9084
+data  9085-9085
+label 9085 byte_9085
+data  9086-908F
+data  9090-9090
+label 9090 byte_9090
+data  9091-909E
+data  909F-909F
+label 909F byte_909F
+data  90A0-90AB
+data  90AC-90AC
+label 90AC byte_90AC
+data  90AD-90B8
+data  90B9-90B9
+label 90B9 byte_90B9
+data  90BA-90C5
+data  90C6-90D7
+label 90C6 off_90C6
+data  90D8-90D8
+data  90D9-90EA
+label 90D9 off_90D9
+data  90EB-90EB
+data  90EC-90FD
+label 90EC off_90EC
+data  90FE-90FE
+data  90FF-9110
+label 90FF off_90FF
+data  9111-9111
+data  9112-9123
+label 9112 off_9112
+data  9124-9124
+data  9125-9136
+label 9125 off_9125
+data  9137-9137
+data  9138-9149
+label 9138 off_9138
+data  914A-914A
+data  914B-915C
+label 914B off_914B
+data  915D-915D
+data  915E-916F
+label 915E off_915E
+data  9170-9170
+data  9171-91DC
+label 9171 off_9171
+data  91DD-91DD
+data  91DE-91DE
+label 91DE byte_91DE
+data  91DF-91E0
+data  91E1-91FE
+label 91E1 byte_91E1
+data  91FF-91FF
+data  9200-9201
+data  9202-9202
+label 9202 byte_9202
+data  9203-9204
+data  9205-922B
+label 9205 byte_9205
+data  922C-922C
+data  922D-922E
+data  922F-922F
+label 922F byte_922F
+data  9230-9231
+data  9232-9258
+label 9232 byte_9232
+data  9259-9259
+data  925A-925B
+data  925C-9267
+label 925C byte_925C
+data  9268-9268
+data  9269-926A
+data  926B-9270
+data  9271-9271
+data  9272-9273
+data  9274-9274
+label 9274 byte_9274
+data  9275-9276
+data  9277-92A6
+label 9277 byte_9277
+data  92A7-92A7
+data  92A8-92A9
+data  92AA-92AA
+label 92AA byte_92AA
+data  92AB-92AC
+data  92AD-92CA
+label 92AD byte_92AD
+data  92CB-92CB
+data  92CC-92CD
+data  92CE-92CE
+label 92CE byte_92CE
+data  92CF-92D0
+data  92D1-92E5
+label 92D1 byte_92D1
+data  92E6-92E6
+data  92E7-92E8
+data  92E9-92F4
+label 92E9 byte_92E9
+data  92F5-92F5
+data  92F6-92F7
+data  92F8-9312
+data  9313-9313
+data  9314-9315
+data  9316-9316
+label 9316 byte_9316
+data  9317-9318
+data  9319-9339
+label 9319 byte_9319
+data  933A-933A
+label 933A byte_933A
+data  933B-933C
+data  933D-934E
+label 933D byte_933D
+data  934F-934F
+data  9350-9351
+data  9352-9352
+label 9352 byte_9352
+data  9353-9354
+data  9355-9366
+label 9355 byte_9355
+data  9367-9367
+data  9368-9369
+data  936A-9375
+label 936A byte_936A
+data  9376-9376
+data  9377-9378
+data  9379-937E
+data  937F-937F
+data  9380-9381
+data  9382-9382
+label 9382 byte_9382
+data  9383-9384
+data  9385-93A2
+label 9385 byte_9385
+data  93A3-93A3
+data  93A4-93A5
+data  93A6-93A6
+label 93A6 byte_93A6
+data  93A7-93A8
+data  93A9-93D5
+label 93A9 byte_93A9
+data  93D6-93D6
+data  93D7-93D8
+data  93D9-93D9
+label 93D9 byte_93D9
+data  93DA-93DB
+data  93DC-941D
+label 93DC byte_93DC
+data  941E-941E
+data  941F-9420
+data  9421-9426
+label 9421 byte_9421
+data  9427-9427
+data  9428-9429
+data  942A-942F
+data  9430-9430
+data  9431-9432
+data  9433-9438
+data  9439-9439
+data  943A-943B
+data  943C-9441
+label 943C byte_943C
+data  9442-9442
+data  9443-9444
+data  9445-944A
+data  944B-944B
+data  944C-944D
+data  944E-9459
+label 944E byte_944E
+data  945A-9489
+label 945A byte_945A
+data  948A-948A
+data  948B-948C
+data  948D-948F
+data  9490-9490
+data  9491-9492
+data  9493-9498
+label 9493 byte_9493
+data  9499-9499
+data  949A-949B
+data  949C-94A1
+data  94A2-94A2
+data  94A3-94A4
+data  94A5-94B9
+data  94BA-94BA
+data  94BB-94BC
+data  94BD-9526
+code 9520
+label 9520 L9520
+code 9526
+label 9526 L9526
+; data  9527-953B
+data  9527-953A
+label 9527 aCopyright1983At_0
+code 953B
+label 953B L953B
+code 9553
+label 9553 L9553
+code 9557
+label 9557 locret_9557
+code 9558
+label 9558 L9558
+code 956E
+label 956E L956E
+code 9578
+label 9578 L9578
+code 9586
+label 9586 L9586
+code 958F
+label 958F L958F
+code 9599
+label 9599 L9599
+code 95A0
+label 95A0 L95A0
+code 95A6
+label 95A6 locret_95A6
+code 95A7
+label 95A7 L95A7
+code 95B1
+label 95B1 L95B1
+code 95B2
+label 95B2 L95B2
+code 95D4
+label 95D4 L95D4
+code 95D7
+label 95D7 L95D7
+code 95EA
+label 95EA L95EA
+code 95F2
+label 95F2 L95F2
+code 95F9
+label 95F9 L95F9
+code 95FB
+label 95FB L95FB
+code 9604
+label 9604 L9604
+code 960F
+label 960F L960F
+code 961C
+label 961C L961C
+code 961D
+label 961D L961D
+code 961E
+label 961E L961E
+code 9624
+label 9624 L9624
+code 962A
+label 962A L962A
+code 9643
+label 9643 L9643
+code 9649
+label 9649 L9649
+code 964B
+label 964B L964B
+code 9672
+label 9672 L9672
+code 9674
+label 9674 L9674
+code 9679
+label 9679 L9679
+code 968E
+label 968E L968E
+code 9690
+label 9690 L9690
+code 96A0
+label 96A0 locret_96A0
+code 96A1
+label 96A1 L96A1
+data  96B6-96C9
+label 96B6 word_96B6
+code 96C7
+label 96C7 L96C7
+code 96C9
+label 96C9 L96C9
+data  96CA-96DD
+label 96CA word_96CA
+data  96DE-96F1
+label 96DE word_96DE
+data  96F2-9717
+label 96F2 word_96F2
+code 970D
+label 970D L970D
+data  9718-9721
+label 9718 byte_9718
+code 971B
+label 971B L971B
+code 9722
+label 9722 L9722
+code 9739
+label 9739 locret_9739
+code 973A
+label 973A L973A
+code 9774
+label 9774 locret_9774
+code 9775
+label 9775 L9775
+code 9787
+label 9787 L9787
+code 97AB
+label 97AB locret_97AB
+code 97AC
+label 97AC L97AC
+code 97B8
+label 97B8 L97B8
+code 97C1
+label 97C1 locret_97C1
+code 97C2
+label 97C2 L97C2
+code 97E3
+label 97E3 L97E3
+code 97E8
+label 97E8 L97E8
+code 97ED
+label 97ED L97ED
+code 97F2
+label 97F2 L97F2
+code 97F7
+label 97F7 L97F7
+code 97FC
+label 97FC L97FC
+code 9801
+label 9801 L9801
+code 9806
+label 9806 L9806
+code 9810
+label 9810 L9810
+data  983B-9846
+label 983B byte_983B
+data  9847-9849
+label 9847 byte_9847
+data  984A-984C
+label 984A byte_984A
+data  984D-984F
+label 984D byte_984D
+data  9850-9852
+label 9850 byte_9850
+data  9853-9855
+label 9853 byte_9853
+data  9856-9857
+label 9856 word_9856
+data  9858-9858
+label 9858 byte_9858
+data  9859-985B
+label 9859 byte_9859
+data  985C-985E
+label 985C byte_985C
+data  985F-9861
+label 985F byte_985F
+data  9862-9864
+label 9862 byte_9862
+data  9865-9873
+label 9865 byte_9865
+code 9874
+label 9874 L9874
+code 9875
+label 9875 L9875
+code 9879
+label 9879 L9879
+code 987E
+label 987E locret_987E
+code 987F
+label 987F L987F
+code 9886
+label 9886 L9886
+code 9890
+label 9890 L9890
+code 9897
+label 9897 locret_9897
+code 9898
+label 9898 L9898
+code 989B
+label 989B L989B
+code 98A1
+label 98A1 L98A1
+code 98A7
+label 98A7 L98A7
+code 98AF
+label 98AF locret_98AF
+code 98B0
+label 98B0 L98B0
+code 98CA
+label 98CA locret_98CA
+data  98CB-98DC
+label 98CB byte_98CB
+data  98DD-98DD
+label 98DD byte_98DD
+data  98DE-99A1
+label 98DE byte_98DE
+data  99A2-99BD
+label 99A2 byte_99A2
+data  99BE-9A81
+label 99BE byte_99BE
+data  9A82-9A9D
+label 9A82 byte_9A82
+data  9A9E-9B61
+label 9A9E byte_9A9E
+data  9B62-9C25
+label 9B62 byte_9B62
+data  9C26-9C41
+label 9C26 byte_9C26
+data  9C42-9D05
+label 9C42 byte_9C42
+data  9D06-9D21
+label 9D06 byte_9D06
+data  9D22-9DE5
+label 9D22 byte_9D22
+data  9DE6-9E01
+label 9DE6 byte_9DE6
+data  9E02-9EC5
+label 9E02 byte_9E02
+data  9EC6-9EE1
+label 9EC6 byte_9EC6
+data  9EE2-9FA5
+label 9EE2 byte_9EE2
+data  9FA6-9FC1
+label 9FA6 byte_9FA6
+data  9FC2-A085
+label 9FC2 byte_9FC2
+data  A086-A0A1
+label A086 byte_A086
+data  A0A2-A165
+label A0A2 byte_A0A2
+data  A166-A181
+label A166 byte_A166
+data  A182-A1C9
+label A182 off_A182
+data  A1CA-A1CD
+label A1CA off_A1CA
+code A1CE
+label A1CE LA1CE
+code A1D1
+label A1D1 LA1D1
+code A1EF
+label A1EF LA1EF
+code A1FE
+label A1FE LA1FE
+code A214
+label A214 LA214
+code A24D
+label A24D LA24D
+code A24F
+label A24F LA24F
+code A27E
+label A27E LA27E
+code A296
+label A296 LA296
+code A2AE
+label A2AE LA2AE
+code A2B0
+label A2B0 LA2B0
+code A2C2
+label A2C2 LA2C2
+code A2D4
+label A2D4 LA2D4
+code A2D6
+label A2D6 LA2D6
+code A2D8
+label A2D8 LA2D8
+code A2DA
+label A2DA LA2DA
+code A2EB
+label A2EB LA2EB
+code A2F8
+label A2F8 LA2F8
+code A304
+label A304 LA304
+code A306
+label A306 LA306
+code A325
+label A325 LA325
+code A32E
+label A32E LA32E
+code A331
+label A331 LA331
+code A333
+label A333 LA333
+code A33C
+label A33C LA33C
+code A33F
+label A33F LA33F
+code A374
+label A374 LA374
+code A395
+label A395 LA395
+code A39D
+label A39D LA39D
+code A3A3
+label A3A3 LA3A3
+code A3A5
+label A3A5 LA3A5
+code A3A7
+label A3A7 LA3A7
+code A3E4
+label A3E4 LA3E4
+code A3F0
+label A3F0 LA3F0
+code A3F4
+label A3F4 LA3F4
+code A400
+label A400 LA400
+code A403
+label A403 LA403
+code A40A
+label A40A LA40A
+code A455
+label A455 LA455
+code A459
+label A459 LA459
+code A49F
+label A49F LA49F
+code A4BA
+label A4BA LA4BA
+code A4C5
+label A4C5 LA4C5
+code A508
+label A508 LA508
+code A50A
+label A50A LA50A
+code A53C
+label A53C LA53C
+code A53E
+label A53E LA53E
+code A54A
+label A54A locret_A54A
+code A54B
+label A54B LA54B
+code A580
+label A580 LA580
+code A58C
+label A58C LA58C
+data  A590-A590
+code A591
+label A591 LA591
+code A5B2
+label A5B2 locret_A5B2
+code A5B3
+label A5B3 LA5B3
+code A5DE
+label A5DE LA5DE
+code A5E9
+label A5E9 LA5E9
+code A5F7
+label A5F7 LA5F7
+code A5FF
+label A5FF LA5FF
+code A607
+label A607 locret_A607
+code A608
+label A608 LA608
+code A633
+label A633 LA633
+code A63E
+label A63E LA63E
+code A64C
+label A64C LA64C
+code A654
+label A654 locret_A654
+code A655
+label A655 LA655
+code A669
+label A669 LA669
+code A671
+label A671 LA671
+code A674
+label A674 locret_A674
+data  A675-A676
+label A675 JumpTableA675
+data  A677-A678
+data  A679-A67A
+data  A67B-A67C
+data  A67D-A67E
+data  A67F-A680
+data  A681-A682
+data  A683-A684
+data  A685-A686
+data  A687-A688
+data  A689-A68A
+code A68B
+label A68B LA68B
+code A6AB
+label A6AB LA6AB
+data  A6C8-A6DD
+label A6C8 off_A6C8
+data  A6DE-A6DF
+label A6DE off_A6DE
+code A6E0
+label A6E0 LA6E0
+code A6EC
+label A6EC LA6EC
+code A6F2
+label A6F2 LA6F2
+code A6F4
+label A6F4 LA6F4
+code A6FD
+label A6FD LA6FD
+code A705
+label A705 LA705
+code A708
+label A708 LA708
+code A717
+label A717 locret_A717
+data  A718-A719
+label A718 off_A718
+data  A71A-A71B
+data  A71C-A71D
+data  A71E-A71F
+data  A720-A721
+data  A722-A723
+data  A724-A725
+data  A726-A727
+code A728
+label A728 LA728
+code A742
+label A742 LA742
+code A744
+label A744 LA744
+code A76B
+label A76B LA76B
+code A784
+label A784 LA784
+code A790
+label A790 LA790
+code A795
+label A795 LA795
+code A79E
+label A79E LA79E
+code A7AE
+label A7AE LA7AE
+code A7B0
+label A7B0 LA7B0
+code A7B2
+label A7B2 LA7B2
+code A7B6
+label A7B6 LA7B6
+code A7BF
+label A7BF LA7BF
+code A7C8
+label A7C8 LA7C8
+code A7D1
+label A7D1 LA7D1
+code A7DF
+label A7DF LA7DF
+code A7F7
+label A7F7 LA7F7
+code A800
+label A800 LA800
+code A803
+label A803 LA803
+code A80B
+label A80B LA80B
+code A814
+label A814 LA814
+code A817
+label A817 LA817
+code A81F
+label A81F LA81F
+code A843
+label A843 LA843
+code A849
+label A849 LA849
+code A84C
+label A84C LA84C
+code A860
+label A860 LA860
+code A861
+label A861 LA861
+code A86B
+label A86B LA86B
+code A874
+label A874 locret_A874
+code A875
+label A875 LA875
+code A880
+label A880 LA880
+code A8A6
+label A8A6 locret_A8A6
+code A8A7
+label A8A7 LA8A7
+code A8B2
+label A8B2 LA8B2
+code A8D5
+label A8D5 locret_A8D5
+code A8D6
+label A8D6 LA8D6
+code A8DA
+label A8DA LA8DA
+code A8E6
+label A8E6 LA8E6
+code A8F9
+label A8F9 LA8F9
+code A90C
+label A90C LA90C
+code A91F
+label A91F locret_A91F
+code A920
+label A920 LA920
+code A932
+label A932 locret_A932
+code A933
+label A933 LA933
+code A945
+label A945 locret_A945
+code A946
+label A946 LA946
+code A95E
+label A95E LA95E
+code A974
+label A974 LA974
+code A978
+label A978 LA978
+code A984
+label A984 LA984
+code A986
+label A986 LA986
+code A99E
+label A99E LA99E
+code A9A2
+label A9A2 locret_A9A2
+code A9A3
+label A9A3 LA9A3
+code A9BB
+label A9BB LA9BB
+code A9D1
+label A9D1 LA9D1
+code A9D5
+label A9D5 LA9D5
+code A9E1
+label A9E1 LA9E1
+code A9E3
+label A9E3 LA9E3
+code A9FB
+label A9FB LA9FB
+code A9FF
+label A9FF locret_A9FF
+code AA00
+label AA00 LAA00
+code AA1F
+label AA1F LAA1F
+code AA23
+label AA23 LAA23
+data  AA25-AA7C
+code AA7D
+label AA7D LAA7D
+code AA85
+label AA85 locret_AA85
+code AA86
+label AA86 LAA86
+code AA99
+label AA99 LAA99
+code AAA5
+label AAA5 LAAA5
+code AAA8
+label AAA8 LAAA8
+code AAB3
+label AAB3 LAAB3
+code AAB5
+label AAB5 LAAB5
+code AAC8
+label AAC8 LAAC8
+code AAD4
+label AAD4 LAAD4
+code AAD7
+label AAD7 LAAD7
+code AAE2
+label AAE2 LAAE2
+code AAE4
+label AAE4 LAAE4
+code AAE7
+label AAE7 LAAE7
+code AAF9
+label AAF9 LAAF9
+code AB11
+label AB11 LAB11
+code AB1D
+label AB1D LAB1D
+code AB4D
+label AB4D LAB4D
+code AB60
+label AB60 LAB60
+code AB8F
+label AB8F LAB8F
+code AB9F
+label AB9F LAB9F
+code ABC0
+label ABC0 LABC0
+code ABDB
+label ABDB LABDB
+code ABDE
+label ABDE LABDE
+code ABE5
+label ABE5 LABE5
+code ABF0
+label ABF0 LABF0
+code ABF5
+label ABF5 LABF5
+code AC00
+label AC00 LAC00
+code AC05
+label AC05 LAC05
+code AC14
+label AC14 LAC14
+code AC22
+label AC22 LAC22
+code AC27
+label AC27 LAC27
+code AC31
+label AC31 LAC31
+code AC32
+label AC32 LAC32
+code AC34
+label AC34 LAC34
+code AC52
+label AC52 LAC52
+code AC5B
+label AC5B LAC5B
+code AC65
+label AC65 LAC65
+code AC7C
+label AC7C LAC7C
+code AC8A
+label AC8A LAC8A
+code AC91
+label AC91 LAC91
+code ACA6
+label ACA6 LACA6
+code ACB1
+label ACB1 LACB1
+code ACE0
+label ACE0 LACE0
+code AD00
+label AD00 LAD00
+code AD06
+label AD06 LAD06
+code AD1F
+label AD1F locret_AD1F
+code AD20
+label AD20 LAD20
+code AD3D
+label AD3D locret_AD3D
+code AD3E
+label AD3E LAD3E
+code AD57
+label AD57 LAD57
+code AD6C
+label AD6C LAD6C
+code AD7F
+label AD7F LAD7F
+code AD8F
+label AD8F LAD8F
+code ADA1
+label ADA1 LADA1
+code ADA3
+label ADA3 LADA3
+code ADAE
+label ADAE locret_ADAE
+code ADAF
+label ADAF LADAF
+code ADBD
+label ADBD LADBD
+code ADD3
+label ADD3 locret_ADD3
+code ADD4
+label ADD4 LADD4
+code ADEB
+label ADEB LADEB
+code AE03
+label AE03 LAE03
+code AE11
+label AE11 LAE11
+code AE3E
+label AE3E LAE3E
+code AE48
+label AE48 LAE48
+code AE5F
+label AE5F locret_AE5F
+code AE60
+label AE60 LAE60
+code AE6E
+label AE6E LAE6E
+code AE72
+label AE72 LAE72
+code AE87
+label AE87 LAE87
+code AE9F
+label AE9F LAE9F
+code AEAF
+label AEAF LAEAF
+code AEB2
+label AEB2 LAEB2
+code AEBD
+label AEBD LAEBD
+code AEC4
+label AEC4 LAEC4
+code AF25
+label AF25 LAF25
+code AF86
+label AF86 locret_AF86
+code AF87
+label AF87 LAF87
+code AF9A
+label AF9A LAF9A
+code AF9D
+label AF9D LAF9D
+code AFA8
+label AFA8 LAFA8
+code AFC1
+label AFC1 LAFC1
+code AFEF
+label AFEF LAFEF
+code B006
+label B006 LB006
+code B020
+label B020 LB020
+code B02C
+label B02C LB02C
+code B038
+label B038 LB038
+code B044
+label B044 LB044
+data  B04F-B050
+label B04F tbl0xB04F
+data  B051-B052
+data  B053-B054
+data  B055-B056
+data  B057-B058
+data  B059-B05A
+data  B05B-B05C
+data  B05D-B05E
+data  B05F-B060
+data  B061-B062
+data  B063-B064
+data  B065-B066
+data  B067-B068
+data  B069-B06A
+data  B06B-B06C
+data  B06D-B06E
+data  B06F-B070
+code B071
+label B071 LB071
+code B089
+label B089 LB089
+code B094
+label B094 locret_B094
+code B095
+label B095 LB095
+code B0F9
+label B0F9 LB0F9
+code B0FF
+label B0FF LB0FF
+code B128
+label B128 LB128
+code B157
+label B157 locret_B157
+code B158
+label B158 LB158
+code B19E
+label B19E LB19E
+code B1A6
+label B1A6 LB1A6
+code B1D4
+label B1D4 LB1D4
+code B1E3
+label B1E3 LB1E3
+code B21D
+label B21D LB21D
+code B223
+label B223 LB223
+code B251
+label B251 LB251
+code B260
+label B260 locret_B260
+code B261
+label B261 LB261
+code B266
+label B266 LB266
+code B285
+label B285 LB285
+code B292
+label B292 LB292
+code B29B
+label B29B locret_B29B
+code B29C
+label B29C LB29C
+code B2C1
+label B2C1 LB2C1
+code B2D1
+label B2D1 locret_B2D1
+code B2D2
+label B2D2 LB2D2
+code B2E1
+label B2E1 LB2E1
+code B2E3
+label B2E3 locret_B2E3
+code B2E4
+label B2E4 LB2E4
+code B2F8
+label B2F8 LB2F8
+code B307
+label B307 LB307
+code B321
+label B321 LB321
+code B32A
+label B32A locret_B32A
+code B32B
+label B32B LB32B
+code B339
+label B339 LB339
+code B33D
+label B33D locret_B33D
+code B33E
+label B33E LB33E
+code B345
+label B345 LB345
+data  B34C-B3B1
+label B3B2 aCopyright1983Atar
+data  B3B2-B3C6
+data  B3C6-B3CA
+label B3CB aAllyWasTheWhipcra
+;data  B3CB-B3E4
+;code B3E4
+label B3E4 LB3E4
+code B3E9
+label B3E9 LB3E9
+code B3F0
+label B3F0 LB3F0
+code B43F
+label B43F LB43F
+code B46F
+label B46F LB46F
+code B47F
+label B47F LB47F
+code B483
+label B483 LB483
+code B4B5
+label B4B5 LB4B5
+code B4FD
+label B4FD LB4FD
+code B509
+label B509 LB509
+code B50B
+label B50B LB50B
+code B510
+label B510 LB510
+code B513
+label B513 LB513
+code B516
+label B516 LB516
+code B533
+label B533 LB533
+code B53D
+label B53D LB53D
+code B540
+label B540 LB540
+code B54F
+label B54F LB54F
+code B55D
+label B55D LB55D
+code B565
+label B565 LB565
+code B579
+label B579 LB579
+code B5A9
+label B5A9 LB5A9
+code B5B9
+label B5B9 LB5B9
+code B5BD
+label B5BD LB5BD
+code B5EF
+label B5EF LB5EF
+code B637
+label B637 LB637
+code B643
+label B643 LB643
+code B645
+label B645 LB645
+code B64A
+label B64A LB64A
+code B64D
+label B64D LB64D
+code B650
+label B650 LB650
+code B66D
+label B66D LB66D
+code B677
+label B677 LB677
+code B67A
+label B67A LB67A
+code B684
+label B684 LB684
+code B689
+label B689 LB689
+code B697
+label B697 LB697
+code B69F
+label B69F LB69F
+data  B6B3-B6B4
+label B6B3 word_B6B3
+data  B6B5-B6B6
+data  B6B7-B6B8
+code B6B9
+label B6B9 LB6B9
+code B6C0
+label B6C0 LB6C0
+code B6C5
+label B6C5 LB6C5
+code B6C7
+label B6C7 LB6C7
+code B6CC
+label B6CC LB6CC
+code B6D7
+label B6D7 LB6D7
+code B6DC
+label B6DC LB6DC
+code B6E4
+label B6E4 LB6E4
+code B6FC
+label B6FC LB6FC
+code B6FD
+label B6FD LB6FD
+code B705
+label B705 LB705
+code B739
+label B739 LB739
+data  B748-B749
+label B748 jt1
+data  B74A-B74B
+data  B74C-B74D
+data  B74E-B74F
+data  B750-B751
+data  B752-B753
+data  B754-B755
+data  B756-B757
+data  B758-B759
+data  B75A-B75B
+label B75A off_B75A
+data  B75C-B75D
+data  B75E-B75F
+data  B760-B761
+data  B762-B763
+data  B764-B765
+data  B766-B767
+data  B768-B769
+data  B76A-B76B
+code B76C
+label B76C LB76C
+code B7F6
+label B7F6 LB7F6
+code B7FE
+label B7FE LB7FE
+code B80C
+label B80C LB80C
+code B81C
+label B81C LB81C
+code B836
+label B836 LB836
+code B83F
+label B83F LB83F
+code B84B
+label B84B LB84B
+code B852
+label B852 LB852
+code B85E
+label B85E LB85E
+code B868
+label B868 LB868
+code B876
+label B876 LB876
+code B87D
+label B87D LB87D
+code B939
+label B939 LB939
+code B93C
+label B93C LB93C
+code B948
+label B948 LB948
+code B951
+label B951 LB951
+code B957
+label B957 LB957
+code B95C
+label B95C LB95C
+code B98B
+label B98B LB98B
+code B98E
+label B98E LB98E
+code B99B
+label B99B LB99B
+code B9A1
+label B9A1 LB9A1
+code B9AB
+label B9AB LB9AB
+code B9B2
+label B9B2 LB9B2
+code B9C0
+label B9C0 LB9C0
+code B9EF
+label B9EF LB9EF
+code B9F1
+label B9F1 LB9F1
+code B9F9
+label B9F9 LB9F9
+code BA01
+label BA01 LBA01
+code BA09
+label BA09 LBA09
+code BA11
+label BA11 locret_BA11
+code BA12
+label BA12 LBA12
+code BA1F
+label BA1F LBA1F
+code BA28
+label BA28 LBA28
+code BA32
+label BA32 LBA32
+code BA63
+label BA63 LBA63
+code BA74
+label BA74 LBA74
+code BA82
+label BA82 LBA82
+code BA9D
+label BA9D LBA9D
+code BA9F
+label BA9F locret_BA9F
+code BAA0
+label BAA0 LBAA0
+code BAA4
+label BAA4 LBAA4
+code BAA8
+label BAA8 LBAA8
+code BAAC
+label BAAC LBAAC
+code BAB0
+label BAB0 LBAB0
+code BAB4
+label BAB4 LBAB4
+code BAB8
+label BAB8 LBAB8
+code BABE
+label BABE LBABE
+code BAC2
+label BAC2 LBAC2
+code BACE
+label BACE LBACE
+code BAD0
+label BAD0 LBAD0
+code BB16
+label BB16 LBB16
+code BB1A
+label BB1A LBB1A
+code BB1E
+label BB1E LBB1E
+code BB22
+label BB22 LBB22
+code BB2F
+label BB2F LBB2F
+code BB35
+label BB35 LBB35
+data  BB3B-BB7A
+label BB3B word_BB3B
+code BB7B
+label BB7B LBB7B
+code BB85
+label BB85 LBB85
+code BB8D
+label BB8D locret_BB8D
+data  BB8E-BB8F
+label BB8E off_BB8E
+data  BB90-BB91
+data  BB92-BB93
+data  BB94-BB95
+data  BB96-BB97
+code BB98
+label BB98 LBB98
+code BBBA
+label BBBA locret_BBBA
+code BBBB
+label BBBB LBBBB
+code BBEF
+label BBEF LBBEF
+code BBF8
+label BBF8 LBBF8
+code BC0B
+label BC0B LBC0B
+code BC1D
+label BC1D locret_BC1D
+code BC1E
+label BC1E LBC1E
+code BC43
+label BC43 LBC43
+code BC58
+label BC58 LBC58
+code BC61
+label BC61 LBC61
+code BC72
+label BC72 LBC72
+code BC84
+label BC84 locret_BC84
+code BC85
+label BC85 LBC85
+code BCA9
+label BCA9 LBCA9
+code BCAD
+label BCAD locret_BCAD
+code BCAE
+label BCAE LBCAE
+code BCB0
+label BCB0 LBCB0
+code BCC8
+label BCC8 LBCC8
+code BCCA
+label BCCA LBCCA
+code BCE9
+label BCE9 Write_Sound
+code BCEB
+label BCEB LBCEB
+code BCF5
+label BCF5 LBCF5
+code BCF9
+label BCF9 Sound_1
+code BCFE
+label BCFE Sound_2
+code BD03
+label BD03 LBD03
+label BD03 Sound_3
+code BD08
+label BD08 Sound_4
+code BD0D
+label BD0D Sound_5
+code BD12
+label BD12 Sound_6
+code BD17
+label BD17 Sound_7
+code BD1C
+label BD1C Sound_8
+code BD21
+label BD21 Sound_9
+code BD26
+label BD26 Sound_A
+code BD2B
+label BD2B Sound_B
+code BD30
+label BD30 Sound_C
+code BD35
+label BD35 Sound_D
+code BD3A
+label BD3A Sound_E
+code BD3F
+label BD3F Sound_F
+code BD44
+label BD44 Sound_10
+code BD49
+label BD49 Sound_11
+code BD4E
+label BD4E Sound_12
+code BD53
+label BD53 Sound_13
+code BD58
+label BD58 Sound_14
+code BD5D
+label BD5D Sound_15
+code BD62
+label BD62 Sound_16
+code BD67
+label BD67 Sound_17
+code BD6C
+label BD6C Sound_18
+code BD71
+label BD71 Sound_19
+code BD76
+label BD76 Sound_1A
+code BD7B
+label BD7B Sound_1B
+code BD80
+label BD80 Sound_1C
+code BD85
+label BD85 Sound_1D
+code BD8A
+label BD8A Sound_1E
+code BD8F
+label BD8F Sound_1F
+code BD94
+label BD94 Sound_20
+code BD99
+label BD99 Sound_21
+code BD9E
+label BD9E Sound_22
+code BDA3
+label BDA3 Sound_23
+code BDA8
+label BDA8 Sound_24
+code BDAD
+label BDAD Sound_25
+code BDB2
+label BDB2 Sound_26
+code BDB7
+label BDB7 Sound_27
+code BDBC
+label BDBC Sound_28
+code BDC1
+label BDC1 Sound_29
+code BDC6
+label BDC6 Sound_2A
+code BDCB
+label BDCB Sound_2B
+code BDD0
+label BDD0 Sound_2C
+code BDD5
+label BDD5 LBDD5
+label BDD5 Sound_2D
+code BDDA
+label BDDA Sound_2E
+code BDDF
+label BDDF Sound_2F
+code BDE4
+label BDE4 Sound_30
+code BDE9
+label BDE9 Sound_31
+code BDEE
+label BDEE Sound_32
+code BDF3
+label BDF3 Sound_33
+code BDF8
+label BDF8 LBDF8
+label BDF8 Sound_34
+code BDFD
+label BDFD Sound_35
+code BE02
+label BE02 Sound_36
+code BE07
+label BE07 Sound_37
+code BE0C
+label BE0C Sound_38
+code BE11
+label BE11 Sound_39
+code BE16
+label BE16 LBE16
+label BE16 Sound_3A
+code BE1B
+label BE1B Sound_3B
+code BE20
+label BE20 LBE20
+code BE22
+label BE22 LBE22
+code BE3A
+label BE3A LBE3A
+code BE4C
+label BE4C LBE4C
+code BF69
+label BF69 LBF69
+code BF7C
+label BF7C LBF7C
+code BFB4
+label BFB4 LBFB4
+code BFE2
+label BFE2 LBFE2
+code BFF4
+label BFF4 LBFF4
+code BFF7
+label BFF7 LBFF7
+code C02F
+label C02F LC02F
+code C039
+label C039 LC039
+code C04A
+label C04A LC04A
+code C04F
+label C04F LC04F
+code C054
+label C054 LC054
+code C083
+label C083 LC083
+code C087
+label C087 LC087
+code C090
+label C090 LC090
+code C09D
+label C09D LC09D
+code C0C2
+label C0C2 LC0C2
+code C0F7
+label C0F7 LC0F7
+code C0FE
+label C0FE locret_C0FE
+code C0FF
+label C0FF LC0FF
+code C132
+label C132 LC132
+code C17B
+label C17B LC17B
+code C191
+label C191 LC191
+code C19E
+label C19E LC19E
+code C1BB
+label C1BB LC1BB
+code C1D1
+label C1D1 LC1D1
+code C1E9
+label C1E9 LC1E9
+code C20C
+label C20C LC20C
+code C22A
+label C22A LC22A
+code C23D
+label C23D LC23D
+code C249
+label C249 LC249
+code C24E
+label C24E LC24E
+code C274
+label C274 LC274
+code C27F
+label C27F LC27F
+code C29B
+label C29B LC29B
+code C2B1
+label C2B1 LC2B1
+code C2B3
+label C2B3 LC2B3
+code C2C2
+label C2C2 locret_C2C2
+code C2C3
+label C2C3 LC2C3
+code C2DF
+label C2DF LC2DF
+code C306
+label C306 LC306
+code C30C
+label C30C LC30C
+code C31D
+label C31D LC31D
+code C32C
+label C32C LC32C
+code C33A
+label C33A LC33A
+code C369
+label C369 LC369
+code C36C
+label C36C LC36C
+code C37C
+label C37C LC37C
+code C3A5
+label C3A5 LC3A5
+code C3A7
+label C3A7 LC3A7
+code C3B7
+label C3B7 LC3B7
+code C3BD
+label C3BD LC3BD
+code C3C6
+label C3C6 LC3C6
+code C3C8
+label C3C8 LC3C8
+code C3D8
+label C3D8 LC3D8
+code C3EE
+label C3EE LC3EE
+code C409
+label C409 LC409
+code C413
+label C413 LC413
+code C421
+label C421 LC421
+code C434
+label C434 LC434
+code C44F
+label C44F locret_C44F
+code C450
+label C450 LC450
+code C452
+label C452 LC452
+code C469
+label C469 LC469
+code C498
+label C498 LC498
+code C4A5
+label C4A5 LC4A5
+code C4B1
+label C4B1 LC4B1
+code C4D1
+label C4D1 LC4D1
+code C4DA
+label C4DA LC4DA
+code C4E4
+label C4E4 LC4E4
+code C4EA
+label C4EA locret_C4EA
+code C4EB
+label C4EB LC4EB
+code C507
+label C507 LC507
+code C50C
+label C50C LC50C
+code C516
+label C516 LC516
+code C519
+label C519 LC519
+code C542
+label C542 LC542
+code C54E
+label C54E LC54E
+code C557
+label C557 LC557
+code C591
+label C591 LC591
+code C5A3
+label C5A3 locret_C5A3
+code C5A4
+label C5A4 LC5A4
+code C5DB
+label C5DB LC5DB
+code C5E3
+label C5E3 LC5E3
+code C5F2
+label C5F2 LC5F2
+code C5F8
+label C5F8 LC5F8
+code C604
+label C604 LC604
+code C61D
+label C61D LC61D
+code C640
+label C640 locret_C640
+code C641
+label C641 LC641
+code C647
+label C647 LC647
+code C65A
+label C65A locret_C65A
+code C65B
+label C65B LC65B
+code C66D
+label C66D LC66D
+code C67A
+label C67A LC67A
+code C680
+label C680 LC680
+code C688
+label C688 LC688
+code C68B
+label C68B LC68B
+code C690
+label C690 LC690
+code C69D
+label C69D LC69D
+code C6B4
+label C6B4 LC6B4
+code C6B7
+label C6B7 locret_C6B7
+code C6B8
+label C6B8 LC6B8
+code C6C8
+label C6C8 LC6C8
+code C6D4
+label C6D4 LC6D4
+code C6D7
+label C6D7 LC6D7
+code C6D9
+label C6D9 LC6D9
+code C6DC
+label C6DC LC6DC
+code C6F4
+label C6F4 LC6F4
+code C6F7
+label C6F7 LC6F7
+code C6F9
+label C6F9 LC6F9
+code C6FC
+label C6FC LC6FC
+code C706
+label C706 LC706
+code C70E
+label C70E LC70E
+code C71E
+label C71E LC71E
+code C72E
+label C72E LC72E
+code C734
+; comment C734 "Display BCD numbers"
+label C734 LC734
+label C737 byte_C737
+data  C737-C796
+label C797 byte_C797
+data  C797-C7A2
+data  C7A3-C7A3
+label C7A3 unk_C7A3
+data  C7A4-C7B5
+label C7A4 word_C7A4
+data  C7B6-C7B6
+label C7B6 unk_C7B6
+data  C7B7-C7B8
+label C7B7 word_C7B7
+data  C7BB-C7BC
+label C7BB word_C7BB
+data  C7BD-C7BE
+data  C7BF-C7C0
+data  C7C1-C7C2
+label C7C1 word_C7C1
+data  C7C3-C7C4
+label C7C3 word_C7C3
+data  C7C5-C7C6
+label C7C5 word_C7C5
+data  C7C7-C7C8
+label C7C7 word_C7C7
+data  C7C9-C7CA
+label C7C9 word_C7C9
+data  C7CB-C7CC
+label C7CB word_C7CB
+data  C7CD-C7F0
+label C7CD word_C7CD
+label C7F1 byte_C7F1
+data  C7F1-C7FC
+code C7FD
+label C7FD LC7FD
+code C811
+label C811 LC811
+code C81E
+label C81E LC81E
+code C826
+label C826 LC826
+code C847
+label C847 LC847
+code C84A
+label C84A LC84A
+code C869
+label C869 LC869
+code C86B
+label C86B LC86B
+code C86D
+label C86D LC86D
+code C86F
+label C86F LC86F
+code C871
+label C871 LC871
+code C87F
+label C87F LC87F
+code C882
+label C882 LC882
+code C884
+label C884 LC884
+code C887
+label C887 LC887
+code C8A1
+label C8A1 LC8A1
+code C8A3
+label C8A3 LC8A3
+code C8A5
+label C8A5 LC8A5
+code C8A7
+label C8A7 LC8A7
+code C8A9
+label C8A9 LC8A9
+code C8B7
+label C8B7 LC8B7
+code C8BA
+label C8BA LC8BA
+code C8BC
+label C8BC LC8BC
+code C8BF
+label C8BF LC8BF
+code C8D9
+label C8D9 LC8D9
+code C8DB
+label C8DB LC8DB
+code C8DD
+label C8DD LC8DD
+code C8DF
+label C8DF LC8DF
+code C8E1
+label C8E1 LC8E1
+code C8EF
+label C8EF LC8EF
+code C8F2
+label C8F2 LC8F2
+code C8F4
+label C8F4 LC8F4
+code C8F7
+label C8F7 LC8F7
+code C918
+label C918 LC918
+code C966
+label C966 LC966
+code C971
+label C971 LC971
+code C9B6
+label C9B6 LC9B6
+code C9B9
+label C9B9 LC9B9
+code C9F4
+label C9F4 LC9F4
+code C9F7
+label C9F7 LC9F7
+code CA4E
+label CA4E LCA4E
+code CA54
+label CA54 LCA54
+code CA5B
+label CA5B LCA5B
+data  CA64-CA77
+label CA64 word_CA64
+data  CA78-CA8B
+label CA78 word_CA78
+code CA8C
+label CA8C LCA8C
+code CA8F
+label CA8F LCA8F
+code CA9D
+label CA9D LCA9D
+code CAA5
+label CAA5 LCAA5
+code CAB7
+label CAB7 LCAB7
+code CAC5
+label CAC5 LCAC5
+code CADE
+label CADE LCADE
+code CAF3
+label CAF3 LCAF3
+code CB08
+label CB08 LCB08
+code CB0B
+label CB0B LCB0B
+code CB1A
+label CB1A LCB1A
+code CB31
+label CB31 LCB31
+code CB49
+label CB49 LCB49
+code CB59
+label CB59 LCB59
+code CB71
+label CB71 LCB71
+code CB7D
+label CB7D LCB7D
+code CB82
+label CB82 LCB82
+code CB91
+label CB91 LCB91
+code CBA0
+label CBA0 LCBA0
+code CBA3
+label CBA3 locret_CBA3
+data  CBA4-CBA5
+label CBA4 word_CBA4
+data  CBA6-CC0F
+label CBA6 word_CBA6
+data  CC10-CC17
+label CC10 word_CC10
+code CC18
+label CC18 LCC18
+code CC38
+label CC38 LCC38
+code CC3B
+label CC3B LCC3B
+code CC49
+label CC49 LCC49
+code CC5B
+label CC5B LCC5B
+code CC61
+label CC61 LCC61
+code CC70
+label CC70 LCC70
+data  CC7A-CC97
+label CC7A word_CC7A
+data  CC98-CCBF
+label CC98 word_CC98
+code CCC0
+label CCC0 LCCC0
+code CCCC
+label CCCC LCCCC
+code CCD8
+label CCD8 LCCD8
+code CCE4
+label CCE4 LCCE4
+code CCF0
+label CCF0 LCCF0
+code CCFC
+label CCFC LCCFC
+code CD08
+label CD08 LCD08
+code CD14
+label CD14 LCD14
+code CD20
+label CD20 LCD20
+code CD2C
+label CD2C LCD2C
+code CD38
+label CD38 LCD38
+code CD44
+label CD44 LCD44
+code CD50
+label CD50 LCD50
+code CD5C
+label CD5C LCD5C
+code CD68
+label CD68 LCD68
+code CD74
+label CD74 LCD74
+code CD80
+label CD80 LCD80
+code CD8C
+label CD8C LCD8C
+code CD98
+label CD98 LCD98
+code CD9C
+label CD9C Shift_D_R_6
+code CD9E
+label CD9E Shift_D_R_5
+code CDA0
+label CDA0 Shift_D_R_4
+code CDA2
+label CDA2 Shift_D_R_3
+code CDA9
+label CDA9 LCDA9
+code CDAB
+label CDAB Shift_D_L_7
+code CDB1
+label CDB1 Shift_D_L_4
+code CDB5
+label CDB5 Shift_D_L_2
+code CDBA
+label CDBA LCDBA
+label CDBA Math_Run_Start
+code CDBD
+label CDBD Math_Wait_Til_Halt
+code CDC3
+label CDC3 LCDC3
+code CDE7
+label CDE7 LCDE7
+code CE0C
+label CE0C LCE0C
+code CE18
+label CE18 LCE18
+code CE24
+label CE24 LCE24
+code CE2F
+label CE2F LCE2F
+code CE3A
+label CE3A LCE3A
+code CE45
+label CE45 Gen_Random
+data  CE4F-CE53
+label CE54 aUrfeyGotWired
+data  CE54-CE64
+data  CE64-CEC9
+label CECA aCopyright1983Atari
+data  CECA-CEDE
+data  CEDE-D603
+label CEDE word_CEDE
+data  D604-D605
+label D604 word_D604
+data  D606-D607
+data  D608-D609
+data  D60A-D60B
+data  D60C-D60D
+data  D60E-D60F
+data  D610-D611
+data  D612-D613
+label D612 word_D612
+data  D614-D615
+data  D616-D617
+data  D618-D619
+data  D61A-D61B
+data  D61C-D61D
+data  D61E-D61F
+data  D620-D621
+label D620 word_D620
+data  D622-D623
+data  D624-D625
+data  D626-D627
+data  D628-D629
+data  D62A-D62B
+data  D62C-D62D
+data  D62E-D62F
+data  D630-D631
+code D631
+label D631 LD631
+data  D632-D633
+data  D634-D635
+data  D636-D637
+data  D638-D639
+data  D63A-D63B
+data  D63C-D63D
+data  D63E-D63F
+data  D640-D641
+label D640 word_D640
+data  D642-D643
+data  D644-D645
+data  D646-D647
+data  D648-D649
+label D648 word_D648
+data  D64A-D64B
+data  D64C-D64D
+data  D64E-D64F
+data  D650-D651
+label D650 word_D650
+data  D652-D653
+data  D654-D655
+data  D656-D657
+data  D658-D659
+label D658 word_D658
+data  D65A-D65B
+data  D65C-D65D
+data  D65E-D65F
+code D660
+label D660 LD660
+code D68D
+label D68D LD68D
+code D690
+label D690 LD690
+code D693
+label D693 LD693
+code D6A0
+label D6A0 LD6A0
+code D6A3
+label D6A3 LD6A3
+code D6BC
+label D6BC LD6BC
+code D6BF
+label D6BF LD6BF
+code D6E7
+label D6E7 LD6E7
+code D6EA
+label D6EA LD6EA
+code D709
+label D709 LD709
+data  D716-D775
+label D716 word_D716
+code D776
+label D776 LD776
+code D783
+label D783 LD783
+code D788
+label D788 LD788
+code D792
+label D792 LD792
+code D7A6
+label D7A6 LD7A6
+code D7B0
+label D7B0 LD7B0
+code D7CB
+label D7CB LD7CB
+code D7CE
+label D7CE LD7CE
+code D7D9
+label D7D9 LD7D9
+code D7DA
+label D7DA LD7DA
+code D7ED
+label D7ED LD7ED
+code D7EF
+label D7EF LD7EF
+code D7FC
+label D7FC LD7FC
+code D808
+label D808 LD808
+code D812
+label D812 LD812
+code D81E
+label D81E LD81E
+code D822
+label D822 LD822
+code D82F
+label D82F LD82F
+label D843 byte_D843
+data  D843-D84A
+code D84B
+label D84B LD84B
+code D853
+label D853 LD853
+code D860
+label D860 LD860
+code D885
+label D885 LD885
+code D889
+label D889 LD889
+code D88B
+label D88B LD88B
+code D8A4
+label D8A4 LD8A4
+code D8AA
+label D8AA LD8AA
+code D8AC
+label D8AC LD8AC
+code D8AE
+label D8AE LD8AE
+code D8B7
+label D8B7 LD8B7
+code D8C0
+label D8C0 LD8C0
+code D8CD
+label D8CD LD8CD
+code D8D7
+label D8D7 LD8D7
+code D8DE
+label D8DE locret_D8DE
+code D8DF
+label D8DF LD8DF
+code D8E7
+label D8E7 LD8E7
+code D8EC
+label D8EC LD8EC
+code D8F1
+label D8F1 LD8F1
+code D8F7
+label D8F7 LD8F7
+code D8FA
+label D8FA LD8FA
+code D912
+label D912 LD912
+code D91A
+label D91A LD91A
+code D923
+label D923 LD923
+code D92C
+label D92C LD92C
+code D93B
+label D93B LD93B
+code D941
+label D941 locret_D941
+code D942
+label D942 LD942
+code D94B
+label D94B LD94B
+code D957
+label D957 LD957
+code D95D
+label D95D locret_D95D
+code D95E
+label D95E LD95E
+code D971
+label D971 LD971
+code D974
+label D974 LD974
+code D97C
+label D97C LD97C
+code D985
+label D985 LD985
+code D993
+label D993 LD993
+code D9D3
+label D9D3 LD9D3
+code D9DB
+label D9DB locret_D9DB
+code D9DC
+label D9DC LD9DC
+code D9FA
+label D9FA LD9FA
+code DA1E
+label DA1E LDA1E
+code DA2A
+label DA2A LDA2A
+code DA94
+label DA94 LDA94
+code DA9C
+label DA9C LDA9C
+code DAB1
+label DAB1 LDAB1
+code DAB3
+label DAB3 LDAB3
+code DAC1
+label DAC1 LDAC1
+code DAD3
+label DAD3 LDAD3
+code DADF
+label DADF LDADF
+code DAEE
+label DAEE LDAEE
+code DAF5
+label DAF5 LDAF5
+code DB03
+label DB03 LDB03
+code DB1F
+label DB1F LDB1F
+code DB2E
+label DB2E locret_DB2E
+data  DB2F-DB30
+label DB2F word_DB2F
+data  DB31-DB31
+data  DB32-DB32
+data  DB33-DB33
+data  DB34-DB34
+data  DB35-DB35
+data  DB36-DB36
+data  DB37-DB37
+data  DB39-DB39
+data  DB3B-DB3B
+data  DB3D-DB3D
+data  DB3E-DB3E
+label DB3F aStarWar
+data  DB3F-DB48
+label DBA8 aGameOve
+data  DBA8-DBB1
+label DBB1 aInsertCoin
+data  DBB1-DBBD
+label DBBD aFreePla_0
+data  DBBD-DBC6
+label DBC6 a2Plays1Coi
+data  DBC6-DBD4
+label DBD4 a1Coin1Pla
+data  DBD4-DBE1
+label DBE1 a2Coins1Pla
+data  DBE1-DBEF
+label DBEF aPullTriggerToStar
+data  DBEF-DC04
+label DC04 aCredit
+data  DC04-DC0B
+label DC0B aCredi_0
+data  DC0B-DC11
+label DC11 aShieldGon
+data  DC11-DC1C
+label DC1C aFlightInstruction
+data  DC1C-DC3B
+label DC3B a1_YourXWingIsEqui
+data  DC3B-DC5E
+label DC5E aInvisibleDeflecto
+data  DC5E-DC7D
+label DC9F a2_DeflectorStreng
+data  DC9F-DCC2
+label DCC2 aAFireballImpactsY
+data  DCC2-DCE3
+label DCE3 aWhenYouStrikeALas
+data  DCE3-DD03
+label DD12 a3_AimYourLasersWi
+data  DD12-DD34
+label DD34 aExplodeEmpireTieF
+data  DD34-DD56
+label DD74 a4_ShootFireballsB
+data  DD74-DD93
+label DDA6 a5_TheRebelForceIs
+data  DDA6-DDC9
+data  DDFD-DDFD
+label DDFD unk_DDFD
+data  DDFE-DDFE
+label DDFE unk_DDFE
+label DE29 aDarthVaderSShip20
+data  DE29-DE35
+label DF17 aSelectADeathSta
+data  DF17-DF2A
+label DF2A aFireLaserAtDesire
+data  DF2A-DF4A
+label DF4A aCountdow
+data  DF4A-DF53
+label DF53 aEas_0
+data  DF53-DF57
+label DF57 aMediu
+data  DF57-DF5D
+label DF5D aHar_0
+data  DF5D-DF61
+label DF73 aBonu
+data  DF73-DF78
+label DF78 aNoBonu
+data  DF78-DF80
+label DF8E aMessageFromRebelC
+data  DF8E-DFAD
+label DFAD aYouAreATrueRebelP
+data  DFAD-DFC7
+label DFC7 aTheForceIsWithYo
+data  DFC7-DFDC
+label DFDC aShootYourInitial
+data  DFDC-DFEF
+label DFEF aPrincessLeiaSRebe
+data  DFEF-E00B
+code E000
+label E000 LE000
+label E00A aPointsNextTowe
+data  E00A-E01B
+label E01B aTower
+data  E01B-E021
+label E021 aClearedAllLaserTo
+data  E021-E039
+label E039 a50000ForShootingA
+data  E039-E057
+label E057 aExhaustPortAhea
+data  E057-E069
+label E069 aDeathStarDestroye
+data  E069-E07D
+label E07D aExhaustPortMisse
+data  E07D-E090
+label E090 aBonusForRemaining
+data  E090-E0AA
+label E0AA a5000
+data  E0AA-E0B2
+label E0B2 aAddedToDeflectorS
+data  E0B2-E0CB
+label E0CB aShieldAtFullStren
+data  E0CB-E0E2
+label E0E2 aStartingWaveBonu
+data  E0E2-E0F5
+label E0F5 aShootFireball
+data  E0F5-E104
+label E104 aShootTieFighter
+data  E104-E116
+label E116 aAvoidCatwalk
+data  E116-E124
+label E124 aUseTheForc
+data  E124-E131
+label E131 aForUsingTheForc
+data  E131-E145
+label E145 aObiWanKenobiIsGon
+data  E145-E163
+label E185 aTheEmpireSDeathSt
+data  E185-E1A8
+label E1A7 aCommandOfDarthVad
+data  E1A7-E1C8
+label E1C8 aRebelPlanet_YouMu
+data  E1C8-E1E8
+label E220 aAlway
+data  E220-E226
+label E226 aAccountingInforma
+data  E226-E23C
+label E23C aAuxCoin
+data  E23C-E245
+label E245 aLeftMechCoin
+data  E245-E254
+label E254 aRightMechCoin
+data  E254-E264
+label E264 aTotalCoinsPai
+data  E264-E274
+label E274 aGamesPlaye
+data  E274-E280
+label E280 aHighWav
+data  E280-E289
+label E289 aTotalGameTimeSeco
+data  E289-E2AA
+label E2AA aAverageGameTim
+data  E2AA-E2BB
+label E2BB aTotalTimeOnSecond
+data  E2BB-E2DA
+label E2DA aPercentageOfPlayP
+data  E2DA-E2F8
+label E2F8 aHistoryOfGameTime
+data  E2F8-E30D
+label E30D aGameOption
+data  E30D-E319
+label E319 aValueOfACoi
+data  E319-E328
+label E328 aLeftMechValu
+data  E328-E337
+label E337 aRightMechValu
+data  E337-E347
+label E347 aBonusAdde
+data  E347-E352
+label E352 aStartingShiel
+data  E352-E361
+label E361 aPlayDifficult
+data  E361-E370
+label E370 aBonusShiel
+data  E370-E37C
+label E37C aMusicInAttrac
+data  E37C-E38C
+label E38C aResetHighScore
+data  E38C-E39D
+label E39D aResetTimingInf
+data  E39D-E3AE
+label E3AE aResetOption
+data  E3AE-E3BB
+label E3BB aTestNovra
+data  E3BB-E3C6
+label E3C6 aUpDownToSelectIte
+data  E3C6-E3DC
+label E3FC aFreePla
+data  E3FC-E405
+label E405 a2Credit
+data  E405-E40E
+label E40E a1Credi
+data  E40E-E416
+label E416 aCredi
+data  E416-E41E
+label E424 aNon_0
+data  E424-E428
+label E455 aNon
+data  E455-E459
+data  E45A-E45A
+label E45A unk_E45A
+data  E45B-E45B
+label E45B unk_E45B
+label E45D aEas
+data  E45D-E461
+label E461 aModerat
+data  E461-E469
+label E469 aHar
+data  E469-E46D
+label E46D aHardes
+data  E46D-E474
+label E478 aYe_3
+data  E478-E47B
+label E47B aN_3
+data  E47B-E47D
+label E47D aN_2
+data  E47D-E47F
+label E47F aYe_2
+data  E47F-E482
+label E482 aN_1
+data  E482-E484
+label E484 aYe_1
+data  E484-E487
+label E487 aN_0
+data  E487-E489
+label E489 aYe_0
+data  E489-E48C
+label E48C aN
+data  E48C-E48E
+label E48E aYe
+data  E48E-E491
+label E491 aNoError
+data  E491-E49A
+label E49A aErrorA
+data  E49A-E4A2
+label E4A2 aSwitchTes
+data  E4A2-E4AD
+label E4AD aLeftFir
+data  E4AD-E4B6
+label E4B6 aRightFir
+data  E4B6-E4C0
+label E4C7 aSelfTes
+data  E4C7-E4D0
+label E4D0 aSla
+data  E4D0-E4D4
+label E4D4 aAuxCoi
+data  E4D4-E4DC
+label E4DC aLeftCoi
+data  E4DC-E4E5
+label E4F0 aLeftThum
+data  E4F0-E4FA
+label E4FA aRightThum
+data  E4FA-E505
+label E50D aPotTes
+data  E50D-E515
+label E515 aHardwareError
+data  E515-E524
+label E524 aNoErrorsDetecte
+data  E524-E536
+label E536 aProgramRamAt2f
+data  E536-E548
+label E556 aMathRamAt5
+data  E556-E564
+label E571 aVgRam1At3
+data  E571-E57E
+label E57E aVgRam2At3
+data  E57E-E58B
+label E598 aVgRam4At4
+data  E598-E5A5
+label E5A5 aVgRam5At4
+data  E5A5-E5B2
+label E5B2 aNonVolatileRamAt1
+data  E5B2-E5C8
+label E5DA aProgramRom1At1h
+data  E5DA-E5ED
+label E5ED aProgramRom2At1j
+data  E5ED-E600
+label E613 aProgramRom4At1
+data  E613-E625
+label E631 aMathboxTest
+data  E631-E63E
+label E63E aBadMathboxReadyLi
+data  E63E-E654
+label E654 aDividerError
+data  E654-E662
+label E662 aNoDividerError
+data  E662-E673
+label E673 aOptSwNumDivDenIsE
+data  E673-E691
+label E691 aMatrixError
+data  E691-E69E
+label E69E aNoMatrixError
+data  E69E-E6AE
+label E6AE aBipTes
+data  E6AE-E6B6
+label E6B6 aAlignTheBoxe
+data  E6B6-E6C5
+label E6C5 aScaleTes
+data  E6C5-E6CF
+label E6CF aLinea
+data  E6CF-E6D5
+label E6D5 aLinearAndBinar
+data  E6D5-E6E6
+data  E6E6-E6E6
+label E6E6 unk_E6E6
+data  E6E7-E6E7
+data  E6E8-E6E8
+label E6EC a1_Di
+data  E6EC-E6F2
+label E6F2 a2_Lo
+data  E6F2-E6F8
+label E6F8 a3_Hig
+data  E6F8-E6FF
+label E6FF aIntensityTes
+data  E6FF-E70D
+label E70D aPressAuxCoinToCon
+data  E70D-E727
+label E727 aPressAuxCoinForSe
+data  E727-E743
+label E743 aPullRightFireToPe
+; data  E743-E764
+data  E743-E763
+code E764
+label E764 LE764
+code E772
+label E772 LE772
+code E789
+label E789 LE789
+code E790
+label E790 Display_Vect_BCD
+label E790 LE790
+code E7A2
+label E7A2 LE7A2
+code E7A9
+label E7A9 LE7A9
+code E7AD
+label E7AD LE7AD
+code E7BB
+label E7BB LE7BB
+code E7C2
+label E7C2 LE7C2
+code E7C7
+label E7C7 LE7C7
+code E7D2
+label E7D2 locret_E7D2
+code E7D3
+label E7D3 LE7D3
+code E7DC
+label E7DC locret_E7DC
+code E7DD
+label E7DD LE7DD
+code E7EA
+label E7EA LE7EA
+code E7FC
+label E7FC LE7FC
+code E811
+label E811 LE811
+code E821
+label E821 LE821
+code E82B
+label E82B LE82B
+code E83C
+label E83C LE83C
+code E845
+label E845 LE845
+code E84F
+label E84F LE84F
+code E858
+label E858 LE858
+code E861
+label E861 LE861
+code E86A
+label E86A LE86A
+code E873
+label E873 LE873
+code E87C
+label E87C LE87C
+code E885
+label E885 LE885
+code E888
+label E888 LE888
+data  E894-E895
+label E894 ptrText
+data  E896-E897
+data  E898-E899
+data  E89A-E89B
+data  E89C-E89D
+data  E89E-E89F
+data  E8A0-E8A1
+data  E8A2-E8A3
+data  E8A4-E8A5
+data  E8A6-E8A7
+data  E8A8-E8A9
+data  E8AA-E8AB
+data  E8AC-E8AD
+data  E8AE-E8AF
+data  E8B0-E8B1
+data  E8B2-E8B3
+data  E8B4-E8B5
+data  E8B6-E8B7
+data  E8B8-E8B9
+data  E8BA-E8BB
+data  E8BC-E8BD
+data  E8BE-E8BF
+data  E8C0-E8C1
+data  E8C2-E8C3
+data  E8C4-E8C5
+data  E8C6-E8C7
+data  E8C8-E8C9
+data  E8CA-E8CB
+data  E8CC-E8CD
+data  E8CE-E8CF
+data  E8D0-E8D1
+data  E8D2-E8D3
+data  E8D4-E8D5
+data  E8D6-E8D7
+data  E8D8-E8D9
+data  E8DA-E8DB
+data  E8DC-E8DD
+data  E8DE-E8DF
+data  E8E0-E8E1
+data  E8E2-E8E3
+data  E8E4-E8E5
+data  E8E6-E8E7
+data  E8E8-E8E9
+data  E8EA-E8EB
+data  E8EC-E8ED
+data  E8EE-E8EF
+data  E8F0-E8F1
+data  E8F2-E8F3
+data  E8F4-E8F5
+data  E8F6-E8F7
+data  E8F8-E8F9
+data  E8FA-E8FB
+data  E8FC-E8FD
+data  E8FE-E8FF
+data  E900-E901
+data  E902-E903
+data  E904-E905
+data  E906-E907
+data  E908-E909
+data  E90A-E90B
+data  E90C-E90D
+data  E90E-E90F
+data  E910-E911
+data  E912-E913
+data  E914-E915
+data  E916-E917
+data  E918-E919
+data  E91A-E91B
+data  E91C-E91D
+data  E91E-E91F
+data  E920-E921
+data  E922-E923
+data  E924-E925
+data  E926-E927
+data  E928-E929
+data  E92A-E92B
+data  E92C-E92D
+data  E92E-E92F
+data  E930-E931
+data  E932-E933
+data  E934-E935
+data  E936-E937
+data  E938-E939
+data  E93A-E93B
+data  E93C-E93D
+data  E93E-E93F
+data  E940-E941
+data  E942-E943
+data  E944-E945
+data  E946-E947
+data  E948-E949
+data  E94A-E94B
+data  E94C-E94D
+data  E94E-E94F
+data  E950-E951
+data  E952-E953
+data  E954-E955
+data  E956-E957
+data  E958-E959
+data  E95A-E95B
+data  E95C-E95D
+data  E95E-E95F
+data  E960-E961
+data  E962-E963
+data  E964-E965
+data  E966-E967
+data  E968-E969
+data  E96A-E96B
+data  E96C-E96D
+data  E96E-E96F
+data  E970-E971
+data  E972-E973
+data  E974-E975
+data  E976-E977
+data  E978-E979
+data  E97A-E97B
+data  E97C-E97D
+data  E97E-E97F
+data  E980-E981
+data  E982-E983
+data  E984-E985
+data  E986-E987
+data  E988-E989
+data  E98A-E98B
+data  E98C-E98D
+data  E98E-E98F
+data  E990-E991
+data  E992-E993
+data  E994-E995
+data  E996-E997
+data  E998-E999
+data  E99A-E99B
+data  E99C-E99D
+data  E99E-E99F
+label E99E off_E99E
+data  E9A0-E9A1
+data  E9A2-E9A3
+data  E9A4-E9A5
+data  E9A6-E9A7
+data  E9A8-E9A9
+data  E9AA-E9AB
+data  E9AC-E9AD
+data  E9AE-E9AF
+data  E9B0-E9B1
+data  E9B2-E9B3
+data  E9B4-E9B5
+data  E9B6-E9B7
+data  E9B8-E9B9
+data  E9BA-E9BB
+data  E9BC-E9BD
+data  E9BE-E9BF
+data  E9C0-E9C1
+data  E9C2-E9C3
+data  E9C4-E9C5
+data  E9C6-E9C7
+data  E9C8-E9C9
+data  E9CA-E9CB
+data  E9CC-E9CD
+data  E9CE-E9CF
+data  E9D0-E9D1
+data  E9D2-E9D3
+data  E9D4-E9D5
+data  E9D6-E9D7
+data  E9D8-E9D9
+data  E9DA-E9DB
+data  E9DC-E9DD
+data  E9DE-E9DF
+data  E9E0-E9E1
+data  E9E2-E9E3
+data  E9E4-E9E5
+data  E9E6-E9E7
+data  E9E8-E9E9
+data  E9EA-E9EB
+data  E9EC-E9ED
+data  E9EE-E9EF
+data  E9F0-E9F1
+data  E9F2-E9F3
+data  E9F4-E9F5
+data  E9F6-E9F7
+data  E9F8-E9F9
+data  E9FA-E9FB
+data  E9FC-E9FD
+data  E9FE-E9FF
+data  EA00-EA01
+data  EA02-EA03
+data  EA04-EA05
+data  EA06-EA07
+data  EA08-EA09
+data  EA0A-EA0B
+data  EA0C-EA0D
+data  EA0E-EA0F
+data  EA10-EA11
+data  EA12-EA13
+data  EA14-EA15
+data  EA16-EA17
+data  EA18-EA19
+data  EA1A-EA1B
+data  EA1C-EA1D
+data  EA1E-EA1F
+data  EA20-EA21
+data  EA22-EA23
+data  EA24-EA25
+data  EA26-EA27
+data  EA28-EA29
+data  EA2A-EA2B
+data  EA2C-EA2D
+data  EA2E-EA2F
+data  EA30-EA31
+data  EA32-EA33
+data  EA34-EA35
+data  EA36-EA37
+data  EA38-EA39
+data  EA3A-EA3B
+data  EA3C-EA3D
+data  EA3E-EA3F
+data  EA40-EA4F
+data  EA50-EDA7
+label EA50 word_EA50
+data  EDA8-EF53
+label EDA8 word_EDA8
+code EF54
+label EF54 BADIRQ
+code EF56
+label EF56 IRQ
+code EF5E
+label EF5E LEF5E
+code EF64
+label EF64 LEF64
+code EF72
+label EF72 LEF72
+code EF7F
+label EF7F LEF7F
+code EF8B
+label EF8B LEF8B
+code EFCA
+label EFCA LEFCA
+code EFDE
+label EFDE LEFDE
+code EFE6
+label EFE6 LEFE6
+code EFF7
+label EFF7 LEFF7
+code F010
+label F010 LF010
+code F034
+label F034 LF034
+code F041
+label F041 LF041
+code F05A
+label F05A LF05A
+code F06A
+label F06A LF06A
+code F073
+label F073 LF073
+code F07F
+label F07F LF07F
+code F088
+label F088 LF088
+code F094
+label F094 LF094
+code F0A0
+label F0A0 LF0A0
+code F0A9
+label F0A9 LF0A9
+code F0C4
+label F0C4 LF0C4
+code F0D8
+label F0D8 LF0D8
+code F0E9
+label F0E9 LF0E9
+code F0F3
+label F0F3 LF0F3
+code F0FC
+label F0FC LF0FC
+code F115
+label F115 LF115
+code F12F
+label F12F LF12F
+code F133
+label F133 LF133
+code F146
+label F146 LF146
+code F153
+label F153 LF153
+code F168
+label F168 LF168
+code F16A
+label F16A LF16A
+code F16C
+label F16C LF16C
+code F176
+label F176 LF176
+code F178
+label F178 LF178
+code F186
+label F186 LF186
+code F18C
+label F18C locret_F18C
+code F18D
+label F18D LF18D
+code F19E
+label F19E LF19E
+code F1A4
+label F1A4 LF1A4
+code F1BA
+label F1BA LF1BA
+code F1C0
+label F1C0 LF1C0
+code F1C6
+label F1C6 LF1C6
+code F1D0
+label F1D0 LF1D0
+code F1D8
+label F1D8 LF1D8
+code F1E5
+label F1E5 LF1E5
+code F1EB
+label F1EB LF1EB
+code F1F7
+label F1F7 LF1F7
+code F1FD
+label F1FD LF1FD
+code F20A
+label F20A LF20A
+code F20F
+label F20F LF20F
+code F215
+label F215 LF215
+code F21D
+label F21D LF21D
+code F226
+label F226 LF226
+code F22B
+label F22B LF22B
+code F237
+label F237 LF237
+code F250
+label F250 LF250
+code F261
+label F261 LF261
+label F261 Reset
+code F281
+label F281 LF281
+code F2A2
+label F2A2 LF2A2
+code F2B2
+label F2B2 LF2B2
+code F2C2
+label F2C2 LF2C2
+code F2D6
+label F2D6 LF2D6
+code F2DC
+label F2DC LF2DC
+code F2E3
+label F2E3 LF2E3
+code F2FB
+label F2FB LF2FB
+data  F32E-F32F
+label F32E word_F32E
+data  F330-F331
+data  F332-F333
+label F332 word_F332
+data  F334-F335
+label F334 word_F334
+data  F336-F337
+data  F338-F339
+data  F33A-F33B
+data  F33C-F33D
+data  F33E-F33F
+data  F340-F341
+label F340 off_F340
+data  F342-F343
+label F342 word_F342
+data  F344-F345
+label F344 word_F344
+data  F346-F347
+data  F348-F349
+data  F34A-F34B
+data  F34C-F34D
+label F34C word_F34C
+data  F34E-F36D
+label F34E word_F34E
+code F36E
+label F36E LF36E
+code F380
+label F380 LF380
+code F387
+label F387 LF387
+code F38D
+label F38D LF38D
+code F39D
+label F39D LF39D
+code F3A0
+label F3A0 LF3A0
+code F3B5
+label F3B5 LF3B5
+code F3BE
+label F3BE LF3BE
+code F3D2
+label F3D2 LF3D2
+code F3D6
+label F3D6 LF3D6
+code F3D8
+label F3D8 LF3D8
+code F3DC
+label F3DC LF3DC
+code F3E5
+label F3E5 LF3E5
+code F3EB
+label F3EB LF3EB
+code F3FB
+label F3FB LF3FB
+code F40B
+label F40B LF40B
+code F41A
+label F41A LF41A
+code F41E
+label F41E LF41E
+code F420
+label F420 LF420
+code F424
+label F424 LF424
+code F436
+label F436 LF436
+code F43F
+label F43F LF43F
+code F448
+label F448 LF448
+code F452
+label F452 LF452
+code F464
+label F464 LF464
+code F46B
+label F46B LF46B
+code F482
+label F482 LF482
+code F491
+label F491 LF491
+code F49E
+label F49E LF49E
+code F4B2
+label F4B2 LF4B2
+code F4B7
+label F4B7 LF4B7
+code F4C3
+label F4C3 LF4C3
+code F4CE
+label F4CE LF4CE
+code F4D6
+label F4D6 LF4D6
+code F4E5
+label F4E5 LF4E5
+code F4EC
+label F4EC LF4EC
+code F4FD
+label F4FD LF4FD
+code F51D
+label F51D LF51D
+code F520
+label F520 LF520
+code F526
+label F526 LF526
+code F528
+label F528 LF528
+code F543
+label F543 LF543
+code F557
+label F557 LF557
+code F56E
+label F56E LF56E
+code F5B1
+label F5B1 LF5B1
+code F5E5
+label F5E5 LF5E5
+code F5EB
+label F5EB LF5EB
+code F5ED
+label F5ED LF5ED
+code F5F2
+label F5F2 LF5F2
+code F5F9
+label F5F9 LF5F9
+code F5FB
+label F5FB LF5FB
+code F601
+label F601 LF601
+code F615
+label F615 LF615
+code F61C
+label F61C LF61C
+code F61E
+label F61E LF61E
+code F624
+label F624 LF624
+code F636
+label F636 LF636
+code F643
+label F643 LF643
+code F65C
+label F65C LF65C
+code F662
+label F662 LF662
+code F679
+label F679 LF679
+code F692
+label F692 LF692
+code F69D
+label F69D LF69D
+code F69F
+label F69F LF69F
+code F6A1
+label F6A1 LF6A1
+code F6BB
+label F6BB LF6BB
+code F6C3
+label F6C3 LF6C3
+code F6C5
+label F6C5 LF6C5
+code F6C7
+label F6C7 LF6C7
+code F6C9
+label F6C9 LF6C9
+code F6E8
+label F6E8 LF6E8
+code F6EA
+label F6EA LF6EA
+code F6EC
+label F6EC LF6EC
+code F6F0
+label F6F0 LF6F0
+code F6F2
+label F6F2 LF6F2
+code F709
+label F709 LF709
+code F70D
+label F70D LF70D
+code F714
+label F714 LF714
+code F720
+label F720 LF720
+data  F723-F724
+label F723 off_F723
+data  F725-F726
+label F725 off_F725
+data  F727-F732
+label F727 off_F727
+data  F733-F734
+label F733 off_F733
+data  F735-F74E
+label F735 word_F735
+code F74F
+label F74F LF74F
+code F767
+label F767 LF767
+code F769
+label F769 LF769
+code F77A
+label F77A LF77A
+code F77C
+label F77C LF77C
+code F77F
+label F77F LF77F
+code F7AB
+label F7AB LF7AB
+code F7B6
+label F7B6 LF7B6
+code F7DF
+label F7DF LF7DF
+code F851
+label F851 LF851
+code F86C
+label F86C LF86C
+code F86E
+label F86E LF86E
+code F876
+label F876 LF876
+code F879
+label F879 LF879
+code F884
+label F884 LF884
+code F88C
+label F88C LF88C
+code F894
+label F894 LF894
+code F89B
+label F89B LF89B
+code F8AA
+label F8AA LF8AA
+code F8CC
+label F8CC LF8CC
+code F8D9
+label F8D9 LF8D9
+code F8FC
+label F8FC LF8FC
+code F900
+label F900 LF900
+code F906
+label F906 LF906
+code F90F
+label F90F LF90F
+code F917
+label F917 LF917
+code F932
+label F932 LF932
+code F934
+label F934 LF934
+code F93F
+label F93F LF93F
+code F94A
+label F94A LF94A
+code F958
+label F958 LF958
+code F97F
+label F97F LF97F
+code F98A
+label F98A LF98A
+code F994
+label F994 LF994
+code F99B
+label F99B LF99B
+code F9C6
+label F9C6 LF9C6
+code F9CE
+label F9CE LF9CE
+code F9D1
+label F9D1 LF9D1
+code FA19
+label FA19 LFA19
+code FA2E
+label FA2E LFA2E
+code FA35
+label FA35 LFA35
+code FA42
+label FA42 LFA42
+code FA4E
+label FA4E LFA4E
+code FA80
+label FA80 LFA80
+code FA88
+label FA88 LFA88
+code FA8B
+label FA8B LFA8B
+code FA92
+label FA92 LFA92
+code FAA9
+label FAA9 LFAA9
+code FAC1
+label FAC1 LFAC1
+code FAD6
+label FAD6 LFAD6
+code FAD8
+label FAD8 LFAD8
+data  FAE1-FAE2
+label FAE1 off_FAE1
+data  FAE3-FAE4
+data  FAE5-FAE6
+data  FAE7-FAE8
+data  FAE9-FAEA
+label FAE9 off_FAE9
+data  FAEB-FAEC
+data  FAED-FAEE
+data  FAEF-FAF0
+data  FAF1-FAF2
+data  FAF3-FAF4
+data  FAF5-FAF6
+data  FAF7-FAF8
+data  FAF9-FAFA
+label FAF9 off_FAF9
+data  FAFB-FAFC
+data  FAFD-FAFE
+data  FAFF-FB00
+data  FB01-FB02
+data  FB03-FB04
+data  FB05-FB06
+data  FB07-FB08
+code FB09
+label FB09 LFB09
+code FB10
+label FB10 LFB10
+code FB19
+label FB19 LFB19
+code FB1C
+label FB1C LFB1C
+code FB23
+label FB23 LFB23
+code FB2D
+label FB2D LFB2D
+code FB38
+label FB38 LFB38
+data  FB4B-FB72
+label FB4B word_FB4B
+; data  FB73-FB74
+; label FB73 word_FB73
+code FB75
+label FB75 LFB75
+code FB82
+label FB82 LFB82
+code FB8F
+label FB8F LFB8F
+code FB9C
+label FB9C LFB9C
+code FBA3
+label FBA3 LFBA3
+code FBAA
+label FBAA LFBAA
+code FBBF
+label FBBF LFBBF
+code FBD4
+label FBD4 LFBD4
+code FBF6
+label FBF6 LFBF6
+code FC0D
+label FC0D LFC0D
+code FC1C
+label FC1C LFC1C
+code FC22
+label FC22 LFC22
+code FC44
+label FC44 LFC44
+code FC4B
+label FC4B LFC4B
+code FC62
+label FC62 LFC62
+code FC72
+label FC72 LFC72
+code FCAC
+label FCAC LFCAC
+data  FCD1-FCF0
+label FCD1 word_FCD1
+data  FCF1-FCFE
+label FCF1 off_FCF1
+data  FCFF-FD06
+label FCFF off_FCFF
+code FD07
+label FD07 Check_Test_Diag
+label FD07 LFD07
+code FD1A
+label FD1A LFD1A
+code FD2F
+label FD2F LFD2F
+code FD5A
+label FD5A LFD5A
+code FD72
+label FD72 LFD72
+code FD75
+label FD75 LFD75
+code FD7B
+label FD7B LFD7B
+data  FD85-FD85
+label FD85 JMPTBL_Diag
+data  FD86-FD87
+data  FD89-FD8A
+data  FD8B-FD8B
+data  FD8C-FD8D
+data  FD8E-FD8E
+data  FD8F-FD90
+data  FD91-FD91
+data  FD92-FD93
+data  FD94-FD94
+data  FD95-FD96
+data  FD98-FD99
+code FD9A
+label FD9A Diag_Test_Tablefcb $E0, $10, $E1, $11, $E2, $12, $E3, $13
+data  FD9A-FDB3
+code FDBC
+label FDBC LFDBC
+code FDC2
+label FDC2 LFDC2
+code FDD4
+label FDD4 LFDD4
+code FDD7
+label FDD7 LFDD7
+code FDDD
+label FDDD LFDDD
+code FDEF
+label FDEF LFDEF
+code FDF2
+label FDF2 LFDF2
+code FDFF
+label FDFF LFDFF
+code FE0C
+label FE0C LFE0C
+code FE0E
+label FE0E LFE0E
+code FE21
+label FE21 LFE21
+code FE34
+label FE34 LFE34
+label FE37 Diag_Vect_Data
+data  FE37-FE4E
+code FE4F
+label FE4F LFE4F
+code FE58
+label FE58 LFE58
+code FE60
+label FE60 LFE60
+code FE71
+label FE71 LFE71
+code FE75
+label FE75 LFE75
+code FE7C
+label FE7C LFE7C
+code FE87
+label FE87 LFE87
+code FE8F
+label FE8F LFE8F
+code FE9A
+label FE9A LFE9A
+code FEA0
+label FEA0 LFEA0
+code FEA4
+label FEA4 LFEA4
+code FEA7
+label FEA7 LFEA7
+code FEAE
+label FEAE LFEAE
+code FEB0
+label FEB0 LFEB0
+code FEC1
+label FEC1 LFEC1
+code FED7
+label FED7 LFED7
+code FEFF
+label FEFF LFEFF
+code FF03
+label FF03 LFF03
+code FF06
+label FF06 LFF06
+code FF17
+label FF17 LFF17
+code FF24
+label FF24 LFF24
+code FF32
+label FF32 LFF32
+code FF4A
+label FF4A LFF4A
+data  FF57-FFDB
+label FFDC aCopyright1983A
+data  FFDC-FFF0
+data  FFF0-FFF1
+data  FFF2-FFF3
+data  FFF4-FFF5
+data  FFF6-FFF7
+data  FFF8-FFF9
+data  FFFA-FFFB
+data  FFFC-FFFD
+data  FFFE-FFFF
+; TO DO: add warning if duplicate label (see word_FB73)
+label FB73 LFB73
+code FB73
+label B3E4 LB3E4
+code B3E4
+; label E764 LE764
+comment 8357 Trench catwalk/turrets data?
+comment 835B Trench catwalk/turrets data?
+comment 8388 Trench
+comment 83A7 Copy pointers from ROM to RAM starting at word_4B3F
+comment 8404 Trench
+comment 84A8 Game over/insert coins timer
+comment 859B XT2
+comment 85FC XT2
+comment 8628 Point BIC to $5078 MReg3C
+comment 8630 Do math program run
+comment 8633 Math result X
+comment 866C Point BIC to $5078 MReg3C
+comment 8674 Do math program run
+comment 8677 Math result X
+comment 867D Trench floor lines calcs
+comment 8692 XT2
+comment 86B1 XT2
+comment 86E0 Point BIC to $5078 MReg3C
+comment 86E5 Do math program run
+comment 86E8 Math result X
+comment 8700 Point BIC to $5078 MReg3C
+comment 8705 Do math program run
+comment 8708 Math result X
+comment 870E Trench floor lines calcs
+comment 8721 XT2
+comment 874E XT2
+comment 87D1 XT2
+comment 87E4 ZT2
+comment 881E Point BIC to $5078 MReg3C
+comment 8823 Do math program run
+comment 8826 Math result Y
+comment 882F Math result X
+comment 8834 Math result X
+comment 8844 Trench side vertical lines calcs
+comment 8850 Point BIC to $5078 MReg3C
+comment 8855 Do math program run
+comment 8858 Math result X
+comment 885E Trench floor lines calcs
+comment 887D XT2
+comment 88A3 Trench left side turret calcs
+comment 88B7 Point BIC to math $5E00
+comment 88BF Do math program run
+comment 88C2 Math result X
+comment 88E1 Math result X
+comment 88E9 Trench calcs
+comment 88F1 Function select for an object
+comment 8920 Point BIC to $5078 MReg3C
+comment 8925 Do math program run
+comment 8928 Math result X
+comment 893A Point BIC to $5078 MReg3C
+comment 893F Do math program run
+comment 8942 Math result X
+comment 8948 Trench floor lines calcs
+comment 8956 Space wave pitch
+comment 895E Space wave pitch
+comment 8966 Space wave roll
+comment 896E Space wave roll
+comment 8976 Space wave yaw
+comment 897E Space wave yaw
+comment 898A Sine for rotation
+comment 898F Cosine for rotation
+comment 899F Sine for rotation
+comment 89A4 Cosine for rotation
+comment 89CE Roll
+comment 89D0 Do math program run
+comment 89D9 Pitch
+comment 89DB Do math program run
+comment 89E4 Yaw
+comment 89E6 Do math program run
+comment 89EB Shift D register right
+comment 89F4 Shift D register right
+comment 89FD Shift D register right
+comment 8A07 Shift D register right
+comment 8A10 Shift D register right
+comment 8A19 Shift D register right
+comment 8A23 Shift D register right
+comment 8A2C Shift D register right
+comment 8A35 Shift D register right
+comment 8A3F Shift D register right
+comment 8A48 Shift D register right
+comment 8A51 Shift D register right
+comment 8A5E Shift D register right
+comment 8A6A Shift D register right
+comment 8A76 Shift D register right
+comment 8A83 Shift D register right
+comment 8A8F Shift D register right
+comment 8A9B Shift D register right
+comment 8ADC Update random numbers
+comment 8AFB Vaders tie score
+comment 8B69 Tie fighter score
+comment 8B6D 3x Tie fighter data structure ($19 bytes per Tie)
+comment 8B80 3x Tie fighter data structure ($19 bytes per Tie)
+comment 8B86 3x Tie fighter data structure ($19 bytes per Tie)
+comment 8BDB 3x Tie fighter data structure ($19 bytes per Tie)
+comment 8C06 Sine for rotation
+comment 8C0C Cosine for rotation
+comment 8C0F Space wave roll
+comment 8C44 Some tie fighters process
+comment 8C54 Copy transform data from [BIC] to matrix 2
+comment 8C5E Point BIC to $5098 MReg4C
+comment 8C73 Do math program run
+comment 8C83 Do math program run
+comment 8C86 Math result X
+comment 8CBC Math result X
+comment 8CDB Game over/insert coins timer
+comment 8CF8 Emit fireballs from tie fighters
+comment 8CFF 6x Fireball data structure 2 ($6 bytes per fireball)
+comment 8D12 Math result Y
+comment 8D23 Math result Z
+comment 8D2D Math result Y
+comment 8D3E Math result Z
+comment 8D4F Math result Y
+comment 8D59 Math result Z
+comment 8ED6 Initialise object?
+comment 8F05 3x Tie fighter data structure ($19 bytes per Tie)
+comment 8F18 Pointer to 3D object index
+comment 8F2E 3x Tie fighter data structure ($19 bytes per Tie)
+comment 8F34 Called 3 times at start of attract screen 1 and 2
+comment 8F3A Initialise math registers matrix
+comment 8F3F Matrix -1.000 constant
+comment 8F50 Pointer to 3D object index
+comment 8F71 Pointer to 3D object index
+comment 8F77 Copy XYZ data to math RAM
+comment 8FB1 3x Tie fighter data structure ($19 bytes per Tie)
+comment 8FBF 3x Tie fighter data structure ($19 bytes per Tie)
+comment 8FD2 Pointer to 3D object index
+comment 8FE6 Initialise math registers matrix
+comment 8FFC Pointer to 3D object index
+comment 901D Pointer to 3D object index
+comment 9542 Shield count
+comment 9544 Shield count
+comment 954D Shield count
+comment 9551 Shield count
+comment 955C Sheild being depleted
+comment 9562 Sheild being depleted
+comment 9564 Shield count
+comment 956A Shield count
+comment 956E Shield count
+comment 9574 Shield count
+comment 9576 Sheild being depleted
+comment 9578 Shield count
+comment 95A7 Sheild being depleted
+comment 95AB Shield count
+comment 95B2 Shield count
+comment 95B5 Shield colour table
+comment 95CB Sheild being depleted
+comment 95E1 Sheild being depleted
+comment 95EA Shield count
+comment 95ED Shield colour table
+comment 95F6 Shield count
+comment 960B Print text string from pointer table
+comment 960F Shield count
+comment 9612 Shield colour table
+comment 961F Shield count
+comment 9622 Shield vector table
+comment 9636 Shield vector table
+comment 963D Game over/insert coins timer
+comment 965A Another copy of shield vector table??
+comment 9661 Game over/insert coins timer
+comment 9669 Shield count
+comment 9682 Game over/insert coins timer
+comment 9690 Game over/insert coins timer
+comment 9698 Sheild being depleted
+comment 969C Shield count
+comment 96A1 Shield count
+comment 96A4 Shield colour table
+comment 96AB Shield count
+comment 96AE Shield vector table
+comment 9730 Death Star destroyed  incrementing score value
+comment 9730 Also has unused starting wave bonus scores of 200,000 and 600,000
+comment 9730 for waves 2 and 4
+comment 9736 Add to score total
+comment 973A Temporary score adder towers 1
+comment 973D Add to score total
+comment 9743 Temporary score adder towers 3
+comment 9749 Temporary score adder towers 3
+comment 974C Temporary score adder towers 2
+comment 9752 Temporary score adder towers 2
+comment 9755 Temporary score adder towers 1
+comment 975B Temporary score adder towers 1
+comment 976B Cleared all towers score value
+comment 976E Add to score total
+comment 9775 Shield count
+comment 9779 Death Star destroyed  incrementing score value
+comment 9779 Also has unused starting wave bonus scores of 200,000 and 600,000
+comment 9779 for waves 2 and 4
+comment 977E Temporary score adder 1
+comment 9781 Temporary score adder 1
+comment 9784 Temporary score adder 2
+comment 9789 Temporary score adder 2
+comment 978D Temporary score adder 2
+comment 9792 Temporary score adder 1
+comment 9796 Temporary score adder 1
+comment 979B Temporary score adder 1
+comment 979F Temporary score adder 1
+comment 97A5 Temporary score adder 1
+comment 97A8 Add to score total
+comment 97B3 Using Force score value
+comment 97D5 Used the force score
+comment 97DA Display BCD number text
+comment 97DD 'For using the Force' text
+comment 97DF Print text string from pointer table
+comment 97E3 Used the force score
+comment 97E6 Add to score total
+comment 97E8 Tie fighter score value
+comment 97EB Add to score total
+comment 97ED Vaders tie score value
+comment 97F0 Add to score total
+comment 97F2 Trench green squares score value
+comment 97F5 Add to score total
+comment 97F7 Laser tower score value
+comment 97FA Add to score total
+comment 97FC Trench turrets score value
+comment 97FF Add to score total
+comment 9801 Fireball score value
+comment 9804 Add to score total
+comment 9806 Exhaust port score
+comment 9809 Add to score total
+comment 980B Cleared all towers score value
+comment 9810 Add to score total
+comment 9812 Temporary score adder 2
+comment 9815 Score
+comment 9818 Score
+comment 981C Temporary score adder 1
+comment 981F Score thousands
+comment 9822 Score thousands
+comment 9826 Temporary score adder 1
+comment 9829 Score hundred thousands
+comment 982C Score hundred thousands
+comment 982E Score millions
+comment 9833 Score millions
+comment 9865 for waves 2 and 4
+comment 987A Timer for fireball hit?
+comment 987F Game over/insert coins timer
+comment 9883 Timer for fireball hit?
+comment 9886 Timer for fireball hit?
+comment 988A Fireball timer 3
+comment 988E Timer for fireball hit?
+comment 9890 Timer for fireball hit?
+comment 9895 Timer for fireball hit?
+comment 9898 Game over/insert coins timer
+comment 989E 3x Tie fighter data structure ($19 bytes per Tie)
+comment 98AA 3x Tie fighter data structure ($19 bytes per Tie)
+comment 98B0 Timer for fireball hit?
+comment 98C0 Vector JSRL 19B3 Laser explosion small circle
+comment A1CE Tie fighter data 1
+comment A1D7 Tie fighter data 1
+comment A206 Temporary score adder towers 1
+comment A20C Temporary score adder towers 3
+comment A218 Trench left side turret calcs
+comment A21E XT2
+comment A221 YT2
+comment A224 ZT2
+comment A227 Some Towers code
+comment A22D XT2
+comment A233 YT2
+comment A239 ZT2
+comment A24F Pointer to Tie fighter data
+comment A271 Do math program run
+comment A274 Math result X
+comment A27B Math result X
+comment A28D Math result Y
+comment A296 Math result X
+comment A29B Tie fighter data 1
+comment A2B0 Pointer to Tie fighter data
+comment A2B2 Tie fighter data 1
+comment A2ED Pointer to Tie fighter data
+comment A2F8 Pointer to Tie fighter data
+comment A30E Tie fighter data 1
+comment A347 Math result X
+comment A360 Math result X
+comment A36D Shield count
+comment A374 Math result X
+comment A38B Shield count
+comment A392 Explosion
+comment A399 Math result Y
+comment A3A7 ZT2
+comment A3B2 Pointer to Tie fighter data
+comment A3B4 Tie fighter data 1
+comment A3C1 ZT2
+comment A3C9 Math result X
+comment A3DA Shield count
+comment A3E1 Explosion
+comment A3EA Math result Y
+comment A3F4 Math result X
+comment A403 Function select for an object
+comment A406 Some Towers code
+comment A40A Swap Matrix 2  x, y, z to  x, y, z
+comment A420 Point BIC to $5078 MReg3C
+comment A423 Reg00 = (([BIC,0] - XT) x Ax2)  +  (([BIC,1] - YT) x Bx2)  +  (([BIC,2] - ZT) x Cx2)
+comment A423 Reg01 = (([BIC,0] - XT) x Ay2)  +  (([BIC,1] - YT) x By2)  +  (([BIC,2] - ZT) x Cy2)
+comment A423 Reg02 = (([BIC,0] - XT) x Az2)  +  (([BIC,1] - YT) x Bz2)  +  (([BIC,2] - ZT) x Cz2)
+comment A423 BIC++
+comment A425 Do math program run
+comment A428 Math result Y
+comment A42E Math result Z
+comment A449 Math result Z
+comment A455 Called during towers phase only
+comment A459 Pointer to Tie fighter data
+comment A465 YT2
+comment A468 Math result Y
+comment A46E ZT2
+comment A471 Math result Z
+comment A477 Math result X
+comment A47A MReg02 = MReg02 x MReg00
+comment A47C Do math program run
+comment A47F Math result Y
+comment A482 YT
+comment A485 Math result Z
+comment A488 ZT
+comment A494 Math result Y
+comment A49A Math result Z
+comment A49F Tie fighter data 1
+comment A4B1 Math result Y
+comment A4B7 Math result Z
+comment A4BA Math result X
+comment A4C5 Math result X
+comment A4C8 MReg02 = MReg02 x MReg00
+comment A4CA Do math program run
+comment A4CD YT
+comment A4D0 Math result Y
+comment A4E2 Math result Y
+comment A4EC ZT
+comment A4F1 Math result Z
+comment A50D Math result Y
+comment A510 MReg02 = MReg02 x MReg00
+comment A512 Do math program run
+comment A51B ZT
+comment A51E Math result Y
+comment A523 Tie fighter data 1
+comment A557 XT
+comment A55C YT
+comment A55F Tie fighter data 1
+comment A575 ZT
+comment A57B Laser tower score
+comment A583 ZT
+comment A589 Towers incrementing score
+comment A591 Shield count
+comment A595 Pointer to Tie fighter data
+comment A597 Tie fighter data 1
+comment A5BB Math result X
+comment A5C1 Math result Z
+comment A5C7 Math result Y
+comment A5CA MReg02 = MReg02 x MReg00
+comment A5CC Do math program run
+comment A5CF Math result Z
+comment A5D2 ZT2
+comment A5DE Math result Y
+comment A5F4 Emit fireballs from towers/bunkers
+comment A5FC Emit fireballs from towers/bunkers 2
+comment A610 Math result X
+comment A616 Math result Z
+comment A61C Math result Y
+comment A61F MReg02 = MReg02 x MReg00
+comment A621 Do math program run
+comment A624 Math result Z
+comment A627 ZT2
+comment A633 Math result Y
+comment A649 Emit fireballs from towers/bunkers 2
+comment A68B Fireball data pointer
+comment A705 6x Fireball data structure 2 ($6 bytes per fireball)
+comment A708 Fireball data pointer
+comment A710 6x Fireball data structure 2 ($6 bytes per fireball)
+comment A715 Do not return to last function call ?
+comment A728 Emit fireballs from towers 4
+comment A733 Pointer to Tie fighter data
+comment A786 Joystick X
+comment A790 Joystick X
+comment A7B6 Emit fireballs from towers 3
+comment A7BF Emit fireballs from towers 3
+comment A7C8 Emit fireballs from towers 3
+comment A7D9 Pointer to Tie fighter data
+comment A7EE ZT2
+comment A7FB Emit fireballs from towers 3
+comment A80F Emit fireballs from towers 3
+comment A849 6x Fireball data structure 2 ($6 bytes per fireball)
+comment A84C Fireball data pointer
+comment A85C Fireball movement processing
+comment A861 Fireball data pointer
+comment A865 6x Fireball data structure 2 ($6 bytes per fireball)
+comment A978 Shift D register right
+comment A9C5 Shift D register right
+comment AAE4 6x Fireball data structure 2 ($6 bytes per fireball)
+comment AAE7 Fireball data pointer
+comment AAF3 Shield lost by fireball animation
+comment AB00 XT2
+comment AB06 YT2
+comment AB0C ZT2
+comment AB14 XT2
+comment AB17 YT2
+comment AB1A ZT2
+comment AB25 Do math program run
+comment AB28 Math result X
+comment AB3E XT
+comment AB41 Math result Y
+comment AB44 YT
+comment AB4D Math result X
+comment AB54 Math result Z
+comment AB57 ZT
+comment AB60 Math result X
+comment AB67 Get divider result and multiply by Math result Z, insert VCTR instruction
+comment AB6A Fireball data pointer
+comment AB75 Math result Y
+comment AB78 Reg02 = Reg02 x Reg00
+comment AB7A Do math program run
+comment AB7D Math result Y
+comment ABB2 XT
+comment ABBC Fireball data pointer
+comment ABC6 XT
+comment AC0D Fireball destroyed
+comment AC10 Fireball data pointer
+comment AC14 Shield lost by fireball hit
+comment AC1C Shield lost by fireball animation
+comment AC22 Fireball animation
+comment AC34 Fireball data pointer
+comment AC38 Check for all 6 fireball slots
+comment AC42 XT2
+comment AC48 YT2
+comment AC4E ZT2
+comment AC52 Fireball data pointer
+comment AC58 XT
+comment ACB1 Fireball data pointer
+comment AD13 Shield count
+comment AD37 Fireball score
+comment AD54 6x Fireball data structure 2 ($6 bytes per fireball)
+comment AD59 Fireball destroyed
+comment AD60 6x Fireball data structure 2 ($6 bytes per fireball)
+comment ADD4 Point BIC to $5078 MReg3C
+comment ADDC Do math program run
+comment ADDF Math result X
+comment ADEB Math result X
+comment ADF7 XT
+comment ADFA Math result Y
+comment AE03 Math result X
+comment AE08 Math result Z
+comment AE11 Math result X
+comment AE19 Math result X
+comment AE1C Reg02 = Reg02 x Reg00
+comment AE1E Do math program run
+comment AE21 Math result Z
+comment AE2B Math result Y
+comment AE3B XT
+comment B086 Fireball destroyed
+comment B098 XT2
+comment B0A7 YT2
+comment B0B6 ZT2
+comment B0C7 ZT2
+comment B0D1 YT2
+comment B0D4 Math result Y
+comment B0D9 XT2
+comment B0DC Math result Z
+comment B0E2 Math result X
+comment B0E5 Reg02 = Reg02 x Reg00
+comment B0E7 Do math program run
+comment B0EC Math result Y
+comment B103 Math result Z
+comment B11A XT2
+comment B16A YT2
+comment B174 ZT2
+comment B177 Math result Z
+comment B17C XT2
+comment B17F Math result Y
+comment B185 Math result X
+comment B188 Reg02 = Reg02 x Reg00
+comment B18A Do math program run
+comment B18F Math result Z
+comment B1AF Math result Y
+comment B1C6 XT2
+comment B1ED YT2
+comment B1F5 ZT2
+comment B1F8 Math result Z
+comment B1FD XT2
+comment B200 Math result Y
+comment B206 Math result X
+comment B209 Reg02 = Reg02 x Reg00
+comment B20B Do math program run
+comment B210 Math result Z
+comment B22C Math result Y
+comment B243 XT2
+comment B2B9 Trench green squares score
+comment B2CB Trench turrets score
+comment B2DE Fireball destroyed
+comment B342 Fireball destroyed
+comment B3FA Trench left side turret calcs
+comment B404 Trench right side turret calcs
+comment B414 Trench left side turret calcs
+comment B41E Trench right side turret calcs
+comment B42E Trench left side turret calcs
+comment B438 Trench right side turret calcs
+comment B43F Trench
+comment B44F XT2
+comment B45B Pointer to Tie fighter data
+comment B45D XT2
+comment B475 Pointer to Tie fighter data
+comment B481 Pointer to Tie fighter data
+comment B491 Point BIC to $5078 MReg3C
+comment B499 Do math program run
+comment B4B8 XT2
+comment B4C7 Math result X
+comment B4CF YT2
+comment B4DA ZT2
+comment B4E7 XT2
+comment B4F3 Shield count
+comment B4FA Explosion
+comment B50B Trench calcs
+comment B513 Function select for an object
+comment B52D Pointer to Tie fighter data
+comment B56E XT2
+comment B589 XT2
+comment B595 Pointer to Tie fighter data
+comment B597 XT2
+comment B5AF Pointer to Tie fighter data
+comment B5BB Pointer to Tie fighter data
+comment B5CE Point BIC to $5078 MReg3C
+comment B5D3 Do math program run
+comment B5F2 XT2
+comment B601 Math result X
+comment B609 YT2
+comment B614 ZT2
+comment B621 XT2
+comment B62D Shield count
+comment B634 Explosion
+comment B645 Trench calcs
+comment B64D Function select for an object
+comment B667 Pointer to Tie fighter data
+comment B6A8 XT2
+comment B6BC Insert vector instructions at joystick position for laser explosion
+comment B6C3 Insert vector instructions at joystick position for laser explosion
+comment B6D7 Joystick X
+comment B6DF Joystick X
+comment B6F8 Joystick Y
+comment B700 Joystick Y
+comment B77E Shift D register right
+comment B78C Shift D register right
+comment B79A Shift D register right
+comment B7B3 Shift D register right
+comment B7BE Shift D register right
+comment B7C9 Shift D register right
+comment B873 XT
+comment B878 YT
+comment B87F ZT
+comment B889 XT
+comment B88C Shift D register right
+comment B899 YT
+comment B89C Shift D register right
+comment B8B9 XT
+comment B8C0 YT
+comment B8C5 ZT
+comment B8CF XT
+comment B8D2 Shift D register right
+comment B8DD YT
+comment B8E0 Shift D register right
+comment B8FD XT
+comment B902 YT
+comment B909 ZT
+comment B913 XT
+comment B916 Shift D register right
+comment B923 YT
+comment B926 Shift D register right
+comment B92E Game over/insert coins timer
+comment B939 3D Object state data 2. 8 slots of 14 bytes
+comment B93E Free up object state slot
+comment B942 3D Object state data 2. 8 slots of 14 bytes
+comment B948 3D Object slot select
+comment B951 3D Object slot select
+comment B956 3D Object state data 2. 8 slots of 14 bytes
+comment B95F Sine for rotation
+comment B965 Cosine for rotation
+comment B96B Point BIC to $50C0
+comment B96E Roll
+comment B970 Do math program run
+comment B976 Sine for rotation
+comment B97C Cosine for rotation
+comment B982 Point BIC to $50C0
+comment B985 Pitch
+comment B987 Do math program run
+comment B98B 3D Object state data 2. 8 slots of 14 bytes
+comment B990 If object state slot active then
+comment B9A3 3D Object state data 2. 8 slots of 14 bytes
+comment B9A6 Loop until all 3D Object states processed
+comment B9A8 3D Object state data 2. 8 slots of 14 bytes
+comment B9B4 3D Object state data 2. 8 slots of 14 bytes
+comment B9BC Initialise math registers matrix
+comment B9CB Shift D register right
+comment B9DD Shift D register right
+comment BA12 BIC points to $50C0
+comment BA14 Run math program $80 Copy [BIC] to Matrix 3
+comment BA17 @      ; Matrix 1 = Matrix 2 x Matrix 3
+comment BA19 Do math program run
+comment BA1C 3D Object state data 2. 8 slots of 14 bytes
+comment BA1F Pointer to Tie fighter data
+comment BA25 Tie/bunker/tower hit explosion
+comment BA28 Pointer to Tie fighter data
+comment BA2C 3D Object state data 2. 8 slots of 14 bytes
+comment BA44 Point BIC to $5078 MReg3C
+comment BA49 Do math program run
+comment BA4C Math result X
+comment BA4F If object behind observer then remove
+comment BA51 XT
+comment BA57 Math result Y
+comment BA5A YT
+comment BA63 XT
+comment BA66 Remove object if outside visible limit
+comment BA68 Math result Z
+comment BA6B ZT
+comment BA76 XT
+comment BA79 Remove object if outside visible limit
+comment BA82 Tie/bunker/tower fragments table
+comment BA86 Work out which colour for tie/bunker/ tower fragments
+comment BA88 Copy object 3D data to math ram
+comment BA8B Do 3D object transform using Matrix 1
+comment BA8E Format vectors for ties, and tower/bunker explosions
+comment BA96 Insert vector CNTR instruction
+comment BA9D Remove/clear object state flag
+comment BABA g      ; Tower fragments colour
+comment BAC0 d      ; Bunker fragments colour
+comment BAE5 Point BIC to $5078 MReg3C
+comment BAE8 ZT
+comment BAED YT
+comment BAF0 XT
+comment BAF5 Do math program run
+comment BAF8 XT
+comment BAFB YT
+comment BB00 ZT
+comment BB03 Math result X
+comment BB06 Do division
+comment BB09 Get divider result and multiply by Math result Z, insert VCTR instruction
+comment BB0C r      ; Vector SCAL instruction
+comment BB0E XT
+comment BB28 Tie fighter hit colour cycle table
+comment BB37 Get divider result and multiply by Math result Z, insert VCTR instruction
+comment BB7D Death Star explosion state
+comment BB85 Death Star explosion state
+comment BBB5 Death Star explosion state
+comment BC18 Death Star explosion state
+comment BC7F Death Star explosion state
+comment BCAB Death Star explosion state
+comment BE22 Called from select screen, attract screen 1 + 3 when writing text
+comment BE2C Called from select screen, attract screen 1 + 3 when writing text
+comment BE83 Read NOVRAM
+comment BE8C Read NOVRAM
+comment BEBE Display BCD numbers
+comment BEC4 Display BCD numbers
+comment BECA Display BCD numbers
+comment BED5 Read NOVRAM
+comment BEEC Display BCD numbers
+comment BEF2 Display BCD numbers
+comment BEF8 Display BCD numbers
+comment BEFE Display BCD numbers
+comment BF09 Read NOVRAM
+comment BF20 Display BCD numbers
+comment BF26 Display BCD numbers
+comment BF2C Display BCD numbers
+comment BF32 Display BCD numbers
+comment BF3D Read NOVRAM
+comment BF54 Read NOVRAM
+comment BF94 Read NOVRAM
+comment BFAB Read NOVRAM
+comment BFCF Display BCD numbers
+comment BFDC Table for game time history text positions
+comment C0C8 Read NOVRAM
+comment C107 Read NOVRAM
+comment C140 Read NOVRAM
+comment C164 Read NOVRAM
+comment C1E9 Joystick pitch data structure
+comment C1F5 Joystick roll data structure
+comment C20F Read NOVRAM
+comment C270 NOVRAM
+comment C293 NOVRAM
+comment C29E High scores init table
+comment C2A9 High score names
+comment C2D5 NOVRAM
+comment C306 NOVRAM
+comment C310 NOVRAM
+comment C333 NOVRAM
+comment C342 NOVRAM
+comment C373 NOVRAM
+comment C377 NOVRAM
+comment C3AE NOVRAM
+comment C3B4 NOVRAM
+comment C3DE Read NOVRAM
+comment C3F3 NOVRAM
+comment C405 NOVRAM
+comment C41B NOVRAM
+comment C425 NOVRAM
+comment C42D NOVRAM
+comment C43C NOVRAM
+comment C452 Called from select screen, attract screen 1 + 3 when writing text
+comment C45C Called from select screen, attract screen 1 + 3 when writing text
+comment C480 Print text string from pointer table
+comment C4C4 NOVRAM
+comment C4C8 NOVRAM
+comment C4EB Game over/insert coins timer
+comment C58B NOVRAM
+comment C595 NOVRAM
+comment C5F2 NOVRAM
+comment C5FC NOVRAM
+comment C601 NOVRAM
+comment C609 NOVRAM
+comment C61A NOVRAM
+comment C622 NOVRAM
+comment C641 NOVRAM
+comment C64F NOVRAM
+comment C667 NOVRAM
+comment C671 NOVRAM
+comment C67A NOVRAM
+comment C682 NOVRAM
+comment C6AA Display BCD numbers
+comment C6B4 Print text string from pointer table
+comment C734 Display BCD numbers
+comment C804 Called from select screen, attract screen 1 + 3 when writing text
+comment C80C High scores text position table
+comment C813 Called from select screen, attract screen 1 + 3 when writing text
+comment C816 High scores text size
+comment C847 Attract text colour/intensity for fading
+comment C864 Attract text colour/intensity for fading
+comment C89C Attract text colour/intensity for fading
+comment C8D4 Attract text colour/intensity for fading
+comment C91C Display BCD numbers
+comment C92E High scores RAM
+comment CA56 Vector CNTR instruction
+comment CA8C High scores RAM
+comment CA8F Score millions
+comment CA97 Score thousands
+comment CAEA Score millions
+comment CAEE Score thousands
+comment CC2D High scores RAM
+comment CC46 High scores RAM
+comment CC5E High score names
+comment CC6A High scores RAM
+comment CC6D High scores init table
+comment CCE6 Change memory page
+comment CD50 Called during towers
+comment CD5C Called during trench start
+comment CD68 Called during towers
+comment CD80 Starfield attract screen 1 + 3 + 4
+comment CDE7 Ay2
+comment CDEA Bx2
+comment CDED Bx2
+comment CDF0 Ay2
+comment CDF3 Az2
+comment CDF6 Cx2
+comment CDF9 Cx2
+comment CDFC Az2
+comment CDFF Bz2
+comment CE02 Cy2
+comment CE05 Cy2
+comment CE08 Bz2
+comment CE14 Do math program run
+comment CE20 Do math program run
+comment CE27 Point BIC to $5080 MReg40 Matrix 4
+comment CE2C Do math program run
+comment CE32 Point BIC to $5080 MReg40 Matrix 4
+comment CE37 Do math program run
+comment CE3D Point BIC to $5080 MReg40 Matrix 4
+comment CE42 Do math program run
+comment D660 Point U to vector RAM $38
+comment D663 Animate laser target hit
+comment D666 Vector RTSL instruction
+comment D690 Laser target animation
+comment D6A3 Laser target animation
+comment D6BF Laser target animation
+comment D6EA Laser target animation
+comment D709 Get random number
+comment D70C Mask 0-15
+comment D710 Multiply by 6 for 0- 90 range
+comment D711 Table of vector SVEC instructions for laser hit target animation
+comment D714 Point X reg to word from table
+comment D77D Check for coin or slam inputs
+comment D78C Credits
+comment D790 Credits
+comment D8A8 Credits
+comment D8AA Credits
+comment D932 Text string index
+comment D935 Insert text colour vector instruction
+comment D951 Text string index
+comment D997 Text string index
+comment D9B4 Text string index
+comment D9C6 Text handling
+comment DB0C Attract screen 2 text position control
+comment E766 Display BCD numbers
+comment E76B Display BCD number text
+comment E774 Display BCD numbers
+comment E7CB Text string index
+comment E7CE Insert text colour vector instruction
+comment E7D0 Insert text position vector instruction
+comment E7D7 Text string index
+comment E7DA Insert text position vector instruction
+comment E7DD Text string index
+comment E7E0 Text string colour
+comment E7EA Text string index
+comment E7ED Text string position
+comment E7FC Text string index
+comment E7FF Text string position
+comment E813 Text handling
+comment E816 Vector SCAL 2,0 instruction
+comment E81B Vector CNTR instruction
+comment E824 Text string index
+comment EF54 public BADIRQ
+comment EF56 public IRQ
+comment EF58 Bounds check for return address in ROM
+comment EF5E Only allow IRQ calls from lower in ROM than BADIRQ function
+comment EF6B Check sanity byte is $3F
+comment EF81 Check coin inputs
+comment EF84 Credits
+comment EF91 Inputs debounce
+comment EF97 Inputs debounce
+comment EF9D Inputs debounce
+comment EFA3 Inputs debounce
+comment EFCA Joystick processing
+comment F03B Copies Star Wars logo vector data to vector RAM
+comment F049 If VGHALT is high, VG is ready
+comment F04D Vector pointer state
+comment F05A What the heck is going on here???
+comment F05C Vector pointer state
+comment F067 Seems to toggle vector address $0000 from $E038 and $EA38 JMPL $038 and $A38
+comment F07F Colour cycle blue/cyan for lasers
+comment F084 Points to jump table that jump into vector ROM for laser colour cycle
+comment F085 Copies vector JMPL instructions into vector RAM
+comment F106 Vector RTSL
+comment F10C Cycle through 7 colours
+comment F115 Vector colour cycle count
+comment F11F Vector RTSL
+comment F125 Update laser target hit vector animations
+comment F128 Start vector generator run
+comment F133 Inputs debounce
+comment F18D Joystick pitch data structure
+comment F190 Joystick Y
+comment F1A9 Joystick roll data structure
+comment F1AC Joystick X
+comment F261 public Reset
+comment F28C Stack top at $4FFF
+comment F290 H      ; Direct Page at $4800
+comment F2CC Check self test switch
+comment F2D6 Read option switches
+comment F2DE Store in shadow RAM
+comment F2FB Clear vector RAM to HALT instructions
+comment F305 Set up first vector instruction to JSRL 38
+comment F30D Vector pointer state
+comment F317 Read NOVRAM
+comment F32B Jump to main game loop
+comment F36E Self test
+comment F373 Check Aux coin
+comment F430 NOVRAM
+comment F43A NOVRAM
+comment F442 NOVRAM
+comment F44A NOVRAM
+comment F44F NOVRAM
+comment F496 NOVRAM
+comment F49B NOVRAM
+comment F4B2 NOVRAM
+comment F4C0 NOVRAM
+comment F50F Point to ROM start address table
+comment F514 Size of each ROM
+comment F51D Point to ROM start address table
+comment F520 Next ROM address start
+comment F522 Size of ROM
+comment F59A Print text string from pointer table
+comment F59F Print text string from pointer table
+comment F5AC Print text string from pointer table
+comment F5B9 Print text string from pointer table
+comment F5D7 Display BCD numbers
+comment F5DD Display BCD numbers
+comment F795 Print text string from pointer table
+comment F79A Print text string from pointer table
+comment F7B3 Print text string from pointer table
+comment F7EB Display BCD numbers
+comment F80A Display BCD numbers
+comment F824 Print text string from pointer table
+comment F89D Print text string from pointer table
+comment F8C1 Print text string from pointer table
+comment F8C6 Print text string from pointer table
+comment F934 Print text string from pointer table
+comment F939 Print text string from pointer table
+comment F96D Print text string from pointer table
+comment F981 Print text string from pointer table
+comment F9DF Display BCD numbers
+comment F9E4 Display BCD numbers
+comment F9EE Display BCD numbers
+comment F9F3 Display BCD numbers
+comment F9FD Display BCD numbers
+comment FA02 Display BCD numbers
+comment FA0C Display BCD numbers
+comment FA11 Display BCD numbers
+comment FA30 Print text string from pointer table
+comment FA35 Print text string from pointer table
+comment FAB4 Display BCD numbers
+comment FAB9 Display BCD numbers
+comment FAD8 Print text string from pointer table
+comment FB78 Math zero constant
+comment FB85 Math zero constant
+comment FB92 Math zero constant
+comment FBAD Math result X
+comment FBB6 Math result Y
+comment FBC2 Math result X
+comment FBCB Math result Y
+comment FBD7 XT
+comment FBDD YT
+comment FBE3 ZT
+comment FBEC Math result X
+comment FBFE YT
+comment FC04 ZT
+comment FC0A XT
+comment FC0D XT
+comment FC16 Math result X
+comment FC32 Math zero constant
+comment FC38 Math 1.000 constant
+comment FC3E Point BIC to $5020 MReg10
+comment FC4D Test routine $5B
+comment FC59 Math result X
+comment FC75 XT
+comment FC7B YT
+comment FC81 ZT
+comment FC8D XT
+comment FC93 YT
+comment FC99 ZT
+comment FCA2 Math result X
+comment FCB5 XT
+comment FCBA YT
+comment FCBF ZT
+comment FCC8 Math result X
+comment FD1A Self test and Diag selected
+comment FD28 Get diag test option
+comment FD36 Point to Vector RAM start instruction
+comment FD3A Vector instruction JRSL 0x1FAE
+comment FD3F Vector instruction CNTR 0x40
+comment FD44 Get BCD number of diag test from table
+comment FD46 Reset stack pointer
+comment FD4A Display 2 digit BCD number in A
+comment FD4D Vector HALT
+comment FD57 Bounds check
+comment FD7D Bounds check
+comment FE13 Point to diag vector test instructions
+comment FE31 Run diag vector test
+commentline 8341 =============== S U B R O U T I N E =======================================
+commentline 8341 Entering trench
+commentline 8365 ---------------------------------------------------------------------------
+commentline 83A3 End of function sub_8341
+commentline 83A4 =============== S U B R O U T I N E =======================================
+commentline 83A4 Called when starting trench
+commentline 83CD End of function sub_83A4
+commentline 83CE =============== S U B R O U T I N E =======================================
+commentline 83ED ---------------------------------------------------------------------------
+commentline 83F6 ---------------------------------------------------------------------------
+commentline 8407 End of function sub_83CE
+commentline 8408 =============== S U B R O U T I N E =======================================
+commentline 8408 Trench
+commentline 8416 ---------------------------------------------------------------------------
+commentline 8447 ---------------------------------------------------------------------------
+commentline 8475 ---------------------------------------------------------------------------
+commentline 8494 End of function sub_8408
+commentline 8495 =============== S U B R O U T I N E =======================================
+commentline 84B5 End of function sub_8495
+commentline 84B5 ---------------------------------------------------------------------------
+commentline 84C6 =============== S U B R O U T I N E =======================================
+commentline 850F ---------------------------------------------------------------------------
+commentline 8565 ---------------------------------------------------------------------------
+commentline 859A End of function sub_84C6
+commentline 859B =============== S U B R O U T I N E =======================================
+commentline 85BD ---------------------------------------------------------------------------
+commentline 85CF ---------------------------------------------------------------------------
+commentline 85F8 End of function sub_859B
+commentline 85F9 =============== S U B R O U T I N E =======================================
+commentline 8618 ---------------------------------------------------------------------------
+commentline 8695 End of function sub_85F9
+commentline 8695 ---------------------------------------------------------------------------
+commentline 86AE =============== S U B R O U T I N E =======================================
+commentline 86CD ---------------------------------------------------------------------------
+commentline 86F3 ---------------------------------------------------------------------------
+commentline 8724 End of function sub_86AE
+commentline 8724 ---------------------------------------------------------------------------
+commentline 8735 =============== S U B R O U T I N E =======================================
+commentline 873F ---------------------------------------------------------------------------
+commentline 8748 ---------------------------------------------------------------------------
+commentline 875E ---------------------------------------------------------------------------
+commentline 8773 ---------------------------------------------------------------------------
+commentline 87CA End of function sub_8735
+commentline 87CB =============== S U B R O U T I N E =======================================
+commentline 87F5 ---------------------------------------------------------------------------
+commentline 8874 ---------------------------------------------------------------------------
+commentline 889E ---------------------------------------------------------------------------
+commentline 889E End of function sub_87CB
+commentline 889F =============== S U B R O U T I N E =======================================
+commentline 88D0 ---------------------------------------------------------------------------
+commentline 88EE ---------------------------------------------------------------------------
+commentline 88F4 End of function sub_889F
+commentline 88F5 =============== S U B R O U T I N E =======================================
+commentline 8911 ---------------------------------------------------------------------------
+commentline 8950 End of function sub_88F5
+commentline 8951 =============== S U B R O U T I N E =======================================
+commentline 8951 Attributes: noreturn
+commentline 8956 End of function sub_8951
+commentline 8959 =============== S U B R O U T I N E =======================================
+commentline 8959 Attributes: noreturn
+commentline 895E End of function sub_8959
+commentline 8961 =============== S U B R O U T I N E =======================================
+commentline 8961 Attributes: noreturn
+commentline 8966 End of function sub_8961
+commentline 8969 =============== S U B R O U T I N E =======================================
+commentline 8969 Attributes: noreturn
+commentline 896E End of function sub_8969
+commentline 8971 =============== S U B R O U T I N E =======================================
+commentline 8971 Attributes: noreturn
+commentline 8976 End of function sub_8971
+commentline 8979 =============== S U B R O U T I N E =======================================
+commentline 8979 Attributes: noreturn
+commentline 897E End of function sub_8979
+commentline 8981 =============== S U B R O U T I N E =======================================
+commentline 8992 End of function sub_8981
+commentline 8993 =============== S U B R O U T I N E =======================================
+commentline 89A7 End of function sub_8993
+commentline 89A7 ---------------------------------------------------------------------------
+commentline 89C8 =============== S U B R O U T I N E =======================================
+commentline 89C8 Space wave roll
+commentline 89C8 Attributes: noreturn
+commentline 89D0 End of function sub_89C8
+commentline 89D3 =============== S U B R O U T I N E =======================================
+commentline 89D3 Space wave pitch
+commentline 89DB End of function sub_89D3
+commentline 89DE =============== S U B R O U T I N E =======================================
+commentline 89DE Space wave yaw
+commentline 89E6 End of function sub_89DE
+commentline 89E9 =============== S U B R O U T I N E =======================================
+commentline 8A04 End of function sub_89E9
+commentline 8A05 =============== S U B R O U T I N E =======================================
+commentline 8A20 End of function sub_8A05
+commentline 8A21 =============== S U B R O U T I N E =======================================
+commentline 8A3C End of function sub_8A21
+commentline 8A3D =============== S U B R O U T I N E =======================================
+commentline 8A58 End of function sub_8A3D
+commentline 8A59 =============== S U B R O U T I N E =======================================
+commentline 8A7D End of function sub_8A59
+commentline 8A7E =============== S U B R O U T I N E =======================================
+commentline 8AA2 End of function sub_8A7E
+commentline 8AA2 ---------------------------------------------------------------------------
+commentline 8AB6 =============== S U B R O U T I N E =======================================
+commentline 8ACE End of function sub_8AB6
+commentline 8ACF ---------------------------------------------------------------------------
+commentline 8ACF START OF FUNCTION CHUNK FOR sub_B32B
+commentline 8ADC ---------------------------------------------------------------------------
+commentline 8B57 ---------------------------------------------------------------------------
+commentline 8B6C END OF FUNCTION CHUNK FOR sub_B32B
+commentline 8B6D =============== S U B R O U T I N E =======================================
+commentline 8B85 End of function sub_8B6D
+commentline 8B86 =============== S U B R O U T I N E =======================================
+commentline 8BBE ---------------------------------------------------------------------------
+commentline 8BE0 End of function sub_8B86
+commentline 8BE1 =============== S U B R O U T I N E =======================================
+commentline 8C12 ---------------------------------------------------------------------------
+commentline 8C15 ---------------------------------------------------------------------------
+commentline 8C21 ---------------------------------------------------------------------------
+commentline 8C28 ---------------------------------------------------------------------------
+commentline 8C2F ---------------------------------------------------------------------------
+commentline 8C36 ---------------------------------------------------------------------------
+commentline 8C3D ---------------------------------------------------------------------------
+commentline 8C44 ---------------------------------------------------------------------------
+commentline 8C81 ---------------------------------------------------------------------------
+commentline 8CD4 ---------------------------------------------------------------------------
+commentline 8CFD ---------------------------------------------------------------------------
+commentline 8D1A ---------------------------------------------------------------------------
+commentline 8D1C ---------------------------------------------------------------------------
+commentline 8D1F ---------------------------------------------------------------------------
+commentline 8D35 ---------------------------------------------------------------------------
+commentline 8D37 ---------------------------------------------------------------------------
+commentline 8D3A ---------------------------------------------------------------------------
+commentline 8D46 ---------------------------------------------------------------------------
+commentline 8D48 ---------------------------------------------------------------------------
+commentline 8D4B ---------------------------------------------------------------------------
+commentline 8D61 ---------------------------------------------------------------------------
+commentline 8D63 ---------------------------------------------------------------------------
+commentline 8D66 ---------------------------------------------------------------------------
+commentline 8D70 End of function sub_8BE1
+commentline 8D70 ---------------------------------------------------------------------------
+commentline 8D9D =============== S U B R O U T I N E =======================================
+commentline 8D9D Some tie fighters process
+commentline 8DE2 End of function sub_8D9D
+commentline 8DE3 =============== S U B R O U T I N E =======================================
+commentline 8E1B End of function sub_8DE3
+commentline 8E1C =============== S U B R O U T I N E =======================================
+commentline 8E22 End of function sub_8E1C
+commentline 8E23 =============== S U B R O U T I N E =======================================
+commentline 8E51 ---------------------------------------------------------------------------
+commentline 8E5C ---------------------------------------------------------------------------
+commentline 8E66 End of function sub_8E23
+commentline 8E66 ---------------------------------------------------------------------------
+commentline 8E78 =============== S U B R O U T I N E =======================================
+commentline 8E78 End of function sub_8E78
+commentline 8E79 =============== S U B R O U T I N E =======================================
+commentline 8E94 ---------------------------------------------------------------------------
+commentline 8E98 End of function sub_8E79
+commentline 8E9B =============== S U B R O U T I N E =======================================
+commentline 8EA1 End of function sub_8E9B
+commentline 8EA4 =============== S U B R O U T I N E =======================================
+commentline 8EAF End of function sub_8EA4
+commentline 8EB2 =============== S U B R O U T I N E =======================================
+commentline 8EB7 End of function sub_8EB2
+commentline 8EBA =============== S U B R O U T I N E =======================================
+commentline 8ECD End of function sub_8EBA
+commentline 8ECE =============== S U B R O U T I N E =======================================
+commentline 8ED5 End of function sub_8ECE
+commentline 8ED6 =============== S U B R O U T I N E =======================================
+commentline 8EF1 ---------------------------------------------------------------------------
+commentline 8F33 End of function sub_8ED6
+commentline 8F34 =============== S U B R O U T I N E =======================================
+commentline 8F7A End of function sub_8F34
+commentline 8F7B =============== S U B R O U T I N E =======================================
+commentline 8F9D ---------------------------------------------------------------------------
+commentline 8FC6 ---------------------------------------------------------------------------
+commentline 9023 End of function sub_8F7B
+commentline 9023 ---------------------------------------------------------------------------
+commentline 953B =============== S U B R O U T I N E =======================================
+commentline 9557 End of function sub_953B
+commentline 9558 =============== S U B R O U T I N E =======================================
+commentline 9558 Process shields
+commentline 9586 ---------------------------------------------------------------------------
+commentline 958F ---------------------------------------------------------------------------
+commentline 95A6 End of function sub_9558
+commentline 95A7 =============== S U B R O U T I N E =======================================
+commentline 95A7 Insert vector instructions for shields
+commentline 95B2 ---------------------------------------------------------------------------
+commentline 95D4 ---------------------------------------------------------------------------
+commentline 95EA ---------------------------------------------------------------------------
+commentline 9604 ---------------------------------------------------------------------------
+commentline 960E End of function sub_95A7
+commentline 960F =============== S U B R O U T I N E =======================================
+commentline 9629 End of function sub_960F
+commentline 962A =============== S U B R O U T I N E =======================================
+commentline 964B ---------------------------------------------------------------------------
+commentline 9674 ---------------------------------------------------------------------------
+commentline 9690 ---------------------------------------------------------------------------
+commentline 96A0 End of function sub_962A
+commentline 96A1 =============== S U B R O U T I N E =======================================
+commentline 96B5 End of function sub_96A1
+commentline 96B5 ---------------------------------------------------------------------------
+commentline 9722 =============== S U B R O U T I N E =======================================
+commentline 9722 Death Star starting wave bonus score
+commentline 9739 End of function sub_9722
+commentline 973A =============== S U B R O U T I N E =======================================
+commentline 973A Towers incrementing score
+commentline 9774 End of function sub_973A
+commentline 9775 =============== S U B R O U T I N E =======================================
+commentline 9775 Shield bonus score
+commentline 97AB End of function sub_9775
+commentline 97AC =============== S U B R O U T I N E =======================================
+commentline 97AC Used the force score
+commentline 97B8 ---------------------------------------------------------------------------
+commentline 97C1 End of function sub_97AC
+commentline 97C2 =============== S U B R O U T I N E =======================================
+commentline 97E2 End of function sub_97C2
+commentline 97E3 =============== S U B R O U T I N E =======================================
+commentline 97E6 End of function sub_97E3
+commentline 97E8 =============== S U B R O U T I N E =======================================
+commentline 97E8 Tie fighter score
+commentline 97EB End of function sub_97E8
+commentline 97ED =============== S U B R O U T I N E =======================================
+commentline 97ED Vaders tie score
+commentline 97F0 End of function sub_97ED
+commentline 97F2 =============== S U B R O U T I N E =======================================
+commentline 97F2 Trench green squares score
+commentline 97F5 End of function sub_97F2
+commentline 97F7 =============== S U B R O U T I N E =======================================
+commentline 97F7 Laser tower score
+commentline 97FA End of function sub_97F7
+commentline 97FC =============== S U B R O U T I N E =======================================
+commentline 97FC Trench turrets score
+commentline 97FF End of function sub_97FC
+commentline 9801 =============== S U B R O U T I N E =======================================
+commentline 9801 Fireball score
+commentline 9806 ---------------------------------------------------------------------------
+commentline 980B ---------------------------------------------------------------------------
+commentline 983A End of function sub_9801
+commentline 983A ---------------------------------------------------------------------------
+commentline 9874 =============== S U B R O U T I N E =======================================
+commentline 987E End of function sub_9874
+commentline 987F =============== S U B R O U T I N E =======================================
+commentline 987F Fireball timer
+commentline 9885 End of function sub_987F
+commentline 9886 =============== S U B R O U T I N E =======================================
+commentline 9886 Fireball timer 2
+commentline 988E End of function sub_9886
+commentline 9890 =============== S U B R O U T I N E =======================================
+commentline 9890 Fireball timer 3
+commentline 9897 End of function sub_9890
+commentline 9898 =============== S U B R O U T I N E =======================================
+commentline 98AF End of function sub_9898
+commentline 98B0 =============== S U B R O U T I N E =======================================
+commentline 98B0 Insert vector laser explosion small circle
+commentline 98CA End of function sub_98B0
+commentline 98CA ---------------------------------------------------------------------------
+commentline A1CE =============== S U B R O U T I N E =======================================
+commentline A213 End of function sub_A1CE
+commentline A214 =============== S U B R O U T I N E =======================================
+commentline A2B0 ---------------------------------------------------------------------------
+commentline A2C2 ---------------------------------------------------------------------------
+commentline A2D6 ---------------------------------------------------------------------------
+commentline A2F7 End of function sub_A214
+commentline A2F8 =============== S U B R O U T I N E =======================================
+commentline A304 ---------------------------------------------------------------------------
+commentline A32E ---------------------------------------------------------------------------
+commentline A333 ---------------------------------------------------------------------------
+commentline A33C ---------------------------------------------------------------------------
+commentline A3A7 ---------------------------------------------------------------------------
+commentline A400 ---------------------------------------------------------------------------
+commentline A409 End of function sub_A2F8
+commentline A40A =============== S U B R O U T I N E =======================================
+commentline A40A Some Towers code
+commentline A458 End of function sub_A40A
+commentline A459 =============== S U B R O U T I N E =======================================
+commentline A459 Some Towers code
+commentline A49F ---------------------------------------------------------------------------
+commentline A50A ---------------------------------------------------------------------------
+commentline A53E ---------------------------------------------------------------------------
+commentline A54A End of function sub_A459
+commentline A54B ---------------------------------------------------------------------------
+commentline A54B START OF FUNCTION CHUNK FOR sub_B2D2
+commentline A580 ---------------------------------------------------------------------------
+commentline A58F END OF FUNCTION CHUNK FOR sub_B2D2
+commentline A58F ---------------------------------------------------------------------------
+commentline A591 =============== S U B R O U T I N E =======================================
+commentline A591 FUNCTION CHUNK AT ROM:A728 SIZE 0000008E BYTES
+commentline A5B2 ---------------------------------------------------------------------------
+commentline A5B3 ---------------------------------------------------------------------------
+commentline A5DE ---------------------------------------------------------------------------
+commentline A608 ---------------------------------------------------------------------------
+commentline A633 ---------------------------------------------------------------------------
+commentline A655 ---------------------------------------------------------------------------
+commentline A669 ---------------------------------------------------------------------------
+commentline A671 ---------------------------------------------------------------------------
+commentline A674 ---------------------------------------------------------------------------
+commentline A674 End of function sub_A591
+commentline A674 ---------------------------------------------------------------------------
+commentline A68B =============== S U B R O U T I N E =======================================
+commentline A68B Emit fireballs from tie fighters
+commentline A6C7 End of function sub_A68B
+commentline A6C7 ---------------------------------------------------------------------------
+commentline A6E0 =============== S U B R O U T I N E =======================================
+commentline A6E0 Emit fireballs from towers 4
+commentline A6EC ---------------------------------------------------------------------------
+commentline A6F2 End of function sub_A6E0
+commentline A6F4 =============== S U B R O U T I N E =======================================
+commentline A703 End of function sub_A6F4
+commentline A705 =============== S U B R O U T I N E =======================================
+commentline A705 Emit fireballs from towers 3
+commentline A717 End of function sub_A705
+commentline A717 ---------------------------------------------------------------------------
+commentline A728 ---------------------------------------------------------------------------
+commentline A728 START OF FUNCTION CHUNK FOR sub_A591
+commentline A742 ---------------------------------------------------------------------------
+commentline A790 ---------------------------------------------------------------------------
+commentline A79E ---------------------------------------------------------------------------
+commentline A7AE ---------------------------------------------------------------------------
+commentline A7B5 END OF FUNCTION CHUNK FOR sub_A591
+commentline A7B6 =============== S U B R O U T I N E =======================================
+commentline A7B6 Emit fireballs from towers/bunkers
+commentline A7B6 FUNCTION CHUNK AT ROM:A7D1 SIZE 0000000E BYTES
+commentline A7BD End of function sub_A7B6
+commentline A7BF =============== S U B R O U T I N E =======================================
+commentline A7C6 End of function sub_A7BF
+commentline A7C8 =============== S U B R O U T I N E =======================================
+commentline A7C8 Emit fireballs from towers/bunkers 2
+commentline A7CF End of function sub_A7C8
+commentline A7D1 START OF FUNCTION CHUNK FOR sub_A7B6
+commentline A7DD END OF FUNCTION CHUNK FOR sub_A7B6
+commentline A7DF =============== S U B R O U T I N E =======================================
+commentline A7F6 End of function sub_A7DF
+commentline A7F7 =============== S U B R O U T I N E =======================================
+commentline A800 ---------------------------------------------------------------------------
+commentline A809 End of function sub_A7F7
+commentline A80B =============== S U B R O U T I N E =======================================
+commentline A814 ---------------------------------------------------------------------------
+commentline A848 End of function sub_A80B
+commentline A849 =============== S U B R O U T I N E =======================================
+commentline A849 Fireball movement
+commentline A860 ---------------------------------------------------------------------------
+commentline A86A End of function sub_A849
+commentline A86B =============== S U B R O U T I N E =======================================
+commentline A874 End of function sub_A86B
+commentline A875 =============== S U B R O U T I N E =======================================
+commentline A880 ---------------------------------------------------------------------------
+commentline A8A6 End of function sub_A875
+commentline A8A7 =============== S U B R O U T I N E =======================================
+commentline A8B2 ---------------------------------------------------------------------------
+commentline A8D6 ---------------------------------------------------------------------------
+commentline A8D9 End of function sub_A8A7
+commentline A8DA =============== S U B R O U T I N E =======================================
+commentline A8DA Some towers processing
+commentline A8E6 ---------------------------------------------------------------------------
+commentline A8F9 ---------------------------------------------------------------------------
+commentline A90C ---------------------------------------------------------------------------
+commentline A920 ---------------------------------------------------------------------------
+commentline A933 ---------------------------------------------------------------------------
+commentline A946 ---------------------------------------------------------------------------
+commentline A978 ---------------------------------------------------------------------------
+commentline A9A3 ---------------------------------------------------------------------------
+commentline A9D5 ---------------------------------------------------------------------------
+commentline AA00 ---------------------------------------------------------------------------
+commentline AA23 ---------------------------------------------------------------------------
+commentline AA7D ---------------------------------------------------------------------------
+commentline AA85 End of function sub_A8DA
+commentline AA86 =============== S U B R O U T I N E =======================================
+commentline AA86 Exhaust port processing
+commentline AAA5 ---------------------------------------------------------------------------
+commentline AAB3 End of function sub_AA86
+commentline AAB5 =============== S U B R O U T I N E =======================================
+commentline AAD4 ---------------------------------------------------------------------------
+commentline AAE2 End of function sub_AAB5
+commentline AAE4 =============== S U B R O U T I N E =======================================
+commentline AAE4 Fireball processing
+commentline AAF9 ---------------------------------------------------------------------------
+commentline AB11 ---------------------------------------------------------------------------
+commentline ABDB ---------------------------------------------------------------------------
+commentline ABF0 ---------------------------------------------------------------------------
+commentline AC00 ---------------------------------------------------------------------------
+commentline AC14 ---------------------------------------------------------------------------
+commentline AC22 ---------------------------------------------------------------------------
+commentline AC27 ---------------------------------------------------------------------------
+commentline AC31 ---------------------------------------------------------------------------
+commentline AC51 End of function sub_AAE4
+commentline AC52 =============== S U B R O U T I N E =======================================
+commentline AC52 Fireball animation
+commentline AC7C ---------------------------------------------------------------------------
+commentline AC8A ---------------------------------------------------------------------------
+commentline ACB0 End of function sub_AC52
+commentline ACB1 =============== S U B R O U T I N E =======================================
+commentline ACB1 Shield lost by fireball animation
+commentline ACDF End of function sub_ACB1
+commentline ACE0 =============== S U B R O U T I N E =======================================
+commentline ACE0 Shield lost by fireball hit
+commentline AD1F End of function sub_ACE0
+commentline AD20 =============== S U B R O U T I N E =======================================
+commentline AD20 Fireball destroyed
+commentline AD3D End of function sub_AD20
+commentline AD3E =============== S U B R O U T I N E =======================================
+commentline AD6B End of function sub_AD3E
+commentline AD6C =============== S U B R O U T I N E =======================================
+commentline ADA3 ---------------------------------------------------------------------------
+commentline ADAE End of function sub_AD6C
+commentline ADAF =============== S U B R O U T I N E =======================================
+commentline ADBA End of function sub_ADAF
+commentline ADBD =============== S U B R O U T I N E =======================================
+commentline ADD3 End of function sub_ADBD
+commentline ADD4 =============== S U B R O U T I N E =======================================
+commentline AE5F End of function sub_ADD4
+commentline AE60 =============== S U B R O U T I N E =======================================
+commentline AE6E ---------------------------------------------------------------------------
+commentline AEBC End of function sub_AE60
+commentline AEBD =============== S U B R O U T I N E =======================================
+commentline AEC4 ---------------------------------------------------------------------------
+commentline AF86 End of function sub_AEBD
+commentline AF87 =============== S U B R O U T I N E =======================================
+commentline AF9A ---------------------------------------------------------------------------
+commentline B006 ---------------------------------------------------------------------------
+commentline B04E End of function sub_AF87
+commentline B04E ---------------------------------------------------------------------------
+commentline B071 =============== S U B R O U T I N E =======================================
+commentline B094 End of function sub_B071
+commentline B095 =============== S U B R O U T I N E =======================================
+commentline B0F9 ---------------------------------------------------------------------------
+commentline B158 ---------------------------------------------------------------------------
+commentline B19E ---------------------------------------------------------------------------
+commentline B1E3 ---------------------------------------------------------------------------
+commentline B21D ---------------------------------------------------------------------------
+commentline B260 ---------------------------------------------------------------------------
+commentline B261 ---------------------------------------------------------------------------
+commentline B266 ---------------------------------------------------------------------------
+commentline B292 ---------------------------------------------------------------------------
+commentline B29C ---------------------------------------------------------------------------
+commentline B2C1 ---------------------------------------------------------------------------
+commentline B2D1 End of function sub_B095
+commentline B2D2 =============== S U B R O U T I N E =======================================
+commentline B2D2 FUNCTION CHUNK AT ROM:A54B SIZE 00000045 BYTES
+commentline B2E3 ---------------------------------------------------------------------------
+commentline B2E4 ---------------------------------------------------------------------------
+commentline B2F8 ---------------------------------------------------------------------------
+commentline B307 ---------------------------------------------------------------------------
+commentline B32A End of function sub_B2D2
+commentline B32B =============== S U B R O U T I N E =======================================
+commentline B32B FUNCTION CHUNK AT ROM:8ACF SIZE 0000009E BYTES
+commentline B339 ---------------------------------------------------------------------------
+commentline B33E ---------------------------------------------------------------------------
+commentline B345 ---------------------------------------------------------------------------
+commentline B349 End of function sub_B32B
+commentline B349 ---------------------------------------------------------------------------
+commentline B3E4 =============== S U B R O U T I N E =======================================
+commentline B3E7 End of function sub_B3E4
+commentline B3E9 =============== S U B R O U T I N E =======================================
+commentline B43E End of function sub_B3E9
+commentline B43F =============== S U B R O U T I N E =======================================
+commentline B510 ---------------------------------------------------------------------------
+commentline B53D ---------------------------------------------------------------------------
+commentline B578 End of function sub_B43F
+commentline B579 =============== S U B R O U T I N E =======================================
+commentline B64A ---------------------------------------------------------------------------
+commentline B677 ---------------------------------------------------------------------------
+commentline B6B2 End of function sub_B579
+commentline B6B2 ---------------------------------------------------------------------------
+commentline B6B9 =============== S U B R O U T I N E =======================================
+commentline B6B9 Insert vector instructions at joystick position for laser explosion 2
+commentline B6BF End of function sub_B6B9
+commentline B6C0 =============== S U B R O U T I N E =======================================
+commentline B6C0 Insert vector instructions at joystick position for laser explosion 3
+commentline B6C6 End of function sub_B6C0
+commentline B6C7 =============== S U B R O U T I N E =======================================
+commentline B6CA End of function sub_B6C7
+commentline B6CC =============== S U B R O U T I N E =======================================
+commentline B6D6 End of function sub_B6CC
+commentline B6D7 =============== S U B R O U T I N E =======================================
+commentline B6D7 Insert vector instructions at joystick position for laser explosion
+commentline B738 End of function sub_B6D7
+commentline B739 =============== S U B R O U T I N E =======================================
+commentline B747 End of function sub_B739
+commentline B747 ---------------------------------------------------------------------------
+commentline B76C =============== S U B R O U T I N E =======================================
+commentline B7FE ---------------------------------------------------------------------------
+commentline B80C ---------------------------------------------------------------------------
+commentline B83E End of function sub_B76C
+commentline B83F =============== S U B R O U T I N E =======================================
+commentline B851 End of function sub_B83F
+commentline B852 =============== S U B R O U T I N E =======================================
+commentline B85C End of function sub_B852
+commentline B85E =============== S U B R O U T I N E =======================================
+commentline B938 End of function sub_B85E
+commentline B939 =============== S U B R O U T I N E =======================================
+commentline B947 End of function sub_B939
+commentline B948 =============== S U B R O U T I N E =======================================
+commentline B95B End of function sub_B948
+commentline B95C ---------------------------------------------------------------------------
+commentline B95C START OF FUNCTION CHUNK FOR sub_B98B
+commentline B98A END OF FUNCTION CHUNK FOR sub_B98B
+commentline B98B =============== S U B R O U T I N E =======================================
+commentline B98B Check if tie/bunker/tower been hit
+commentline B98B FUNCTION CHUNK AT ROM:B95C SIZE 0000002F BYTES
+commentline B9B2 ---------------------------------------------------------------------------
+commentline B9BF End of function sub_B98B
+commentline B9C0 =============== S U B R O U T I N E =======================================
+commentline B9F8 End of function sub_B9C0
+commentline B9F9 =============== S U B R O U T I N E =======================================
+commentline BA11 End of function sub_B9F9
+commentline BA12 =============== S U B R O U T I N E =======================================
+commentline BA12 Process tie/tower/bunker explosions
+commentline BA31 End of function sub_BA12
+commentline BA32 =============== S U B R O U T I N E =======================================
+commentline BA9D ---------------------------------------------------------------------------
+commentline BA9F End of function sub_BA32
+commentline BAA0 =============== S U B R O U T I N E =======================================
+commentline BAA4 ---------------------------------------------------------------------------
+commentline BAA8 ---------------------------------------------------------------------------
+commentline BAAC ---------------------------------------------------------------------------
+commentline BAB0 ---------------------------------------------------------------------------
+commentline BAB4 ---------------------------------------------------------------------------
+commentline BABE ---------------------------------------------------------------------------
+commentline BACE ---------------------------------------------------------------------------
+commentline BB15 End of function sub_BAA0
+commentline BB16 =============== S U B R O U T I N E =======================================
+commentline BB18 End of function sub_BB16
+commentline BB1A =============== S U B R O U T I N E =======================================
+commentline BB1C End of function sub_BB1A
+commentline BB1E =============== S U B R O U T I N E =======================================
+commentline BB2D End of function sub_BB1E
+commentline BB2F =============== S U B R O U T I N E =======================================
+commentline BB2F Tie fighter hit colour cycle table
+commentline BB3A End of function sub_BB2F
+commentline BB3A ---------------------------------------------------------------------------
+commentline BB7B =============== S U B R O U T I N E =======================================
+commentline BB84 End of function sub_BB7B
+commentline BB85 =============== S U B R O U T I N E =======================================
+commentline BB85 Death Star explosion animation
+commentline BB8D End of function sub_BB85
+commentline BB8D ---------------------------------------------------------------------------
+commentline BB98 =============== S U B R O U T I N E =======================================
+commentline BBBA End of function sub_BB98
+commentline BBBB =============== S U B R O U T I N E =======================================
+commentline BC1D End of function sub_BBBB
+commentline BC1E =============== S U B R O U T I N E =======================================
+commentline BC84 End of function sub_BC1E
+commentline BC85 =============== S U B R O U T I N E =======================================
+commentline BCA9 ---------------------------------------------------------------------------
+commentline BCAD End of function sub_BC85
+commentline BCAE =============== S U B R O U T I N E =======================================
+commentline BCC7 End of function sub_BCAE
+commentline BCC8 =============== S U B R O U T I N E =======================================
+commentline BCE8 End of function sub_BCC8
+commentline BCE9 ---------------------------------------------------------------------------
+commentline BCE9 START OF FUNCTION CHUNK FOR Sound_3
+commentline BCF8 END OF FUNCTION CHUNK FOR Sound_3
+commentline BCF9 =============== S U B R O U T I N E =======================================
+commentline BCFB End of function Sound_1
+commentline BCFE =============== S U B R O U T I N E =======================================
+commentline BD00 End of function Sound_2
+commentline BD03 =============== S U B R O U T I N E =======================================
+commentline BD03 Attributes: noreturn
+commentline BD03 FUNCTION CHUNK AT ROM:BCE9 SIZE 00000010 BYTES
+commentline BD05 End of function Sound_3
+commentline BD08 =============== S U B R O U T I N E =======================================
+commentline BD0A End of function Sound_4
+commentline BD0D =============== S U B R O U T I N E =======================================
+commentline BD0F End of function Sound_5
+commentline BD12 =============== S U B R O U T I N E =======================================
+commentline BD14 End of function Sound_6
+commentline BD17 =============== S U B R O U T I N E =======================================
+commentline BD19 End of function Sound_7
+commentline BD1C =============== S U B R O U T I N E =======================================
+commentline BD1E End of function Sound_8
+commentline BD21 =============== S U B R O U T I N E =======================================
+commentline BD23 End of function Sound_9
+commentline BD26 =============== S U B R O U T I N E =======================================
+commentline BD28 End of function Sound_A
+commentline BD2B =============== S U B R O U T I N E =======================================
+commentline BD2D End of function Sound_B
+commentline BD30 =============== S U B R O U T I N E =======================================
+commentline BD32 End of function Sound_C
+commentline BD35 =============== S U B R O U T I N E =======================================
+commentline BD37 End of function Sound_D
+commentline BD3A =============== S U B R O U T I N E =======================================
+commentline BD3C End of function Sound_E
+commentline BD3F =============== S U B R O U T I N E =======================================
+commentline BD41 End of function Sound_F
+commentline BD44 =============== S U B R O U T I N E =======================================
+commentline BD46 End of function Sound_10
+commentline BD49 =============== S U B R O U T I N E =======================================
+commentline BD49 Remember
+commentline BD4B End of function Sound_11
+commentline BD4E =============== S U B R O U T I N E =======================================
+commentline BD50 End of function Sound_12
+commentline BD53 =============== S U B R O U T I N E =======================================
+commentline BD53 Look at the size of that thing
+commentline BD55 End of function Sound_13
+commentline BD58 =============== S U B R O U T I N E =======================================
+commentline BD58 Stay in attack formation
+commentline BD5A End of function Sound_14
+commentline BD5D =============== S U B R O U T I N E =======================================
+commentline BD5F End of function Sound_15
+commentline BD62 =============== S U B R O U T I N E =======================================
+commentline BD62 Force is strong in this one
+commentline BD64 End of function Sound_16
+commentline BD67 =============== S U B R O U T I N E =======================================
+commentline BD67 Red 5 Im going in
+commentline BD69 End of function Sound_17
+commentline BD6C =============== S U B R O U T I N E =======================================
+commentline BD6C Luke trust me
+commentline BD6E End of function Sound_18
+commentline BD71 =============== S U B R O U T I N E =======================================
+commentline BD73 End of function Sound_19
+commentline BD76 =============== S U B R O U T I N E =======================================
+commentline BD76 Yahoo youre all clear kid
+commentline BD78 End of function Sound_1A
+commentline BD7B =============== S U B R O U T I N E =======================================
+commentline BD7B High score
+commentline BD7D End of function Sound_1B
+commentline BD80 =============== S U B R O U T I N E =======================================
+commentline BD82 End of function Sound_1C
+commentline BD85 =============== S U B R O U T I N E =======================================
+commentline BD85 Imperial March
+commentline BD87 End of function Sound_1D
+commentline BD8A =============== S U B R O U T I N E =======================================
+commentline BD8A Enter Death Star
+commentline BD8C End of function Sound_1E
+commentline BD8F =============== S U B R O U T I N E =======================================
+commentline BD8F Death Star destroyed
+commentline BD91 End of function Sound_1F
+commentline BD94 =============== S U B R O U T I N E =======================================
+commentline BD94 Towers 1 music
+commentline BD96 End of function Sound_20
+commentline BD99 =============== S U B R O U T I N E =======================================
+commentline BD99 Towers 2 music
+commentline BD9B End of function Sound_21
+commentline BD9E =============== S U B R O U T I N E =======================================
+commentline BD9E Trench music
+commentline BDA0 End of function Sound_22
+commentline BDA3 =============== S U B R O U T I N E =======================================
+commentline BDA5 End of function Sound_23
+commentline BDA8 =============== S U B R O U T I N E =======================================
+commentline BDA8 Space wave 1 music
+commentline BDAA End of function Sound_24
+commentline BDAD =============== S U B R O U T I N E =======================================
+commentline BDAD Space Wave 2 music
+commentline BDAF End of function Sound_25
+commentline BDB2 =============== S U B R O U T I N E =======================================
+commentline BDB2 Explosion
+commentline BDB4 End of function Sound_26
+commentline BDB7 =============== S U B R O U T I N E =======================================
+commentline BDB9 End of function Sound_27
+commentline BDBC =============== S U B R O U T I N E =======================================
+commentline BDBE End of function Sound_28
+commentline BDC1 =============== S U B R O U T I N E =======================================
+commentline BDC3 End of function Sound_29
+commentline BDC6 =============== S U B R O U T I N E =======================================
+commentline BDC8 End of function Sound_2A
+commentline BDCB =============== S U B R O U T I N E =======================================
+commentline BDCD End of function Sound_2B
+commentline BDD0 =============== S U B R O U T I N E =======================================
+commentline BDD2 End of function Sound_2C
+commentline BDD5 =============== S U B R O U T I N E =======================================
+commentline BDD7 End of function Sound_2D
+commentline BDDA =============== S U B R O U T I N E =======================================
+commentline BDDC End of function Sound_2E
+commentline BDDF =============== S U B R O U T I N E =======================================
+commentline BDE1 End of function Sound_2F
+commentline BDE4 =============== S U B R O U T I N E =======================================
+commentline BDE6 End of function Sound_30
+commentline BDE9 =============== S U B R O U T I N E =======================================
+commentline BDEB End of function Sound_31
+commentline BDEE =============== S U B R O U T I N E =======================================
+commentline BDEE R2 beeps entering Death Star
+commentline BDF0 End of function Sound_32
+commentline BDF3 =============== S U B R O U T I N E =======================================
+commentline BDF5 End of function Sound_33
+commentline BDF8 =============== S U B R O U T I N E =======================================
+commentline BDFA End of function Sound_34
+commentline BDFD =============== S U B R O U T I N E =======================================
+commentline BDFF End of function Sound_35
+commentline BE02 =============== S U B R O U T I N E =======================================
+commentline BE04 End of function Sound_36
+commentline BE07 =============== S U B R O U T I N E =======================================
+commentline BE09 End of function Sound_37
+commentline BE0C =============== S U B R O U T I N E =======================================
+commentline BE0E End of function Sound_38
+commentline BE11 =============== S U B R O U T I N E =======================================
+commentline BE13 End of function Sound_39
+commentline BE16 =============== S U B R O U T I N E =======================================
+commentline BE18 End of function Sound_3A
+commentline BE1B =============== S U B R O U T I N E =======================================
+commentline BE1D End of function Sound_3B
+commentline BE20 =============== S U B R O U T I N E =======================================
+commentline BE20 Display accounting screen
+commentline BFF4 ---------------------------------------------------------------------------
+commentline C02E End of function sub_BE20
+commentline C02F =============== S U B R O U T I N E =======================================
+commentline C04A ---------------------------------------------------------------------------
+commentline C086 End of function sub_C02F
+commentline C087 =============== S U B R O U T I N E =======================================
+commentline C09C End of function sub_C087
+commentline C09D =============== S U B R O U T I N E =======================================
+commentline C0FE End of function sub_C09D
+commentline C0FF =============== S U B R O U T I N E =======================================
+commentline C0FF NVRAM something
+commentline C209 End of function sub_C0FF
+commentline C20C =============== S U B R O U T I N E =======================================
+commentline C23D ---------------------------------------------------------------------------
+commentline C24B End of function sub_C20C
+commentline C24E =============== S U B R O U T I N E =======================================
+commentline C27F ---------------------------------------------------------------------------
+commentline C29B ---------------------------------------------------------------------------
+commentline C2B1 End of function sub_C24E
+commentline C2B3 =============== S U B R O U T I N E =======================================
+commentline C2C2 End of function sub_C2B3
+commentline C2C3 =============== S U B R O U T I N E =======================================
+commentline C305 End of function sub_C2C3
+commentline C306 =============== S U B R O U T I N E =======================================
+commentline C37C ---------------------------------------------------------------------------
+commentline C3ED End of function sub_C306
+commentline C3EE =============== S U B R O U T I N E =======================================
+commentline C412 End of function sub_C3EE
+commentline C413 =============== S U B R O U T I N E =======================================
+commentline C44F End of function sub_C413
+commentline C450 =============== S U B R O U T I N E =======================================
+commentline C4EA End of function sub_C450
+commentline C4EB =============== S U B R O U T I N E =======================================
+commentline C50C ---------------------------------------------------------------------------
+commentline C557 ---------------------------------------------------------------------------
+commentline C5A3 End of function sub_C4EB
+commentline C5A4 =============== S U B R O U T I N E =======================================
+commentline C5E3 ---------------------------------------------------------------------------
+commentline C5EF End of function sub_C5A4
+commentline C5F2 =============== S U B R O U T I N E =======================================
+commentline C5F2 FUNCTION CHUNK AT ROM:C65B SIZE 0000001F BYTES
+commentline C640 ---------------------------------------------------------------------------
+commentline C640 End of function sub_C5F2
+commentline C641 =============== S U B R O U T I N E =======================================
+commentline C65A End of function sub_C641
+commentline C65B ---------------------------------------------------------------------------
+commentline C65B START OF FUNCTION CHUNK FOR sub_C5F2
+commentline C679 END OF FUNCTION CHUNK FOR sub_C5F2
+commentline C67A =============== S U B R O U T I N E =======================================
+commentline C687 End of function sub_C67A
+commentline C688 =============== S U B R O U T I N E =======================================
+commentline C68F End of function sub_C688
+commentline C690 =============== S U B R O U T I N E =======================================
+commentline C69D ---------------------------------------------------------------------------
+commentline C6B7 End of function sub_C690
+commentline C6B8 =============== S U B R O U T I N E =======================================
+commentline C6D3 End of function sub_C6B8
+commentline C6D4 =============== S U B R O U T I N E =======================================
+commentline C6D4 Read NOVRAM
+commentline C6D4 End of function sub_C6D4
+commentline C6D7 =============== S U B R O U T I N E =======================================
+commentline C6D7 Read NOVRAM
+commentline C6F3 End of function sub_C6D7
+commentline C6F4 =============== S U B R O U T I N E =======================================
+commentline C6F4 End of function sub_C6F4
+commentline C6F7 =============== S U B R O U T I N E =======================================
+commentline C70D End of function sub_C6F7
+commentline C70E =============== S U B R O U T I N E =======================================
+commentline C734 End of function sub_C70E
+commentline C734 ---------------------------------------------------------------------------
+commentline C7FD =============== S U B R O U T I N E =======================================
+commentline C7FD Display high scores
+commentline C811 ---------------------------------------------------------------------------
+commentline C847 ---------------------------------------------------------------------------
+commentline C869 ---------------------------------------------------------------------------
+commentline C86D ---------------------------------------------------------------------------
+commentline C87F ---------------------------------------------------------------------------
+commentline C884 ---------------------------------------------------------------------------
+commentline C8A1 ---------------------------------------------------------------------------
+commentline C8A5 ---------------------------------------------------------------------------
+commentline C8B7 ---------------------------------------------------------------------------
+commentline C8BC ---------------------------------------------------------------------------
+commentline C8D9 ---------------------------------------------------------------------------
+commentline C8DD ---------------------------------------------------------------------------
+commentline C8EF ---------------------------------------------------------------------------
+commentline C8F4 ---------------------------------------------------------------------------
+commentline C966 ---------------------------------------------------------------------------
+commentline C9B6 ---------------------------------------------------------------------------
+commentline C9F4 ---------------------------------------------------------------------------
+commentline CA4E ---------------------------------------------------------------------------
+commentline CA63 End of function sub_C7FD
+commentline CA63 ---------------------------------------------------------------------------
+commentline CA8C =============== S U B R O U T I N E =======================================
+commentline CA8C Score
+commentline CAA5 ---------------------------------------------------------------------------
+commentline CAB6 End of function sub_CA8C
+commentline CAB7 =============== S U B R O U T I N E =======================================
+commentline CAF2 End of function sub_CAB7
+commentline CAF3 =============== S U B R O U T I N E =======================================
+commentline CB08 ---------------------------------------------------------------------------
+commentline CB82 ---------------------------------------------------------------------------
+commentline CB91 ---------------------------------------------------------------------------
+commentline CBA3 End of function sub_CAF3
+commentline CBA3 ---------------------------------------------------------------------------
+commentline CC18 =============== S U B R O U T I N E =======================================
+commentline CC5A End of function sub_CC18
+commentline CC5B =============== S U B R O U T I N E =======================================
+commentline CC79 End of function sub_CC5B
+commentline CC79 ---------------------------------------------------------------------------
+commentline CCC0 =============== S U B R O U T I N E =======================================
+commentline CCC0 Initialise object?
+commentline CCCB End of function sub_CCC0
+commentline CCCC =============== S U B R O U T I N E =======================================
+commentline CCCC Copy XYZ data to math RAM
+commentline CCD7 End of function sub_CCCC
+commentline CCD8 =============== S U B R O U T I N E =======================================
+commentline CCD8 Copy object 3D data to math ram
+commentline CCE3 End of function sub_CCD8
+commentline CCE4 =============== S U B R O U T I N E =======================================
+commentline CCEF End of function sub_CCE4
+commentline CCF0 =============== S U B R O U T I N E =======================================
+commentline CCF0 Get divider result and multiply by Math result Z, insert VCTR instruction
+commentline CCFB End of function sub_CCF0
+commentline CCFC =============== S U B R O U T I N E =======================================
+commentline CCFC Trench floor lines calcs
+commentline CD07 End of function sub_CCFC
+commentline CD08 =============== S U B R O U T I N E =======================================
+commentline CD08 Trench side vertical lines calcs
+commentline CD13 End of function sub_CD08
+commentline CD14 =============== S U B R O U T I N E =======================================
+commentline CD14 Math program 0x50. Matrix Multiply - Transposed
+commentline CD14 Then do perspective division?
+commentline CD1F End of function sub_CD14
+commentline CD20 =============== S U B R O U T I N E =======================================
+commentline CD20 Do 3D object transform using Matrix 1
+commentline CD2B End of function sub_CD20
+commentline CD2C =============== S U B R O U T I N E =======================================
+commentline CD2C Format vectors for ties, and tower/bunker explosions
+commentline CD37 End of function sub_CD2C
+commentline CD38 =============== S U B R O U T I N E =======================================
+commentline CD38 Trench left side turret calcs
+commentline CD43 End of function sub_CD38
+commentline CD44 =============== S U B R O U T I N E =======================================
+commentline CD44 Trench right side turret calcs
+commentline CD4F End of function sub_CD44
+commentline CD50 =============== S U B R O U T I N E =======================================
+commentline CD5B End of function sub_CD50
+commentline CD5C =============== S U B R O U T I N E =======================================
+commentline CD5C Trench calcs
+commentline CD67 End of function sub_CD5C
+commentline CD68 =============== S U B R O U T I N E =======================================
+commentline CD73 End of function sub_CD68
+commentline CD74 =============== S U B R O U T I N E =======================================
+commentline CD74 Function select for an object
+commentline CD7F End of function sub_CD74
+commentline CD80 =============== S U B R O U T I N E =======================================
+commentline CD80 Starfield
+commentline CD8B End of function sub_CD80
+commentline CD8C =============== S U B R O U T I N E =======================================
+commentline CD8C Towers surface dots
+commentline CD97 End of function sub_CD8C
+commentline CD98 =============== S U B R O U T I N E =======================================
+commentline CD98 Unused
+commentline CD9B End of function sub_CD98
+commentline CD9C =============== S U B R O U T I N E =======================================
+commentline CD9C Shift D register right
+commentline CD9D End of function Shift_D_R_6
+commentline CD9E =============== S U B R O U T I N E =======================================
+commentline CD9E Shift D register right
+commentline CDA8 End of function Shift_D_R_5
+commentline CDA9 =============== S U B R O U T I N E =======================================
+commentline CDA9 Shift D register left
+commentline CDAA End of function sub_CDA9
+commentline CDAB =============== S U B R O U T I N E =======================================
+commentline CDB9 End of function Shift_D_L_7
+commentline CDBA =============== S U B R O U T I N E =======================================
+commentline CDBA Do math program run
+commentline CDC2 End of function Math_Run_Start
+commentline CDC3 =============== S U B R O U T I N E =======================================
+commentline CDC3 Initialise math registers matrix
+commentline CDE6 End of function sub_CDC3
+commentline CDE7 =============== S U B R O U T I N E =======================================
+commentline CDE7 Swap Matrix 2  x, y, z to  x, y, z
+commentline CE0B End of function sub_CDE7
+commentline CE0C =============== S U B R O U T I N E =======================================
+commentline CE0C Copy transform data from [BIC] to matrix 2
+commentline CE17 End of function sub_CE0C
+commentline CE18 =============== S U B R O U T I N E =======================================
+commentline CE18 Run math program $80 Copy [BIC] to Matrix 3
+commentline CE23 End of function sub_CE18
+commentline CE24 =============== S U B R O U T I N E =======================================
+commentline CE24 Run math program $00 Roll on Matrix 4
+commentline CE2C End of function sub_CE24
+commentline CE2F =============== S U B R O U T I N E =======================================
+commentline CE2F Run math program $0E Pitch on Matrix 4
+commentline CE37 End of function sub_CE2F
+commentline CE3A =============== S U B R O U T I N E =======================================
+commentline CE3A Run math program $1C Yaw on Matrix 4
+commentline CE42 End of function sub_CE3A
+commentline CE45 =============== S U B R O U T I N E =======================================
+commentline CE45 Update random numbers
+commentline CE4E End of function Gen_Random
+commentline CE4E ---------------------------------------------------------------------------
+commentline D660 =============== S U B R O U T I N E =======================================
+commentline D68C End of function sub_D660
+commentline D68D =============== S U B R O U T I N E =======================================
+commentline D68D Point U to vector RAM $38
+commentline D68D End of function sub_D68D
+commentline D690 =============== S U B R O U T I N E =======================================
+commentline D690 Animate laser target hit
+commentline D69F End of function sub_D690
+commentline D6A0 =============== S U B R O U T I N E =======================================
+commentline D6A0 End of function sub_D6A0
+commentline D6A3 =============== S U B R O U T I N E =======================================
+commentline D6BB End of function sub_D6A3
+commentline D6BC =============== S U B R O U T I N E =======================================
+commentline D6BC End of function sub_D6BC
+commentline D6BF =============== S U B R O U T I N E =======================================
+commentline D6E6 End of function sub_D6BF
+commentline D6E7 =============== S U B R O U T I N E =======================================
+commentline D6E7 End of function sub_D6E7
+commentline D6EA =============== S U B R O U T I N E =======================================
+commentline D708 End of function sub_D6EA
+commentline D709 =============== S U B R O U T I N E =======================================
+commentline D709 Laser target animation
+commentline D715 End of function sub_D709
+commentline D715 ---------------------------------------------------------------------------
+commentline D776 =============== S U B R O U T I N E =======================================
+commentline D776 Check coin inputs
+commentline D788 ---------------------------------------------------------------------------
+commentline D7B0 ---------------------------------------------------------------------------
+commentline D812 ---------------------------------------------------------------------------
+commentline D822 ---------------------------------------------------------------------------
+commentline D841 ---------------------------------------------------------------------------
+commentline D84B ---------------------------------------------------------------------------
+commentline D8D7 ---------------------------------------------------------------------------
+commentline D8DE End of function sub_D776
+commentline D8DF =============== S U B R O U T I N E =======================================
+commentline D8DF Called from select screen, attract screen 1 + 3 when writing text
+commentline D8EC ---------------------------------------------------------------------------
+commentline D8F6 End of function sub_D8DF
+commentline D8F7 =============== S U B R O U T I N E =======================================
+commentline D8F7 Doesnt seem to be used anywhere
+commentline D919 End of function sub_D8F7
+commentline D91A =============== S U B R O U T I N E =======================================
+commentline D922 End of function sub_D91A
+commentline D923 =============== S U B R O U T I N E =======================================
+commentline D923 Called from attract screen 1
+commentline D941 End of function sub_D923
+commentline D942 =============== S U B R O U T I N E =======================================
+commentline D942 Called from Attract screen 3 + 4
+commentline D95D End of function sub_D942
+commentline D95E =============== S U B R O U T I N E =======================================
+commentline D95E Attract screen 2 text position control
+commentline D970 End of function sub_D95E
+commentline D971 =============== S U B R O U T I N E =======================================
+commentline D984 End of function sub_D971
+commentline D985 =============== S U B R O U T I N E =======================================
+commentline D9DB End of function sub_D985
+commentline D9DC =============== S U B R O U T I N E =======================================
+commentline D9DC Initialise before game start
+commentline D9F9 End of function sub_D9DC
+commentline D9FA =============== S U B R O U T I N E =======================================
+commentline D9FA Attract screen 2 large Star Wars logo handling
+commentline DA1E ---------------------------------------------------------------------------
+commentline DAB3 ---------------------------------------------------------------------------
+commentline DAC1 ---------------------------------------------------------------------------
+commentline DB1F ---------------------------------------------------------------------------
+commentline DB2E End of function sub_D9FA
+commentline DB2E ---------------------------------------------------------------------------
+commentline E764 =============== S U B R O U T I N E =======================================
+commentline E770 End of function sub_E764
+commentline E772 =============== S U B R O U T I N E =======================================
+commentline E772 Display BCD number text
+commentline E78E End of function sub_E772
+commentline E790 =============== S U B R O U T I N E =======================================
+commentline E790 Display BCD numbers
+commentline E7A2 ---------------------------------------------------------------------------
+commentline E7BB ---------------------------------------------------------------------------
+commentline E7C6 End of function Display_Vect_BCD
+commentline E7C7 =============== S U B R O U T I N E =======================================
+commentline E7C7 Print text string from pointer table
+commentline E7D2 End of function sub_E7C7
+commentline E7D3 =============== S U B R O U T I N E =======================================
+commentline E7DC End of function sub_E7D3
+commentline E7DD =============== S U B R O U T I N E =======================================
+commentline E7DD Insert text colour vector instruction
+commentline E7E9 End of function sub_E7DD
+commentline E7EA =============== S U B R O U T I N E =======================================
+commentline E7EA Insert text position vector instruction
+commentline E7FC ---------------------------------------------------------------------------
+commentline E820 End of function sub_E7EA
+commentline E821 =============== S U B R O U T I N E =======================================
+commentline E821 Text handling
+commentline E83C ---------------------------------------------------------------------------
+commentline E845 ---------------------------------------------------------------------------
+commentline E84F ---------------------------------------------------------------------------
+commentline E858 ---------------------------------------------------------------------------
+commentline E861 ---------------------------------------------------------------------------
+commentline E86A ---------------------------------------------------------------------------
+commentline E873 ---------------------------------------------------------------------------
+commentline E87C ---------------------------------------------------------------------------
+commentline E885 ---------------------------------------------------------------------------
+commentline E893 End of function sub_E821
+commentline E893 ---------------------------------------------------------------------------
+commentline EF54 =============== S U B R O U T I N E =======================================
+commentline EF54 Attributes: noreturn
+commentline EF54 End of function BADIRQ
+commentline EF56 =============== S U B R O U T I N E =======================================
+commentline F041 ---------------------------------------------------------------------------
+commentline F0A0 ---------------------------------------------------------------------------
+commentline F132 End of function IRQ
+commentline F133 =============== S U B R O U T I N E =======================================
+commentline F133 Inputs debounce
+commentline F145 End of function sub_F133
+commentline F146 =============== S U B R O U T I N E =======================================
+commentline F146 Joystick processing
+commentline F16C ---------------------------------------------------------------------------
+commentline F186 ---------------------------------------------------------------------------
+commentline F18C End of function sub_F146
+commentline F18D =============== S U B R O U T I N E =======================================
+commentline F1C5 End of function sub_F18D
+commentline F1C6 =============== S U B R O U T I N E =======================================
+commentline F1EB ---------------------------------------------------------------------------
+commentline F1FC End of function sub_F1C6
+commentline F1FD =============== S U B R O U T I N E =======================================
+commentline F22A End of function sub_F1FD
+commentline F22B =============== S U B R O U T I N E =======================================
+commentline F260 End of function sub_F22B
+commentline F261 ---------------------------------------------------------------------------
+commentline F261 START OF FUNCTION CHUNK FOR sub_6532
+commentline F2D6 ---------------------------------------------------------------------------
+commentline F32B END OF FUNCTION CHUNK FOR sub_6532
+commentline F32B ---------------------------------------------------------------------------
+commentline F36E ---------------------------------------------------------------------------
+commentline F36E START OF FUNCTION CHUNK FOR sub_6532
+commentline F380 ---------------------------------------------------------------------------
+commentline F39D ---------------------------------------------------------------------------
+commentline F3B5 ---------------------------------------------------------------------------
+commentline F3BE ---------------------------------------------------------------------------
+commentline F3D6 ---------------------------------------------------------------------------
+commentline F3FB ---------------------------------------------------------------------------
+commentline F40B ---------------------------------------------------------------------------
+commentline F41E ---------------------------------------------------------------------------
+commentline F464 ---------------------------------------------------------------------------
+commentline F482 ---------------------------------------------------------------------------
+commentline F491 ---------------------------------------------------------------------------
+commentline F4B2 ---------------------------------------------------------------------------
+commentline F4CE ---------------------------------------------------------------------------
+commentline F51B END OF FUNCTION CHUNK FOR sub_6532
+commentline F51D =============== S U B R O U T I N E =======================================
+commentline F51D End of function sub_F51D
+commentline F520 START OF FUNCTION CHUNK FOR sub_6532
+commentline F557 ---------------------------------------------------------------------------
+commentline F56E ---------------------------------------------------------------------------
+commentline F5B1 ---------------------------------------------------------------------------
+commentline F5ED ---------------------------------------------------------------------------
+commentline F5F9 ---------------------------------------------------------------------------
+commentline F61C ---------------------------------------------------------------------------
+commentline F643 ---------------------------------------------------------------------------
+commentline F679 ---------------------------------------------------------------------------
+commentline F69F ---------------------------------------------------------------------------
+commentline F6C7 ---------------------------------------------------------------------------
+commentline F6EA ---------------------------------------------------------------------------
+commentline F6F0 ---------------------------------------------------------------------------
+commentline F70B END OF FUNCTION CHUNK FOR sub_6532
+commentline F70D =============== S U B R O U T I N E =======================================
+commentline F71C End of function sub_F70D
+commentline F720 START OF FUNCTION CHUNK FOR sub_6532
+commentline F720 END OF FUNCTION CHUNK FOR sub_6532
+commentline F720 ---------------------------------------------------------------------------
+commentline F74F =============== S U B R O U T I N E =======================================
+commentline F767 ---------------------------------------------------------------------------
+commentline F77C End of function sub_F74F
+commentline F77F =============== S U B R O U T I N E =======================================
+commentline F869 End of function sub_F77F
+commentline F86C =============== S U B R O U T I N E =======================================
+commentline F876 ---------------------------------------------------------------------------
+commentline F883 End of function sub_F86C
+commentline F884 =============== S U B R O U T I N E =======================================
+commentline F889 End of function sub_F884
+commentline F88C =============== S U B R O U T I N E =======================================
+commentline F891 End of function sub_F88C
+commentline F894 =============== S U B R O U T I N E =======================================
+commentline F8A7 End of function sub_F894
+commentline F8AA =============== S U B R O U T I N E =======================================
+commentline F8C9 End of function sub_F8AA
+commentline F8CC =============== S U B R O U T I N E =======================================
+commentline F900 ---------------------------------------------------------------------------
+commentline F932 ---------------------------------------------------------------------------
+commentline F93C End of function sub_F8CC
+commentline F93F =============== S U B R O U T I N E =======================================
+commentline F955 End of function sub_F93F
+commentline F958 =============== S U B R O U T I N E =======================================
+commentline F98A ---------------------------------------------------------------------------
+commentline F998 End of function sub_F958
+commentline F99B =============== S U B R O U T I N E =======================================
+commentline F9CE ---------------------------------------------------------------------------
+commentline FA2E ---------------------------------------------------------------------------
+commentline FA4C End of function sub_F99B
+commentline FA4E =============== S U B R O U T I N E =======================================
+commentline FA88 ---------------------------------------------------------------------------
+commentline FA92 ---------------------------------------------------------------------------
+commentline FAD6 ---------------------------------------------------------------------------
+commentline FADE End of function sub_FA4E
+commentline FADE ---------------------------------------------------------------------------
+commentline FB09 =============== S U B R O U T I N E =======================================
+commentline FB09 FUNCTION CHUNK AT ROM:FBF6 SIZE 00000026 BYTES
+commentline FB0D End of function sub_FB09
+commentline FB10 =============== S U B R O U T I N E =======================================
+commentline FB19 ---------------------------------------------------------------------------
+commentline FB20 End of function sub_FB10
+commentline FB23 =============== S U B R O U T I N E =======================================
+commentline FB2D ---------------------------------------------------------------------------
+commentline FB35 End of function sub_FB23
+commentline FB38 ---------------------------------------------------------------------------
+commentline FB38 START OF FUNCTION CHUNK FOR sub_FE7C
+commentline FB49 END OF FUNCTION CHUNK FOR sub_FE7C
+commentline FB49 ---------------------------------------------------------------------------
+commentline FB75 =============== S U B R O U T I N E =======================================
+commentline FB80 End of function sub_FB75
+commentline FB82 =============== S U B R O U T I N E =======================================
+commentline FB8D End of function sub_FB82
+commentline FB8F =============== S U B R O U T I N E =======================================
+commentline FB9A End of function sub_FB8F
+commentline FB9C =============== S U B R O U T I N E =======================================
+commentline FBA1 End of function sub_FB9C
+commentline FBA3 =============== S U B R O U T I N E =======================================
+commentline FBA8 End of function sub_FBA3
+commentline FBAA =============== S U B R O U T I N E =======================================
+commentline FBBD End of function sub_FBAA
+commentline FBBF =============== S U B R O U T I N E =======================================
+commentline FBD2 End of function sub_FBBF
+commentline FBD4 =============== S U B R O U T I N E =======================================
+commentline FBF3 End of function sub_FBD4
+commentline FBF6 ---------------------------------------------------------------------------
+commentline FBF6 START OF FUNCTION CHUNK FOR sub_FB09
+commentline FC19 END OF FUNCTION CHUNK FOR sub_FB09
+commentline FC1C =============== S U B R O U T I N E =======================================
+commentline FC62 ---------------------------------------------------------------------------
+commentline FC6F End of function sub_FC1C
+commentline FC72 =============== S U B R O U T I N E =======================================
+commentline FCA9 End of function sub_FC72
+commentline FCAC =============== S U B R O U T I N E =======================================
+commentline FCCE End of function sub_FCAC
+commentline FCCE ---------------------------------------------------------------------------
+commentline FD07 ---------------------------------------------------------------------------
+commentline FD07 START OF FUNCTION CHUNK FOR sub_6532
+commentline FD1A ---------------------------------------------------------------------------
+commentline FD7B ---------------------------------------------------------------------------
+commentline FD82 END OF FUNCTION CHUNK FOR sub_6532
+commentline FD82 ---------------------------------------------------------------------------
+commentline FDBC =============== S U B R O U T I N E =======================================
+commentline FDC2 ---------------------------------------------------------------------------
+commentline FDD4 ---------------------------------------------------------------------------
+commentline FDD4 End of function sub_FDBC
+commentline FDD7 =============== S U B R O U T I N E =======================================
+commentline FDDD ---------------------------------------------------------------------------
+commentline FDEF ---------------------------------------------------------------------------
+commentline FDEF End of function sub_FDD7
+commentline FDF2 =============== S U B R O U T I N E =======================================
+commentline FE0E ---------------------------------------------------------------------------
+commentline FE21 ---------------------------------------------------------------------------
+commentline FE34 End of function sub_FDF2
+commentline FE34 ---------------------------------------------------------------------------
+commentline FE4F =============== S U B R O U T I N E =======================================
+commentline FE60 ---------------------------------------------------------------------------
+commentline FE71 ---------------------------------------------------------------------------
+commentline FE7A End of function sub_FE4F
+commentline FE7C =============== S U B R O U T I N E =======================================
+commentline FE7C FUNCTION CHUNK AT ROM:FB38 SIZE 00000013 BYTES
+commentline FE8F ---------------------------------------------------------------------------
+commentline FEA0 ---------------------------------------------------------------------------
+commentline FEA4 End of function sub_FE7C
+commentline FEA7 =============== S U B R O U T I N E =======================================
+commentline FEAE ---------------------------------------------------------------------------
+commentline FF21 End of function sub_FEA7
+commentline FF24 ---------------------------------------------------------------------------
+commentline FF24 START OF FUNCTION CHUNK FOR sub_6532
+commentline FF54 END OF FUNCTION CHUNK FOR sub_6532
+commentline FF54 ---------------------------------------------------------------------------
+commentline FFFE end of ROM

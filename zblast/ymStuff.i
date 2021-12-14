@@ -411,7 +411,7 @@ int loadYM(TCHAR *FILE_NAME)
 
     if (rc_rd != FR_OK)
     {
-      printf("Could not open file %s (%s: %i) \r\n", FILE_NAME, ff_getErrorText(rc_rd), rc_rd);
+      printf("Could not open file %s (%s: %i) \r\n", FILE_NAME, getErrorText(rc_rd), rc_rd);
 outputCurrentDirectory();
       return 0;
     }

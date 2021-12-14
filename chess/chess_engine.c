@@ -4,9 +4,6 @@
 #include <locale.h>
 #include <assert.h>
 
-
-#ifdef FREESTANDING
-
 #include <vectrex/vectrexInterface.h>
 
 #define CLOCKS_PER_SEC 1000000
@@ -20,11 +17,6 @@ unsigned int __clock()
   CCNT0(val);
   return val;
 }
-
-#else
-#include <time.h>
-#endif
-
 
 
 #define PAWN 0

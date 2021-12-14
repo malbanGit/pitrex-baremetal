@@ -1,0 +1,34 @@
+TODO
+----
+
+While functional, there's a lot still to be added or considered.  This list is
+not necessarily complete, and in some regards just acts as a scratch pad for me
+to remember things that need doing.
+
+### Medium priority
+
+ * **ENDM** argument could match the opening MACRO if specified.
+ * Check all symbols are valid.  After variable substitution (e.g., in macros),
+   they might end up containing invalid characters.
+ * Structs.
+ * Functions.  I already have an expression evaluator, so why not?
+ * Replace simple opcode strings with a new opcode node type - eliminate many
+   strcasecmp()s.
+ * **SET** should perhaps be incompatible with other assignments.
+
+### Low priority
+
+ * **INCLUDE** could push arguments as new positional variables.
+ * **EQU** could permit any value, including lists.  A list could expand
+   in-place somehow.
+ * Should **DP** default to zero, not disabled?
+ * Ability to specify maximum number of passes.
+ * As it stands, section names need to be quoted - can this requirement be
+   lifted?  Similarly when pasting macro args - maybe pass a simplified ID?
+ * 6800, 6801, 6803 ISA support.
+ * Support the extended syntax pseudo-ops from the Perl version.
+ * For CoCo3 and others, destination addresses could usefully be outside the
+   64K range.
+ * The limitation on inclusion and macro expansion occurring in the first pass
+   could be lifted.  Should just be able to clear all local label tables
+   whenever an expansion occurs in a later pass, and then trigger another one.

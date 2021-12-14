@@ -1,0 +1,293 @@
+ROM:CC79
+ROM:CC79 ; ---------------------------------------------------------------------------
+ROM:CCC0
+ROM:CCC0 ; =============== S U B R O U T I N E =======================================
+ROM:CCC0
+ROM:CCC0 ; Initialise object?
+ROM:CCC0
+ROM:CCC0 sub_CCC0:
+ROM:CCC0                 orcc    #1
+ROM:CCC2                 ror     MPAGE
+ROM:CCC5                 jsr     $670D
+ROM:CCC8                 clr     MPAGE
+ROM:CCCB                 rts
+ROM:CCCB ; End of function sub_CCC0
+ROM:CCCB
+ROM:CCCC
+ROM:CCCC ; =============== S U B R O U T I N E =======================================
+ROM:CCCC
+ROM:CCCC ; Copy XYZ data to math RAM
+ROM:CCCC
+ROM:CCCC sub_CCCC:
+ROM:CCCC                 orcc    #1
+ROM:CCCE                 ror     MPAGE
+ROM:CCD1                 jsr     $6724
+ROM:CCD4                 clr     MPAGE
+ROM:CCD7                 rts
+ROM:CCD7 ; End of function sub_CCCC
+ROM:CCD7
+ROM:CCD8
+ROM:CCD8 ; =============== S U B R O U T I N E =======================================
+ROM:CCD8
+ROM:CCD8 ; Copy object 3D data to math ram
+ROM:CCD8
+ROM:CCD8 sub_CCD8:
+ROM:CCD8                 orcc    #1
+ROM:CCDA                 ror     MPAGE
+ROM:CCDD                 jsr     $6726
+ROM:CCE0                 clr     MPAGE
+ROM:CCE3                 rts
+ROM:CCE3 ; End of function sub_CCD8
+ROM:CCE3
+ROM:CCE4
+ROM:CCE4 ; =============== S U B R O U T I N E =======================================
+ROM:CCE4
+ROM:CCE4
+ROM:CCE4 sub_CCE4:
+ROM:CCE4                 orcc    #1
+ROM:CCE6                 ror     MPAGE           ; Change memory page
+ROM:CCE9                 jsr     $6761
+ROM:CCEC                 clr     MPAGE
+ROM:CCEF                 rts
+ROM:CCEF ; End of function sub_CCE4
+ROM:CCEF
+ROM:CCF0
+ROM:CCF0 ; =============== S U B R O U T I N E =======================================
+ROM:CCF0
+ROM:CCF0 ; Get divider result and multiply by Math result Z, insert VCTR instruction
+ROM:CCF0
+ROM:CCF0 sub_CCF0:
+ROM:CCF0                 orcc    #1
+ROM:CCF2                 ror     MPAGE
+ROM:CCF5                 jsr     $6761
+ROM:CCF8                 clr     MPAGE
+ROM:CCFB                 rts
+ROM:CCFB ; End of function sub_CCF0
+ROM:CCFB
+ROM:CCFC
+ROM:CCFC ; =============== S U B R O U T I N E =======================================
+ROM:CCFC
+ROM:CCFC ; Trench floor lines calcs
+ROM:CCFC
+ROM:CCFC sub_CCFC:
+ROM:CCFC                 orcc    #1
+ROM:CCFE                 ror     MPAGE
+ROM:CD01                 jsr     $6782
+ROM:CD04                 clr     MPAGE
+ROM:CD07                 rts
+ROM:CD07 ; End of function sub_CCFC
+ROM:CD07
+ROM:CD08
+ROM:CD08 ; =============== S U B R O U T I N E =======================================
+ROM:CD08
+ROM:CD08 ; Trench side vertical lines calcs
+ROM:CD08
+ROM:CD08 sub_CD08:
+ROM:CD08                 orcc    #1
+ROM:CD0A                 ror     MPAGE
+ROM:CD0D                 jsr     $67AA
+ROM:CD10                 clr     MPAGE
+ROM:CD13                 rts
+ROM:CD13 ; End of function sub_CD08
+ROM:CD13
+ROM:CD14
+ROM:CD14 ; =============== S U B R O U T I N E =======================================
+ROM:CD14
+ROM:CD14 ; Math program 0x50. Matrix Multiply - Transposed
+ROM:CD14 ; Then do perspective division?
+ROM:CD14
+ROM:CD14 sub_CD14:
+ROM:CD14                 orcc    #1
+ROM:CD16                 ror     MPAGE
+ROM:CD19                 jsr     $67D2
+ROM:CD1C                 clr     MPAGE
+ROM:CD1F                 rts
+ROM:CD1F ; End of function sub_CD14
+ROM:CD1F
+ROM:CD20
+ROM:CD20 ; =============== S U B R O U T I N E =======================================
+ROM:CD20
+ROM:CD20 ; Do 3D object transform using Matrix 1
+ROM:CD20
+ROM:CD20 sub_CD20:
+ROM:CD20                 orcc    #1
+ROM:CD22                 ror     MPAGE
+ROM:CD25                 jsr     $67D4
+ROM:CD28                 clr     MPAGE
+ROM:CD2B                 rts
+ROM:CD2B ; End of function sub_CD20
+ROM:CD2B
+ROM:CD2C
+ROM:CD2C ; =============== S U B R O U T I N E =======================================
+ROM:CD2C
+ROM:CD2C ; Format vectors for ties, and tower/bunker explosions
+ROM:CD2C
+ROM:CD2C sub_CD2C:
+ROM:CD2C                 orcc    #1
+ROM:CD2E                 ror     MPAGE
+ROM:CD31                 jsr     $6819
+ROM:CD34                 clr     MPAGE
+ROM:CD37                 rts
+ROM:CD37 ; End of function sub_CD2C
+ROM:CD37
+ROM:CD38
+ROM:CD38 ; =============== S U B R O U T I N E =======================================
+ROM:CD38
+ROM:CD38 ; Trench left side turret calcs
+ROM:CD38
+ROM:CD38 sub_CD38:
+ROM:CD38                 orcc    #1
+ROM:CD3A                 ror     MPAGE
+ROM:CD3D                 jsr     $6864
+ROM:CD40                 clr     MPAGE
+ROM:CD43                 rts
+ROM:CD43 ; End of function sub_CD38
+ROM:CD43
+ROM:CD44
+ROM:CD44 ; =============== S U B R O U T I N E =======================================
+ROM:CD44
+ROM:CD44 ; Trench right side turret calcs
+ROM:CD44
+ROM:CD44 sub_CD44:
+ROM:CD44                 orcc    #1
+ROM:CD46                 ror     MPAGE
+ROM:CD49                 jsr     $68C7
+ROM:CD4C                 clr     MPAGE
+ROM:CD4F                 rts
+ROM:CD4F ; End of function sub_CD44
+ROM:CD4F
+ROM:CD50
+ROM:CD50 ; =============== S U B R O U T I N E =======================================
+ROM:CD50
+ROM:CD50
+ROM:CD50 sub_CD50:
+ROM:CD50                 orcc    #1              ; Called during towers
+ROM:CD52                 ror     MPAGE
+ROM:CD55                 jsr     $692D
+ROM:CD58                 clr     MPAGE
+ROM:CD5B                 rts
+ROM:CD5B ; End of function sub_CD50
+ROM:CD5B
+ROM:CD5C
+ROM:CD5C ; =============== S U B R O U T I N E =======================================
+ROM:CD5C
+ROM:CD5C ; Trench calcs
+ROM:CD5C
+ROM:CD5C sub_CD5C:
+ROM:CD5C                 orcc    #1              ; Called during trench start
+ROM:CD5E                 ror     MPAGE
+ROM:CD61                 jsr     $6978
+ROM:CD64                 clr     MPAGE
+ROM:CD67                 rts
+ROM:CD67 ; End of function sub_CD5C
+ROM:CD67
+ROM:CD68
+ROM:CD68 ; =============== S U B R O U T I N E =======================================
+ROM:CD68
+ROM:CD68
+ROM:CD68 sub_CD68:
+ROM:CD68                 orcc    #1              ; Called during towers
+ROM:CD6A                 ror     MPAGE
+ROM:CD6D                 jsr     $6A0C
+ROM:CD70                 clr     MPAGE
+ROM:CD73                 rts
+ROM:CD73 ; End of function sub_CD68
+ROM:CD73
+ROM:CD74
+ROM:CD74 ; =============== S U B R O U T I N E =======================================
+ROM:CD74
+ROM:CD74 ; Function select for an object
+ROM:CD74
+ROM:CD74 sub_CD74:
+ROM:CD74                 orcc    #1
+ROM:CD76                 ror     MPAGE
+ROM:CD79                 jsr     $6AA0
+ROM:CD7C                 clr     MPAGE
+ROM:CD7F                 rts
+ROM:CD7F ; End of function sub_CD74
+ROM:CD7F
+ROM:CD80
+ROM:CD80 ; =============== S U B R O U T I N E =======================================
+ROM:CD80
+ROM:CD80 ; Starfield
+ROM:CD80
+ROM:CD80 sub_CD80:
+ROM:CD80                 orcc    #1              ; Starfield attract screen 1 + 3 + 4
+ROM:CD82                 ror     MPAGE
+ROM:CD85                 jsr     $7D9A
+ROM:CD88                 clr     MPAGE
+ROM:CD8B                 rts
+ROM:CD8B ; End of function sub_CD80
+ROM:CD8B
+ROM:CD8C
+ROM:CD8C ; =============== S U B R O U T I N E =======================================
+ROM:CD8C
+ROM:CD8C ; Towers surface dots
+ROM:CD8C
+ROM:CD8C sub_CD8C:
+ROM:CD8C                 orcc    #1
+ROM:CD8E                 ror     MPAGE
+ROM:CD91                 jsr     $7EAF
+ROM:CD94                 clr     MPAGE
+ROM:CD97                 rts
+ROM:CD97 ; End of function sub_CD8C
+ROM:CD97
+ROM:CD98
+ROM:CD98 ; =============== S U B R O U T I N E =======================================
+ROM:CD98
+ROM:CD98 ; Unused
+ROM:CD98
+ROM:CD98 sub_CD98:
+--
+ROM:F260                 rts
+ROM:F260 ; End of function sub_F22B
+ROM:F260
+ROM:F261 ; ---------------------------------------------------------------------------
+ROM:F261 ; START OF FUNCTION CHUNK FOR sub_6532
+ROM:F261
+ROM:F261                 ; public Reset
+ROM:F261 Reset:
+ROM:F261                 orcc    #$10
+ROM:F263                 clr     MPAGE
+ROM:F266                 lda     #0
+ROM:F268                 sta     LED1
+ROM:F26B                 sta     LED2
+ROM:F26E                 sta     LED3
+ROM:F271                 lda     #0
+ROM:F273                 sta     PRNGClr
+ROM:F278                 sta     PRNGClr
+ROM:F27B                 sta     EVGRESET
+ROM:F27E                 ldu     #0
+--
+ROM:F4E5
+ROM:F4E5 loc_F4E5:
+ROM:F4E5                 sta     WDCLR
+ROM:F4E8                 leax    -1,x
+ROM:F4EA                 bne     loc_F4E5
+ROM:F4EC
+ROM:F4EC loc_F4EC:
+ROM:F4EC                 sta     WDCLR
+ROM:F4EF                 lda     #0
+ROM:F4F1                 sta     MPAGE
+ROM:F4F4                 ldx     word_F342
+ROM:F4F7                 ldy     #$2000
+ROM:F4FB                 tfr     x, d
+ROM:F4FD
+ROM:F4FD loc_F4FD:
+ROM:F4FD                 adcb    1,x
+ROM:F4FF                 adca    ,x++
+ROM:F501                 sta     WDCLR
+ROM:F504                 leay    -2,y
+ROM:F506                 bne     loc_F4FD
+ROM:F508                 tfr     d, x
+ROM:F50A                 lda     #$FF
+ROM:F50C                 sta     MPAGE
+ROM:F50F                 ldu     #word_F344      ; Point to ROM start address table
+ROM:F512                 tfr     x, d
+ROM:F514                 ldy     #$2000          ; Size of each ROM
+ROM:F518                 ldx     word_F342
+ROM:F51B                 bra     loc_F528
+ROM:F51B ; END OF FUNCTION CHUNK FOR sub_6532
+ROM:F51D
+ROM:F51D ; =============== S U B R O U T I N E =======================================
+ROM:F51D

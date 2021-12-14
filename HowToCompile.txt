@@ -1,0 +1,50 @@
+If you want to compile everything, for both PiZero and PiZero 2:
+(in the directory "software")
+  make clean
+  make
+
+This might lead to errors if you do not have the same setup as I have.
+In the file Rules.mk, there is a definition of:
+MAKE_IMAGE
+
+If that is defined, the makefiles try to copy the resulting "*.img" files to the SD card
+(path given also in Rules.mk), if that is not successfull, than the make breaks.
+
+Either comment the definition of MAKE_IMAGE out or give correct paths.
+
+To compile all for only PiZero:   make -f Makefile.zero all BUILD_FOR=zero1
+To compile all for only PiZero2:  make -f Makefile.zero all BUILD_FOR=zero2
+
+---
+
+If you want to compile single programs, go to the respective directory and
+type: 
+
+  make clean
+  make
+
+Per default the build image is for the PiZero type that is given in the Makefile
+(first line e.g. BUILD_FOR = zero2).
+
+To compile for the other pi, either edit the make file or call the make file with the varibale definition, like:
+  make BUILD_FOR=zero1
+
+---
+  
+make clean
+In general "cleans" the current project.
+
+make clean-all
+Cleans the linked libraries (like all stuff in the pitrex directory) and forces them to be rebuilt.
+
+(clean-all and clean - do different things!)
+I don't think all dependencies are allways correct, so if in doubt do a:
+
+make clean
+make clean-all
+make
+
+--
+
+All object files for pizero1 are build into the directory "build".
+All object files for pizero2 are build into the directory "build7".

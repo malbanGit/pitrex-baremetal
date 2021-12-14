@@ -32,6 +32,9 @@
 
 //#define PI 3.1415926535
 
+int NUM_SPEECH_SAMPLES;
+
+
 extern char *gamename[];
 extern int gamenum;
 
@@ -74,7 +77,7 @@ int coin_in=0;
 int coin_count=0;
 
 //float r,g,b;
-BYTE *vectorram;
+static BYTE *vectorram;
 int sysReset=0;
 int spinvert = 0;
 int toggle_mouse=1;

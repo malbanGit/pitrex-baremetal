@@ -24,7 +24,7 @@
 extern "C" {
 #endif
 
-#ifdef NDEBUG
+#ifdef USPIDEBUG
 	#define assert(expr)	((void) 0)
 #else
 	void assertion_failed (const char *pExpr, const char *pFile, unsigned nLine);

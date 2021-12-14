@@ -127,7 +127,7 @@ static unsigned s_nDeviceNumber = 0;
 
 boolean SMSC951xDeviceWriteReg (TSMSC951xDevice *pThis, u32 nIndex, u32 nValue);
 boolean SMSC951xDeviceReadReg (TSMSC951xDevice *pThis, u32 nIndex, u32 *pValue);
-#ifndef NDEBUG
+#ifdef USPIDEBUG
 void SMSC951xDeviceDumpReg (TSMSC951xDevice *pThis, const char *pName, u32 nIndex);
 void SMSC951xDeviceDumpRegs (TSMSC951xDevice *pThis);
 #endif
@@ -493,7 +493,7 @@ boolean SMSC951xDeviceReadReg (TSMSC951xDevice *pThis, u32 nIndex, u32 *pValue)
 					  0, nIndex, pValue, sizeof *pValue) == (int) sizeof *pValue;
 }
 
-#ifndef NDEBUG
+#ifdef USPIDEBUG
 
 void SMSC951xDeviceDumpReg (TSMSC951xDevice *pThis, const char *pName, u32 nIndex)
 {

@@ -46,7 +46,7 @@ static unsigned char CS2 = 0x10;
 // internal state
 unsigned char       m_control_state;
 unsigned char       m_address;
-unsigned char       m_data;
+static unsigned char       m_data;
 
 
 void init_earom()

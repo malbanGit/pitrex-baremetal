@@ -172,7 +172,7 @@ boolean USBDeviceInitialize (TUSBDevice *pThis)
 		return FALSE;
 	}
 
-#ifndef NDEBUG
+#ifdef USPIDEBUG
 	//DebugHexdump (pThis->m_pDeviceDesc, sizeof *pThis->m_pDeviceDesc, FromDevice);
 #endif
 	
@@ -260,7 +260,7 @@ boolean USBDeviceInitialize (TUSBDevice *pThis)
 		return FALSE;
 	}
 
-#ifndef NDEBUG
+#ifdef USPIDEBUG
 	//DebugHexdump (pThis->m_pConfigDesc, nTotalLength, FromDevice);
 #endif
 

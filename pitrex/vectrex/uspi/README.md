@@ -61,7 +61,7 @@ Configuration
 
 Before you build the USPi library you have to configure it to meet your system configuration in the file *include/uspios.h* (top section).
 
-Another option (NDEBUG) can be defined in Rules.mk to build the release version. In the test phase it is better to use the debug version which contains many additional checks.
+Another option (USPIDEBUG) can be defined in Rules.mk to build the debug version. In the test phase it is better to use the debug version which contains many additional checks.
 
 Building
 --------

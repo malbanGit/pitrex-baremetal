@@ -4,16 +4,26 @@
 #include <vectrex/osWrapper.h>
 #include <vectrex/circle_env.h>
 
-
-
+/*
+#define LOG_ERROR   1
+#define LOG_WARNING 2
+#define LOG_NOTICE  3
+#define LOG_DEBUG   4
+*/
+char logBuf[1024];
 void LogWrite (const char *pSource,     // short name of module
            unsigned    Severity,        // see above
            const char *pMessage, ...)  // uses printf format options
 {
+#ifdef NDEBUG
     if (Severity>=3) return;
+#endif    
     va_list var;
     va_start (var, pMessage);
-  printf("%s: Log:%i : %s - ignoring args!\n\r",pSource, Severity, pMessage);
+
+    sprintf(logBuf, pMessage, var);
+    
+    printf("%s: Log:%i : %s\n\r",pSource, Severity, logBuf);
     va_end (var);
 }
 
@@ -22,7 +32,7 @@ typedef struct TPropertyBuffer
 {
     u32 nBufferSize;            // bytes
     u32 nCode;
-    #define CODE_REQUEST        0x00000000
+    #define CODE_REQUEST            0x00000000
     #define CODE_RESPONSE_SUCCESS   0x80000000
     #define CODE_RESPONSE_FAILURE   0x80000001
     u8  Tags[0];
@@ -47,26 +57,21 @@ void _BcmMailBox (TBcmMailBox *pThis)
 {
 }
 
+//uint32_t lib_bcm2835_mailbox_write_read(uint8_t channel, uint32_t data);
 unsigned BcmMailBoxWriteRead (TBcmMailBox *pThis, unsigned nData)
 {
+ //return lib_bcm2835_mailbox_write_read(pThis->m_nChannel, nData);
+  
     DataMemBarrier ();
+    
     BcmMailBoxFlush (pThis);
+    MsDelay (20);
+    
     BcmMailBoxWrite (pThis, nData);
+    MsDelay (20);
     unsigned nResult = BcmMailBoxRead (pThis);
     DataMemBarrier ();
     return nResult;
-}
-
-
-
-u32 read32 (u32 nAddress)
-{
-    return *(volatile u32 *) nAddress;
-}
-
-void write32 (u32 nAddress, u32 nValue)
-{
-    *(volatile u32 *) nAddress = nValue;
 }
 
 void BcmMailBoxFlush (TBcmMailBox *pThis)
@@ -116,60 +121,68 @@ void _BcmPropertyTags (TBcmPropertyTags *pThis)
 {
     _BcmMailBox (&pThis->m_MailBox);
 }
-
 boolean BcmPropertyTagsGetTag (TBcmPropertyTags *pThis, u32 nTagId,
-                   void *pTag, unsigned nTagSize, unsigned  nRequestParmSize)
+			       void *pTag, unsigned nTagSize, unsigned  nRequestParmSize)
 {
-    unsigned nBufferSize = sizeof (TPropertyBuffer) + nTagSize + sizeof (u32);
+	assert (pThis != 0);
 
-    // cannot use malloc() here because this is used before mem_init() is called
-    u8 Buffer[nBufferSize + 15];
-    TPropertyBuffer *pBuffer = (TPropertyBuffer *) (((u32) Buffer + 15) & ~15);
-    
-    pBuffer->nBufferSize = nBufferSize;
-    pBuffer->nCode = CODE_REQUEST;
-    memcpy (pBuffer->Tags, pTag, nTagSize);
-    
-    TPropertyTag *pHeader = (TPropertyTag *) pBuffer->Tags;
-    pHeader->nTagId = nTagId;
-    pHeader->nValueBufSize = nTagSize - sizeof (TPropertyTag);
-    pHeader->nValueLength = nRequestParmSize & ~VALUE_LENGTH_RESPONSE;
+	assert (pTag != 0);
+	assert (nTagSize >= sizeof (TPropertyTagSimple));
+	unsigned nBufferSize = sizeof (TPropertyBuffer) + nTagSize + sizeof (u32);
+	assert ((nBufferSize & 3) == 0);
 
-    u32 *pEndTag = (u32 *) (pBuffer->Tags + nTagSize);
-    *pEndTag = PROPTAG_END;
+	TPropertyBuffer *pBuffer = (TPropertyBuffer *) MEM_COHERENT_REGION;
 
-    CleanDataCache ();
-    DataSyncBarrier ();
+	
+	pBuffer->nBufferSize = nBufferSize;
+	pBuffer->nCode = CODE_REQUEST;
+	memcpy (pBuffer->Tags, pTag, nTagSize);
+	
+	TPropertyTag *pHeader = (TPropertyTag *) pBuffer->Tags;
+	pHeader->nTagId = nTagId;
+	pHeader->nValueBufSize = nTagSize - sizeof (TPropertyTag);
+	pHeader->nValueLength = nRequestParmSize & ~VALUE_LENGTH_RESPONSE;
 
-    u32 nBufferAddress = BUS_ADDRESS ((u32) pBuffer);
-    if (BcmMailBoxWriteRead (&pThis->m_MailBox, nBufferAddress) != nBufferAddress)
-    {
-        return FALSE;
-    }
-    
-    InvalidateDataCache ();
-    DataSyncBarrier ();
+	u32 *pEndTag = (u32 *) (pBuffer->Tags + nTagSize);
+	*pEndTag = PROPTAG_END;
 
-    if (pBuffer->nCode != CODE_RESPONSE_SUCCESS)
-    {
-        return FALSE;
-    }
-    
-    if (!(pHeader->nValueLength & VALUE_LENGTH_RESPONSE))
-    {
-        return FALSE;
-    }
-    
-    pHeader->nValueLength &= ~VALUE_LENGTH_RESPONSE;
-    if (pHeader->nValueLength == 0)
-    {
-        return FALSE;
-    }
+#if RASPPI != 3
+//	CleanDataCache ();
+//	DataSyncBarrier ();
+#endif
+	u32 nBufferAddress = BUS_ADDRESS ((u32) pBuffer);
+	if (BcmMailBoxWriteRead (&pThis->m_MailBox, nBufferAddress) != nBufferAddress)
+	{
+		return FALSE;
+	}
+	
+#if RASPPI != 3
+//	InvalidateDataCache ();
+//	DataSyncBarrier ();
+#endif
+	DataMemBarrier ();
 
-    memcpy (pTag, pBuffer->Tags, nTagSize);
+	if (pBuffer->nCode != CODE_RESPONSE_SUCCESS)
+	{
+		return FALSE;
+	}
+	
+	if (!(pHeader->nValueLength & VALUE_LENGTH_RESPONSE))
+	{
+		return FALSE;
+	}
+	
+	pHeader->nValueLength &= ~VALUE_LENGTH_RESPONSE;
+	if (pHeader->nValueLength == 0)
+	{
+		return FALSE;
+	}
 
-    return TRUE;
+	memcpy (pTag, pBuffer->Tags, nTagSize);
+
+	return TRUE;
 }
+
 
 
 
@@ -199,6 +212,91 @@ void CancelKernelTimer (unsigned hTimer)
 
 
 
+#ifndef NDEBUG
+
+void assertion_failed (const char *pExpr, const char *pFile, unsigned nLine)
+{
+	unsigned int ulStackPtr;
+	asm volatile ("mov %0,sp" : "=r" (ulStackPtr));
+
+	char buf[1024] ;
+	sprintf (buf, "%s(%u)", pFile, nLine);
+
+//	debug_stacktrace ((unsigned int *) ulStackPtr, StringGet (&Source));
+	
+	printf("%s: assertion failed: %s",buf, pExpr);
+
+//	_String (&Source);
+}
+void uspi_assertion_failed (const char *pExpr, const char *pFile, unsigned nLine)
+{
+	assertion_failed (pExpr, pFile, nLine);
+}
+
+
+
+static const char FromDebug[] = "debug";
+
+void debug_hexdump (const void *pStart, unsigned nBytes, const char *pSource)
+{
+	u8 *pOffset = (u8 *) pStart;
+
+	if (pSource == 0)
+	{
+		pSource = FromDebug;
+	}
+
+	printf("%s: Dumping 0x%X bytes starting at 0x%X", pSource, nBytes, (unsigned) pOffset);
+	
+	while (nBytes > 0)
+	{
+		printf("%s: %04X: %02X %02X %02X %02X %02X %02X %02X %02X-%02X %02X %02X %02X %02X %02X %02X %02X", pSource,
+				(unsigned) pOffset & 0xFFFF,
+				(unsigned) pOffset[0],  (unsigned) pOffset[1],  (unsigned) pOffset[2],  (unsigned) pOffset[3],
+				(unsigned) pOffset[4],  (unsigned) pOffset[5],  (unsigned) pOffset[6],  (unsigned) pOffset[7],
+				(unsigned) pOffset[8],  (unsigned) pOffset[9],  (unsigned) pOffset[10], (unsigned) pOffset[11],
+				(unsigned) pOffset[12], (unsigned) pOffset[13], (unsigned) pOffset[14], (unsigned) pOffset[15]);
+
+		pOffset += 16;
+
+		if (nBytes >= 16)
+		{
+			nBytes -= 16;
+		}
+		else
+		{
+			nBytes = 0;
+		}
+	}
+}
+/*Ü
+void debug_stacktrace (const u32 *pStackPtr, const char *pSource)
+{
+	if (pSource == 0)
+	{
+		pSource = FromDebug;
+	}
+	
+	for (unsigned i = 0; i < 64; i++, pStackPtr++)
+	{
+		extern unsigned char _etext;
+
+		if (   *pStackPtr >= MEM_KERNEL_START
+		    && *pStackPtr < (u32) &_etext)
+		{
+			LoggerWrite (LoggerGet (), pSource, LogDebug, "stack[%u] is 0x%X", i, (unsigned) *pStackPtr);
+		}
+	}
+}
+*/
+
+void DebugHexdump (const void *pBuffer, unsigned nBufLen, const char *pSource)
+{
+	debug_hexdump (pBuffer, nBufLen, pSource);
+}
+
+#endif
+
 
 
 
@@ -211,6 +309,7 @@ int SetPowerStateOn (unsigned nDeviceId)
     TPropertyTagPowerState PowerState;
     PowerState.nDeviceId = nDeviceId;
     PowerState.nState = POWER_STATE_ON | POWER_STATE_WAIT;
+    
     if (   !BcmPropertyTagsGetTag (&Tags, PROPTAG_SET_POWER_STATE, &PowerState, sizeof PowerState, 8)
         ||  (PowerState.nState & POWER_STATE_NO_DEVICE)
         || !(PowerState.nState & POWER_STATE_ON))

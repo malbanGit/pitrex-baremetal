@@ -1,0 +1,403 @@
+org 6000
+label 4684 BANKSWITCH
+comment 670D "Bank 1"
+data 6005-670C
+data 6AB1-6C1B
+data 6C1B-6C1B
+data 6CFB-6CFB
+data 6EB0-6EB0
+data 6FD8-6FD8
+data 720A-720A
+data 72D4-72D4
+data 7374-7374
+data 7450-7450
+data 7610-7D99
+code 670D
+code 6724
+code 6726
+code 6761
+code 6761
+code 6782
+code 67AA
+code 67D2
+code 67D4
+code 6819
+code 6864
+code 68C7
+code 692D
+code 6978
+code 6A0C
+code 6AA0
+code 7D9A
+code 7EAF
+code 6C1C
+code 6CFC
+code 6EB1
+code 6FD9
+code 720B
+code 72D5
+code 7375
+code 7451
+code 7D9A
+code 7E2D
+code 7EAF
+code 7F58
+code 7F9A
+code 7FDB
+
+label 670D L670D
+label 6724 L6724
+label 6726 L6726
+label 6761 L6761
+label 6761 L6761
+label 6782 L6782
+label 67AA L67AA
+label 67D2 L67D2
+label 67D4 L67D4
+label 6819 L6819
+label 6864 L6864
+label 68C7 L68C7
+label 692D L692D
+label 6978 L6978
+label 6A0C L6A0C
+label 6AA0 L6AA0
+label 7D9A L7D9A
+label 7EAF L7EAF
+label 6C1C L6C1C
+label 6CFC L6CFC
+label 6EB1 L6EB1
+label 6FD9 L6FD9
+label 720B L720B
+label 72D5 L72D5
+label 7375 L7375
+label 7451 L7451
+label 7D9A L7D9A
+label 7E2D L7E2D
+label 7EAF L7EAF
+label 7F58 L7F58
+label 7F9A L7F9A
+label 7FDB L7FDB
+label 6036 L6036
+code 6036
+label 611E L611E
+code 611E
+label 6005 L6005
+code 6005
+label 7220 L7720
+commentline 6000 ===========================================================================
+commentline 6000 Segment type: Pure code
+comment 6000 segment ROM
+comment 6004 V
+commentline 670D =============== S U B R O U T I N E =======================================
+commentline 6723 End of function sub_670D
+commentline 6724 =============== S U B R O U T I N E =======================================
+comment 6724 Selected object model
+comment 6726 Selected object model
+comment 6733 Array of object sizes?
+comment 6738 Number of points in object?
+comment 6742 Table of pointers to object X, Y, Z point data?
+comment 675A Loop count for object points
+comment 675C Copy XYZ data to math RAM
+commentline 6760 End of function sub_6724
+commentline 6761 =============== S U B R O U T I N E =======================================
+comment 6761 Called during space, towers and trench
+comment 6764 Math result X
+comment 6767 Reg01 = Reg01 x Reg00
+comment 6767 Reg02 = Reg02 x Reg00
+comment 676C Math result Z
+comment 6778 Math result Y
+commentline 6781 End of function sub_6761
+commentline 6782 =============== S U B R O U T I N E =======================================
+comment 6782 Calc trench floor lines
+comment 6785 Math result X
+comment 6788 Reg01 = Reg01 x Reg00
+comment 6788 Reg02 = Reg02 x Reg00
+comment 678D Math result Z
+comment 6796 Math result Z
+comment 679B Math result Y
+comment 67A4 Math result Y
+commentline 67A9 End of function sub_6782
+commentline 67AA =============== S U B R O U T I N E =======================================
+comment 67AA Calc trench vertical lines on walls
+comment 67AD Math result X
+comment 67B0 Reg01 = Reg01 x Reg00
+comment 67B0 Reg02 = Reg02 x Reg00
+comment 67B5 Math result Z
+comment 67BE Math result Z
+comment 67C3 Math result Y
+comment 67CC Math result Y
+commentline 67D1 End of function sub_67AA
+commentline 67D2 =============== S U B R O U T I N E =======================================
+comment 67D2 Called during space
+commentline 67D2 End of function sub_67D2
+commentline 67D4 =============== S U B R O U T I N E =======================================
+comment 67D4 Selected object model
+comment 67DB Loop count for object points
+comment 67E6 Set BIC
+comment 67F0 Math program 0x50. Matrix Multiply - Transposed
+comment 67F5 Math result X
+comment 6800 Math result X
+comment 6803 Reg01 = Reg01 x Reg00
+comment 6803 Reg02 = Reg02 x Reg00
+comment 6808 Math result Y
+comment 680D Math result Z
+comment 6814 Loop until all object points done
+commentline 6818 End of function sub_67D4
+commentline 6819 =============== S U B R O U T I N E =======================================
+commentline 6819 Format vectors for ties, and tower/bunker explosions
+comment 6819 Called during space and towers
+comment 681C Selected object model
+commentline 6838 ---------------------------------------------------------------------------
+comment 683D Vector is visible
+commentline 6863 ---------------------------------------------------------------------------
+commentline 6863 End of function sub_6819
+commentline 6864 =============== S U B R O U T I N E =======================================
+comment 6864 Left hand side of trench turret calculation
+comment 6867 XT2
+comment 686A Clear XT, YT and ZT to zero
+comment 686D ZT2
+comment 6873 Selected object model
+comment 6877 Loop count for object points
+comment 6891 Point BIC to Math RAM $5E00
+comment 689C Math result X
+comment 68A1 Math result Y
+comment 68A7 Math result Z
+comment 68B0 Loop until all object points done
+comment 68B7 XT2
+comment 68BD YT2
+comment 68C3 ZT2
+commentline 68C6 End of function sub_6864
+commentline 68C7 =============== S U B R O U T I N E =======================================
+comment 68C7 Right hand side of trench turret calculation
+comment 68CA XT2
+comment 68CD Clear XT, YT and ZT to zero
+comment 68D0 ZT2
+comment 68D6 Selected object model
+comment 68DA Loop count for object points
+comment 68ED Negate
+comment 68F7 Point BIC to Math RAM $5E00
+comment 6902 Math result X
+comment 6907 Math result Y
+comment 690D Math result Z
+comment 6916 Loop count for object points
+comment 691D XT2
+comment 6923 YT2
+comment 6929 ZT2
+commentline 692C End of function sub_68C7
+commentline 692D =============== S U B R O U T I N E =======================================
+comment 692D Trench calculation
+comment 6930 Math result X
+comment 6933 Math result X
+comment 6939 Math result Y
+comment 693C Math result Y
+comment 6942 Math result Z
+comment 6945 Math result Z
+comment 6948 Point BIC to Math RAM $5E00
+comment 6951 Math result X
+comment 6957 XT = [BIC,3] - Reg00
+comment 6957 BIC++
+comment 695F Selected object model
+comment 6963 [BIC,2] = ([BIC,0] - Reg01) x (YT)
+comment 6963 [BIC,3] = ([BIC,1] - Reg02) x (YT)
+comment 6963 BIC++
+comment 6963 XT = (BIC,3) - Reg00
+comment 6963 BIC++
+comment 6968 XT
+comment 696B YT
+comment 696E Run math program $AE
+commentline 6977 End of function sub_692D
+commentline 6978 =============== S U B R O U T I N E =======================================
+comment 6978 Some trench calculation
+comment 697B Math result X
+comment 697E Math result X
+comment 6984 Math result Y
+comment 6987 Math result Y
+comment 698D Math result Z
+comment 6990 Math result Z
+comment 6993 Point BIC to Math RAM $5E00
+comment 699C Math result X
+comment 69A2 XT Reg0C = [BIC,3] - Reg00
+comment 69AA Selected object model
+comment 69AE [BIC,2] = ([BIC,0] - Reg01) x (YT)
+comment 69AE [BIC,3] = ([BIC,1] - Reg02) x (YT)
+comment 69AE BIC++
+comment 69AE XT = [BIC,3] - Reg00
+comment 69AE BIC++
+comment 69BC XT
+comment 69BF YT
+comment 69CE Selected object model
+commentline 69E3 ---------------------------------------------------------------------------
+commentline 69FB ---------------------------------------------------------------------------
+commentline 6A0B End of function sub_6978
+commentline 6A0C =============== S U B R O U T I N E =======================================
+comment 6A0F Math result X
+comment 6A12 Math result X
+comment 6A18 Math result Y
+comment 6A1B Math result Y
+comment 6A21 Math result Z
+comment 6A24 Math result Z
+comment 6A27 Point BIC to Math RAM $5E00
+comment 6A30 Math result X
+comment 6A36 Reg0C = [BIC,3] - Reg00
+comment 6A3E Selected object model
+comment 6A42 [BIC,2] = ([BIC,0] - Reg01) x YT
+comment 6A42 [BIC,3] = ([BIC,1] - Reg02) x YT
+comment 6A42 BIC++
+comment 6A42 XT = [BIC,3] - Reg00
+comment 6A42 BIC++
+comment 6A50 XT
+comment 6A53 YT
+comment 6A5D Loop until all object points done
+comment 6A62 Selected object model
+commentline 6A77 ---------------------------------------------------------------------------
+commentline 6A8F ---------------------------------------------------------------------------
+commentline 6A9F End of function sub_6A0C
+commentline 6AA0 =============== S U B R O U T I N E =======================================
+comment 6AA3 Get object selected
+comment 6AAA Check that start of function has illegal $01 instruction byte. Why??
+commentline 6AAF End of function sub_6AA0
+commentline 6AAF ---------------------------------------------------------------------------
+commentline 6C1C =============== S U B R O U T I N E =======================================
+comment 6C1C Draws bunkers before exploded
+comment 6C1E Change zero page to Math RAM
+comment 6C27 Y points to vector RAM
+comment 6C72 Selected object model
+comment 6C86 Selected object model
+comment 6CBA Selected object model
+comment 6CCE Selected object model
+comment 6CE7 Insert Vector SCAL 2,00 instruction
+comment 6CED Insert Vector CNTR instruction
+comment 6CF3 Increment vector RAM pointer by 52 bytes for bunker vector data
+commentline 6CFA End of function sub_6C1C
+commentline 6CFA ---------------------------------------------------------------------------
+commentline 6CFC =============== S U B R O U T I N E =======================================
+comment 6CFC Draws towers before top exploded
+comment 6DC8 Selected object model
+comment 6DDC Selected object model
+comment 6E9C Vector SCAL 2,0 instruction
+comment 6EA2 Insert Vector CNTR instruction
+commentline 6EAF End of function sub_6CFC
+commentline 6EAF ---------------------------------------------------------------------------
+commentline 6EB1 =============== S U B R O U T I N E =======================================
+comment 6EB1 Draws tower after top exploded
+comment 6F4F Selected object model
+comment 6F63 Selected object model
+comment 6FCA Insert Vector CNTR instruction
+commentline 6FD7 End of function sub_6EB1
+commentline 6FD7 ---------------------------------------------------------------------------
+commentline 6FD9 =============== S U B R O U T I N E =======================================
+comment 6FD9 Draws trench turrets
+comment 7139 Selected object model
+comment 714D Selected object model
+comment 71ED Selected object model
+comment 71FC Insert Vector CNTR instruction
+commentline 7209 End of function sub_6FD9
+commentline 7209 ---------------------------------------------------------------------------
+commentline 720B =============== S U B R O U T I N E =======================================
+comment 720B Draws trench green squares
+comment 7211 Y axis offset for squares
+comment 721E Insert Vector STAT 2,80 instruction (Green)
+comment 72C6 Insert Vector CNTR instruction
+commentline 72D3 End of function sub_720B
+commentline 72D3 ---------------------------------------------------------------------------
+commentline 72D5 =============== S U B R O U T I N E =======================================
+comment 72D5 Draws trench catwalks
+comment 7366 Insert Vector CNTR instruction
+commentline 7373 End of function sub_72D5
+commentline 7373 ---------------------------------------------------------------------------
+commentline 7375 =============== S U B R O U T I N E =======================================
+comment 7375 Tower top explode: Copy math points to vector RAM?
+comment 7388 Insert Vector JSRL 0018 instruction (STAT for colour fade?)
+comment 7442 Insert Vector CNTR instruction
+commentline 744F End of function sub_7375
+commentline 744F ---------------------------------------------------------------------------
+commentline 7451 =============== S U B R O U T I N E =======================================
+comment 7451 Draws trench exhaust port
+comment 7464 Insert Vector STAT 2,80 instruction (Green)
+comment 74E2 Insert Vector STAT 3,80 instruction (Red)
+comment 75AE Insert Vector STAT 4,FF instruction ()
+comment 75FC Insert Vector SCAL 2,00 instruction
+comment 7602 Insert Vector CNTR instruction
+commentline 760F End of function sub_7451
+commentline 760F ---------------------------------------------------------------------------
+comment 7644 1st object 54 points
+comment 765E 1st object XYZ data address
+commentline 7D9A =============== S U B R O U T I N E =======================================
+comment 7D9A Get X 'forward' transform position
+comment 7D9C XT2
+comment 7D9F Get Y 'horizontal' transform
+comment 7DA2 YT2
+comment 7DA5 Get Z 'vertical' transform
+comment 7DA8 ZT2
+comment 7DB3 Clear star dots RAM
+comment 7DB8 Clear DPbyte_88
+comment 7DBA Insert Vector STAT 7 for white stars
+comment 7DBC Star intensity
+comment 7DBE Y points to vector RAM
+comment 7DC0 Point BIC to Math RAM $5C60
+comment 7DC6 Store $8C to DPbyte_82
+comment 7DC8 Negate to $74
+comment 7DC9 Add $BE to get $32
+comment 7DCB Store $32 in DPbyte_81 (why not just load B with $32 ?)
+comment 7DD3 DPbyte_84 holds running star MRAM pointer
+comment 7DDA Math result X
+comment 7DE9 Check perspective division value?
+comment 7DED Start division
+comment 7DF0 Reg39 = Reg01 x Reg01
+comment 7DF3 Reg38 = Reg00 x Reg00
+comment 7DFA Reg3A = Reg02 x Reg02
+comment 7E04 Get division result
+comment 7E07 Math result X
+comment 7E0A Reg01 = Reg01 x Reg00
+comment 7E0A Reg02 = Reg02 x Reg00
+comment 7E10 Math result Z
+comment 7E17 Math result Y
+commentline 7E2D ---------------------------------------------------------------------------
+comment 7E36 Math result Z
+comment 7E3F Math result Y
+comment 7E49 These 3 lines surely do nothing as ORA #0 does nothing ?
+comment 7E4F Math result Z
+comment 7E54 Math result Y
+commentline 7E5D ---------------------------------------------------------------------------
+comment 7E75 Starfield Y offset
+comment 7E87 JSRL to Vector ROM subroutine to draw dot
+comment 7E90 Insert Vector CNTR
+comment 7E9F XT2
+comment 7EA5 YT2
+comment 7EAB ZT2
+commentline 7EAE End of function sub_7D9A
+commentline 7EAF =============== S U B R O U T I N E =======================================
+comment 7EAF Towers surface dots
+comment 7EBE Insert Vector STAT 2, 80 for green dots
+comment 7EC3 Point BIC to Math RAM $5C60
+comment 7EDD Math result X
+comment 7F02 Math result X
+comment 7F05 Reg01 = Reg01 x Reg00
+comment 7F05 Reg02 = Reg02 x Reg00
+comment 7F0B Math result Z
+comment 7F12 Math result Y
+commentline 7F28 ---------------------------------------------------------------------------
+comment 7F31 Math result Z
+comment 7F3A Math result Y
+comment 7F4A Math result Z
+comment 7F4F Math result Y
+commentline 7F58 ---------------------------------------------------------------------------
+comment 7F58 Towers surface dots
+comment 7F84 JSRL to Vector ROM subroutine to draw dot
+comment 7F8D Insert Vector CNTR
+commentline 7F99 End of function sub_7EAF
+commentline 7F9A =============== S U B R O U T I N E =======================================
+comment 7FA6 Math result Y
+comment 7FB5 Math result Z
+comment 7FC7 Math result X
+comment 7FCC Math result Y
+comment 7FD1 Math result Z
+comment 7FD4 These 2 lines do nothing ?
+commentline 7FDA End of function sub_7F9A
+commentline 7FDB =============== S U B R O U T I N E =======================================
+comment 7FDB Random number update
+comment 7FE6 XT2
+comment 7FEF Math result Y
+comment 7FF5 YT2
+commentline 7FFF End of function sub_7FDB
+commentline 7FFF end of 'ROM'

@@ -168,6 +168,7 @@ void draw_wireframe_ship (struct univ_object *univ)
 
 void draw_solid_ship (struct univ_object *univ)
 {
+/*  
 	int i;
 	int sx,sy;
 	double rx,ry,rz;
@@ -198,19 +199,19 @@ void draw_solid_ship (struct univ_object *univ)
 	num_faces = solid_data->num_faces;
 	face_data = solid_data->face_data;
 
-/*
-	for (i = 0; i < num_faces; i++)
-	{
-		vec.x = face_data[i].norm_x;
-		vec.y = face_data[i].norm_y;
-		vec.z = face_data[i].norm_z;
 
-		vec = unit_vector (&vec);
-		cos_angle = vector_dot_product (&vec, &camera_vec);
+//	for (i = 0; i < num_faces; i++)
+//	{
+//		vec.x = face_data[i].norm_x;
+//		vec.y = face_data[i].norm_y;
+//		vec.z = face_data[i].norm_z;
+//
+//		vec = unit_vector (&vec);
+//		cos_angle = vector_dot_product (&vec, &camera_vec);
+//
+//		visible[i] = (cos_angle < -0.13);
+//	}
 
-		visible[i] = (cos_angle < -0.13);
-	}
-*/
 
 	tmp = trans_mat[0].y;
 	trans_mat[0].y = trans_mat[1].x;
@@ -327,13 +328,15 @@ void draw_solid_ship (struct univ_object *univ)
 		lasv = ship_list[univ->type]->front_laser;
 		col = (univ->type == SHIP_VIPER) ? GFX_COL_CYAN : GFX_COL_WHITE; 
 		
-		polygon (point_list[lasv].x, point_list[lasv].y,
-						 univ->location.x > 0 ? 0 : 511, rand255() * 2,
-						 point_list[lasv].z, col);
+		polygon (point_list[lasv].x, 
+			 point_list[lasv].y,
+			 univ->location.x > 0 ? 0 : 511, 
+			 rand255() * 2,
+			 point_list[lasv].z, 
+			 col);
 	}
+	*/
 }
-
-
 
 
 

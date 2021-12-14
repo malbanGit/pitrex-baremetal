@@ -15,7 +15,6 @@
 
 
 #include <vectrex/osWrapper.h>
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
 
 #include "../vectrexBase/e6522.h"

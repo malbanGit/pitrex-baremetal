@@ -1,0 +1,2148 @@
+ROM:6000 MATHROM:        fdb $7EF2
+ROM:6002                 fdb $61EF
+ROM:6004                 fcb $56 ; V
+
+ROM:6044                 fdb loc_67FD            ; 28
+ROM:6044                 fdb loc_682F            ; 30
+ROM:6044                 fdb loc_6859            ; 32
+ROM:6044                 fdb loc_68D5            ; 34
+ROM:6044                 fdb loc_6ABF            ; 46
+ROM:6044                 fdb loc_6B1D            ; 50
+ROM:6044                 fdb loc_6B32            ; 48
+ROM:6044                 fdb loc_6C76            ; 53
+ROM:6044                 fdb loc_6CB6            ; 55
+ROM:6044                 fdb loc_6CE1            ; 57
+ROM:6044                 fdb sub_62E4            ; 7
+ROM:6044                 fdb sub_6306            ; 8
+ROM:6044                 fdb sub_6326            ; 9
+ROM:6044                 fdb sub_6348            ; 10
+ROM:6044                 fdb sub_6459            ; 11
+ROM:6044                 fdb sub_6483            ; 12
+ROM:6044                 fdb sub_64E2            ; 1
+ROM:6044                 fdb sub_64F1            ; 2
+ROM:6044                 fdb sub_6513            ; 3
+ROM:6044                 fdb sub_6532            ; 4
+ROM:6044                 fdb sub_656C            ; 13
+ROM:6044                 fdb sub_659F            ; 14
+ROM:6044                 fdb sub_6670            ; 15
+ROM:6044                 fdb sub_66AC            ; 16
+ROM:6044                 fdb sub_6708            ; 23
+ROM:6044                 fdb sub_6708            ; 5
+ROM:6044                 fdb sub_676B            ; 24
+ROM:6044                 fdb sub_676B            ; 6
+ROM:6044                 fdb sub_6787            ; 25
+ROM:6044                 fdb sub_679A            ; 26
+ROM:6044                 fdb sub_67E5            ; 27
+ROM:6044                 fdb sub_6802            ; 29
+ROM:6044                 fdb sub_6838            ; 31
+ROM:6044                 fdb sub_68D0            ; 33
+ROM:6044                 fdb sub_6912            ; 35
+ROM:6044                 fdb sub_6933            ; 36
+ROM:6044                 fdb sub_6953            ; 37
+ROM:6044                 fdb sub_6968            ; 38
+ROM:6044                 fdb sub_69A9            ; 41
+ROM:6044                 fdb sub_69F4            ; 42
+ROM:6044                 fdb sub_6A50            ; 39
+ROM:6044                 fdb sub_6A50            ; 43
+ROM:6044                 fdb sub_6A7E            ; 40
+ROM:6044                 fdb sub_6A89            ; 44
+ROM:6044                 fdb sub_6AAB            ; 45
+ROM:6044                 fdb sub_6AFF            ; 49
+ROM:6044                 fdb sub_6B22            ; 47
+ROM:6044                 fdb sub_6BDB            ; 51
+ROM:6044                 fdb sub_6BF1            ; 52
+ROM:6044                 fdb sub_6C84            ; 54
+ROM:6044                 fdb sub_6CC4            ; 56
+ROM:6044                 fdb sub_6CEF            ; 58
+ROM:6044                 fdb sub_6D0C            ; 59
+ROM:6044                 fdb sub_6D15            ; 60
+ROM:6044                 fdb sub_6D3B            ; 17
+ROM:6044                 fdb sub_6D54            ; 18
+ROM:6044                 fdb sub_6D80            ; 19
+ROM:6044                 fdb sub_6D86            ; 20
+ROM:6044                 fdb sub_6D95            ; 21
+ROM:6044                 fdb sub_6D98            ; 22
+ROM:6044 Jump_Table_1:   fdb sub_6275            ; 0 ; Game initialisation
+
+ROM:6593 word_6593:      fdb $64
+ROM:6595                 fdb $FE70
+ROM:6597                 fdb $FED4
+ROM:6599                 fdb 0
+ROM:659B                 fdb $64
+ROM:659D                 fdb $190
+ROM:6759 off_6759:       fdb Sound_1B            ; High score
+ROM:675B                 fdb Sound_1C
+ROM:675D                 fdb Sound_1F            ; Death Star destroyed
+ROM:675F                 fdb Sound_22            ; Trench music
+ROM:6761 off_6761:       fdb Sound_25            ; Space Wave 2 music
+ROM:6763                 fdb Sound_24            ; Space wave 1 music
+ROM:6765                 fdb Sound_21            ; Towers 2 music
+ROM:6767                 fdb Sound_20            ; Towers 1 music
+ROM:6769                 fdb Sound_1D            ; Imperial March
+ROM:71DD word_71DD:      fdb $12
+ROM:71DF                 fcb 0
+ROM:71E0                 fdb $25
+ROM:71E2                 fcb 0
+ROM:71E3                 fdb $37
+ROM:71E5                 fcb 0
+ROM:71E6                 fdb $49
+ROM:71E8                 fcb 0
+ROM:71E9                 fdb $5B
+ROM:71EB                 fcb 0
+ROM:71EC                 fdb $6E
+ROM:71EE                 fcb 0
+ROM:71EF                 fdb $80
+ROM:71F1                 fcb 0
+ROM:71F2                 fdb $92
+ROM:71F4                 fcb $FF
+ROM:71F5                 fdb $A5
+ROM:71F7                 fcb $FF
+ROM:71F8                 fdb $B7
+ROM:71FA                 fcb $FF
+ROM:71FB                 fdb $C9
+ROM:71FD                 fcb $FF
+ROM:71FE                 fdb $DB
+ROM:7200                 fcb $FF
+ROM:7201                 fdb $EE
+ROM:7203                 fcb $FE
+ROM:7204                 fdb $100
+ROM:7206                 fcb $FE
+ROM:7207                 fdb $112
+ROM:7209                 fcb $FE
+ROM:720A                 fdb $124
+ROM:720C                 fcb $FD
+ROM:720D                 fdb $137
+ROM:720F                 fcb $FD
+ROM:7210                 fdb $149
+ROM:7212                 fcb $FD
+ROM:7213                 fdb $15B
+ROM:7215                 fcb $FC
+ROM:7216                 fdb $16E
+ROM:7218                 fcb $FC
+ROM:7219                 fdb $180
+ROM:721B                 fcb $FC
+ROM:721C                 fdb $192
+ROM:721E                 fcb $FB
+ROM:721F                 fdb $1A4
+ROM:7221                 fcb $FB
+ROM:7222                 fdb $1B7
+ROM:7224                 fcb $FA
+ROM:7225                 fdb $1C9
+ROM:7227                 fcb $FA
+ROM:7228                 fdb $1DB
+ROM:722A                 fcb $F9
+ROM:722B                 fdb $1ED
+ROM:722D                 fcb $F9
+ROM:722E                 fdb $200
+ROM:7230                 fcb $F8
+ROM:7231                 fdb $212
+ROM:7233                 fcb $F7
+ROM:7234                 fdb $224
+ROM:7236                 fcb $F7
+ROM:7237                 fdb $237
+ROM:7239                 fcb $F6
+ROM:723A                 fdb $249
+ROM:723C                 fcb $F6
+ROM:723D                 fdb $25B
+ROM:723F                 fcb $F5
+ROM:7240                 fdb $26D
+ROM:7242                 fcb $F4
+ROM:7243                 fdb $280
+ROM:7245                 fcb $F4
+ROM:7246                 fdb $292
+ROM:7248                 fcb $F3
+ROM:7249                 fdb $2A4
+ROM:724B                 fcb $F2
+ROM:724C                 fdb $2B6
+ROM:724E                 fcb $F1
+ROM:724F                 fdb $2C9
+ROM:7251                 fcb $F0
+ROM:7252                 fdb $2DB
+ROM:7254                 fcb $F0
+ROM:7255                 fdb $2ED
+ROM:7257                 fcb $EF
+ROM:7258                 fdb $2FF
+ROM:725A                 fcb $EE
+ROM:725B                 fdb $312
+ROM:725D                 fcb $ED
+ROM:725E                 fdb $324
+ROM:7260                 fcb $EC
+ROM:7261                 fdb $336
+ROM:7263                 fcb $EB
+ROM:7264                 fdb $348
+ROM:7266                 fcb $EA
+ROM:7267                 fdb $35B
+ROM:7269                 fcb $E9
+ROM:726A                 fdb $36D
+ROM:726C                 fcb $E9
+ROM:726D                 fdb $37F
+ROM:726F                 fcb $E8
+ROM:7270                 fdb $391
+ROM:7272                 fcb $E7
+ROM:7273                 fdb $3A4
+ROM:7275                 fcb $E5
+ROM:7276                 fdb $3B6
+ROM:7278                 fcb $E4
+ROM:7279                 fdb $3C8
+ROM:727B                 fcb $E3
+ROM:727C                 fdb $3DA
+ROM:727E                 fcb $E2
+ROM:727F                 fdb $3ED
+ROM:7281                 fcb $E1
+ROM:7282                 fdb $3FF
+ROM:7284                 fcb $E0
+ROM:7285                 fdb $411
+ROM:7287                 fcb $DF
+ROM:7288                 fdb $423
+ROM:728A                 fcb $DE
+ROM:728B                 fdb $436
+ROM:728D                 fcb $DD
+ROM:728E                 fdb $448
+ROM:7290                 fcb $DB
+ROM:7291                 fdb $45A
+ROM:7293                 fcb $DA
+ROM:7294                 fdb $46C
+ROM:7296                 fcb $D9
+ROM:7297                 fdb $47F
+ROM:7299                 fcb $D8
+ROM:729A                 fdb $491
+ROM:729C                 fcb $D6
+ROM:729D                 fdb $4A3
+ROM:729F                 fcb $D5
+ROM:72A0                 fdb $4B5
+ROM:72A2                 fcb $D4
+ROM:72A3                 fdb $4C8
+ROM:72A5                 fcb $D2
+ROM:72A6                 fdb $4DA
+ROM:72A8                 fcb $D1
+ROM:72A9                 fdb $4EC
+ROM:72AB                 fcb $CF
+ROM:72AC                 fdb $4FE
+ROM:72AE                 fcb $CE
+ROM:72AF                 fdb $510
+ROM:72B1                 fcb $CD
+ROM:72B2                 fdb $523
+ROM:72B4                 fcb $CB
+ROM:72B5                 fdb $535
+ROM:72B7                 fcb $CA
+ROM:72B8                 fdb $547
+ROM:72BA                 fcb $C8
+ROM:72BB                 fdb $559
+ROM:72BD                 fcb $C7
+ROM:72BE                 fdb $56C
+ROM:72C0                 fcb $C5
+ROM:72C1                 fdb $57E
+ROM:72C3                 fcb $C4
+ROM:72C4                 fdb $590
+ROM:72C6                 fcb $C2
+ROM:7A08 word_7A08:      fdb $6280               ; Tie fighter colour table
+ROM:7A0A                 fdb $6730
+ROM:7A0C                 fdb $6280
+ROM:7A0E                 fdb $6730
+ROM:7A10                 fdb $6280
+ROM:7A12                 fdb $6740
+ROM:7A14                 fdb $6280
+ROM:7A16                 fdb $6740
+ROM:7A18                 fdb $6280
+ROM:7A1A                 fdb $6750
+ROM:7A1C                 fdb $6280
+ROM:7A1E                 fdb $6750
+ROM:7A20                 fdb $6280
+ROM:7A22                 fdb $6760
+ROM:7A24                 fdb $6280
+ROM:7A26                 fdb $6760
+ROM:7A28                 fdb $6280
+ROM:7A2A                 fdb $6770
+ROM:7A2C                 fdb $6280
+ROM:7A2E                 fdb $6770
+ROM:7A30                 fdb $6280
+ROM:7A32                 fdb $6780
+ROM:7A34                 fdb $6280
+ROM:7A36                 fdb $6780
+ROM:7A38                 fdb $6280
+ROM:7A3A                 fdb $6780
+ROM:7A3C                 fdb $6280
+ROM:7A3E                 fdb $6780
+ROM:7A40                 fdb $6280
+ROM:7A42                 fdb $6780
+ROM:7A44                 fdb $67C0
+ROM:7A46                 fdb $67C0
+
+ROM:7A7B                 fcb $D, $A8, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7A7B                 fcb $F7, $9D, 2, $BB, $5A, $30, $5F, $EE
+ROM:7A7B                 fcb $FF, $FF, $FF, $FF, $FF
+ROM:7A7B                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7A7B                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7A7B                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7A7B                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7A7B                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7A7B                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7A7B                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7A7B                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7A7B                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7A7B                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7A7B                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7A7B                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7A7B                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+
+ROM:7AF8 aCopyright1983At_1:fcc 'COPYRIGHT 1983 ATARI'
+
+ROM:7B0C                 fcb $B6, $AB
+ROM:7B0C                 fcb $B8, $AD, $BA, $B8, $DF, $AD, $B6, $A9
+ROM:7B0C                 fcb $BA, $AD, $BE, $DF, $BB, $B6, $BB, $DF
+
+ROM:7B1E                 fdb byte_81C3, byte_82DC, byte_8267, byte_82DC, byte_8201, byte_82DC, byte_81E2, byte_82FA
+ROM:7B1E off_7B1E:       fdb byte_7E08, byte_82DC, byte_8286, byte_82DC, byte_7D42, byte_82DC, byte_81E2, byte_82DC
+
+ROM:7B3E                 fdb byte_7F78, byte_82DC, byte_7F97, byte_82DC, byte_81C3, byte_82D2, byte_7DB1, byte_82FA
+ROM:7B3E off_7B3E:       fdb byte_7E08, byte_82DC, byte_7D42, byte_82C8, byte_7DB1, byte_82C8, byte_80C6, byte_82DC
+
+ROM:7B5E                 fdb byte_804D, byte_82BE, byte_80C6, byte_82C8, byte_7E3D, byte_82D2, byte_8267, byte_8325
+ROM:7B5E off_7B5E:       fdb byte_7E08, byte_82DC, byte_7CF8, byte_82C8, byte_7DCA, byte_82DC, byte_8066, byte_82E6
+
+ROM:7B7E                 fdb byte_8135, byte_82D2, byte_8226, byte_82C8, byte_7ED8, byte_82F0, byte_7E75, byte_8325
+ROM:7B7E off_7B7E:       fdb byte_7E08, byte_82DC, byte_7D5B, byte_82C8, byte_7ED8, byte_82F0, byte_7E75, byte_82D2
+
+ROM:7B9E                 fdb byte_8066, byte_82E6, byte_7E3D, byte_82D2, byte_7E21, byte_82D2, byte_7CD6, byte_8325
+ROM:7B9E off_7B9E:       fdb byte_7E08, byte_82DC, byte_8226, byte_82C8, byte_810A, byte_82D2, byte_804D, byte_82BE
+
+ROM:7BBE                 fdb byte_8135, byte_82D2, byte_7E75, byte_82D2, byte_80C6, byte_82C8, byte_7ED8, byte_8325
+ROM:7BBE off_7BBE:       fdb byte_7E08, byte_82DC, byte_7D5B, byte_82C8, byte_810A, byte_82D2, byte_7FB9, byte_82C8
+
+ROM:7BDE                 fdb byte_7FB9, byte_82C8, byte_80EE, byte_82BE, byte_8242, byte_82C8, byte_7E56, byte_807F
+ROM:7BDE off_7BDE:       fdb byte_7E08, byte_82DC, byte_8025, byte_82F0, byte_7DE3, byte_82E6, byte_7F16, byte_82C8
+
+ROM:7BFE                 fdb byte_8003, byte_82D2, byte_7EB9, byte_82D2, byte_7F47, byte_82D2, byte_7EF1, byte_807F
+ROM:7BFE off_7BFE:       fdb byte_7E08, byte_82DC, byte_7D11, byte_82D2, byte_81A1, byte_82E6, byte_7D80, byte_82E6
+
+ROM:7C1E                 fdb byte_8176, byte_82E6, byte_82A5, byte_82F0, byte_81A1, byte_82F0, byte_8201, byte_807F
+ROM:7C1E off_7C1E:       fdb byte_7E08, byte_82DC, byte_7E9D, byte_82F0, byte_7FD2, byte_82F0, byte_809B, byte_82F0
+
+ROM:7C3E                 fdb byte_82A5, byte_82F0, byte_7D80, byte_82E6, byte_81A1, byte_82F0, byte_8176, byte_807F
+ROM:7C3E off_7C3E:       fdb byte_7E08, byte_82DC, byte_7D5B, byte_82C8, byte_7ED8, byte_82F0, byte_7FD2, byte_82F0
+
+ROM:7C5E                 fdb byte_7EB9, byte_82D2, byte_7F47, byte_82D2, byte_7EF1, byte_82BE, byte_7D80, byte_807F
+ROM:7C5E off_7C5E:       fdb byte_7E08, byte_82DC, byte_7E9D, byte_82F0, byte_7FD2, byte_82F0, byte_8154, byte_82C8
+
+ROM:7C7E                 fdb off_7C9E, byte_82F0, off_7C9E, byte_82D2, off_7C9E, byte_82F0, off_7C9E, byte_807F
+ROM:7C7E off_7C7E:       fdb byte_7E08, byte_82DC, off_7C9E, byte_82D2, off_7C9E, byte_82F0, off_7C9E, byte_82D2
+
+ROM:7C9E                 fdb byte_7FD2, byte_8003, byte_8025, byte_809B, byte_80EE, byte_8154, byte_8176, byte_81A1
+ROM:7C9E                 fdb byte_82A5
+
+ROM:7C9E off_7C9E:       fdb byte_7D11, byte_7D80, byte_7DE3, byte_7E9D, byte_7E75, byte_7EB9, byte_7EF1, byte_7F47
+
+ROM:7CC0                 fdb off_7C1E, off_7C3E, off_7C5E
+ROM:7CC0 off_7CC0:       fdb off_7B1E, off_7B3E, off_7B5E, off_7B7E, off_7B9E, off_7BBE, off_7BDE, off_7BFE ; Trench catwalk/turrets data?
+
+ROM:7CD6 byte_7CD6:      fcb 1, 8, 8, 2, 0, 3, 2, $20
+ROM:7CD6                 fcb 1, $E, $C2, 1, $C0, 0, 2, $80
+ROM:7CD6                 fcb $20, 1, 3, $30, 1, 2, 2, 2
+ROM:7CD6                 fcb $80, 5
+ROM:7CD6                 fcb $80, $8C, 2, $38, 8, 1, 0, 0
+
+ROM:7CF8 byte_7CF8:      fcb 2, 0, 0, 2, $38, 8, 2, 3
+ROM:7CF8                 fcb 3, 2, $80, $B0, 2, $C, $C, 2
+ROM:7CF8                 fcb 5
+ROM:7CF8                 fcb $C2, $C2, 2, 0, 0, 2, 8, 8
+
+ROM:7D11 byte_7D11:      fcb 1, 0, 0, 1, $A0, $A0, 1, 3
+ROM:7D11                 fcb 1, 0, 0, 1, 0, 0, 1, $E
+ROM:7D11                 fcb 3, 1, $A, $A, 1, 0, 0, 1
+ROM:7D11                 fcb $38, $38, 1, $20, $20, 1, $C0, $C0
+ROM:7D11                 fcb 5
+ROM:7D11                 fcb 8, 8, 1, $20, $20, 1, $80, $80
+ROM:7D11                 fcb $E, 1, 8, 8, 1, 0, 0, 1
+
+ROM:7D42 byte_7D42:      fcb 2, 0, $30, 2, $C, 0, 2, 0
+ROM:7D42                 fcb 3, 0, 2, 0, $C, 2, $30, 0
+ROM:7D42                 fcb 3, 2, $C0, 0, 2, 0, $C0, 2
+ROM:7D42                 fcb 5
+
+ROM:7D5B byte_7D5B:      fcb 1, 0, 0, 2, $A0, $A0, 1, 0
+ROM:7D5B                 fcb 0, 0, 1, $C0, $C0, 2, $A0, $A0
+ROM:7D5B                 fcb 0, 1, 3, 3, 2, $A, $A, 1
+ROM:7D5B                 fcb 1, 3, 3, 1, 0, 0, 2, $3A
+ROM:7D5B                 fcb $3A, 1, 0, 0, 5
+
+ROM:7D80 byte_7D80:      fcb 1, $A, $A, 1, 0, 0, 1, $A0
+ROM:7D80                 fcb 0, 0, 1, $A0, $A0, 1, 0, 0
+ROM:7D80                 fcb 1, $A
+ROM:7D80                 fcb $A0, 1, 0, 0, 1, $A, $A, 1
+
+ROM:7D9A byte_7D9A:      fcb $A, 1, 0, 0, 1, $A0, $A0, 1
+ROM:7D9A                 fcb 0, 0, 1, $A, $A, 1, 0, 0
+ROM:7D9A                 fcb 1, $A0, $A0, 1, 0, 0, 5
+
+ROM:7DB1 byte_7DB1:      fcb 2, $80, $80, 2, $8C, $83, 2, $B0
+ROM:7DB1                 fcb $32, $E, 2, $E, $C2, 2, 2, 2
+ROM:7DB1                 fcb 5
+ROM:7DB1                 fcb $80, 2, $80, $B0, 2, 2, 2, 2
+
+ROM:7DCA byte_7DCA:      fcb 2, 2, 2, 2, $32, $32, 2, 2
+ROM:7DCA                 fcb 2, 2, $C8, $C8, 2, 8, 8, 2
+ROM:7DCA                 fcb 5
+ROM:7DCA                 fcb 8, 8, 2, $E0, $E0, 2, $20, $20
+
+ROM:7DE3 byte_7DE3:      fcb 1, $22, $88, 1, 0, 0, 1, $88
+ROM:7DE3                 fcb 0, 0, 1, $A, $A0, 1, $C0, 3
+ROM:7DE3                 fcb $22, 1, $33, $CC, 1, $A0, $A, 1
+ROM:7DE3                 fcb 2, $28, $82, 2, 0, 0, 2, $88
+ROM:7DE3                 fcb $28, 2, 0, 0, 5
+
+ROM:7E08 byte_7E08:      fcb 2, $41, $41, 2, $41, $41, 2, $14
+ROM:7E08                 fcb $14, 2, $14, $14, 2, $41, $41, 2
+ROM:7E08                 fcb $41, $41, 1, $3C, $3C, 1, $C3, $C3
+ROM:7E08                 fcb 5
+
+ROM:7E21 byte_7E21:      fcb 2, $80, $80, 2, 0, 0, 2, 8
+ROM:7E21                 fcb 1, 0, 0, 5
+ROM:7E21                 fcb 3, 3, 2, $E, $E, 2, $B0, $B0
+ROM:7E21                 fcb 8, 1, 0, 0, 2, $E0, $E0, 2
+
+ROM:7E3D byte_7E3D:      fcb 2, 0, 0, 2, $A, $A, 2, $30
+ROM:7E3D                 fcb 0, 0, 2, $C0, $C0, 2, $AC, $AC
+ROM:7E3D                 fcb $30, 2, 0, 0, 2, $2B, $2B, 2
+ROM:7E3D                 fcb 5
+
+ROM:7E56 byte_7E56:      fcb 2, 3, 3, 2, 2, 0, 1, $C0
+ROM:7E56                 fcb 1, 0, 2, 2, 0, 0, 5
+ROM:7E56                 fcb 2, 2, 2, $30, 1, $30, 2, 2
+ROM:7E56                 fcb 2, $C, 1, $C, 2, 2, 2, $C0
+
+ROM:7E75 byte_7E75:      fcb 1, 2, 2, 1, 0, 0, 1, 2
+ROM:7E75                 fcb 0, 2, 3, 3, 1, 0, 0, 5
+ROM:7E75                 fcb 1, 0, 0, 1, $A8, $A8, 2, 0
+ROM:7E75                 fcb 2, 1, 0, 0, 1, 0, 0, 2
+ROM:7E75                 fcb $F2, $F2, 1, $C, $C, 1, 2, 2
+
+ROM:7E9D byte_7E9D:      fcb 2, $2A, $AA, 1, 0, 0, 2, $AA
+ROM:7E9D                 fcb 0, 3
+ROM:7E9D                 fcb $A8, 2, 0, 3, 2, 0, $C, 2
+
+ROM:7EAF byte_7EAF:      fcb 2, $AA, $A8, 1, 0, 0, 2, $2A
+ROM:7EAF                 fcb $AA, 5
+
+ROM:7EB9 byte_7EB9:      fcb 2, $C, $C, 2, 3, 3, 2, $A0
+ROM:7EB9                 fcb 2, 0, 0, 2, $A3, $A3, 5
+ROM:7EB9                 fcb $28, $28, 1, $A, $A, 2, $A0, $A0
+ROM:7EB9                 fcb $A0, 1, 3, 3, 1, $A, $A, 1
+
+ROM:7ED8 byte_7ED8:      fcb 2, $A8, $A8, 2, 0, 0, 2, $2A
+ROM:7ED8                 fcb 0, 0, 2, $2A, $2A, 2, 0, 0
+ROM:7ED8                 fcb $2A, 2, 0, 0, 2, $A8, $A8, 2
+ROM:7ED8                 fcb 5
+
+ROM:7EF1 byte_7EF1:      fcb 2, $88, $88, 1, $22, $22, 1, 0
+ROM:7EF1                 fcb 0, 2, $CC, $CC, 2, $82, $82, 1
+ROM:7EF1                 fcb 1, 0, $AA, 1, 0, 0, 2, $A8
+ROM:7EF1                 fcb $28, $28, 1, 0, 0, 1, $AA, 0
+ROM:7EF1                 fcb $A8, 1, $2A, $2A, 5
+
+ROM:7F16 byte_7F16:      fcb 1, $A, $A0, 1, $C0, $C, 1, $A0
+ROM:7F16                 fcb 0, $30, 1, $82, $28, 1, 0, 0
+ROM:7F16                 fcb 1, $80, $80, 1, $30, 3, 1, 2
+ROM:7F16                 fcb 2, 1, $C, 0, 1, $28, 0, 1
+ROM:7F16                 fcb 3, $C0, 1, $28, $28, 1, 0, 0
+ROM:7F16                 fcb 5
+ROM:7F16                 fcb $A, 1, 0, 0, 1, $28, 0, 1
+
+ROM:7F47 byte_7F47:      fcb 1, $80, $80, 1, $20, $20, 1, 8
+ROM:7F47                 fcb 1, $20, $20, 1, $C0, $C0, 1, $20
+ROM:7F47                 fcb $20, 1, $C0, $C0, 1, $A8, $A8, 1
+ROM:7F47                 fcb 5
+ROM:7F47                 fcb 8, 1, $30, $C, 1, $2A, $2A, 1
+ROM:7F47                 fcb 8, 8, 1, 3, 3, 1, 8, 8
+ROM:7F47                 fcb $C0, $C0, 1, $20, $20, 1, 0, 0
+
+ROM:7F78 byte_7F78:      fcb 2, 0, 0, 2, 2, 2, 2, 0
+ROM:7F78                 fcb 0, 1, $82, $82, 1, $3C, $3C, 1
+ROM:7F78                 fcb 2, 2, 2, 2, 0, 0, 5
+ROM:7F78                 fcb $3C, $3C, 1, $82, $82, 2, 0, 0
+
+ROM:7F97 byte_7F97:      fcb 1, 0, 0, 1, 2, 2, 2, $8C
+ROM:7F97                 fcb 2, 2, 2, $8C, $8C, 1, 2, 2
+ROM:7F97                 fcb 2, $B0, $B0, 1, 2, 2, 2, $80
+ROM:7F97                 fcb $80, 5
+ROM:7F97                 fcb $8C, 1, 2, 2, 2, $B0, $B0, 1
+
+ROM:7FB9 byte_7FB9:      fcb 2, $A, $A, 2, $B0, $B0, 2, $2C
+ROM:7FB9                 fcb $2C, 2, $B, $B, 2, 0, 0, 2
+ROM:7FB9                 fcb 5
+ROM:7FB9                 fcb $E, $E, 2, $38, $38, 2, $E0, $E0
+
+ROM:7FD2 byte_7FD2:      fcb 1, 0, $AA, 1, 0, 0, 1, $AA
+ROM:7FD2                 fcb 0, 0, 1, $AA, 0, 1, 0, 0
+ROM:7FD2                 fcb 0, 0, 1, $AA, 0, 1, 0, 0
+ROM:7FD2                 fcb 0, 1, 0, 0, 1, 0, $AA, 1
+ROM:7FD2                 fcb 0, 1, 0, 0, 1, 0, $AA, 1
+ROM:7FD2                 fcb 1, 0, $AA, 1, 0, 0, 1, $AA
+ROM:7FD2                 fcb 5
+
+ROM:8003 byte_8003:      fcb 1, $B0, $B0, 1, $2C, $2C, 1, 8
+ROM:8003                 fcb 1, $B0, $B0, 1, $2C, $2C, 1, 8
+ROM:8003                 fcb 8, 2, 0, 0, 2, $A, $A, 2
+ROM:8003                 fcb 8, 5
+ROM:8003                 fcb $A0, $A0, 2, $A, $A, 2, 0, 0
+
+ROM:8025 byte_8025:      fcb 1, $AA, 0, 1, 0, 0, 1, 0
+ROM:8025                 fcb 2, $A, $A
+ROM:8025                 fcb $AA, 1, 0, 0, 2, $AA, 0, 1
+ROM:8025                 fcb $A, $A, 2, 0, 0, 1, $A0, $A0
+
+ROM:8040                 fcb 0, 1, 0, 0, 5
+ROM:8040                 fcb 1, 0, $AA, 1, 0, 0, 1, $AA
+
+ROM:804D byte_804D:      fcb 2, 0, 0, 2, $32, $E, 2, 2
+ROM:804D                 fcb $20, $20, 2, $20, $20, 2, 0, 0
+ROM:804D                 fcb 2, 2, 8, 8, 2, $C8, $C8, 2
+ROM:804D                 fcb 5
+
+ROM:8066 byte_8066:      fcb 2, 0, 0, 2, $8C, $8C, 2, $80
+ROM:8066                 fcb 5
+ROM:8066                 fcb $80, 2, $23, $23, 2, $20, $20, 2
+ROM:8066                 fcb 8, 8, 2, $B, $B, 2, 0, 0
+
+ROM:807F byte_807F:      fcb 1, 0, 0, 2, $2A, $2A, 1, $20
+ROM:807F                 fcb $20, 2, $C0, $C0, 2, $30, $30, 2
+ROM:807F                 fcb 4, 3, 3, 3
+ROM:807F                 fcb $CC, $CC, 2, $33, $33, 1, $C, $C
+
+ROM:809B byte_809B:      fcb 1, $A8, $AA, 1, 0, 0, 1, 3
+ROM:809B                 fcb 0, 0, 1, 0, 0, 1, $A2, $AA
+ROM:809B                 fcb 0, 0, 5
+ROM:809B                 fcb 1, 0, 0, 1, 0, 0, 1, 0
+ROM:809B                 fcb $AA, 2, $AA, 0, 1, 0, $AA, 1
+ROM:809B                 fcb $AA, 2, $AA, 3, 1, 0, $AA, 1
+
+ROM:80C6 byte_80C6:      fcb 1, 0, 0, 1, $C0, $30, 2, $A
+ROM:80C6                 fcb 1, 0, 0, 1, $C0, $30, 2, $A
+ROM:80C6                 fcb $A, 1, 0, 0, 1, 0, 0, 5
+ROM:80C6                 fcb $A, 1, $30, $C0, 1, 0, 0, 1
+ROM:80C6                 fcb $C0, $30, 2, $A, $A, 1, $30, $C0
+
+ROM:80EE byte_80EE:      fcb 1, 2, 2, 2, $30, $80, 2, $C
+ROM:80EE                 fcb $20, 2, $C2, $A, 1, 2, 2, 2
+ROM:80EE                 fcb 2, 2, 2, 5
+ROM:80EE                 fcb $A, $C2, 2, $20, $C, 2, $80, $30
+
+ROM:810A byte_810A:      fcb 1, 2, 2, 1, $C0, $C0, 1, $20
+ROM:810A                 fcb 0, 0, 1, 2, 2, 1, $2C, $2C
+ROM:810A                 fcb 0, 1, $8C, $8C, 1, $20, $20, 1
+ROM:810A                 fcb 1, $80, $80, 1, 2, 2, 2, 0
+ROM:810A                 fcb $20, 1, $E, $E, 1, 8, 8, 2
+ROM:810A                 fcb 3, 3, 5
+
+ROM:8135 byte_8135:      fcb 1, 3, 3, 2, 2, 2, 1, 8
+ROM:8135                 fcb 1, $20, $20, 2, $B, $B, 5
+ROM:8135                 fcb $32, $32, 2, $C8, $C8, 2, $80, $80
+ROM:8135                 fcb 8, 2, $B0, $B0, 2, 8, 8, 1
+
+ROM:8154 byte_8154:      fcb 1, $E, $E, 2, $A, 0, 1, $A0
+ROM:8154                 fcb 1, $FA, $FA, 2, $A, 0, 1, 2
+ROM:8154                 fcb 2, 5
+ROM:8154                 fcb $A, 0, 1, $A0, $A0, 2, 0, $A
+ROM:8154                 fcb $A0, 2, 0, $A, 1, $FA, $FA, 2
+
+ROM:8176 byte_8176:      fcb 1, $AA, $2A, 1, 0, 0, 1, $AA
+ROM:8176                 fcb 0, 0, 1, 0, 0, 1, $AA, $8A
+ROM:8176                 fcb 0, 0, 5
+ROM:8176                 fcb 0, 2, 0, $AA, 1, $AA, 0, 1
+ROM:8176                 fcb 1, 0, 0, 1, 0, 0, 1, $AA
+ROM:8176                 fcb 3, 2, 3, $AA, 1, $AA, 0, 1
+
+ROM:81A1 byte_81A1:      fcb 2, $2A, $2A, 1, 0, 0, 2, $A8
+ROM:81A1                 fcb 0, 0, 2, $A8, $A8, 1, 0, 0
+ROM:81A1                 fcb 2, $8A, $AA, 1, 0, 0, 1, $AA
+ROM:81A1                 fcb $A2, 5
+ROM:81A1                 fcb $A8, 1, 0, 0, 2, $2A, $2A, 1
+
+ROM:81C3 byte_81C3:      fcb 1, 0, 0, 2, $30, $C, 1, 0
+ROM:81C3                 fcb 0, 0, 2, $30, $C, 1, 0, 0
+ROM:81C3                 fcb 0, 2, 0, 0, 2, $C, $30, 1
+ROM:81C3                 fcb 2, 0, 0, 2, $C, $30, 5
+
+ROM:81E2 byte_81E2:      fcb 2, 0, 0, 1, 0, 0, 1, 0
+ROM:81E2                 fcb 0, 1, 0, 0, 2, 0, 0, 2
+ROM:81E2                 fcb 1, 0, 0, 2, 0, 0, 5
+ROM:81E2                 fcb $3C, $3C, 2, 0, 0, 2, $C3, $C3
+
+ROM:8201 byte_8201:      fcb 1, 0, 0, 1, $C0, $C0, 2, $30
+ROM:8201                 fcb 0, 0, 1, $C0, $C0, 2, $30, $30
+ROM:8201                 fcb 0, 1, 0, 0, 5
+ROM:8201                 fcb 1, $C, $C, 1, 3, 3, 2, 0
+ROM:8201                 fcb $30, 1, $C, $C, 1, 3, 3, 2
+
+ROM:8226 byte_8226:      fcb 2, 0, 0, 2, 2, 2, 2, $38
+ROM:8226                 fcb 2, 0, 0, 5
+ROM:8226                 fcb $38, 1, $A3, $A3, 1, 2, 2, 2
+ROM:8226                 fcb $8C, $8C, 2, 2, 2, 2, $38, $38
+
+ROM:8242 byte_8242:      fcb 1, 2, 2, 1, 0, 0, 2, $32
+ROM:8242                 fcb 0, 1, 0, 0, 5
+ROM:8242                 fcb 1, 0, $B2, 1, $AC, $C, 2, 0
+ROM:8242                 fcb $83, $E3, 1, $30, 0, 2, 3, 0
+ROM:8242                 fcb $C, 1, $C0, $32, 2, 0, 0, 1
+
+ROM:8267 byte_8267:      fcb 2, 0, 0, 2, 0, 0, 1, $C3
+ROM:8267                 fcb 0, 0, 1, $C3, $C3, 2, 0, 0
+ROM:8267                 fcb 1, $C3, $C3, 2, 0, 0, 5
+ROM:8267                 fcb $C3, 2, 0, 0, 1, $C3, $C3, 2
+
+ROM:8286 byte_8286:      fcb 1, 0, 0, 2, 0, 0, 1, $C3
+ROM:8286                 fcb 0, 2, 0, 0, 2, $3C, 0, 1
+ROM:8286                 fcb 0, $C3, 2, 0, 0, 1, 0, $3C
+ROM:8286                 fcb 2, 0, 0, 2, 0, 0, 5
+
+ROM:82A5 byte_82A5:      fcb 2, $AA, $8A, 2, 0, 0, 2, $BA
+ROM:82A5                 fcb 0, 0, 2, $AE, $AA, 2, 0, 0
+ROM:82A5                 fcb 5
+ROM:82A5                 fcb $AA, 2, 0, 0, 2, $AA, $AB, 2
+
+ROM:82BE byte_82BE:      fcb 1, $14, $14, 1, $BF, $BF, 1, $14
+ROM:82BE                 fcb $14, 5
+
+ROM:82C8 byte_82C8:      fcb 1, 0, 0, 1, $95, $95, 1, 0
+ROM:82C8                 fcb 0, 5
+
+ROM:82D2 byte_82D2:      fcb 1, 0, 0, 1, $56, $56, 1, 0
+ROM:82D2                 fcb 0, 5
+
+ROM:82DC byte_82DC:      fcb 1, 0, 0, 1, $55, $55, 1, 0
+ROM:82DC                 fcb 0, 5
+
+ROM:82E6 byte_82E6:      fcb 1, $14, $14, 1, $FE, $FE, 1, $14
+ROM:82E6                 fcb $14, 5
+
+ROM:82F0 byte_82F0:      fcb 1, $14, $14, 1, $FF, $FF, 1, $14
+ROM:82F0                 fcb $14, 5
+
+ROM:82FA byte_82FA:      fcb 1, $55, $55, 1, $15, $15, 1, 5
+ROM:82FA                 fcb 0, 0, 1, 5, 5, 1, 0, 0
+ROM:82FA                 fcb 0, 0, 3
+ROM:82FA                 fcb 1, 1, 0, 0, 1, 1, 1, 4
+ROM:82FA                 fcb 1, 5, 5, 1, 0, 0, 1, 1
+ROM:82FA                 fcb 5, 1, 0, 0, 1, 5, 5, 1
+
+ROM:8325 byte_8325:      fcb 1, 0, 0, 2, $2A, $2A, 1, 0
+ROM:8325                 fcb 0, 2, $40, $40, 2, $10, $10, 2
+ROM:8325                 fcb 4, 4, 2, 1, 1, 1, $FF, $FF
+ROM:8325                 fcb 4, $FF, $FF, 3
+
+ROM:84B6 byte_84B6:      fcb $F, $80, $F, $60, $F, $40, $F, $20
+ROM:84B6                 fcb 7, $60, 7, $20, 3, $60, 3, $20
+
+ROM:8696 word_8696:      fdb $FC00
+ROM:8698                 fdb 0
+
+ROM:869A                 fdb $400
+ROM:869C                 fdb 0
+ROM:869E                 fdb $FC00
+ROM:86A0                 fdb $F000
+ROM:86A2                 fdb $FE00
+ROM:86A4                 fdb $F000
+ROM:86A6                 fdb $200
+ROM:86A8                 fdb $F000
+ROM:86AA                 fdb $400
+ROM:86AC                 fdb $F000
+ROM:8725 word_8725:      fdb $FC00
+ROM:8727                 fdb 0
+ROM:8729                 fdb $FC00
+ROM:872B                 fdb $F000
+ROM:872D                 fdb $400
+ROM:872F                 fdb $F000
+ROM:8731                 fdb $400
+ROM:8733                 fdb 0
+
+ROM:89A8                 fdb $3DF, $3FE2, $4FF, $3FCE, $590, $3FC2, $590, $3FC2
+ROM:89A8 word_89A8:      fdb $B5, $3FFF, $100, $3FFE, $16A, $3FFC, $21F, $3FF7
+
+ROM:8AA3                 fcb $54, $CD, $E5, $2D, $3F, $14, $12, $CD ; Not used?
+ROM:8AA3                 fcb $69, $F6, $AD, $33, $AA, $28, $A6, $B
+ROM:8AA3                 fcb $F7, $58, $D1
+
+ROM:8D71 byte_8D71:      fcb $F, $80, $49, $69, $F, $80, $49, $69
+ROM:8D71                 fcb 3, $60, $49, $4B, 3, $40, $49, $4B
+ROM:8D71                 fcb 7, $20, $49, $4B, 3, $80, $49, $4B
+ROM:8D71                 fcb 7, $80, $49, $57, 7, $20, $49, $51
+ROM:8D71                 fcb $F, $80, $49, $63, $F, $40, $49, $5D
+
+ROM:8D99 byte_8D99:      fcb 3, $30, $49, $4B
+ROM:8E68 JumpTable8E68:  fdb sub_8E79
+ROM:8E6A                 fdb sub_8E9B
+ROM:8E6C                 fdb sub_8EA4
+ROM:8E6E                 fdb sub_8EB2
+ROM:8E70                 fdb sub_8EBA
+ROM:8E72                 fdb sub_8ECE
+ROM:8E74                 fdb sub_8E78
+ROM:8E76                 fdb sub_8E78
+ROM:9024 byte_9024:      fcb 0, 1
+ROM:9026 byte_9026:      fcb 4, 4
+ROM:9028 byte_9028:      fcb $7C, 0, 0, 0, 4, 0
+ROM:902E byte_902E:      fcb $7C, 0, $FC, 0, 0, 0
+ROM:9034 byte_9034:      fcb $7C, 0, 4, 0, 0, 0
+ROM:903A byte_903A:      fcb $7C, 0, 0, 0, 4, 0
+ROM:9040 byte_9040:      fcb $7C, 0, $FC, 0, 0, 0
+ROM:9046 byte_9046:      fcb $7C, 0, 4, 0, 0, 0
+ROM:904C byte_904C:      fcb $7C, 0, 0, 0, 4, 0
+ROM:9052 byte_9052:      fcb $7C, 0, $FC, 0, 0, 0
+ROM:9058 byte_9058:      fcb $7C, 0, 4, 0, 0, 0
+ROM:905E byte_905E:      fcb $7C, 0, $F8, 0, 0, 0
+ROM:9064 byte_9064:      fcb $7C, 0, 8, 0, 0, 0
+ROM:906A byte_906A:      fcb $7C, 0, 0, 0, 8, 0
+ROM:9070 off_9070:       fdb byte_907C, byte_9085, byte_9090, byte_909F
+ROM:9078 off_9078:       fdb byte_90AC
+ROM:907A off_907A:       fdb byte_90B9
+ROM:907C byte_907C:      fcb 3
+ROM:907D                 fdb off_90C6, off_9138, off_914B, off_9171
+ROM:9085 byte_9085:      fcb 4
+ROM:9086                 fdb off_90D9, off_9112, off_915E, off_914B, off_9171
+ROM:9090 byte_9090:      fcb 6
+ROM:9091                 fdb off_90EC, off_9112, off_915E, off_9125, off_9138, off_914B, off_9171
+ROM:909F byte_909F:      fcb 5
+ROM:90A0                 fdb off_9112, off_915E, off_9125, off_9138, off_914B, off_9171
+ROM:90AC byte_90AC:      fcb 5
+ROM:90AD                 fdb off_90FF, off_9112, off_914B, off_915E, off_9138, off_9171
+ROM:90B9 byte_90B9:      fcb 5
+ROM:90BA                 fdb off_9112, off_915E, off_9138, off_915E, off_914B, off_9171
+
+ROM:90C6                 fdb byte_9034
+ROM:90C6 off_90C6:       fdb byte_9024, byte_91E1, byte_9028, byte_9024, byte_9205, byte_902E, byte_9024, byte_9232
+
+ROM:90D8                 fcb   0
+
+ROM:90D9                 fdb byte_9046
+ROM:90D9 off_90D9:       fdb byte_9024, byte_9277, byte_903A, byte_9024, byte_92AD, byte_9040, byte_9024, byte_92D1
+
+ROM:90EB                 fcb   0
+
+ROM:90EC                 fdb byte_9058
+ROM:90EC off_90EC:       fdb byte_9024, byte_9319, byte_904C, byte_9024, byte_933D, byte_9052, byte_9024, byte_9355
+
+ROM:90FE                 fcb   0
+
+ROM:90FF                 fdb byte_906A
+ROM:90FF off_90FF:       fdb byte_9024, byte_9385, byte_905E, byte_9024, byte_93A9, byte_9064, byte_9024, byte_93DC
+
+ROM:9111                 fcb   0
+
+ROM:9112                 fdb byte_906A
+ROM:9112 off_9112:       fdb byte_9024, byte_9385, byte_905E, byte_9024, byte_93A9, byte_9064, byte_9026, byte_93DC
+
+ROM:9124                 fcb   0
+
+ROM:9125                 fdb byte_9034
+ROM:9125 off_9125:       fdb byte_9024, byte_91DE, byte_9028, byte_9024, byte_9202, byte_902E, byte_9024, byte_922F
+
+ROM:9137                 fcb   0
+
+ROM:9138                 fdb byte_9046
+ROM:9138 off_9138:       fdb byte_9024, byte_9274, byte_903A, byte_9024, byte_92AA, byte_9040, byte_9024, byte_92CE
+
+ROM:914A                 fcb   0
+
+ROM:914B                 fdb byte_9058
+ROM:914B off_914B:       fdb byte_9024, byte_9316, byte_904C, byte_9024, byte_933A, byte_9052, byte_9024, byte_9352
+
+ROM:915D                 fcb   0
+
+ROM:915E                 fdb byte_906A
+ROM:915E off_915E:       fdb byte_9024, byte_9382, byte_905E, byte_9024, byte_93A6, byte_9064, byte_9024, byte_93D9
+
+ROM:9170                 fcb   0
+
+ROM:9171                 fdb byte_9024, byte_92CE, byte_9046, byte_9024, byte_9382, byte_905E, byte_9024, byte_93A6
+ROM:9171                 fdb byte_9024, byte_93A6, byte_9064, byte_9024, byte_93D9, byte_906A
+ROM:9171                 fdb byte_9034, byte_9024, byte_9382, byte_905E, byte_9024, byte_93A6, byte_9064, byte_9024
+ROM:9171                 fdb byte_9064, byte_9024, byte_93D9, byte_906A, byte_9024, byte_9316, byte_904C, byte_9024
+ROM:9171                 fdb byte_933A, byte_9052, byte_9024, byte_9352, byte_9058, byte_9024, byte_9382, byte_905E
+ROM:9171                 fdb byte_93D9, byte_906A, byte_9024, byte_9274, byte_903A, byte_9024, byte_92AA, byte_9040
+ROM:9171 off_9171:       fdb byte_9024, byte_91DE, byte_9028, byte_9024, byte_9202, byte_902E, byte_9024, byte_922F
+
+ROM:91DD                 fcb   0
+ROM:91DE byte_91DE:      fcb 2
+ROM:91DF                 fdb byte_9421
+
+ROM:91E1 byte_91E1:      fcb $84, 0, $10, $84, 0, $20, $44, 4
+ROM:91E1                 fcb $10, 0, 0, 4, $44, $80, 0, 0
+ROM:91E1                 fcb 4, 0, $84, $81, $10, 0, 0, 4
+ROM:91E1                 fcb $44, $80, 0, 0, 0, 0
+
+ROM:91FF                 fcb 1
+ROM:9200                 fdb byte_925C
+ROM:9202 byte_9202:      fcb 2
+ROM:9203                 fdb byte_9421
+
+ROM:9205 byte_9205:      fcb $84, 2, $20, $44, $10, $10, 0, 0
+ROM:9205                 fcb 0, 0, 0, $44, 2, $20, 0, 0
+ROM:9205                 fcb 2, $10, 0, 0, 4, $44, $90, $10
+ROM:9205                 fcb 4, $44, $90, $10, 0, 0, 0
+ROM:9205                 fcb 4, $44, $90, $10, 0, 0, 0, $84
+
+ROM:922C                 fcb 1
+ROM:922D                 fdb byte_925C
+ROM:922F byte_922F:      fcb 2
+ROM:9230                 fdb byte_9421
+
+ROM:9232 byte_9232:      fcb $84, 1, $20, $44, $20, $10, 0, 0
+ROM:9232                 fcb 0, 0, 0, $44, 1, $20, 0, 0
+ROM:9232                 fcb 1, $10, 0, 0, 4, $44, $A0, $10
+ROM:9232                 fcb 4, $44, $A0, $10, 0, 0, 0
+ROM:9232                 fcb 4, $44, $A0, $10, 0, 0, 0, $84
+
+ROM:9259                 fcb 1
+ROM:925A                 fdb byte_925C
+
+ROM:925C byte_925C:      fcb 0, 0, $44, $44, $82, $20, 0, 0
+ROM:925C                 fcb $40, $44, 1, $20
+
+ROM:9268                 fcb 1
+ROM:9269                 fdb byte_925C
+ROM:926B                 fcb 0, 0, 0, $24, 0, 8
+ROM:9271                 fcb 1
+ROM:9272                 fdb byte_925C
+ROM:9274 byte_9274:      fcb 2
+ROM:9275                 fdb byte_9421
+
+ROM:9277 byte_9277:      fcb $44, 0, $14, $44, 0, $11, $44, 0
+ROM:9277                 fcb 0, 4, $44, $80, 0, 0, 0, 0
+ROM:9277                 fcb 0, 4, $44, $80, 4, 0, 0, 0
+ROM:9277                 fcb $14, $44, 0, $11, $44, 4, $10, 0
+ROM:9277                 fcb $14, $44, 0, $14, $44, 0, $11, 0
+ROM:9277                 fcb $44, 0, $14, $44, 0, $11, $84, $80
+
+ROM:92A7                 fcb 1
+ROM:92A8                 fdb byte_92E9
+ROM:92AA byte_92AA:      fcb 2
+ROM:92AB                 fdb byte_9421
+
+ROM:92AD byte_92AD:      fcb $24, 0, $18, $24, 0, $12, $24, 0
+ROM:92AD                 fcb $28, $24, 0, $22, 0, 0, 4, $44
+ROM:92AD                 fcb $44, $80, $14, 0, 0, 0
+ROM:92AD                 fcb $80, $11, 0, 0, 0, 0, 0, 4
+
+ROM:92CB                 fcb 1
+ROM:92CC                 fdb byte_92E9
+
+ROM:92CE byte_92CE:      fcb 2
+ROM:92CF                 fdb byte_9421
+
+ROM:92D1 byte_92D1:      fcb $24, 0, $18, $24, 0, $12, $24, 0
+ROM:92D1                 fcb $28, $24, 0, $22, 0, 0, 4, $44
+ROM:92D1                 fcb $80, $11, 0, 0, 0
+
+ROM:92E6                 fcb 1
+ROM:92E7                 fdb byte_92E9
+
+ROM:92E9 byte_92E9:      fcb 0, 0, $44, $44, $82, $20, 0, 0
+ROM:92E9                 fcb $40, $44, 2, $20
+
+ROM:92F5                 fcb 1
+ROM:92F6                 fdb byte_92E9
+
+ROM:92F8                 fcb 0, 0, 0, $24, 0, 8, 0, 4
+ROM:92F8                 fcb 0, $FC, $82, $10, 0, 0, 0, $44
+ROM:92F8                 fcb $44, $82, 2
+ROM:92F8                 fcb $82, 8, $44, $81, 2, $44, $81, 8
+
+ROM:9313                 fcb 1
+ROM:9314                 fdb byte_92E9
+ROM:9316 byte_9316:      fcb 2
+ROM:9317                 fdb byte_9421
+
+ROM:9319 byte_9319:      fcb $24, 0, $14, $24, 0, $11, $24, 0
+ROM:9319                 fcb 0
+ROM:9319                 fcb 0, 0, 4, $44, $80, 4, 0, 0
+ROM:9319                 fcb 0, 4, $44, $80, 0, 0, 0, 0
+ROM:9319                 fcb $14, $24, 0, $11, $44, 4, $10, 0
+
+ROM:933A byte_933A:      fcb 2
+ROM:933B                 fdb byte_9421
+
+ROM:933D byte_933D:      fcb $44, $82, $14, $44, $82, $24, $44, $10
+ROM:933D                 fcb 0, 0
+ROM:933D                 fcb $14, 0, 0, 4, $44, $90, $14, 0
+
+ROM:934F                 fcb 1
+ROM:9350                 fdb byte_936A
+ROM:9352 byte_9352:      fcb 2
+ROM:9353                 fdb byte_9421
+
+ROM:9355 byte_9355:      fcb $44, $81, $14, $44, $81, $24, $44, $20
+ROM:9355                 fcb 0, 0
+ROM:9355                 fcb $14, 0, 0, 4, $44, $A0, $14, 0
+
+ROM:9367                 fcb 1
+ROM:9368                 fdb byte_936A
+
+ROM:936A byte_936A:      fcb 0, 0, $44, $44, $82, $24, 0, 0
+ROM:936A                 fcb $40, $44, 1, $20
+
+ROM:9376                 fcb 1
+ROM:9377                 fdb byte_936A
+ROM:9379                 fcb 0, 0, 0, $24, 0, 2
+ROM:937F                 fcb 1
+ROM:9380                 fdb byte_936A
+ROM:9382 byte_9382:      fcb 2
+ROM:9383                 fdb byte_9421
+
+ROM:9385 byte_9385:      fcb 0, 4, 0, $FC, $82, $18, 0, 0
+ROM:9385                 fcb 0, $FC, $82, 8, $FC, $82, 8, $FC
+ROM:9385                 fcb $44, $81, 8, 0, 0, 0
+ROM:9385                 fcb $82, 8, $FC, $82, 8, 0, 0, 4
+
+ROM:93A3                 fcb 1
+ROM:93A4                 fdb byte_945A
+ROM:93A6 byte_93A6:      fcb 2
+ROM:93A7                 fdb byte_9421
+
+ROM:93A9 byte_93A9:      fcb 0, 4, 0, $FC, $82, $18, 0, 0
+ROM:93A9                 fcb 0, $84, $81, 8, 0, 0, 4, $44
+ROM:93A9                 fcb 0, $84, $81, 8, $80, 0, $10, $44
+ROM:93A9                 fcb $80, 0, $10, $44, $81, 8, $80, 0
+ROM:93A9                 fcb $82, 8, 0, 0, 0
+ROM:93A9                 fcb $82, 8, $80, 0, 0, $84, $81, 8
+
+ROM:93D6                 fcb 1
+ROM:93D7                 fdb byte_945A
+ROM:93D9 byte_93D9:      fcb 2
+ROM:93DA                 fdb byte_9421
+
+ROM:93DC byte_93DC:      fcb 0, 4, 0, $14, $80, $18, $14, $80
+ROM:93DC                 fcb 0, 0
+ROM:93DC                 fcb $12, $14, $80, $18, $14, $80, $12, $14
+ROM:93DC                 fcb 1, $44, $B0, 8, $44, $8C, 8, $44
+ROM:93DC                 fcb $14, $80, $12, 0, 0, 0, 0, 0
+ROM:93DC                 fcb 2, 0, 0, 4, $44, $81, $10, 0
+ROM:93DC                 fcb $44, $8C, 8, $44, $B0, 2, $44, $8C
+ROM:93DC                 fcb $80, $18, $14, $80, $12, $14, $80, $18
+ROM:93DC                 fcb $B0, 2, $44, $8C, 2, $44, $B0, 8
+
+ROM:941E                 fcb 1
+ROM:941F                 fdb byte_945A
+ROM:9421 byte_9421:      fcb $C, $80, $10, $80, 0, $10
+ROM:9427                 fcb 1
+ROM:9428                 fdb byte_943C
+ROM:942A                 fcb $80, 0, $20, $44, $80, $3C
+ROM:9430                 fcb 1
+ROM:9431                 fdb byte_944E
+ROM:9433                 fcb $80, 0, 0, $44, $80, $33
+ROM:9439                 fcb 1
+ROM:943A                 fdb byte_944E
+ROM:943C byte_943C:      fcb $80, 0, $20, $44, $82, $3C
+ROM:9442                 fcb 1
+ROM:9443                 fdb byte_944E
+ROM:9445                 fcb $80, 0, 0, $44, $82, $33
+ROM:944B                 fcb 1
+ROM:944C                 fdb byte_944E
+
+ROM:944E byte_944E:      fcb $80, 0, $20, $44, $41, $20, $80, 0
+ROM:944E                 fcb 0, 3, 0, 0
+
+ROM:945A byte_945A:      fcb $24, 0, 8, 0, 4, 0, $84, $81
+ROM:945A                 fcb 0, $40, $44, 1, $10, 0, 0, 0
+ROM:945A                 fcb 0, $C, 0, $84, $81, $20, 0, 8
+ROM:945A                 fcb 1, $10, 0, 0, 0, $80, 8, 0
+ROM:945A                 fcb $20, 0, 0, $44, $44, $82, $20, 0
+ROM:945A                 fcb $44, $44, $82, $20, 0, 8, $40, $44
+
+ROM:948A                 fcb 1
+ROM:948B                 fdb byte_9493
+ROM:948D                 fcb $80, 0, 0
+ROM:9490                 fcb 1
+ROM:9491                 fdb byte_945A
+ROM:9493 byte_9493:      fcb $80, 0, $10, $44, 2, 8
+ROM:9499                 fcb 1
+ROM:949A                 fdb byte_945A
+ROM:949C                 fcb $80, 0, 0, $44, 1, $20
+ROM:94A2                 fcb 1
+ROM:94A3                 fdb byte_945A
+
+ROM:94A5                 fcb 0, $78, $ED, $B0, $68
+ROM:94A5                 fcb $2A, $89, $60, $C6, $20, $84, $3D, $70
+ROM:94A5                 fcb $B8, $5D, $78, $28, $40, $EC, $D4, $B7
+
+ROM:94BA                 fcb $EF
+ROM:94BB                 fdb byte_925C
+
+ROM:94BD                 fcb $FF, $FF
+ROM:94BD                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:94BD                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:94BD                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:94BD                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:94BD                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:94BD                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:94BD                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:94BD                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:94BD                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:94BD                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:94BD                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:94BD                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:94BD                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+
+ROM:9527 aCopyright1983At_0:fcc 'COPYRIGHT 1983 ATARI'
+
+ROM:96B6                 fdb $6280, $6280
+ROM:96B6 word_96B6:      fdb $6080, $6480, $6480, $6680, $6680, $6280, $6280, $6280 ; Shield colour table
+
+ROM:96CA                 fdb $BC04, $BC08
+ROM:96CA word_96CA:      fdb $BBE4, $BBE8, $BBEC, $BBF0, $BBF4, $BBF8, $BBFC, $BC00 ; Shield vector table
+
+ROM:96DE                 fdb $BC06, $BC0A
+ROM:96DE word_96DE:      fdb $BBE6, $BBEA, $BBEE, $BBF2, $BBF6, $BBFA, $BBFE, $BC02 ; Another copy of shield vector table??
+
+ROM:96F2                 fdb $BBCE, $BBD0, $BBD2, $BBD4, $BBD6, $BBD8, $BBDA, $BBDC
+ROM:96F2                 fdb $BBDE, $BBE0, $BBE2
+ROM:96F2 word_96F2:      fdb $BBBE, $BBC0, $BBC2, $BBC4, $BBC6, $BBC8, $BBCA, $BBCC
+
+ROM:9718 byte_9718:      fcb 0, 2, 4, 6, 8, $A, $C, $E
+ROM:9718                 fcb $10, $12
+
+ROM:983B byte_983B:      fcb 0, $50, 0, 1, 0, 0, 2, $50
+ROM:983B                 fcb 0, 5, 0, 0
+
+ROM:9847 byte_9847:      fcb $10, 0, 0           ; Using Force score value
+ROM:984A byte_984A:      fcb 0, $10, 0           ; Tie fighter score value
+ROM:984D byte_984D:      fcb 0, $20, 0           ; Vaders tie score value
+ROM:9850 byte_9850:      fcb 0, 0, $50           ; Trench green squares score value
+ROM:9853 byte_9853:      fcb 0, 1, 0             ; Trench turrets score value
+ROM:9856 word_9856:      fdb 2
+ROM:9858 byte_9858:      fcb 0
+ROM:9859 byte_9859:      fcb 0, 2, 0             ; Laser tower score value
+ROM:985C byte_985C:      fcb 0, 0, $33           ; Fireball score value
+ROM:985F byte_985F:      fcb 2, $50, 0           ; Exhaust port score value
+ROM:9862 byte_9862:      fcb 5, 0, 0             ; Cleared all towers score value
+
+ROM:9865 byte_9865:      fcb 0, $50, 0, $20, 0, 0, $40, 0 ; Death Star destroyed  incrementing score value
+ROM:9865                 fcb 0, $60, 0, 0, $80, 0, 0 ; Also has unused starting wave bonus scores of 200,000 and 600,000
+
+ROM:98CB byte_98CB:      fcb 0, $16, $16, $20, $20, $20, $21, $21
+ROM:98CB                 fcb $25, $31
+ROM:98CB                 fcb $27, $28, $20, $20, $24, $24, $24, $25
+
+ROM:98DD byte_98DD:      fcb $32
+ROM:98DE byte_98DE:      fcb $10, 0, $B0, 0, 3, 1, 0, $10, 0, $E0, 0, 3, 1, 1
+
+ROM:98DE                 fcb $10, 0, $20, 0, 3, 1, 2, $10, 0, $50, 0, 3, 1, 3
+ROM:98DE                 fcb $18, 0, $A0, 0, 1, 3, 4, $18, 0, $60, 0, 1, 2, 5
+ROM:98DE                 fcb $20, 0, $B8, 0, 1, 2, 6, $20, 0, $48, 0, 1, 2, 7
+ROM:98DE                 fcb $30, 0, $40, 0, 3, 2, $A, $38, 0, $98, 0, 1, 3, $B
+ROM:98DE                 fcb $30, 0, $C0, 0, 3, 2, 8, $30, 0, 0, 0, 1, 0, 9
+ROM:98DE                 fcb $38, 0, $68, 0, 1, 3, $E, $40, 0, $90, 0, 3, 3, $F
+ROM:98DE                 fcb $38, 0, $F0, 0, 1, 0, $C, $38, 0, $10, 0, 1, 0, $D
+ROM:98DE                 fcb $40, 0, $70, 0, 3, 3, $10, $50, 0, $90, 0, 1, 1, $11
+ROM:98DE                 fcb $50, 0, 0, 0, 2, 1, $12, $50, 0, $70, 0, 1, 1, $13
+ROM:98DE                 fcb $54, 0, $E4, 0, 1, 1, $14, $54, 0, $1C, 0, 1, 1, $15
+ROM:98DE                 fcb $58, 0, $C0, 0, 1, 0, $16, $58, 0, $40, 0, 1, 0, $17
+ROM:98DE                 fcb $68, 0, $D8, 0, 1, 0, $18, $68, 0, $28, 0, 1, 0, $19
+ROM:98DE                 fcb $70, 0, $F0, 0, 2, 2, $1A, $70, 0, $10, 0, 2, 2, $1B
+
+ROM:99A2 byte_99A2:      fcb $80, 0, $90, 0, 1, 3, $1C, $80, 0, $D8, 0, 1, 0, $1D
+ROM:99A2                 fcb $80, 0, $28, 0, 1, 0, $1E, $80, 0, $70, 0, 1, 2, $1F
+
+ROM:99BE byte_99BE:      fcb $30, 0, $88, 0, 1, 2, 0, $30, 0, $98, 0, 3, 2, 1
+ROM:99BE                 fcb $30, 0, $48, 0, 1, 3, 8, $30, 0, $58, 0, 3, 3, 9
+ROM:99BE                 fcb $30, 0, $68, 0, 3, 3, $A, $30, 0, $78, 0, 1, 3, $B
+ROM:99BE                 fcb $30, 0, 8, 0, 3, 0, 6, $30, 0, $18, 0, 1, 0, 7
+ROM:99BE                 fcb $30, 0, $A8, 0, 3, 2, 2, $30, 0, $B8, 0, 1, 2, 3
+ROM:99BE                 fcb $30, 0, $E8, 0, 1, 0, 4, $30, 0, $F8, 0, 3, 0, 5
+ROM:99BE                 fcb $40, 0, $10, 0, 1, 0, $10, $40, 0, $50, 0, 1, 3, $11
+ROM:99BE                 fcb $40, 0, $60, 0, 3, 3, $12, $40, 0, $70, 0, 1, 3, $13
+ROM:99BE                 fcb $40, 0, $90, 0, 1, 2, $C, $40, 0, $A0, 0, 3, 2, $D
+ROM:99BE                 fcb $40, 0, $B0, 0, 1, 2, $E, $40, 0, $F0, 0, 1, 0, $F
+ROM:99BE                 fcb $54, 0, $CC, 0, 3, 1, $14, $54, 0, $34, 0, 3, 1, $15
+ROM:99BE                 fcb $60, 0, $20, 0, 3, 0, $18, $60, 0, $60, 0, 1, 1, $19
+ROM:99BE                 fcb $60, 0, $A0, 0, 1, 1, $16, $60, 0, $E0, 0, 3, 0, $17
+ROM:99BE                 fcb $74, 0, $E0, 0, 1, 1, $1A, $74, 0, $20, 0, 1, 1, $1B
+
+ROM:9A82 byte_9A82:      fcb $80, 0, $98, 0, 1, 2, $1C, $80, 0, $B8, 0, 1, 2, $1D
+ROM:9A82                 fcb $80, 0, $48, 0, 1, 3, $1E, $80, 0, $68, 0, 1, 3, $1F
+
+ROM:9A9E byte_9A9E:      fcb 4, 0, $30, 0, 3, 1, 0, $C, 0, $20, 0, 3, 0, 1
+ROM:9A9E                 fcb $10, 0, $98, 0, 3, 1, 2, $14, 0, $48, 0, 3, 1, 3
+ROM:9A9E                 fcb $18, 0, $B0, 0, 3, 3, 4, $18, 0, $D0, 0, 3, 0, 5
+ROM:9A9E                 fcb $20, 0, $C0, 0, 3, 1, 6, $24, 0, $38, 0, 3, 2, 7
+ROM:9A9E                 fcb $24, 0, $70, 0, 3, 2, 8, $28, 0, 0, 0, 3, 0, 9
+ROM:9A9E                 fcb $30, 0, $88, 0, 3, 1, $A, $40, 0, $80, 0, 3, 1, $B
+ROM:9A9E                 fcb $44, 0, $60, 0, 3, 2, $C, $48, 0, $90, 0, 3, 1, $D
+ROM:9A9E                 fcb $48, 0, $A8, 0, 3, 3, $E, $4C, 0, $50, 0, 3, 2, $F
+ROM:9A9E                 fcb $50, 0, $28, 0, 3, 0, $12, $68, 0, $B8, 0, 3, 3, $13
+ROM:9A9E                 fcb $50, 0, $E0, 0, 3, 3, $10, $50, 0, 0, 0, 3, 2, $11
+ROM:9A9E                 fcb $68, 0, $D8, 0, 3, 0, $14, $70, 0, $A0, 0, 3, 3, $15
+ROM:9A9E                 fcb $70, 0, $58, 0, 3, 3, $18, $78, 0, $F8, 0, 3, 0, $19
+ROM:9A9E                 fcb $70, 0, $E8, 0, 3, 0, $16, $70, 0, $18, 0, 3, 3, $17
+ROM:9A9E                 fcb $78, 0, $40, 0, 3, 2, $1A, $78, 0, $68, 0, 3, 2, $1B
+
+ROM:9B62 byte_9B62:      fcb 0, 0, $90, 0, 1, 0, 0, 0, 0, $B0, 0, 1, 0, 1
+ROM:9B62                 fcb 0, 0, $10, 0, 1, 0, 4, 0, 0, $30, 0, 1, 0, 5
+ROM:9B62                 fcb 0, 0, $50, 0, 1, 0, 6, 0, 0, $70, 0, 1, 0, 7
+ROM:9B62                 fcb 0, 0, $D0, 0, 1, 0, 2, 0, 0, $F0, 0, 1, 0, 3
+ROM:9B62                 fcb $10, 0, $C8, 0, 1, 2, 8, $28, 0, $C0, 0, 1, 2, 9
+ROM:9B62                 fcb $30, 0, $48, 0, 1, 2, $C, $30, 0, $68, 0, 1, 2, $D
+ROM:9B62                 fcb $30, 0, $88, 0, 1, 2, $A, $30, 0, $A8, 0, 1, 2, $B
+ROM:9B62                 fcb $40, 0, $60, 0, 1, 3, $10, $40, 0, $80, 0, 1, 3, $11
+ROM:9B62                 fcb $40, 0, $A0, 0, 1, 3, $E, $40, 0, $40, 0, 1, 2, $F
+ROM:9B62                 fcb $60, 0, 0, 0, 1, 3, $12, $68, 0, $84, 0, 1, 3, $13
+ROM:9B62                 fcb $70, 0, $18, 0, 1, 1, $18, $70, 0, $38, 0, 1, 1, $19
+ROM:9B62                 fcb $70, 0, $58, 0, 1, 1, $1A, $70, 0, $78, 0, 1, 1, $1B
+ROM:9B62                 fcb $70, 0, $98, 0, 1, 1, $14, $70, 0, $B8, 0, 1, 1, $15
+ROM:9B62                 fcb $70, 0, $D8, 0, 1, 1, $16, $70, 0, $F8, 0, 1, 1, $17
+
+ROM:9C26 byte_9C26:      fcb $30, 0, $E8, 0, 1, 2, $1C, $30, 0, 8, 0, 1, 2, $1D
+ROM:9C26                 fcb $40, 0, $F8, 0, 1, 3, $1E, $40, 0, $18, 0, 1, 3, $1F
+
+ROM:9C42 byte_9C42:      fcb 8, 0, $A8, 0, 3, 2, 0, 8, 0, $58, 0, 3, 2, 1
+ROM:9C42                 fcb $14, 0, $C4, 0, 1, 0, 4, $14, 0, $3C, 0, 1, 0, 5
+ROM:9C42                 fcb $28, 0, $A8, 0, 1, 2, 6, $28, 0, $58, 0, 1, 2, 7
+ROM:9C42                 fcb $30, 0, 0, 0, 3, 0, 8, $38, 0, $E0, 0, 1, 0, 9
+ROM:9C42                 fcb $38, 0, $20, 0, 1, 0, $A, $48, 0, $C0, 0, 1, 3, $B
+ROM:9C42                 fcb $48, 0, $40, 0, 1, 3, $C, $50, 0, $90, 0, 1, 3, $D
+ROM:9C42                 fcb $50, 0, $70, 0, 1, 2, $10, $58, 0, $F0, 0, 3, 2, $11
+ROM:9C42                 fcb $50, 0, $D8, 0, 3, 1, $E, $50, 0, $28, 0, 3, 1, $F
+ROM:9C42                 fcb $58, 0, $10, 0, 3, 2, $12, $68, 0, $B8, 0, 1, 0, $13
+ROM:9C42                 fcb $68, 0, $48, 0, 1, 0, $14, $70, 0, $88, 0, 1, 3, $15
+ROM:9C42                 fcb $70, 0, 0, 0, 1, 1, $18, $70, 0, $30, 0, 1, 3, $19
+ROM:9C42                 fcb $70, 0, $60, 0, 1, 1, $1A, $70, 0, $78, 0, 1, 3, $1B
+ROM:9C42                 fcb $70, 0, $A0, 0, 1, 1, $16, $70, 0, $D0, 0, 1, 3, $17
+ROM:9C42                 fcb $C, 0, $E8, 0, 1, 0, 2, $C, 0, $18, 0, 1, 0, 3
+
+ROM:9D06 byte_9D06:      fcb $80, 0, $B0, 0, 1, 0, $1C, $80, 0, $E8, 0, 1, 1, $1D
+ROM:9D06                 fcb $80, 0, $18, 0, 1, 1, $1E, $80, 0, $50, 0, 1, 0, $1F
+
+ROM:9D22 byte_9D22:      fcb $60, 0, $98, 0, 1, 2, 0, $10, 0, $68, 0, 1, 2, 1
+ROM:9D22                 fcb $20, 0, $D0, 0, 3, 1, 2, $30, 0, $90, 0, 3, 2, 3
+ROM:9D22                 fcb $30, 0, $70, 0, 3, 2, 6, $38, 0, $B8, 0, 1, 1, 7
+ROM:9D22                 fcb $30, 0, $E0, 0, 1, 0, 4, $30, 0, $20, 0, 1, 0, 5
+ROM:9D22                 fcb $38, 0, $48, 0, 1, 1, 8, $40, 0, $90, 0, 1, 3, 9
+ROM:9D22                 fcb $40, 0, $48, 0, 1, 1, $C, $50, 0, $E0, 0, 3, 0, $D
+ROM:9D22                 fcb $40, 0, $E8, 0, 3, 0, $A, $40, 0, $18, 0, 3, 0, $B
+ROM:9D22                 fcb $50, 0, $20, 0, 3, 0, $10, $60, 0, $88, 0, 1, 3, $11
+ROM:9D22                 fcb $50, 0, $F0, 0, 1, 0, $E, $50, 0, $10, 0, 1, 0, $F
+ROM:9D22                 fcb $60, 0, $40, 0, 1, 1, $18, $60, 0, $60, 0, 1, 2, $19
+ROM:9D22                 fcb $60, 0, $80, 0, 1, 2, $1A, $70, 0, 0, 0, 1, 0, $1B
+ROM:9D22                 fcb $60, 0, 8, 0, 1, 0, $16, $60, 0, $30, 0, 1, 1, $17
+ROM:9D22                 fcb $60, 0, $A0, 0, 1, 2, $12, $60, 0, $C0, 0, 1, 1, $13
+ROM:9D22                 fcb $60, 0, $D0, 0, 1, 1, $14, $60, 0, $F8, 0, 1, 0, $15
+
+ROM:9DE6 byte_9DE6:      fcb $80, 0, $A8, 0, 1, 3, $1C, $80, 0, $E0, 0, 1, 3, $1D
+ROM:9DE6                 fcb $80, 0, $20, 0, 1, 3, $1E, $80, 0, $58, 0, 1, 3, $1F
+
+ROM:9E02 byte_9E02:      fcb 0, 0, $B8, 0, 1, 2, 0, 0, 0, $48, 0, 1, 2, 1
+ROM:9E02                 fcb $10, 0, $20, 0, 1, 1, 6, $20, 0, $C8, 0, 1, 1, 7
+ROM:9E02                 fcb $10, 0, $A0, 0, 1, 3, 2, $10, 0, $E0, 0, 1, 1, 3
+ROM:9E02                 fcb $10, 0, $F8, 0, 1, 0, 4, $10, 0, 8, 0, 1, 0, 5
+ROM:9E02                 fcb $20, 0, $38, 0, 1, 1, 8, $2C, 0, $E4, 0, 1, 0, 9
+ROM:9E02                 fcb $2C, 0, $1C, 0, 1, 0, $A, $30, 0, $90, 0, 1, 3, $B
+ROM:9E02                 fcb $40, 0, 0, 0, 3, 1, $C, $50, 0, 0, 0, 1, 1, $D
+ROM:9E02                 fcb $50, 0, $80, 0, 3, 3, $E, $60, 0, $E8, 0, 3, 1, $F
+ROM:9E02                 fcb $60, 0, $18, 0, 3, 1, $10, $60, 0, $80, 0, 1, 3, $11
+ROM:9E02                 fcb $70, 0, $10, 0, 1, 3, $16, $70, 0, $50, 0, 1, 0, $17
+ROM:9E02                 fcb $70, 0, $60, 0, 1, 0, $18, $70, 0, $78, 0, 3, 2, $19
+ROM:9E02                 fcb $70, 0, $88, 0, 3, 2, $12, $70, 0, $A0, 0, 1, 0, $13
+ROM:9E02                 fcb $70, 0, $B0, 0, 1, 0, $14, $70, 0, $F0, 0, 1, 3, $15
+ROM:9E02                 fcb $78, 0, $E0, 0, 3, 3, $1A, $78, 0, $20, 0, 3, 3, $1B
+
+ROM:9EC6 byte_9EC6:      fcb $40, 0, $B0, 0, 1, 2, $1C, $40, 0, $C0, 0, 1, 2, $1D
+ROM:9EC6                 fcb $40, 0, $30, 0, 1, 2, $1E, $40, 0, $40, 0, 1, 2, $1F
+
+ROM:9EE2 byte_9EE2:      fcb $20, 0, $80, 0, 3, 2, 0, $20, 0, $A0, 0, 3, 1, 1
+ROM:9EE2                 fcb $20, 0, $60, 0, 3, 1, 4, $30, 0, $80, 0, 1, 2, 5
+ROM:9EE2                 fcb $20, 0, $B0, 0, 3, 1, 2, $20, 0, $50, 0, 3, 1, 3
+ROM:9EE2                 fcb $30, 0, 0, 0, 3, 0, $A, $30, 0, $20, 0, 3, 0, $B
+ROM:9EE2                 fcb $30, 0, $30, 0, 3, 1, $C, $30, 0, $50, 0, 1, 1, $D
+ROM:9EE2                 fcb $30, 0, $60, 0, 1, 1, $E, $40, 0, $D0, 0, 1, 2, $F
+ROM:9EE2                 fcb $30, 0, $A0, 0, 1, 1, 6, $30, 0, $B0, 0, 1, 1, 7
+ROM:9EE2                 fcb $30, 0, $D0, 0, 3, 1, 8, $30, 0, $E0, 0, 3, 0, 9
+ROM:9EE2                 fcb $40, 0, $20, 0, 1, 0, $12, $40, 0, $30, 0, 1, 2, $13
+ROM:9EE2                 fcb $40, 0, $E0, 0, 1, 0, $10, $40, 0, 0, 0, 1, 0, $11
+ROM:9EE2                 fcb $48, 0, $58, 0, 3, 2, $14, $54, 0, $70, 0, 3, 2, $15
+ROM:9EE2                 fcb $60, 0, $90, 0, 1, 3, $16, $60, 0, $70, 0, 1, 3, $17
+ROM:9EE2                 fcb $68, 0, $F0, 0, 1, 0, $18, $68, 0, $10, 0, 1, 0, $19
+ROM:9EE2                 fcb $70, 0, $C0, 0, 1, 1, $1A, $70, 0, $40, 0, 1, 1, $1B
+
+ROM:9FA6 byte_9FA6:      fcb $80, 0, $A0, 0, 1, 3, $1C, $80, 0, $E0, 0, 1, 3, $1D
+ROM:9FA6                 fcb $80, 0, $20, 0, 1, 3, $1E, $80, 0, $60, 0, 1, 3, $1F
+
+ROM:9FC2 byte_9FC2:      fcb 0, 0, 0, 0, 1, 1, 0, $18, 0, $80, 0, 1, 3, 1
+ROM:9FC2                 fcb $20, 0, $D8, 0, 1, 1, 2, $20, 0, $28, 0, 1, 1, 3
+ROM:9FC2                 fcb $30, 0, $70, 0, 1, 2, 6, $38, 0, $B0, 0, 1, 3, 7
+ROM:9FC2                 fcb $30, 0, $90, 0, 1, 2, 4, $30, 0, $60, 0, 3, 2, 5
+ROM:9FC2                 fcb $38, 0, $50, 0, 1, 3, $A, $48, 0, $E8, 0, 1, 0, $B
+ROM:9FC2                 fcb $38, 0, $E0, 0, 1, 0, 8, $38, 0, $20, 0, 1, 0, 9
+ROM:9FC2                 fcb $48, 0, $18, 0, 1, 0, $C, $50, 0, $88, 0, 1, 2, $D
+ROM:9FC2                 fcb $50, 0, $40, 0, 1, 1, $10, $50, 0, $60, 0, 1, 3, $11
+ROM:9FC2                 fcb $50, 0, $78, 0, 1, 2, $12, $5C, 0, $E4, 0, 1, 0, $13
+ROM:9FC2                 fcb $50, 0, $A0, 0, 1, 3, $E, $50, 0, $C0, 0, 1, 1, $F
+ROM:9FC2                 fcb $5C, 0, $1C, 0, 1, 0, $14, $60, 0, $F0, 0, 1, 0, $15
+ROM:9FC2                 fcb $60, 0, $10, 0, 1, 0, $16, $60, 0, $7C, 0, 1, 3, $17
+ROM:9FC2                 fcb $70, 0, 8, 0, 1, 0, $1A, $70, 0, $38, 0, 1, 1, $1B
+ROM:9FC2                 fcb $70, 0, $C8, 0, 1, 1, $18, $70, 0, $F8, 0, 1, 0, $19
+
+ROM:A086 byte_A086:      fcb 0, 0, $A0, 0, 1, 3, $1C, 0, 0, $C0, 0, 1, 2, $1D
+ROM:A086                 fcb 0, 0, $40, 0, 1, 2, $1E, 0, 0, $60, 0, 1, 3, $1F
+
+ROM:A0A2 byte_A0A2:      fcb $10, 0, $E0, 0, 1, 1, 0, $10, 0, $20, 0, 1, 1, 1
+ROM:A0A2                 fcb $20, 0, $C0, 0, 3, 1, 2, $20, 0, $40, 0, 3, 1, 3
+ROM:A0A2                 fcb $28, 0, $E0, 0, 1, 0, 4, $28, 0, $20, 0, 1, 0, 5
+ROM:A0A2                 fcb $30, 0, $60, 0, 3, 2, 8, $38, 0, $B0, 0, 1, 1, 9
+ROM:A0A2                 fcb $30, 0, $90, 0, 3, 2, 6, $30, 0, $A0, 0, 3, 2, 7
+ROM:A0A2                 fcb $38, 0, $50, 0, 1, 1, $A, $40, 0, $D0, 0, 3, 0, $B
+ROM:A0A2                 fcb $40, 0, 0, 0, 3, 0, $C, $40, 0, $30, 0, 3, 0, $D
+ROM:A0A2                 fcb $40, 0, $80, 0, 1, 1, $E, $50, 0, $88, 0, 1, 2, $F
+ROM:A0A2                 fcb $50, 0, 0, 0, 1, 0, $10, $50, 0, $78, 0, 1, 2, $11
+ROM:A0A2                 fcb $60, 0, $C0, 0, 1, 0, $12, $60, 0, $40, 0, 1, 0, $13
+ROM:A0A2                 fcb $68, 0, $D0, 0, 1, 0, $14, $68, 0, $30, 0, 1, 0, $15
+ROM:A0A2                 fcb $70, 0, $60, 0, 1, 1, $1A, $70, 0, $70, 0, 1, 1, $1B
+ROM:A0A2                 fcb $70, 0, $90, 0, 1, 1, $16, $70, 0, $A0, 0, 1, 1, $17
+ROM:A0A2                 fcb $70, 0, $F0, 0, 1, 0, $18, $70, 0, $10, 0, 1, 0, $19
+
+ROM:A166 byte_A166:      fcb $10, 0, $B8, 0, 1, 2, $1C, $10, 0, $58, 0, 1, 2, $1D
+ROM:A166                 fcb $20, 0, $98, 0, 1, 2, $1E, $20, 0, $70, 0, 1, 2, $1F
+
+ROM:A182                 fdb byte_9C42, byte_9D22, byte_9FC2, byte_A0A2
+ROM:A182                 fdb byte_9E02, byte_9EC6, byte_98DE, byte_99A2, byte_9D22, byte_9DE6, byte_9C42, byte_9D06
+ROM:A182                 fdb byte_9FC2, byte_A086, byte_9B62, byte_9C26, byte_9EE2, byte_9FC2, byte_99BE, byte_9A9E
+ROM:A182                 fdb byte_A0A2, off_A182, byte_9E02, byte_9EE2, byte_98DE, byte_99BE, byte_9D22, byte_9E02
+ROM:A182 off_A182:       fdb byte_9A9E, byte_9B62, byte_9EE2, byte_9FA6, byte_99BE, byte_9A82, byte_A0A2, byte_A166
+
+ROM:A1CA off_A1CA:       fdb byte_9B62, byte_9C42
+ROM:A590                 fcb $39 ; 9
+ROM:A675 JumpTableA675:  fdb sub_A86B
+ROM:A677                 fdb sub_A875
+ROM:A679                 fdb sub_A8A7
+ROM:A67B                 fdb sub_A8DA            ; Some towers processing
+ROM:A67D                 fdb loc_A8E6
+ROM:A67F                 fdb loc_A8F9
+ROM:A681                 fdb loc_AA00
+ROM:A683                 fdb loc_A946
+ROM:A685                 fdb loc_A9A3
+ROM:A687                 fdb sub_AA86            ; Exhaust port processing
+ROM:A689                 fdb sub_AAB5
+
+ROM:A6C8                 fdb byte_4951, byte_4951, byte_494B
+ROM:A6C8 off_A6C8:       fdb byte_4969, byte_4969, byte_4963, byte_4963, byte_495D, byte_495D, byte_4957, byte_4957 ; 6x Fireball data structure 2 ($6 bytes per fireball)
+
+ROM:A6DE off_A6DE:       fdb byte_494B           ; 6x Fireball data structure 2 ($6 bytes per fireball)
+ROM:A718 off_A718:       fdb byte_4969
+ROM:A71A                 fdb byte_4969
+ROM:A71C                 fdb byte_4963
+ROM:A71E                 fdb byte_4963
+ROM:A720                 fdb byte_495D
+ROM:A722                 fdb byte_495D
+ROM:A724                 fdb byte_495D
+ROM:A726                 fdb byte_4957
+
+ROM:AA25                 fcb 0, $80, $A3, $44, $2B, $10, $BD, $CD
+ROM:AA25                 fcb 0, $E3, $C4, $ED, $C4, $CC, 1, 0
+ROM:AA25                 fcb 1, $80, $E3, $44, $ED, $44, $20, 0
+ROM:AA25                 fcb $2B, $10, $BD, $CD, $A2, $10, $83, 1
+ROM:AA25                 fcb $80, $2F, 3, $CC, 1, $80, $E3, $44
+ROM:AA25                 fcb $A2, $10, $83, 1, $80, $2F, 3, $CC
+ROM:AA25                 fcb $C4, $CC, $FF, 0, $E3, $42, $ED, $42
+ROM:AA25                 fcb $E3, $42, $ED, $42, $FC, $50, $9C, $C3
+ROM:AA25                 fcb $ED, $44, $20, $2C, $EE, $84, $CC, $FF
+ROM:AA25                 fcb $EE, $84, $CC, $FF, 0, $E3, $C4, $ED
+ROM:AA25                 fcb $FC, $50, $9C, $C3, 0, $80, $A3, $44
+
+ROM:B04F tbl0xB04F:      fdb $A001               ; Laser vector animation
+ROM:B051                 fdb $A002
+ROM:B053                 fdb $A003
+ROM:B055                 fdb $A004
+ROM:B057                 fdb $A005
+ROM:B059                 fdb $A006
+ROM:B05B                 fdb $A007
+ROM:B05D                 fdb $A008
+ROM:B05F                 fdb $A009
+ROM:B061                 fdb $A00A
+ROM:B063                 fdb $A00B
+ROM:B065                 fdb $A00C
+ROM:B067                 fdb $A00D
+ROM:B069                 fdb $A00E
+ROM:B06B                 fdb $A00F
+ROM:B06D                 fdb $A010
+ROM:B06F                 fdb $A001
+
+ROM:B34C                 fcb $B9, $94, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:B34C                 fcb $FF, $FF, $FF, $FF, $FF, $FF
+ROM:B34C                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:B34C                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:B34C                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:B34C                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:B34C                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:B34C                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:B34C                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:B34C                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:B34C                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:B34C                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:B34C                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+
+ROM:B3B2 aCopyright1983Atar:fcc 'COPYRIGHT 1983 ATARI'
+ROM:B3C6                 fcb 4, $BC, $96, $FA, $5B
+ROM:B3CB aAllyWasTheWhipcra:fcc '(ALLY WAS THE WHIPCRACKER'
+ROM:B6B3 word_B6B3:      fdb $6680
+ROM:B6B5                 fdb $6380
+ROM:B6B7                 fdb $6580
+ROM:B748 jt1:            fdb sub_B9C0
+ROM:B74A                 fdb sub_B9C0
+ROM:B74C                 fdb sub_B9C0
+ROM:B74E                 fdb sub_B9C0
+ROM:B750                 fdb sub_B9C0
+ROM:B752                 fdb sub_B9C0
+ROM:B754                 fdb sub_B9F9
+ROM:B756                 fdb sub_B9F9
+ROM:B758                 fdb sub_B9F9
+ROM:B75A off_B75A:       fdb sub_BAA0            ; Tie/bunker/tower fragments table
+ROM:B75C                 fdb loc_BAA4
+ROM:B75E                 fdb loc_BAA8
+ROM:B760                 fdb loc_BAAC
+ROM:B762                 fdb loc_BAB0
+ROM:B764                 fdb loc_BAB4
+ROM:B766                 fdb sub_BB1A
+ROM:B768                 fdb sub_BB1E
+ROM:B76A                 fdb sub_BB16
+
+ROM:BB3B                 fdb $6270, $6270, $6280, $6280, $6290, $6290, $62A0, $62A0
+ROM:BB3B                 fdb $66A0, $66A0, $66A0, $66A0, $66A0, $66A0, $66A0, $66A0
+ROM:BB3B                 fdb $6780, $62A0, $6790, $62A0, $67A0, $62A0, $67C0, $62A0
+ROM:BB3B word_BB3B:      fdb $6230, $6230, $6240, $6240, $6250, $6250, $6260, $6260
+
+ROM:BB8E off_BB8E:       fdb locret_BB8D
+ROM:BB90                 fdb sub_BB98
+ROM:BB92                 fdb sub_BBBB
+ROM:BB94                 fdb sub_BC1E
+ROM:BB96                 fdb sub_BC85
+
+ROM:C737 byte_C737:      fcb 1, 3, 7, $F, 8, 0, 8, 0
+ROM:C737                 fcb 0, 0, 0, 0, 0, 0, 0, 0
+ROM:C737                 fcb 0, 0, 0, 0, 0, 0, 0, 0
+ROM:C737                 fcb 0, 0, 0, 0, 0, 0, 0, 0
+ROM:C737                 fcb 0, 0, 0, 0, 0, 0, 0, 0
+ROM:C737                 fcb 0, 0, 0, 0, 0, 0, 0, 0
+ROM:C737                 fcb 0, 0, 0, 0, 0, 0, 0, 0
+ROM:C737                 fcb 0, 0, 0, 0, 0, 0, 0, 0
+ROM:C737                 fcb 0, 0, 0, 0, 0, 0, 0, 0
+ROM:C737                 fcb 0, 0, 0, 0, 0, 0, 0, 0
+ROM:C737                 fcb 0, 0, 0, 0, 0, 0, 0, 0
+ROM:C737                 fcb 8, 0, 8, 0, 0, 0, 0, 0
+
+ROM:C797 byte_C797:      fcb 8, $80, $48, $B0, 9, $49, $89, $C1
+ROM:C797                 fcb $E4, $C4, $A4, $84
+
+ROM:C7A3 unk_C7A3:       fcb   0
+
+ROM:C7A4                 fdb $5A60
+ROM:C7A4 word_C7A4:      fdb $50A, $1015, $1A20, $252A, $3035, $3A40, $454A, $5055
+
+ROM:C7B6 unk_C7B6:       fcb   0
+ROM:C7B7 word_C7B7:      fdb $834
+ROM:C7BB word_C7BB:      fdb $1B8
+ROM:C7BD                 fdb $190
+ROM:C7BF                 fdb $168
+ROM:C7C1 word_C7C1:      fdb $118
+ROM:C7C3 word_C7C3:      fdb $140
+ROM:C7C5 word_C7C5:      fdb $B4
+ROM:C7C7 word_C7C7:      fdb $50
+ROM:C7C9 word_C7C9:      fdb $DC
+ROM:C7CB word_C7CB:      fdb $78
+
+ROM:C7CD                 fdb $1FA6, $1FD3
+ROM:C7CD                 fdb $1FD3, $1E6B, $1E98, $1EC5, $1EF2, $1F1F, $1F4C, $1F79
+ROM:C7CD word_C7CD:      fdb $1E6B, $1E98, $1EC5, $1EF2, $1F1F, $1F4C, $1F79, $1FA6
+
+ROM:C7F1 byte_C7F1:      fcb $74, $78, $7A, $7E, $86, $8A, $8E, $92
+ROM:C7F1                 fcb $94, $96, $98, $9A
+
+ROM:CA64                 fdb $1E92, $1E6E
+ROM:CA64 word_CA64:      fdb $1FB8, $1F94, $1F72, $1F42, $1F1E, $1EFC, $1ED8, $1EB6
+
+ROM:CA78                 fdb $1F4C, $1F24
+ROM:CA78 word_CA78:      fdb $8C, $64, $3C, $14, $1FEC, $1FC4, $1F9C, $1F74
+
+ROM:CBA4 word_CBA4:      fdb $11C
+
+ROM:CBA6                 fdb $FE24, $11C, $FE24, $11C, $FE54, $11C, $FE84, $11C
+ROM:CBA6                 fdb $FE24, $5C, $FE24, $8C, $FE24, $BC, $FE24, $EC
+ROM:CBA6                 fdb $FE24, $FF9C, $FE24, $FFCC, $FE24, $FFFC, $FE24, $2C
+ROM:CBA6                 fdb $FE54, $FEDC, $FE24, $FF0C, $FE24, $FF3C, $FE24, $FF6C
+ROM:CBA6                 fdb $FEB4, $11C, $FEE4, $11C, $FF14
+ROM:CBA6                 fdb $FF14, $FEDC, $FEE4, $FEDC, $FEB4, $FEDC, $FE84, $FEDC
+ROM:CBA6 word_CBA6:      fdb $FF44, $FEDC, $FFA4, $FEDC, $FF74, $FEDC, $FF44, $FEDC
+
+ROM:CC10 word_CC10:      fdb $11C, $FF74, $11C, $FFA4
+
+ROM:CC7A                 fdb $504, $E0C, $105, $A04, $501, $1212, $C0D
+ROM:CC7A word_CC7A:      fdb $F02, $917, $10E, $801, $E07, $A12, $D0C, $80A ; High score names
+
+ROM:CC98                 fdb $38, $4766, $38, $655
+ROM:CC98                 fdb $81, $3553, $70, $4899, $51, $8000, $49, $2159
+ROM:CC98 word_CC98:      fdb $128, $5353, $111, $936, $102, $4650, $87, $2551 ; High scores init table
+
+ROM:CE4F                 fcb $13, $D8, $35, $8F, 4
+ROM:CE54 aUrfeyGotWired: fcc '-URFEY GOT WIRED'
+
+ROM:CE64                 fcb $A7, $3E, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:CE64                 fcb $FF, $FF, $FF, $FF, $FF, $FF
+ROM:CE64                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:CE64                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:CE64                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:CE64                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:CE64                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:CE64                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:CE64                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:CE64                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:CE64                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:CE64                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:CE64                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+
+ROM:CECA aCopyright1983Atari:fcc 'COPYRIGHT 1983 ATARI'
+
+ROM:CEDE                 fdb 0, $5A, $FFEC, $1FC4, $FFEC, $3C, $1FEC, 0
+ROM:CEDE                 fdb 0, $E0C8, $BBA3, $B4, $FFEC, $1F4C, $E154, $BBA3
+ROM:CEDE                 fdb 0, $E258, $BBA3, $78, $E078, $BBA3, $6E, $FFC4
+ROM:CEDE                 fdb $16, $1FF1, $A018, $A016, $64FF, $1F9F, $FFC9, $69
+ROM:CEDE                 fdb $18BC, $1C4A, $BB9A, $1F24, $FFBA, $DC, $E0A0, 0
+ROM:CEDE                 fdb $1AF6, $226, 0, $FEE8, $BB91, $1E3E, $E05A, 0
+ROM:CEDE                 fdb $1C2, $E078, 0, $E0E6, $1F88, $1F92, $BB8B, $1F74
+ROM:CEDE                 fdb $1DE4, $E082, $BBA3, 0, $FF38, $BBA3, $50, $FFE2
+ROM:CEDE                 fdb $1F2E, $1FD8, $B6D4, $B68A, $B6BD, $B6A1, $B6AD, $B71D
+ROM:CEDE                 fdb $1F88, $1FB0, $B6C5, $B709, $B6AD, $B670, $B670, $B6C5
+ROM:CEDE                 fdb $1F9C, $E028, $BB9D, $1F92, $E0BE, $BB94, $1FEC, $E050
+ROM:CEDE                 fdb $1FAE, $1F9C, $B71D, $B67C, $B68A, $7200, $8040, $C000
+ROM:CEDE                 fdb $1FC4, $3C, $E028, $C000, $51E0, 0, $1FC4, $1E
+ROM:CEDE                 fdb $1FD8, $3C, $E000, $1FE2, $FFD8, $5A, 0, $1FC4
+ROM:CEDE                 fdb $1FE2, $28, $78, $E014, $A018, $A016, $64FF, $C000
+ROM:CEDE                 fdb $1FE2, $FFB0, $2D, $14, $1FF1, $E03C, $2D, $FFB0
+ROM:CEDE                 fdb $1FE2, $FFCE, $F, $E055, $A018, $A016, $64FF, $1FE2
+ROM:CEDE                 fdb $1FF1, $F, $FFBA, $1FC4, $E046, $1FD3, $1FEC, $A018
+ROM:CEDE                 fdb $25, $1E, $A018, $A016, $64FF, $1F81, $E000, $A018
+ROM:CEDE                 fdb $2D, 0, $1FC4, $E050, $3C, $FFE2, $3C, 0
+ROM:CEDE                 fdb $2D, $E050, $A018, $A016, $64FF, $1FCC, 5, 7
+ROM:CEDE                 fdb $34, $E050, $1FF1, $FFA6, $2D, $28, $1FE2, $E032
+ROM:CEDE                 fdb $3C, $E03C, $BB88, $6E, $FFCE, $78, $FF4C, $1F88
+ROM:CEDE                 fdb $4125, $B9EF, $5C26, $B9EF, $5A3C, $B9EF, $5F3B, $480E
+ROM:CEDE                 fdb $420A, $B9EF, $4335, $B9EF, $F6D2, $B9EF, $5F1B, $422A
+ROM:CEDE                 fdb $441A, $B9EF, $5622, $B9EF, $422A, $B9EF, $4604, $C000
+ROM:CEDE                 fdb $451F, $5E36, $430F, $C000, $5A1C, $B9EF, $4A3E, $B9EF
+ROM:CEDE                 fdb $451F, $F6F9, $5A1C, $B9EF, $4A3E, $B9EF, $5C26, $B9EF
+ROM:CEDE                 fdb $453F, $B9EF, $4624, $B9EF, $5C26, $B9EF, $5B21, $B9EF
+ROM:CEDE                 fdb $4604, $B9EF, $5E36, $F671, $5C06, $4A3E, $F679, $4105
+ROM:CEDE                 fdb $4624, $B9EF, $5622, $F675, $B9EF, $5A1C, $B9EF, $422A
+ROM:CEDE                 fdb $4FE0, 0, $3C, $1FE2, $FFC4, $1FE2, $E028, $1FE2
+ROM:CEDE                 fdb $51E5, 0, $FEE8, $1E, $FF42, $50, $E08C, $BB97
+ROM:CEDE                 fdb $5A1C, $B9EF, $4A3E, $B9EF, $5B01, $B9EF, $422A, $B9EF
+ROM:CEDE                 fdb $5A, $FFC4, $A018, $A016, $64FF, $2D, $32, $1F79
+ROM:CEDE                 fdb $5A, $FFEC, $1F88, $E000, $4F16, $5A, $E014, $1F90
+ROM:CEDE                 fdb $5B01, $B9EF, $4A3E, $B9EF, $5F1B, $B9EF, $422A, $B9EF
+ROM:CEDE                 fdb $5C06, $C000, $B9EF, $5A1C, $B9EF, $422A, $B9EF, $5F1B
+ROM:CEDE                 fdb $64FF, $2D, $1FF6, $4B, $E028, $1FC4, $FFC4, $2D
+ROM:CEDE                 fdb $7200, $8040, $C000
+ROM:CEDE                 fdb $78, $FF1A, $14, $FFA6, $28, $FFEC, 0, $E168
+ROM:CEDE                 fdb $8040, $C000, $18BC, $19A, 0, $FE84, $1DE4, $E00A
+ROM:CEDE                 fdb $82, $FFD8, $78, $FF38, $1F88, $1FCE, $BB9A, $1FC4
+ROM:CEDE                 fdb $96, $1F9C, $B6F2, $B6C5, $B71D, $1FBE, $1FD8, $B68F
+ROM:CEDE                 fdb $A016, $64FF, $1F90, $FFD8, $4B, $E03C, $1FD3, $1FF6
+ROM:CEDE                 fdb $A016, $64FF, $1FD3, $1FFB, $1FF1, $FFBA, $1FD3, $E050
+ROM:CEDE                 fdb $A016, $64FF, $1FE2, $23, $1E, $E032, $1FA6, $FFC4
+ROM:CEDE                 fdb $A016, $64FF, $2D, $1FF1, $1FE2, $FFBA, $4B, $E046
+ROM:CEDE                 fdb $A016, $64FF, $69, $FFCE, $1F97, $FFF6, $4F16, $4B
+ROM:CEDE                 fdb $A016, $64FF, $C000, $64FF, $5A, $E00A, $4B0F, $A018
+ROM:CEDE                 fdb $A018, $A016, $64FF, $1F88, $E01E, $A018, $A016, $64FF
+ROM:CEDE                 fdb $A018, $A016, $64FF, $1FD3, $1FEC, $5A, $FFC4, $1FB5
+ROM:CEDE                 fdb $A018, $A016, $64FF, $34, $19, $4B, $FFD8, $1FB5
+ROM:CEDE                 fdb $A018, $A016, $64FF, $4F05, $1FB5, $E046, $5A, $FFE2
+ROM:CEDE                 fdb $A, $BB88, $1FD8, $E03C, $56E5, $1FCE, $FFD8, 0
+ROM:CEDE                 fdb $A, $F, $E032, $F, $FFB0, $A018, $A016, $64FF
+ROM:CEDE                 fdb $B670, $B670, $B71D, $7200, $8040, $C000, $1FA0, $1FB0
+ROM:CEDE                 fdb $B678, $B6B1, $B6AD, $B6BD, $B6FC, $7200, $8040, $C000
+ROM:CEDE                 fdb $B67F, $B6AD, $1FDA, $14, $B713, $B69A, $B68F, $B6E7
+ROM:CEDE                 fdb $B6AD, $7200, $8040, $C000, $1E, $1F9C, $B6F2, $B6C5
+ROM:CEDE                 fdb $B6BD, $7200, $8040, $C000, $1F5E, $1FC4, $B709, $B69A
+ROM:CEDE                 fdb $B6BD, $B684, $B67C, $B670, $B69A, $B6E1, $7200, $8040
+ROM:CEDE                 fdb $B6C5, $7200, $8040, $C000, $96, $1FC4, $B6E7, $B6C5
+ROM:CEDE                 fdb $B6E7, $B6AD, $1FA6, $1FB0, $B6A1, $B67C, $B6BD, $B678
+ROM:CEDE                 fdb $B9EF, $4125, $B9EF, $420A, $C000, $5C06, $B9EF, $5E36
+ROM:CEDE                 fdb $B9EF, $443A, $B9EF, $5C06, $4624, $B9EF, $5C06, $C000
+ROM:CEDE                 fdb $B9EF, $453F, $B9EF, $5E36, $B9EF, $453F, $B9EF, $422A
+ROM:CEDE                 fdb $B9EF, $453F, $B9EF, $5E36, $F6B5, $B9EF, $5A1C, $B9EF
+ROM:CEDE                 fdb $B9EF, $453F, $F725, $441A, $B9EF, $5622, $B9EF, $4624
+ROM:CEDE                 fdb $B9EF, $5C26, $B9EF, $4A3E, $F725, $5B01, $B9EF, $453F
+ROM:CEDE                 fdb $B9EF, $5F3B, $B9EF, $F67C, $5C06, $453F, $B9EF, $5F3B
+ROM:CEDE                 fdb $B9EF, $F678, $5C06, $4A3E, $B9EF, $5E16, $F671, $B9EF
+ROM:CEDE                 fdb $BB8B, 0, $FF60, $BB8B, $46, $FFE2, $BB8E, 0
+ROM:CEDE                 fdb $BB91, $1EC0, $FFCE, $BB8B, 0, $FF4C, $BB91, $140
+ROM:CEDE                 fdb $BB91, $1FB0, $FFEC, $BB91, $1F9C, $FF88, $BB8B, 0
+ROM:CEDE                 fdb $BB9D, $1DE4, $FEE8, $BBA3, 0, $FF10, $BBA3, $96
+ROM:CEDE                 fdb $BB9D, $82, $FFB0, 0, $FE70, $1F9C, $FF9C, $BB9A
+ROM:CEDE                 fdb $BBA0, $1F2E, $E03C, 0, $FF56, $D2, $E06E, $7200
+ROM:CEDE                 fdb $BBA3, 0, $FF2E, $BBA3, $1FB0, $FFC4, $BBA3, 0
+ROM:CEDE                 fdb $C000, $5A1C, $B9EF, $4A3E, $B9EF, $582C, $F71A, $B9EF
+ROM:CEDE                 fdb $C000, $5A, $1FB0, $B6BD, $B69A, $B709, $B6AD, $B6BD
+ROM:CEDE                 fdb $C000, $64FF, $5A, $E00F, $1FF1, $F, $1FB5, $FFE2
+ROM:CEDE                 fdb $E00A, $1FD3, $1E, $1FB5, $FFD8, $3C, $E04B, $A018
+ROM:CEDE                 fdb $E00A, $A018, $A016, $64FF, $C000, $64FF, $1F81, $E00F
+ROM:CEDE                 fdb $E014, $1FC4, $14, 0, $FFD8, $1FC4, $E014, 0
+ROM:CEDE                 fdb $E01E, $1FA6, $FFBA, $26, $1FF6, $A018, $A016, $64FF
+ROM:CEDE                 fdb $E01E, $5116, $69, $FFF6, $1F88, $FFE2, $A018, $A016
+ROM:CEDE                 fdb $E028, $1FA6, 0, $3C, $FFD8, $C000, $40EA, $1FA6
+ROM:CEDE                 fdb $E028, $3C, $FFEC, 0, $3C, $1FC4, $FFD8, $C000
+ROM:CEDE                 fdb $E028, $C000, $40F6, $5A, 0, $1FA6, $E014, $3C
+ROM:CEDE                 fdb $E032, $1F6A, $FF7E, $BBA3, 0, $FF10, $BBA3, $21C
+ROM:CEDE                 fdb $E03C, $1E, $FFD8, $1E, $28, $1FC4, $E000, $1E
+ROM:CEDE                 fdb $E03C, $35, 5, $16, $FFBF, $1FF1, $E055, $A018
+ROM:CEDE                 fdb $E046, 0, $FF92, $8C, $E028, $7200, $8040, $C000
+ROM:CEDE                 fdb $E050, 0, $FF4C, $51FB, $1FEC, $E032, $1FA6, $E032
+ROM:CEDE                 fdb $E064, $1FD8, $E00A, $1FE2, $FFB0, 0, $FF2E, $82
+ROM:CEDE                 fdb $E082, $7200, $8040, $C000, $1AF6, $B4, $1E3E, $E0B4
+ROM:CEDE                 fdb $E08C, $BB9A, $1F24, $FFBA, $DC, $E0AA, 0, $E08C
+ROM:CEDE                 fdb $E0AA, $BB8E, $8C, $FFD8, $1F74, $E122, $BB8B, 0
+ROM:CEDE                 fdb $E0B4, 0, $E0BE, $7200, $8040, $C000, $18BC, $1FB0
+ROM:CEDE                 fdb $E154, $BB8B, $8C, $FFA6, 0, $FEF2, $14, $FFD8
+ROM:CEDE                 fdb $F691, $5A1C, $B9EF, $4A3E, $B9EF, $422A, $B9EF, $5917
+ROM:CEDE                 fdb $F6A2, $5F1B, $4729, $B9EF, $5E16, $B9EF, $5622, $B9EF
+ROM:CEDE                 fdb $F725, $441A, $B9EF, $5B21, $B9EF, $5C26, $B9EF, $4624
+ROM:CEDE                 fdb $FE0C, $BB8B, $8C, $E05A, 0, $E140, $4AE5, $14
+ROM:CEDE                 fdb $FF24, $BBA3, $21C, $E118, 0, $E136, $1F88, $1F56
+ROM:CEDE                 fdb $FF56, $BB91, $1FBA, $FFF6, $BB91, 0, $FF60, $BB8B
+ROM:CEDE                 fdb $FF7E, $6E, $FFD8, 0, $E08C, $7200, $8040, $C000
+ROM:CEDE                 fdb $FFAB, $1FB5, $E046, $A018, $A016, $64FF, $1FF1, $1FCE
+ROM:CEDE                 fdb $FFBA, $1FDA, $1FF6, $1FDB, $E050, 0, $FFAB, $A018
+ROM:CEDE                 fdb $FFCE, $A018, $A016, $64FF, $3C, $1FF1, $34, $E041
+ROM:CEDE                 fdb $FFD8, $BB85, $5A, $FFCE, $BB8B, $50, $E028, $64
+ROM:CEDE                 fdb $FFF1, $4011, $A018, $A016, $64FF, $1F97, $E02D, $4B
+ROM:CEDE                 fdb $FFF6, 0, $E0BE, $7200, $8040, $C000, $64FF, $78
+ROM:CEDE word_CEDE:      fdb $1AF6, $1DA8, 0, $E208, $1F7E, $E000, 0, $FF74 ; Attract screen 2 'Star Wars' logo and fireball vector data
+
+ROM:D604 word_D604:      fdb $61FF               ; Vector colour cycle table full brightness
+ROM:D606                 fdb $62FF
+ROM:D608                 fdb $63FF
+ROM:D60A                 fdb $64FF
+ROM:D60C                 fdb $65FF
+ROM:D60E                 fdb $66FF
+ROM:D610                 fdb $67FF
+ROM:D612 word_D612:      fdb $6180               ; Vector colour cycle table normal brightness
+ROM:D614                 fdb $6280
+ROM:D616                 fdb $6380
+ROM:D618                 fdb $6480
+ROM:D61A                 fdb $6580
+ROM:D61C                 fdb $6680
+ROM:D61E                 fdb $6780
+ROM:D620 word_D620:      fdb $F917
+ROM:D622                 fdb $F919
+ROM:D624                 fdb $F91B
+ROM:D626                 fdb $F91D
+ROM:D628                 fdb $F91F
+ROM:D62A                 fdb $F921
+ROM:D62C                 fdb $F923
+ROM:D62E                 fdb $F925
+ROM:D630                 fdb $F927
+ROM:D632                 fdb $F929
+ROM:D634                 fdb $F92B
+ROM:D636                 fdb $F92D
+ROM:D638                 fdb $F92F
+ROM:D63A                 fdb $F931
+ROM:D63C                 fdb $F933
+ROM:D63E                 fdb $F935
+ROM:D640 word_D640:      fdb $F937
+ROM:D642                 fdb $F939
+ROM:D644                 fdb $F93B
+ROM:D646                 fdb $F93D
+ROM:D648 word_D648:      fdb $F51E
+ROM:D64A                 fdb $F561
+ROM:D64C                 fdb $F5A3
+ROM:D64E                 fdb $F5E5
+ROM:D650 word_D650:      fdb $F93F
+ROM:D652                 fdb $F94F
+ROM:D654                 fdb $F95F
+ROM:D656                 fdb $F96F
+ROM:D658 word_D658:      fdb $F628
+ROM:D65A                 fdb $F63A
+ROM:D65C                 fdb $F64C
+ROM:D65E                 fdb $F65E
+
+ROM:D716                 fdb $41E4, $5D14, $4106, $41E6, $5E14, $4002, $41ED, $5F11
+ROM:D716                 fdb $4202, $46E6, $5818, $4405, $44E5, $5816, $4203, $48EC
+ROM:D716                 fdb $48E6, $5518, $4504, $43E2, $581A, $4605, $45E4, $5517
+ROM:D716                 fdb $541D, $4301, $4CE3, $511C, $4201, $48E4, $561B, $4302
+ROM:D716                 fdb $5611, $4102, $45EA, $5A14, $4103, $42E6, $5D17, $4208
+ROM:D716 word_D716:      fdb $4200, $4DE1, $511F, $4601, $46E1, $541E, $4902, $43E1 ; Table of vector SVEC instructions for laser hit target animation
+
+ROM:D843 byte_D843:      fcb $FF, 4, 8, 8, $A, $FF, $FF, $FF
+ROM:DB2F word_DB2F:      fdb $41
+ROM:DB31                 fcb   0
+ROM:DB32                 fcb $50 ; P
+ROM:DB33                 fcb   0
+ROM:DB34                 fcb $60 ; `
+ROM:DB35                 fcb   0
+ROM:DB36                 fcb $70 ; p
+ROM:DB37                 fcb   0
+ROM:DB39                 fcb   0
+ROM:DB3B                 fcb   0
+ROM:DB3D                 fcb   0
+ROM:DB3E                 fcb $B8 ; +
+ROM:DB3F aStarWar:       fcc 'STAR WAR+'
+ROM:DBA8 aGameOve:       fcc 'GAME OVE-'
+ROM:DBB1 aInsertCoin:    fcc 'INSERT COIN+'
+ROM:DBBD aFreePla_0:     fcc 'FREE PLA+'
+ROM:DBC6 a2Plays1Coi:    fcc '2 PLAYS 1 COI+'
+ROM:DBD4 a1Coin1Pla:     fcc '1 COIN 1 PLA+'
+ROM:DBE1 a2Coins1Pla:    fcc '2 COINS 1 PLA+'
+ROM:DBEF aPullTriggerToStar:fcc 'PULL TRIGGER TO STAR+'
+ROM:DC04 aCredit:        fcc 'CREDIT+'
+ROM:DC0B aCredi_0:       fcc 'CREDI+'
+ROM:DC11 aShieldGon:     fcc 'SHIELD GON+'
+ROM:DC1C aFlightInstruction:fcc 'FLIGHT INSTRUCTIONS TO RED FIV+'
+ROM:DC3B a1_YourXWingIsEqui:fcc '1.  YOUR X-WING IS EQUIPPED WITH A+'
+ROM:DC5E aInvisibleDeflecto:fcc 'INVISIBLE DEFLECTOR SHIELD THA+'
+ROM:DC9F a2_DeflectorStreng:fcc '2.  DEFLECTOR STRENGTH IS LOST WHE+'
+ROM:DCC2 aAFireballImpactsY:fcc 'A FIREBALL IMPACTS YOUR SHIELD O-'
+ROM:DCE3 aWhenYouStrikeALas:fcc 'WHEN YOU STRIKE A LASER TOWER O-'
+ROM:DD12 a3_AimYourLasersWi:fcc '3.  AIM YOUR LASERS WITH CURSOR T-'
+ROM:DD34 aExplodeEmpireTieF:fcc 'EXPLODE EMPIRE TIE FIGHTERS, LASE-'
+ROM:DD74 a4_ShootFireballsB:fcc '4.  SHOOT FIREBALLS BEFORE THE+'
+ROM:DDA6 a5_TheRebelForceIs:fcc '5.  THE REBEL FORCE IS DEPENDING O+'
+ROM:DDFD unk_DDFD:       fcb $B7 ; +
+ROM:DDFE unk_DDFE:       fcb $B8 ; +
+
+ROM:DE29 aDarthVaderSShip20:fcc 'DARTH VADER'
+ROM:DE29                 fcb $27
+
+ROM:DF17 aSelectADeathSta:fcc 'SELECT A DEATH STA-'
+ROM:DF2A aFireLaserAtDesire:fcc 'FIRE LASER AT DESIRED DEATH STA-'
+ROM:DF4A aCountdow:      fcc 'COUNTDOW+'
+ROM:DF53 aEas_0:         fcc 'EAS+'
+ROM:DF57 aMediu:         fcc 'MEDIU-'
+ROM:DF5D aHar_0:         fcc 'HAR-'
+ROM:DF73 aBonu:          fcc 'BONU+'
+ROM:DF78 aNoBonu:        fcc 'NO BONU+'
+ROM:DF8E aMessageFromRebelC:fcc 'MESSAGE FROM REBEL COMMAND POS+'
+ROM:DFAD aYouAreATrueRebelP:fcc 'YOU ARE A TRUE REBEL PILO+'
+ROM:DFC7 aTheForceIsWithYo:fcc 'THE FORCE IS WITH YO+'
+ROM:DFDC aShootYourInitial:fcc 'SHOOT YOUR INITIAL+'
+
+ROM:DFEF aPrincessLeiaSRebe:fcc 'PRINCESS LEIA'
+ROM:DFEF                 fcb $27
+ROM:DFEF                 fcc 'S REBEL FORC+'
+
+ROM:E00A aPointsNextTowe:fcc 'POINTS NEXT TOWE-'
+ROM:E01B aTower:         fcc 'TOWER+'
+ROM:E021 aClearedAllLaserTo:fcc 'CLEARED ALL LASER TOWER+'
+ROM:E039 a50000ForShootingA:fcc '50,000 FOR SHOOTING ALL TOWER+'
+ROM:E057 aExhaustPortAhea:fcc 'EXHAUST PORT AHEA-'
+ROM:E069 aDeathStarDestroye:fcc 'DEATH STAR DESTROYE-'
+ROM:E07D aExhaustPortMisse:fcc 'EXHAUST PORT MISSE-'
+ROM:E090 aBonusForRemaining:fcc 'BONUS FOR REMAINING ENERG+'
+ROM:E0AA a5000:          fcc '5,000  +'
+ROM:E0B2 aAddedToDeflectorS:fcc 'ADDED TO DEFLECTOR SHIEL-'
+ROM:E0CB aShieldAtFullStren:fcc 'SHIELD AT FULL STRENGT+'
+ROM:E0E2 aStartingWaveBonu:fcc 'STARTING WAVE BONU+'
+ROM:E0F5 aShootFireball: fcc 'SHOOT FIREBALL+'
+ROM:E104 aShootTieFighter:fcc 'SHOOT TIE FIGHTER+'
+ROM:E116 aAvoidCatwalk:  fcc 'AVOID CATWALK+'
+ROM:E124 aUseTheForc:    fcc 'USE THE FORC+'
+ROM:E131 aForUsingTheForc:fcc ' FOR USING THE FORC+'
+ROM:E145 aObiWanKenobiIsGon:fcc 'OBI-WAN KENOBI IS GONE BUT HI+'
+
+ROM:E185 aTheEmpireSDeathSt:fcc 'THE EMPIRE'
+ROM:E185                 fcb $27
+ROM:E185                 fcc 'S DEATH STAR, UNDER TH+'
+
+ROM:E1A7 aCommandOfDarthVad:fcc 'COMMAND OF DARTH VADER, NEARS TH+'
+ROM:E1C8 aRebelPlanet_YouMu:fcc 'REBEL PLANET.  YOU MUST JOIN TH+'
+ROM:E220 aAlway:         fcc 'ALWAY+'
+ROM:E226 aAccountingInforma:fcc 'ACCOUNTING INFORMATIO+'
+ROM:E23C aAuxCoin:       fcc 'AUX COIN+'
+ROM:E245 aLeftMechCoin:  fcc 'LEFT MECH COIN+'
+ROM:E254 aRightMechCoin: fcc 'RIGHT MECH COIN+'
+ROM:E264 aTotalCoinsPai: fcc 'TOTAL COINS PAI-'
+ROM:E274 aGamesPlaye:    fcc 'GAMES PLAYE-'
+ROM:E280 aHighWav:       fcc 'HIGH WAV+'
+ROM:E289 aTotalGameTimeSeco:fcc 'TOTAL GAME TIME           SECOND+'
+ROM:E2AA aAverageGameTim:fcc 'AVERAGE GAME TIM+'
+ROM:E2BB aTotalTimeOnSecond:fcc 'TOTAL TIME ON           SECOND+'
+ROM:E2DA aPercentageOfPlayP:fcc 'PERCENTAGE OF PLAY     PERCEN+'
+ROM:E2F8 aHistoryOfGameTime:fcc 'HISTORY OF GAME TIME+'
+ROM:E30D aGameOption:    fcc 'GAME OPTION+'
+ROM:E319 aValueOfACoi:   fcc 'VALUE OF A COI+'
+ROM:E328 aLeftMechValu:  fcc 'LEFT MECH VALU+'
+ROM:E337 aRightMechValu: fcc 'RIGHT MECH VALU+'
+ROM:E347 aBonusAdde:     fcc 'BONUS ADDE-'
+ROM:E352 aStartingShiel: fcc 'STARTING SHIEL-'
+ROM:E361 aPlayDifficult: fcc 'PLAY DIFFICULT+'
+ROM:E370 aBonusShiel:    fcc 'BONUS SHIEL-'
+ROM:E37C aMusicInAttrac: fcc 'MUSIC IN ATTRAC+'
+ROM:E38C aResetHighScore:fcc 'RESET HIGH SCORE+'
+ROM:E39D aResetTimingInf:fcc 'RESET TIMING INF-'
+ROM:E3AE aResetOption:   fcc 'RESET OPTION+'
+ROM:E3BB aTestNovra:     fcc 'TEST NOVRA-'
+ROM:E3C6 aUpDownToSelectIte:fcc 'UP,DOWN TO SELECT ITE-'
+ROM:E3FC aFreePla:       fcc 'FREE PLA+'
+ROM:E405 a2Credit:       fcc '2 CREDIT+'
+ROM:E40E a1Credi:        fcc '1 CREDI+'
+ROM:E416 aCredi:         fcc '% CREDI+'
+ROM:E424 aNon_0:         fcc 'NON+'
+ROM:E455 aNon:           fcc 'NON+'
+ROM:E45A unk_E45A:       fcb $B7 ; +
+ROM:E45B unk_E45B:       fcb $B8 ; +
+ROM:E45D aEas:           fcc 'EAS+'
+ROM:E461 aModerat:       fcc 'MODERAT+'
+ROM:E469 aHar:           fcc 'HAR-'
+ROM:E46D aHardes:        fcc 'HARDES+'
+ROM:E478 aYe_3:          fcc 'YE+'
+ROM:E47B aN_3:           fcc 'N-'
+ROM:E47D aN_2:           fcc 'N-'
+ROM:E47F aYe_2:          fcc 'YE+'
+ROM:E482 aN_1:           fcc 'N-'
+ROM:E484 aYe_1:          fcc 'YE+'
+ROM:E487 aN_0:           fcc 'N-'
+ROM:E489 aYe_0:          fcc 'YE+'
+ROM:E48C aN:             fcc 'N-'
+ROM:E48E aYe:            fcc 'YE+'
+ROM:E491 aNoError:       fcc 'NO ERROR+'
+ROM:E49A aErrorA:        fcc 'ERROR A+'
+ROM:E4A2 aSwitchTes:     fcc 'SWITCH TES+'
+ROM:E4AD aLeftFir:       fcc 'LEFT FIR+'
+ROM:E4B6 aRightFir:      fcc 'RIGHT FIR+'
+ROM:E4C7 aSelfTes:       fcc 'SELF TES+'
+ROM:E4D0 aSla:           fcc 'SLA-'
+ROM:E4D4 aAuxCoi:        fcc 'AUX COI+'
+ROM:E4DC aLeftCoi:       fcc 'LEFT COI+'
+ROM:E4F0 aLeftThum:      fcc 'LEFT THUM-'
+ROM:E4FA aRightThum:     fcc 'RIGHT THUM-'
+ROM:E50D aPotTes:        fcc 'POT TES+'
+ROM:E515 aHardwareError: fcc 'HARDWARE ERROR+'
+ROM:E524 aNoErrorsDetecte:fcc 'NO ERRORS DETECTE-'
+ROM:E536 aProgramRamAt2f:fcc 'PROGRAM RAM AT 2F+'
+ROM:E556 aMathRamAt5:    fcc 'MATH RAM AT 5+'
+ROM:E571 aVgRam1At3:     fcc 'VG RAM1 AT 3-'
+ROM:E57E aVgRam2At3:     fcc 'VG RAM2 AT 3-'
+ROM:E598 aVgRam4At4:     fcc 'VG RAM4 AT 4-'
+ROM:E5A5 aVgRam5At4:     fcc 'VG RAM5 AT 4-'
+ROM:E5B2 aNonVolatileRamAt1:fcc 'NON VOLATILE RAM AT 1+'
+ROM:E5DA aProgramRom1At1h:fcc 'PROGRAM ROM1 AT 1H-'
+ROM:E5ED aProgramRom2At1j:fcc 'PROGRAM ROM2 AT 1J-'
+ROM:E613 aProgramRom4At1:fcc 'PROGRAM ROM4 AT 1-'
+ROM:E631 aMathboxTest:   fcc 'MATHBOX TEST+'
+ROM:E63E aBadMathboxReadyLi:fcc 'BAD MATHBOX READY LIN+'
+ROM:E654 aDividerError:  fcc 'DIVIDER ERROR+'
+ROM:E662 aNoDividerError:fcc 'NO DIVIDER ERROR+'
+ROM:E673 aOptSwNumDivDenIsE:fcc 'OPT SW    NUM DIV DEN IS ERRO-'
+ROM:E691 aMatrixError:   fcc 'MATRIX ERROR+'
+ROM:E69E aNoMatrixError: fcc 'NO MATRIX ERROR+'
+ROM:E6AE aBipTes:        fcc 'BIP TES+'
+ROM:E6B6 aAlignTheBoxe:  fcc 'ALIGN THE BOXE+'
+ROM:E6C5 aScaleTes:      fcc 'SCALE TES+'
+ROM:E6CF aLinea:         fcc 'LINEA-'
+ROM:E6D5 aLinearAndBinar:fcc 'LINEAR AND BINAR+'
+ROM:E6E6 unk_E6E6:       fcb $30 ; 0
+ROM:E6E7                 fcb $2E ; .
+ROM:E6E8                 fcb $20
+ROM:E6EC a1_Di:          fcc '1. DI-'
+ROM:E6F2 a2_Lo:          fcc '2. LO+'
+ROM:E6F8 a3_Hig:         fcc '3. HIG+'
+ROM:E6FF aIntensityTes:  fcc 'INTENSITY TES+'
+ROM:E70D aPressAuxCoinToCon:fcc 'PRESS AUX COIN TO CONTINU+'
+ROM:E727 aPressAuxCoinForSe:fcc 'PRESS AUX COIN FOR SELF TES+'
+ROM:E743 aPullRightFireToPe:fcc 'PULL RIGHT FIRE TO PERFORM RESET+'
+ROM:E894 ptrText:        fdb aStarWar
+ROM:E896                 fdb a1983LucasfilmLtd
+ROM:E898                 fdb aAllRightsReserved
+ROM:E89A                 fdb aLucasfilmTrademar
+ROM:E89C                 fdb aGameOve
+ROM:E89E                 fdb aGameOve
+ROM:E8A0                 fdb aInsertCoin
+ROM:E8A2                 fdb aFreePla_0
+ROM:E8A4                 fdb a2Plays1Coi
+ROM:E8A6                 fdb a1Coin1Pla
+ROM:E8A8                 fdb a2Coins1Pla
+ROM:E8AA                 fdb aPullTriggerToStar
+ROM:E8AC                 fdb aCredit
+ROM:E8AE                 fdb aCredi_0
+ROM:E8B0                 fdb aShieldGon
+ROM:E8B2                 fdb aFlightInstruction
+ROM:E8B4                 fdb a1_YourXWingIsEqui
+ROM:E8B6                 fdb aInvisibleDeflecto
+ROM:E8B8                 fdb aWillProtectYouFor
+ROM:E8BA                 fdb a2_DeflectorStreng
+ROM:E8BC                 fdb aAFireballImpactsY
+ROM:E8BE                 fdb aWhenYouStrikeALas
+ROM:E8C0                 fdb aTrenchCatwalko
+ROM:E8C2                 fdb a3_AimYourLasersWi
+ROM:E8C4                 fdb aExplodeEmpireTieF
+ROM:E8C6                 fdb aTowerTopsAndTrenc
+ROM:E8C8                 fdb a4_ShootFireballsB
+ROM:E8CA                 fdb aImpactYourShieldo
+ROM:E8CC                 fdb a5_TheRebelForceIs
+ROM:E8CE                 fdb aYouToStopTheEmpir
+ROM:E8D0                 fdb aUpTheDeathStaro
+ROM:E8D2                 fdb unk_DDFC
+ROM:E8D4                 fdb unk_DDFD
+ROM:E8D6                 fdb unk_DDFE
+ROM:E8D8                 fdb unk_DDFF
+ROM:E8DA                 fdb aScorin
+ROM:E8DC                 fdb aTieFighters100
+ROM:E8DE                 fdb aDarthVaderSShip20
+ROM:E8E0                 fdb aLaserBunkers20
+ROM:E8E2                 fdb aLaserTowers20
+ROM:E8E4                 fdb aTrenchTurrets10
+ROM:E8E6                 fdb aFireballs3
+ROM:E8E8                 fdb aExhaustPort2500
+ROM:E8EA                 fdb aDestroyingAllTowe
+ROM:E8EC                 fdb aSelectADeathSta
+ROM:E8EE                 fdb aFireLaserAtDesire
+ROM:E8F0                 fdb aCountdow
+ROM:E8F2                 fdb aEas_0
+ROM:E8F4                 fdb aMediu
+ROM:E8F6                 fdb aHar_0
+ROM:E8F8                 fdb aWave_1
+ROM:E8FA                 fdb aWave_0
+ROM:E8FC                 fdb aWave
+ROM:E8FE                 fdb aBonu
+ROM:E900                 fdb aBonu
+ROM:E902                 fdb aNoBonu
+ROM:E904                 fdb a40000
+ROM:E906                 fdb a80000
+ROM:E908                 fdb aMessageFromRebelC
+ROM:E90A                 fdb aYouAreATrueRebelP
+ROM:E90C                 fdb aTheForceIsWithYo
+ROM:E90E                 fdb aShootYourInitial
+ROM:E910                 fdb aPrincessLeiaSRebe
+ROM:E912                 fdb aPrincessLeiaSRebe
+ROM:E914                 fdb aPointsNextTowe
+ROM:E916                 fdb aTower
+ROM:E918                 fdb aClearedAllLaserTo
+ROM:E91A                 fdb a50000ForShootingA
+ROM:E91C                 fdb aExhaustPortAhea
+ROM:E91E                 fdb aDeathStarDestroye
+ROM:E920                 fdb aExhaustPortMisse
+ROM:E922                 fdb aBonusForRemaining
+ROM:E924                 fdb a5000
+ROM:E926                 fdb aAddedToDeflectorS
+ROM:E928                 fdb aShieldAtFullStren
+ROM:E92A                 fdb aStartingWaveBonu
+ROM:E92C                 fdb aShootFireball
+ROM:E92E                 fdb aShootTieFighter
+ROM:E930                 fdb aAvoidCatwalk
+ROM:E932                 fdb aUseTheForc
+ROM:E934                 fdb aForUsingTheForc
+ROM:E936                 fdb aObiWanKenobiIsGon
+ROM:E938                 fdb aPresenceIsFeltWit
+ROM:E93A                 fdb aTheEmpireSDeathSt
+ROM:E93C                 fdb aCommandOfDarthVad
+ROM:E93E                 fdb aRebelPlanet_YouMu
+ROM:E940                 fdb aRebellionToStopTh
+ROM:E942                 fdb aTheForceWillBeWit
+ROM:E944                 fdb aAlway
+ROM:E946                 fdb aAccountingInforma
+ROM:E948                 fdb aAuxCoin
+ROM:E94A                 fdb aLeftMechCoin
+ROM:E94C                 fdb aRightMechCoin
+ROM:E94E                 fdb aTotalCoinsPai
+ROM:E950                 fdb aGamesPlaye
+ROM:E952                 fdb aHighWav
+ROM:E954                 fdb aTotalGameTimeSeco
+ROM:E956                 fdb aAverageGameTim
+ROM:E958                 fdb aTotalTimeOnSecond
+ROM:E95A                 fdb aPercentageOfPlayP
+ROM:E95C                 fdb aHistoryOfGameTime
+ROM:E95E                 fdb aGameOption
+ROM:E960                 fdb aValueOfACoi
+ROM:E962                 fdb aLeftMechValu
+ROM:E964                 fdb aRightMechValu
+ROM:E966                 fdb aBonusAdde
+ROM:E968                 fdb aStartingShiel
+ROM:E96A                 fdb aPlayDifficult
+ROM:E96C                 fdb aBonusShiel
+ROM:E96E                 fdb aMusicInAttrac
+ROM:E970                 fdb aResetHighScore
+ROM:E972                 fdb aResetTimingInf
+ROM:E974                 fdb aResetOption
+ROM:E976                 fdb aTestNovra
+ROM:E978                 fdb aUpDownToSelectIte
+ROM:E97A                 fdb aPullLeftFireToCha
+ROM:E97C                 fdb aFreePla
+ROM:E97E                 fdb a2Credit
+ROM:E980                 fdb a1Credi
+ROM:E982                 fdb aCredi
+ROM:E984                 fdb unk_E41E
+ROM:E986                 fdb unk_E41F
+ROM:E988                 fdb unk_E420
+ROM:E98A                 fdb unk_E421
+ROM:E98C                 fdb unk_E422
+ROM:E98E                 fdb unk_E423
+ROM:E990                 fdb aNon_0
+ROM:E992                 fdb a2Gives
+ROM:E994                 fdb a4Gives_0
+ROM:E996                 fdb a4Gives
+ROM:E998                 fdb a5Gives
+ROM:E99A                 fdb a3Gives
+ROM:E99C                 fdb aNon
+ROM:E99E off_E99E:       fdb aNon
+ROM:E9A0                 fdb unk_E459
+ROM:E9A2                 fdb unk_E45A
+ROM:E9A4                 fdb unk_E45B
+ROM:E9A6                 fdb unk_E45C
+ROM:E9A8                 fdb aEas
+ROM:E9AA                 fdb aModerat
+ROM:E9AC                 fdb aHar
+ROM:E9AE                 fdb aHardes
+ROM:E9B0                 fdb unk_E474
+ROM:E9B2                 fdb unk_E475
+ROM:E9B4                 fdb unk_E476
+ROM:E9B6                 fdb unk_E477
+ROM:E9B8                 fdb aYe_3
+ROM:E9BA                 fdb aN_3
+ROM:E9BC                 fdb aN_2
+ROM:E9BE                 fdb aYe_2
+ROM:E9C0                 fdb aN_1
+ROM:E9C2                 fdb aYe_1
+ROM:E9C4                 fdb aN_0
+ROM:E9C6                 fdb aYe_0
+ROM:E9C8                 fdb aN
+ROM:E9CA                 fdb aYe
+ROM:E9CC                 fdb aNoError
+ROM:E9CE                 fdb aErrorA
+ROM:E9D0                 fdb aSwitchTes
+ROM:E9D2                 fdb aLeftFir
+ROM:E9D4                 fdb aRightFir
+ROM:E9D6                 fdb aSpare_0
+ROM:E9D8                 fdb aSelfTes
+ROM:E9DA                 fdb aSla
+ROM:E9DC                 fdb aAuxCoi
+ROM:E9DE                 fdb aLeftCoi
+ROM:E9E0                 fdb aRightCoiA
+ROM:E9E2                 fdb aRightCoiA+$A
+ROM:E9E4                 fdb aRightCoiA+$A
+ROM:E9E6                 fdb aLeftThum
+ROM:E9E8                 fdb aRightThum
+ROM:E9EA                 fdb aSpare
+ROM:E9EC                 fdb unk_E50C
+ROM:E9EE                 fdb unk_E50C
+ROM:E9F0                 fdb unk_E50C
+ROM:E9F2                 fdb aPotTes
+ROM:E9F4                 fdb aHardwareError
+ROM:E9F6                 fdb aNoErrorsDetecte
+ROM:E9F8                 fdb aProgramRamAt2f
+ROM:E9FA                 fdb aMathRamAt5_0
+ROM:E9FC                 fdb aMathRamAt5
+ROM:E9FE                 fdb aVgRam0At3
+ROM:EA00                 fdb aVgRam1At3
+ROM:EA02                 fdb aVgRam2At3
+ROM:EA04                 fdb aVgRam3At4
+ROM:EA06                 fdb aVgRam4At4
+ROM:EA08                 fdb aVgRam5At4
+ROM:EA0A                 fdb aNonVolatileRamAt1
+ROM:EA0C                 fdb aProgramRom0At1
+ROM:EA0E                 fdb aProgramRom1At1h
+ROM:EA10                 fdb aProgramRom2At1j
+ROM:EA12                 fdb aProgramRom3At1k
+ROM:EA14                 fdb aProgramRom4At1
+ROM:EA16                 fdb aVgRomAt1
+ROM:EA18                 fdb aMathboxTest
+ROM:EA1A                 fdb aBadMathboxReadyLi
+ROM:EA1C                 fdb aDividerError
+ROM:EA1E                 fdb aNoDividerError
+ROM:EA20                 fdb aOptSwNumDivDenIsE
+ROM:EA22                 fdb aMatrixError
+ROM:EA24                 fdb aNoMatrixError
+ROM:EA26                 fdb aBipTes
+ROM:EA28                 fdb aAlignTheBoxe
+ROM:EA2A                 fdb aScaleTes
+ROM:EA2C                 fdb aLinea
+ROM:EA2E                 fdb aLinearAndBinar
+ROM:EA30                 fdb unk_E6E6
+ROM:EA32                 fdb a1_Di
+ROM:EA34                 fdb a2_Lo
+ROM:EA36                 fdb a3_Hig
+ROM:EA38                 fdb aIntensityTes
+ROM:EA3A                 fdb aPressAuxCoinToCon
+ROM:EA3C                 fdb aPressAuxCoinForSe
+ROM:EA3E                 fdb aPullRightFireToPe
+ROM:EA40                 fdb $FE9C, $FE6C, $FE6C, $FE78, $FE84, $FEA8, $FEC0, $FFBC
+
+ROM:EA50                 fdb 0, 0, 0, 0, 0, 0, 0, 0
+ROM:EA50                 fdb 0, 0, 0, 0, 0, 0, 0, 0
+ROM:EA50                 fdb 0, 0, $1EFC, $1E0, $1F28, $1B8, $1E98, $190
+ROM:EA50                 fdb $14C, $C8, $1FC8, $1E70, $158, 0, $1E14, 0
+ROM:EA50                 fdb $1E44, $1E98, $1E5C, $1E74, $1E5C, $1E50, $54, $90
+ROM:EA50                 fdb $1E44, $D8, $1E5C, $B4, $1E5C, $90, $1E44, $48
+ROM:EA50                 fdb $1E5C, $1F70, $1E5C, $1F4C, $1E44, $1F04, $1E5C, $1EE0
+ROM:EA50                 fdb $1E5C, $24, $1E5C, 0, $1E5C, $1FDC, $1E44, $1F94
+ROM:EA50                 fdb $1E80, $15E, $1EF8, $12C, $1E98, $FA, $1E98, $C8
+ROM:EA50                 fdb $1E80, $168, $1E80, $140, $1EE0, $118, $FA, $140
+ROM:EA50                 fdb $1E8C, $1FC4, $1E8C, $1F88, $1E8C, $1EE8, $1E8C, $1EA2
+ROM:EA50                 fdb $1E8C, $B4, $1E8C, $78, $1E8C, $3C, $1E8C, 0
+ROM:EA50                 fdb $1E98, $DC, $1E68, $B4, $1EC8, $78, $1E50, $50
+ROM:EA50                 fdb $1EB4, $1E3E, $1E78, $1F06
+ROM:EA50                 fdb $1EC8, $1F9C, $1EF8, $1F6A, $1EFC, $1ED4, $1E90, $1EA2
+ROM:EA50                 fdb $1EE0, $96, $1E80, $64, $1E68, 0, $1E68, $1FCE
+ROM:EA50                 fdb $1F08, 0, $1F74, $1F4, $1E98, $1C2, $1E98, $190
+ROM:EA50                 fdb $1F08, $DC, $1F20, $78, $1EC0, 0, $1EC0, $13C
+ROM:EA50                 fdb $1F20, $154, $1E84, $12C, $1F98, $104, $1ED4, $20
+ROM:EA50                 fdb $1F2C, $9C, $1F14, $138, $1F20, $9C, $1ECC, $C0
+ROM:EA50                 fdb $1F38, $1E70, $1F74, $1F6A, $1F68, $190, $1EFC, $C8
+ROM:EA50                 fdb $1F38, $1F38, $1F38, $1F06, $1F38, $1ED4, $1F38, $1EA2
+ROM:EA50                 fdb $1F44, $1ED4, $1FA4, $64, $1F50, $1F9C, $1F8C, $FA
+ROM:EA50                 fdb $1F50, $180, $1F2C, $180, $1F5C, $180, $1F68, $150
+ROM:EA50                 fdb $1F50, $1C2, $1F2C, 0, $1F38, $190, $1F5C, $15E
+ROM:EA50                 fdb $1F5C, $12C, $1F74, $FA, $1F74, $C8, $1F74, $96
+ROM:EA50                 fdb $1F5C, $15E, $1F38, $C8, $1E98, $113, $1F68, $1F9C
+ROM:EA50                 fdb $1F5C, $1B0, $1F68, $1B0, $1F5C, $1B0, $1F08, $1E0
+ROM:EA50                 fdb $1F74, $64, $1F74, $32, $1F74, 0, $1EFC, $1FCE
+ROM:EA50                 fdb $1F80, $180, $13A, $1BC, $1EE4, $180, $1E9C, $180
+ROM:EA50                 fdb $1F80, $90, $1EF0, $48, $1EF0, $48, $1F20, $1FD0
+ROM:EA50                 fdb $1F8C, $1F06, $1FB0, $1ED4, $1FBC, $1ED4, $E4, $D2
+ROM:EA50                 fdb $1F98, 0, $1F98, $1E0, $1F74, $1E0, $1F98, $1B0
+ROM:EA50                 fdb $1F98, $1F9C, $1EBC, $FA, $64, $FA, $1FB0, $1F38
+ROM:EA50                 fdb $1F9C, $1ED4, $1F9C, $1EA2, $1F5C, $12C, $1ECC, $1E3E
+ROM:EA50                 fdb $1FA4, $64, $1F98, $32, $1F8C, 0, $1F68, $1FCE
+ROM:EA50                 fdb $1FB0, $1E48, $140, $1FD8, $1E90, $154, $1ECC, $118
+ROM:EA50                 fdb $1FBC, $1F38, $E0, $20, $1E2C, $C8, $1FBC, $1F60
+ROM:EA50                 fdb $1FBC, $BE, $1F38, $BE, $1F9C, $1F38, $1F9C, $1F06
+ROM:EA50                 fdb $1FC4, $1B0, $1FC4, $1B0, $1F8C, $E6, $1E74, $120
+ROM:EA50                 fdb $48, 0, $48, 0, $48, $1FCE, $48, $1FCE
+ROM:EA50                 fdb $48, $12C, $48, $12C, $48, $12C, $48, $12C
+ROM:EA50                 fdb $48, $12C, $48, $12C, $48, $FA, $48, $FA
+ROM:EA50                 fdb $48, $15E, $48, $15E, $48, $12C, $48, $12C
+ROM:EA50                 fdb $48, $190, $48, $190, $48, $15E, $48, $15E
+ROM:EA50                 fdb $48, $1C2, $48, $1C2, $48, $1C2, $48, $1C2
+ROM:EA50                 fdb $48, $1F9C, $48, $1F9C, $48, $1F6A, $48, $1F6A
+ROM:EA50                 fdb $48, $96, $48, $96, $48, $64, $48, $64
+ROM:EA50                 fdb $48, $C8, $48, $C8, $48, $96, $48, $96
+ROM:EA50                 fdb $48, $FA, $48, $FA, $48, $C8, $48, $C8
+ROM:EA50                 fdb $54, $90, $54, $90, $54, $90, $1FC4, $118
+ROM:EA50                 fdb $64, $12C, $1FB0, $1F6A, $1F98, $C8, $1FD4, $96
+ROM:EA50                 fdb $B2, $1F6A, $B2, $1F6A, $1F80, $190, $1ED4, $12C
+ROM:EA50 word_EA50:      fdb $1F98, $1E5C, $1E6C, $1E38, $1F20, $1E14, $1E30, $1DF0 ; Text string position
+
+ROM:EDA8                 fdb 0, $6780, $6280, $6280, $6280, $6280, $6280, $6280
+ROM:EDA8                 fdb $6280, $6280, $6280, $6280, $6280, $6280, $6280, $6280
+ROM:EDA8                 fdb $6280, $6280, $6280, $6280, $6280, $6280, $6280, $6280
+ROM:EDA8                 fdb $6280, $6280, $6280, $6280, $6280, $6280, $6280, $6280
+ROM:EDA8                 fdb $6280, $6280, $6280, $6280, $6280, $6280, $6280, $6280
+ROM:EDA8                 fdb $6280, $6280, $6280, $6280, $6280, $6280, $6280, $6280
+ROM:EDA8                 fdb $6280, $6280, $6280, $6280, $6280, $6280, $6280, $6280
+ROM:EDA8                 fdb $6280, $6280, $6280, $6280, $6280, $6280, $6280, $6280
+ROM:EDA8                 fdb $6280, $6280, $6280, $6280, $6280, $6280, $6280, $6280
+ROM:EDA8                 fdb $6280, $6280, $6280, $6280, $6280, $6280, $6280, $6780
+ROM:EDA8                 fdb $6280, $6280, $6280, $6280, $6480, $6480, $6780, $6280
+ROM:EDA8                 fdb $6280, $6280, $6280, $6280, $6780, $6780, $6280, $6280
+ROM:EDA8                 fdb $6280, $6280, $6480, $6480, $6480, $6180, $6180, $6180
+ROM:EDA8                 fdb $6280, $6280, $6780, $6780, $6780, $6780, $6780, $6780
+ROM:EDA8                 fdb $6480, $6480, $6480, $6480, $6480, $6480, $6480, $6480
+ROM:EDA8                 fdb $6480, $6480, $6480, $6480, $6480, $6480, $6480, $6480
+ROM:EDA8                 fdb $6480, $6480, $6480, $6580, $6580, $6580, $6580, $6580
+ROM:EDA8                 fdb $6480, $6480, $6680, $6580, $A01A, $6180, $A01A, $6480
+ROM:EDA8                 fdb $6480, $6480, $A01A, $6480, $A01A, $A01A, $A01A, $A01A
+ROM:EDA8                 fdb $6580, $6580, $6580, $6580, $6580, $6580, $A01A, $6280
+ROM:EDA8                 fdb $6680, $6680, $6680, $A01A, $6780, $6780, $A01A, $6480
+ROM:EDA8                 fdb $6720, $6780, $6780, $6780, $6780, $A01A
+ROM:EDA8                 fdb $6780, $6780, $6280, $6280, $6280, $6280, $6280, $6280
+ROM:EDA8                 fdb $6780, $6780, $6780, $6780, $6780, $6780, $6700, $6710
+ROM:EDA8                 fdb $A01A, 0, 0, 0, 0, 0, 0, 0
+ROM:EDA8                 fdb $A01A, $A01A, $A01A, $A01A, $6780, $6480, $6480, $A01A
+ROM:EDA8 word_EDA8:      fdb $6280, $6280, $6280, $6280, $64FF, $6380, $6180, $6680 ; Text string colour
+
+ROM:F32E word_F32E:      fdb $4800
+ROM:F330                 fdb $5000
+ROM:F332 word_F332:      fdb $5001
+ROM:F334 word_F334:      fdb 0
+ROM:F336                 fdb $800
+ROM:F338                 fdb $1000
+ROM:F33A                 fdb $1800
+ROM:F33C                 fdb $2000
+ROM:F33E                 fdb $2800
+ROM:F340 off_F340:       fdb byte_4500           ; NOVRAM
+ROM:F342 word_F342:      fdb $6000
+ROM:F344 word_F344:      fdb $8000
+ROM:F346                 fdb $A000
+ROM:F348                 fdb $C000
+ROM:F34A                 fdb $E000
+ROM:F34C word_F34C:      fdb $2800
+ROM:F34E                 fdb $100, $200, $400, $800, $1000, $2000, $4000, $8000
+ROM:F34E word_F34E:      fdb 1, 2, 4, 8, $10, $20, $40, $80
+ROM:F723 off_F723:       fdb sub_F74F
+ROM:F725 off_F725:       fdb sub_F77F
+ROM:F727 off_F727:       fdb sub_F958, sub_F88C, sub_F884, sub_F894, sub_F8AA, sub_F8CC
+ROM:F733 off_F733:       fdb sub_F93F
+ROM:F735                 fdb $1F06, $1ED4, $1EA2, $1E70, $1F6A
+ROM:F735 word_F735:      fdb $6480, $6280, $6180, $6580, $6780, $6680, $6380, $1F38
+ROM:FAE1 off_FAE1:       fdb sub_FBAA
+ROM:FAE3                 fdb $1F6A
+ROM:FAE5                 fdb sub_FBBF
+ROM:FAE7                 fdb $1F38
+ROM:FAE9 off_FAE9:       fdb sub_FCAC
+ROM:FAEB                 fdb $1F06
+ROM:FAED                 fdb sub_FCAC
+ROM:FAEF                 fdb $1ED4
+ROM:FAF1                 fdb sub_FCAC
+ROM:FAF3                 fdb $1EA2
+ROM:FAF5                 fdb sub_FCAC
+ROM:FAF7                 fdb $1E70
+ROM:FAF9 off_FAF9:       fdb sub_FB09
+ROM:FAFB                 fdb $1F6A
+ROM:FAFD                 fdb sub_FC1C
+ROM:FAFF                 fdb $1F38
+ROM:FB01                 fdb sub_FC72
+ROM:FB03                 fdb $1F06
+ROM:FB05                 fdb sub_FBD4
+ROM:FB07                 fdb $1ED4
+
+ROM:FB4B                 fdb $2AAA, $4000, $2AAA, $64, $2AAA, $2AAA, $4000, $32
+ROM:FB4B                 fdb $5555, $5555, $4000, 0
+ROM:FB4B word_FB4B:      fdb $4000, $4000, $4000, $C8, $5555, $4000, $5555, $96
+
+ROM:FB73 word_FB73:      fdb $6EE4
+
+ROM:FCD1                 fdb $2AAA, 0, $4000, $2AAA, 0, $2AAA, $C000, $2AAA
+ROM:FCD1 word_FCD1:      fdb $5555, 0, $4000, $5555, 0, $5555, $C000, $5555
+
+ROM:FCF1 off_FCF1:       fdb sub_FB75, sub_FB82, sub_FB8F, sub_FB9C, sub_FBA3, sub_FBAA, sub_FBBF
+ROM:FCFF off_FCFF:       fdb sub_FCAC, sub_FCAC, sub_FCAC, sub_FCAC
+ROM:FD85 JMPTBL_Diag:    fcb   0
+ROM:FD86                 fdb sub_FDBC
+ROM:FD89                 fdb sub_FDD7
+ROM:FD8B                 fcb $C0 ; +
+ROM:FD8C                 fdb sub_FDF2
+ROM:FD8E                 fcb $E0 ; a
+ROM:FD8F                 fdb sub_FE4F
+ROM:FD91                 fcb $E8 ; F
+ROM:FD92                 fdb sub_FE4F
+ROM:FD94                 fcb $F0 ; =
+ROM:FD95                 fdb sub_FE7C
+ROM:FD98                 fdb sub_FEA7
+
+ROM:FD9A                 fcb $E4, $14, $E5, $15, $E6, $16, $E7, $17
+ROM:FD9A                 fcb $E8, $18, $E9, $19, $EA, $20, $F0, $21
+ROM:FD9A                 fcb $F1, $22, $F2, $23, $F3, $24, $F4, $25
+ROM:FD9A                 fcb $F8, $26
+
+ROM:FE37 Diag_Vect_Data: fdb $2020, $2020, $100, $100, $5010, $2020, $8040, $2020 ; Diagnostic vector test instruction data. Copied to VECT RAM for test
+ROM:FE37                 fdb $7240, $2020, $6780, $2020
+
+ROM:FF57                 fcb 0, $18, $E9, $40, $9A, $F5, $B0, $38
+ROM:FF57                 fcb $59, $A0, $74, $A6, $20, $7B, $6E, $E0
+ROM:FF57                 fcb $7D, $E8, $AE, $CD, $78, $92, 7, $F4
+ROM:FF57                 fcb 7, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:FF57                 fcb $A6, $BF, $C8, $40, $96, $1F, $64, $10
+ROM:FF57                 fcb $FF, $FF, $FF, $FF, $FF
+ROM:FF57                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:FF57                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:FF57                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:FF57                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:FF57                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:FF57                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:FF57                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:FF57                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:FF57                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:FF57                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:FF57                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+
+ROM:FFDC aCopyright1983A:fcc 'COPYRIGHT 1983 ATARI'
+ROM:FFF0                 fdb $C85
+ROM:FFF2                 fdb BADIRQ
+ROM:FFF4                 fdb BADIRQ
+ROM:FFF6                 fdb BADIRQ
+ROM:FFF8                 fdb IRQ
+ROM:FFFA                 fdb BADIRQ
+ROM:FFFC                 fdb BADIRQ
+ROM:FFFE                 fdb Reset

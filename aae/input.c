@@ -20,9 +20,10 @@
 #define MAX_INPUT_PORT 23
 #define OSD_MAX_JOY_ANALOG 4
 
+MY_Input the_input[256];		
+
 //int mickeyx;   //MouseX var
 //int mickeyy;   //MouseY var
-
 int num_joysticks = 2; // this is ALEGRO - MALBAN!
 void poll_joystick() // also alegro
 {}

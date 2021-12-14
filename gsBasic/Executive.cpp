@@ -754,6 +754,7 @@ Error Executive::Execute(const PtrArray<Statement> &codeBlock, int &pc)
 {
 	Error error;
 	bool exit = false;
+	unsigned char key =0;
 
 	_activeProgramCounter = &pc;
 	_currentCodeBlock = &codeBlock;
@@ -761,7 +762,7 @@ Error Executive::Execute(const PtrArray<Statement> &codeBlock, int &pc)
 	while (*_activeProgramCounter >= 0 && *_activeProgramCounter < int(codeBlock.size()) && !exit)
 	{
 		Statement *stmt = codeBlock[(*_activeProgramCounter)++];
-        unsigned char key =USPiKeyboardLastKeyDown();
+        if (usbKeyboardAvailable) key =USPiKeyboardLastKeyDown();
         if (_state == Running) if (key == 0x03)  
         {
           ctrlC = 1;

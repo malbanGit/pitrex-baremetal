@@ -22,7 +22,7 @@
 #include <uspienv/string.h>
 #include <uspienv/sysconfig.h>
 
-#ifndef NDEBUG
+#ifdef USPIDEBUG
 
 static const char FromDebug[] = "debug";
 

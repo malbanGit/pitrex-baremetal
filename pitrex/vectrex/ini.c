@@ -7,18 +7,6 @@ home page for more info:
 https://github.com/benhoyt/inih
 */
 
-
-/*
-#include <stdio.h>
-#include <ff.h>
-#include <pitrex/pitrexio-gpio.h>
-
-#include "baremetalUtil.h"
-#include "vectrexInterface.h"
-
-#include <ctype.h>
-*/
-
 #include "ini.h"
 
 
@@ -230,7 +218,7 @@ int ini_parse(const char* filename, ini_handler handler, void* user)
   fileRead = fopen(filename, "rb");
   if (fileRead == 0)
   {
-    printf("File (%s) could not be opened: %s!\r\n",filename, ff_getErrorText(errno));
+    printf("File (%s) could not be opened: %s!\r\n",filename, getErrorText(errno));
     char buf[256];
     f_getcwd (buf,256);
     printf("Current directory: %s \r\n", buf);

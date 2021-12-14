@@ -11,7 +11,6 @@
 #define TRUE 1
 #endif
 
-
 #include "z80/z80.h"
 
 #include "SegaG80.h"
@@ -19,6 +18,8 @@
 #include "globals.h"
 #include "log.h"
  
+void (*sega_decrypt)(int,unsigned int *);
+
 static void sega_decrypt64(int pc,unsigned int *lo)
 {
 	unsigned int i = 0;

@@ -7,7 +7,9 @@ extern void v_setCustomClipping(int enabled, int x0, int y0, int x1, int y1); //
 #define FALSE (0!=0)
 #endif
 
+#ifndef bool
 typedef int bool;
+#endif
 
 // rotate 90 degrees anticlockwise for each step:
 #define VECTREX_VERTICAL 1

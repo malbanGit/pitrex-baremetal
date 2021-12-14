@@ -360,7 +360,7 @@ int handleInput(void)
 // this more complicated
 // input "asking", is because I do for now particular reason, other than "because"
 // analog joystick
-        
+//printf("thrust: %i\n", thrust);     
         
     if ((rotateLeft<-80) || (rotateLeft == 1))
         WriteMemory(0x2407,0x80); else WriteMemory(0x2407,0x00); //A left or Y

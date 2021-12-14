@@ -1362,6 +1362,8 @@ int main()
 
   // should be done BEFORE setupIRQ
   kbd_keyboard_startup();
+  
+  
   v_setupIRQHandling();
   v_setClientHz(20);
   v_enableSoundOut(1);
@@ -1369,7 +1371,7 @@ int main()
   v_enableButtons(1);
   v_enableJoystickDigital(1,1,0,0);
 
-  
+
     read_config_file();
     
     /* Start the sound system... */
@@ -1460,7 +1462,7 @@ int main()
 
             if (!docked)
             {
-v_setCustomClipping(1, -19000, -7500, 19000, 22000);              
+		v_setCustomClipping(1, -19000, -7500, 19000, 22000);              
                 gfx_acquire_screen();
                     
                 if ((current_screen == SCR_FRONT_VIEW) || (current_screen == SCR_REAR_VIEW) ||
@@ -1541,7 +1543,7 @@ v_setCustomClipping(1, -19000, -7500, 19000, 22000);
                 cool_laser();               
                 time_ecm();
 
-v_setCustomClipping(0, -20000, -1000, 20000, 22000);              
+		v_setCustomClipping(0, -20000, -1000, 20000, 22000);              
                 update_console();
             }
 

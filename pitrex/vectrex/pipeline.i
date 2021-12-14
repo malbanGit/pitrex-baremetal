@@ -64,7 +64,6 @@ do {\
 
   while (dpl[c].type != PL_END)
   {
-
 // this might get rid of some "dots" during sample playing...
 // not tryied it though,
 // I am afraid samples will not play as well
@@ -693,6 +692,7 @@ ADD_DELAY_CYCLES(biRasterReturnDelayRight);
       }
       case PL_DRAW:
       {
+      
         // todo if consecutive draws
         // handle them in one loop
         // and draw them in one go!      
@@ -709,86 +709,76 @@ ADD_DELAY_CYCLES(biRasterReturnDelayRight);
           // TODO
           LINE_DEBUG_OUT ("    PL D CALIB 0\r\n");
 ////////////////////////////////////////////////////////////
-// v_resetIntegratorOffsets0();
-//  printf("CALIBRATION 0\r\n");
-  I_SET (VIA_port_b, 0x81);
-  DELAY_PORT_B_BEFORE_PORT_A();
-  I_SET_A(0x00);
-  ADD_DELAY_CYCLES(4);
-  I_SET (VIA_port_b, 0x80);
-  ADD_DELAY_CYCLES(6);
-  // reset integrators
-  I_SET (VIA_port_b, 0x82);    // mux=1, enable mux - integrator offset = 0
-  ADD_DELAY_CYCLES(6);
-  I_SET (VIA_port_b, 0x81);    // disable mux
-  ADD_DELAY_CYCLES(4);
-//  currentPortA=0x100;// non regular value!
-  PLAY_SAMPLE_IGNORE_A();
+	// v_resetIntegratorOffsets0();
+//printf("CALIBRATION 0\r\n");
+	  I_SET (VIA_port_b, 0x81);
+	  DELAY_PORT_B_BEFORE_PORT_A();
+	  I_SET_A(0x00);
+	  ADD_DELAY_CYCLES(4);
+	  I_SET (VIA_port_b, 0x80);
+	  ADD_DELAY_CYCLES(6);
+	  // reset integrators
+	  I_SET (VIA_port_b, 0x82);    // mux=1, enable mux - integrator offset = 0
+	  ADD_DELAY_CYCLES(6);
+	  I_SET (VIA_port_b, 0x81);    // disable mux
+	  ADD_DELAY_CYCLES(4);
+	//  currentPortA=0x100;// non regular value!
+	  PLAY_SAMPLE_IGNORE_A();
 ////////////////////////////////////////////////////////////
         }
         else if (dpl[c].flags & PL_CALIBRATE)
         {
           LINE_DEBUG_OUT ("    PL D CALIB \r\n");
 //////////////////////////////////////////////////////////////////////////
-//v_resetIntegratorOffsets();
-{
-  I_SET (VIA_port_b, 0x81);
-  DELAY_PORT_B_BEFORE_PORT_A();
-  if (calibrationValue==0)
-  {
-    I_SET_A(0x00);
-    ADD_DELAY_CYCLES(4);
-    // reset integrators
-    I_SET (VIA_port_b, 0x82);    // mux=1, enable mux - integrator offset = 0
-    ADD_DELAY_CYCLES(6);
-    I_SET (VIA_port_b, 0x81);    // disable mux
-  }
-  else
-  {
+	  //v_resetIntegratorOffsets();
+//printf("CALIBRATION x\r\n");
+	  {
+	    I_SET (VIA_port_b, 0x81);
+	    DELAY_PORT_B_BEFORE_PORT_A();
 
-    I_SET_A(0);
-    ADD_DELAY_CYCLES(6);
-    I_SET (VIA_port_b, 0x82);
-    ADD_DELAY_CYCLES(6);
-    I_SET (VIA_port_b, 0x81);    // disable mux
-    ADD_DELAY_CYCLES(6);
-    
-    
-    I_SET_A(calibrationValue);
-    ADD_DELAY_CYCLES(6);
-    I_SET (VIA_port_b, 0x82);
-    DELAY_PORT_B_BEFORE_PORT_A();
+	    if (calibrationValue==0)
+	    {
+	      I_SET_A(0x00);
+	      ADD_DELAY_CYCLES(4);
+	      // reset integrators
+	      I_SET (VIA_port_b, 0x82);    // mux=1, enable mux - integrator offset = 0
+	      ADD_DELAY_CYCLES(6);
+	      I_SET (VIA_port_b, 0x81);    // disable mux
+	    }
+	    else
+	    {
 
-    I_SET_A(0xff);
+	      I_SET_A(0);
+	      ADD_DELAY_CYCLES(6);
+	      I_SET (VIA_port_b, 0x82);
+	      ADD_DELAY_CYCLES(6);
+	      I_SET (VIA_port_b, 0x81);    // disable mux
+	      ADD_DELAY_CYCLES(6);
+	      
+	      
+	      I_SET_A(calibrationValue);
+	      ADD_DELAY_CYCLES(6);
+	      I_SET (VIA_port_b, 0x82);
+	      DELAY_PORT_B_BEFORE_PORT_A();
 
-    ADD_DELAY_CYCLES(2);
+	      I_SET_A(0xff);
 
-//to test CALIB!!!
-    waitUntilAndUse(setWaitMin*ONE_WAIT_UNIT - 205);
-    vectrexwrite(VIA_port_b, 0x81); // don't ask wghy twice... tempest looks better in parts... and it is just 2 cycls!!!
-    vectrexwrite(VIA_port_b, 0x81);
-    PMNC(CYCLE_COUNTER_ENABLE|CYCLE_COUNTER_RESET);
+	      ADD_DELAY_CYCLES(2);
 
-    lastViaWrite = (0);
-    setWaitMin = 0;
-  }
-  ADD_DELAY_CYCLES(4);
-//  currentPortA=0x100;// non regular value!
-  PLAY_SAMPLE_IGNORE_A();
-}
+	  //to test CALIB!!!
+	      waitUntilAndUse(setWaitMin*ONE_WAIT_UNIT - 205);
+	      vectrexwrite(VIA_port_b, 0x81); // don't ask wghy twice... tempest looks better in parts... and it is just 2 cycls!!!
+	      vectrexwrite(VIA_port_b, 0x81);
+	      PMNC(CYCLE_COUNTER_ENABLE|CYCLE_COUNTER_RESET);
 
+	      lastViaWrite = (0);
+	      setWaitMin = 0;
+	    }
+	    ADD_DELAY_CYCLES(4);
+	  //  currentPortA=0x100;// non regular value!
+	    PLAY_SAMPLE_IGNORE_A();
+	  }
 //////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
           if (calibrationValue !=0)
           {
             // TODO Costs time :-()
@@ -986,21 +976,29 @@ e) sound hat wahrsch. keine Auswirkungen, da Gravitar BAD ist -> keine Sound Aus
 
 */
 
-{
   static unsigned int value;
   static int v1;
-
+  CCNT0(value);
+  if (value < (piCounterMark+((dpl[c-1].this_timing)*ONE_WAIT_UNIT) ) )
   {
-    CCNT0(value);
-    if (value < (piCounterMark+((dpl[c-1].this_timing)*ONE_WAIT_UNIT) ) )
-    {
-      USE_TIME( (piCounterMark+((dpl[c-1].this_timing)*ONE_WAIT_UNIT) ) - value);
-    }
+    USE_TIME( (piCounterMark+((dpl[c-1].this_timing)*ONE_WAIT_UNIT) ) - value);
   }
-  while ((GET(VIA_int_flags) & 0x40) == 0);
 
-}
-//  while ((GET(VIA_int_flags) & 0x40) == 0);
+#if RASPPI != 1 
+// In PiZero2 T1 interrupt flag is sometimes not set/read
+// and the following line than is an endless loop!
+
+  static unsigned volatile int preventer=0;
+  preventer = 0;
+// 2 cycles = 1 GET
+// lets say the lengthiest vector is 512
+// that would mean 512 /2 ? 256 max
+  
+  while (((GET(VIA_int_flags) & 0x40) == 0) && (preventer++ <256));
+  if (preventer>=256) printf("TIMER T1 FAIL!!!\n");
+#else
+  while ((GET(VIA_int_flags) & 0x40) == 0);
+#endif
 
 
 

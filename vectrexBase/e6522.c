@@ -2,12 +2,7 @@
 #include <unistd.h>
 
 #include "vecx.h"
-
-
-
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
-#include <vectrex/baremetalUtil.h>
 
 
 #include "e6809.h"

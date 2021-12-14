@@ -1,9 +1,3 @@
-//fixed analog to digital in loader
-//fixed 4 button to reference only 4 buttons of port 1 (spinner)
-//fixed irq setup of usb keyboard
-
-
-
 /* "ini Order" ...
 
 default.setting
@@ -18,62 +12,33 @@ vectrexInterface.ini
   -> cine.setting
    ->cine.ini
      -> each game.ini
-
 */
 
 
 
 // settings for arcade emulators with ini file!
-
 // scan for todo... in source files to get more ideas
-
-// formy taste asteroids wobbles to much and the display is jumpy on the edges.
-// I have to optimize the positioning... perhaps keep to one scale and/or to a zero ref more often, or in between need of display "black" vectors...
-// also asteroids sound effects could be done better... 
-
 // check all arcade roms in menu
 
 // add a custom clipping to config!
-
-// the only way to get output faster done is to parallel processing and output
-// run output in interrupt and
-// do all emulations/cals in "normal" phase
-// that way, while moving e.g. one could process the next emulation...
-//
-// since emulation are atm at max about 20%
-// these will be COMPLETLY done while moving!
-
-//TODO make cranky value configurable for user without terminal
-//sdz in regard to actual position
-
-//SHIFT bei starup von Vectrex konfigig!!!
-
-
-// after a certain amount of resets the config does not work anymore---
-
-// cinematronix / mame
-
-// new cycle timers
-//
 
 #include <stdio.h>
 #include <stdlib.h> // atoi
 #include <string.h>
 
-#include <baremetal/rpi-gpio.h>
-#include <baremetal/rpi-aux.h>
-#include <bcm2835_vc.h>
-#include <ff.h> 
-
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
-#include <vectrex/baremetalUtil.h>
+#include <baremetal/pitrexio-gpio.h>
 #include <vectrex/osWrapper.h>
 #include <vectrex/mathSupport.h>
 
-#include <baremetal/vectors.h>
+#if RASPPI != 1 
+#define IMG_FILE_PREFIX "piZero2/"
+#else
+#define IMG_FILE_PREFIX "piZero1/"
+#endif
 
-static FATFS fat_fs;		/* File system object */
+
+
 GlobalMemSettings **settingsPointer;
 GlobalMemSettings loaderSettings;
 
@@ -105,7 +70,7 @@ void cleanup_before_linux (void)
 	 *
 	 * we turn off caches etc ...
 	 */
-	mmu_disable(); //dcache_disable(); + icache_disable(); + clean_data_cache();
+	mmu_disable(); 
 	cache_flush(); /* flush I/D-cache */
 }
 
@@ -118,9 +83,15 @@ int currentSelectedItem2 = 0;
 void reloadLoader()
 {
     v_removeIRQHandling();
+#if RASPPI != 1 
+    v_removeMultiCore();
+#endif    
     void *progSpace = (void *) 0x8000; 
+#if RASPPI != 1 
+    char *FILE_NAME = "pitrex7.img";
+#else
     char *FILE_NAME = "pitrex.img";
-    
+#endif    
     FRESULT rc_rd = FR_DISK_ERR;
     FIL file_object_rd;
     rc_rd = f_open(&file_object_rd, FILE_NAME, (unsigned char) FA_READ);
@@ -145,24 +116,44 @@ void reloadLoader()
         dsb();
         dmb();
         cleanup_before_linux();
-    // correct start registers and jump to 8000
-    __asm__ __volatile__(
-        "mov r5, #0x0080   \n\t"
-        "ldr r0, [r5]      \n\t"
-        "mov r5, #0x0084   \n\t"
-        "ldr r1, [r5]      \n\t"
-        "mov r5, #0x0088   \n\t"
-        "ldr r2, [r5]      \n\t"
-        "ldr pc, = 0x8000  \n\t"
-      );
+	// correct start registers and jump to 8000
+/*	  
+	__asm__ __volatile__(
+	  "movw r5, ((0x4000000-100) & 0xffff)\n\t" // R0_STORE
+	  "movt r5, ((0x4000000-100) >> 16)\n\t"
+	    "ldr r0, [r5]      \n\t"
+	  "movw r5, ((0x4000000-100+4) & 0xffff)\n\t" // R1_STORE
+	  "movt r5, ((0x4000000-100+4) >> 16)\n\t"
+	    "ldr r1, [r5]      \n\t"
+	  "movw r5, ((0x4000000-100+8) & 0xffff)\n\t" // R2_STORE
+	  "movt r5, ((0x4000000-100+8) >> 16)\n\t"
+	    "ldr r2, [r5]      \n\t"
+	    "ldr pc, = 0x8000  \n\t"
+	  );
+*/	    
+	__asm__ __volatile__(
+	    "mov r5, #0x4000000   \n\t"
+	    "sub r5, r5, #100 \n\t"
+	    "ldr r0, [r5]      \n\t"
+
+	    "add r5, r5, #4 \n\t"
+	    "ldr r1, [r5]      \n\t"
+
+	    "add r5, r5, #4 \n\t"
+	    "ldr r2, [r5]      \n\t"
+
+	    "ldr pc, = 0x8000  \n\t"
+	  );
     }
 }
- 
 
 
 void loadAndStart(MenuItemNew *item, int button)
 {
     v_removeIRQHandling();
+#if RASPPI != 1 
+    v_removeMultiCore();
+#endif    
 
     void *progSpace = (void *) 0x8000; 
     char *FILE_NAME = item->img;
@@ -214,7 +205,9 @@ void loadAndStart(MenuItemNew *item, int button)
             while (*parameter != (char) 0)
             {
               loaderSettings.parameter1[c++] =  (unsigned char) *parameter;
+printf("Parameter 1 Dec Value = %i\n", (unsigned char) *parameter);  
               parameter++;
+	      
               if (c==126) break;
             } 
           }
@@ -360,17 +353,44 @@ int _clipmaxX= 5000;
 int _clipminY= -5000;
 int _clipmaxY= 5000;
 
+#if RASPPI != 1 
+void __attribute__ ((noreturn)) __attribute__ ((naked)) parkCore1() ;
+void startCore1(unsigned int coreStart);
+extern volatile unsigned int isSMPMode;
+extern volatile unsigned int pendingDisableMultiCore;
+void v_removeMultiCore();
+void handleVectrexOutputSMP();
+void goHavoc();    
+#endif
+
+
+
+
+
 /** Main function - we'll never return from here */
-void loaderMain()
+int main(int argc, char *argv[])
 {
-  resetImportantStuff();
+#if RASPPI != 1
+    printf("core0entered: %X (%p), State: %i\r\n", *((unsigned int *)CORE0_ENTERED), CORE0_ENTERED, *((unsigned int *)CORE0_STATE));
+    printf("core1entered: %X (%p), State: %i\r\n", *((unsigned int *)CORE1_ENTERED), CORE1_ENTERED, *((unsigned int *)CORE1_STATE));
+    printf("core2entered: %X (%p), State: %i\r\n", *((unsigned int *)CORE2_ENTERED), CORE2_ENTERED, *((unsigned int *)CORE2_STATE));
+    printf("core3entered: %X (%p), State: %i\r\n", *((unsigned int *)CORE3_ENTERED), CORE3_ENTERED, *((unsigned int *)CORE3_STATE));
+#endif     
+    
+    resetImportantStuff();
   printf("Loader starting...\r\n");
   printf("BSS start: %X, end: %X\r\n", &__bss_start__, &__bss_end__);
+
+  settingsPointer = (GlobalMemSettings **)SETTING_STORE;
+  *settingsPointer = &loaderSettings;
   printf("SettingPointer: %08x, settings: %0x08\r\n", settingsPointer, &loaderSettings);
  
- 
-  settingsPointer = (GlobalMemSettings **)0x0000008c;
-  *settingsPointer = &loaderSettings;
+  unsigned int arm_ram = lib_bcm2835_vc_get_memory(BCM2835_VC_TAG_GET_ARM_MEMORY) / 1024 / 1024;	///< MB
+  unsigned int gpu_ram = lib_bcm2835_vc_get_memory(BCM2835_VC_TAG_GET_VC_MEMORY) / 1024 / 1024;	///< MB
+  printf("Pi ARM memory: %iMB\n", arm_ram);
+  printf("Pi GPU memory: %iMB\n", gpu_ram);
+    
+
   
   tweakVectors();
 
@@ -390,6 +410,7 @@ void loaderMain()
   }
 
   vectrexinit(1); // pitrex
+  printf("gpio init done!\r\n");
   v_init(); // vectrex interface
   printf("Loader: init done!\r\n");
   
@@ -399,9 +420,8 @@ void loaderMain()
   int b = 30;
   char *ss[] = {"PITREX"};
   
-//  v_initKeyboard(); // can lead to "waits" after return to the loader, this must be investigated in USPI lib and the timer reset before init again
   
-  if (loaderSettings.loader == loaderMain)
+  if (loaderSettings.loader == (void (*)(void)) main)
   {
     printf("Loader is reinitializing...\r\n");
     initMenu();
@@ -411,16 +431,18 @@ void loaderMain()
   else
   {
     printf("Loader is initializing...\r\n");
-    loaderSettings.loader = loaderMain;
+    loaderSettings.loader = (void (*)(void)) main;
     ini_parse("loader.ini", loaderIniHandler, 0);
     
-
     if (!skipWave)
     {
       loadAndPlayRAW();
       v_init(); // vectrex interface
     }
+//goHavoc();    
     usePipeline = 1; 
+//    v_initKeyboard(); // can lead to "waits" after return to the loader, this must be investigated in USPI lib and the timer reset before init again
+//    printf("Keyboard available=%i\n",usbKeyboardAvailable);
 
 
 // doBitmap();
@@ -430,18 +452,15 @@ void loaderMain()
     v_enableButtons(1);
     v_enableJoystickDigital(0,0,0,0);
     v_enableJoystickAnalog(0,0,0,0);
-/*    
-    clipActive = 1;
-    clipMode = 1; // 0 normal clipping, 1 = inverse clipping
-    clipminX=-5000;
-    clipmaxX= 5000;
-    clipminY= -5000;
-    clipmaxY= 5000;
-*/    
+
     v_setHardClipping(1, 1, 1, _clipminX,_clipminY, _clipmaxX,_clipmaxY);
+    
+    
+    
     
     fall = 0;
     blow=100;
+    
     while(1)
     {
       fall-=4;
@@ -458,20 +477,32 @@ void loaderMain()
       v_setHardClipping(1, 1, 1, _clipminX,_clipminY, _clipmaxX,_clipmaxY);
       v_WaitRecal();
       if (pitrexSize<1) pitrexSize+=0.01;else pitrexSize=1; 
+
+      //if ((currentButtonState&0x0f) != (0x01)) // exactly button 1
+
       drawPitrex();
+
       v_doSound(); // not needed with IRQ Mode
       v_readButtons(); // not needed with IRQ Mode
       if ((currentButtonState&0x0f) == (0x08)) // exactly button 4
         break;
+//      if ((currentButtonState&0x0f) == (0x01)) // exactly button 1
+//      {
+//	 startCore1((unsigned int) (&core1Wait));
+//      }
       
-      /*
-      char lk = USPiKeyboardLastKeyDown();
-      if (lk)
-      {
-        printf("%c", lk);
-      }
-*/
-      
+//      if (usbKeyboardAvailable)
+//      {
+//	  printf(".");
+//	char lk = USPiKeyboardLastKeyDown();
+//	if (lk)
+//	{
+//	  printf("%c", lk);
+//	}
+//      }
+//      printf("core1entered: %X (%p), State: %i\r\n", *((unsigned int *)CORE1_ENTERED), CORE1_ENTERED, *((unsigned int *)CORE1_STATE));
+//      asm volatile ("sev");
+     
       
       
     }
@@ -487,7 +518,7 @@ void loaderMain()
 //  v_enableJoystickAnalog(1,1,0,0);
   v_enableJoystickDigital(1,1,0,0);
   
-  v_setupIRQHandling();  
+//  v_setupIRQHandling();  
   v_enableSoundOut(1);
   v_enableButtons(1);
   v_setRefresh(50);
@@ -581,11 +612,11 @@ void drawPitrex()
   draw3dList(PiTrexHershey3d, 0.6, 60,5000+_clipminX,5000+_clipminY);
   commonHints = 0;
 }
-
-
+ 
+ 
 void displayLargeList(const signed char list[])
 {
-  int count = *list++;
+  int count =(unsigned char) (*list++);
 
   while (count >0)  
   {
@@ -613,6 +644,22 @@ void displayLargeListUp(const signed char list[])
 }
 
 MenuItemNew vectrexMenu;
+int scrollReset = 1;
+int loadFileNames();
+
+void initMenu()
+{
+  selectionMade = 0;
+  currentMenuItem = &vectrexMenu;
+  initTestRoms();
+  loadFileNames();
+  scrollReset = 1;
+}
+//////////////////////////////////////////
+// Uppest "Menu"
+//////////////////////////////////////////
+
+MenuItemNew vectrexMenu;
 MenuItemNew settingsMenu =
 {
   0,    // ID
@@ -630,6 +677,8 @@ MenuItemNew settingsMenu =
   0,    // scrolltext
   0,    // no text
 };
+MenuItemNew vectorbladeMenu;
+MenuItemNew arcadeMenu;
 MenuItemNew vectrexMenu =
 {
   1,    // ID
@@ -641,13 +690,15 @@ MenuItemNew vectrexMenu =
   vectrexIcon, // icon
   vectrexSmallIcon, // smallicon
   0,    // has no parent
-  0,    // ! firstChild must be set
+  &vectorbladeMenu,    // ! firstChild must be set
   &settingsMenu,    // has no left
-  0,    // ! right must be set
+  &arcadeMenu,    // ! right must be set
   0,    // scrolltext
   0,    // no text
 };
 
+MenuItemNew computerMenu;
+MenuItemNew atariMenu;
 MenuItemNew arcadeMenu =
 {
   2,    // ID
@@ -659,16 +710,38 @@ MenuItemNew arcadeMenu =
   arcadeIcon, // icon
   arcadeSmallIcon, // smallicon
   0,    // has no parent
-  0,    // ! firstChild must be set
-  0,    // ! left must be set
-  0,    // ! right must be set
+  &atariMenu,    // ! firstChild must be set
+  &vectrexMenu,    // ! left must be set
+  &computerMenu,    // ! right must be set
   0,    // scrolltext
   0,    // no text
 };
+MenuItemNew zBlastMenu;
 
-MenuItemNew videoMenu =
+MenuItemNew videoMenu;
+MenuItemNew computerMenu =
 {
   3,    // ID
+  0,    // no name
+  0,    // no start directory
+  0,    // no start image
+  0,    // no parameter
+  0,    // no parameter
+  computerIcon, // icon
+  computerSmallIcon, // small icon
+  0,    // has no parent
+  &zBlastMenu,    // ! firstChild must be set
+  &arcadeMenu,    // ! left must be set
+  &videoMenu,    // ! right must be set
+  0,    // scrolltext
+  0,    // no text
+};
+ 
+MenuItemNew badAppleMenu;
+MenuItemNew audioMenu;
+MenuItemNew videoMenu =
+{
+  4,    // ID
   0,    // no name
   0,    // no start directory
   0,    // no start image
@@ -677,17 +750,16 @@ MenuItemNew videoMenu =
   videoIcon, // icon
   videoSmallIcon, // small icon
   0,    // has no parent
-  0,    // ! firstChild must be set
-  0,    // ! left must be set
-  0,    // ! right must be set
+  &badAppleMenu,    // ! firstChild must be set
+  &computerMenu,    // ! left must be set
+  &audioMenu,    // ! right must be set
   0,    // scrolltext
   0,    // no text
 };
-
-MenuItemNew zBlastMenu;
+MenuItemNew bohemianMenu;
 MenuItemNew audioMenu =
 {
-  4,    // ID
+  5,    // ID
   0,    // no name
   0,    // no start directory
   0,    // no start image
@@ -696,26 +768,26 @@ MenuItemNew audioMenu =
   audioIcon, // icon
   audioSmallIcon, // smallicon
   0,    // has no parent
-  0,    // ! firstChild must be set
-  0,    // ! left must be set
-  &zBlastMenu,    // ! right must be set
+  &bohemianMenu,    // ! firstChild must be set
+  &videoMenu,    // ! left must be set
+  0,    // ! right must be set
   0,    // scrolltext
   0,    // no text
 };
 MenuItemNew hyperoidsMenu;
 MenuItemNew zBlastMenu =
 {
-  5,    // ID
+  300,    // ID
   "ZBLAST",    // no name
   0,    // no start directory
-  "zblast.img",    // no start image
+  IMG_FILE_PREFIX "zblast.img",    // no start image
   0,    // no parameter
   0,    // no parameter
   zblastList, // icon
   0, // smallicon
-  0,    // has no parent
+  &computerMenu,    // has no parent
   0,    // ! firstChild must be set
-  &audioMenu,    // ! left must be set
+  0,    // ! left must be set
   &hyperoidsMenu,    // ! right must be set
   0,    // scrolltext
   "","","","","A GAME BY MARK RUSSELS", "PITREX PORT KEVIN KOSTER","MUSIC BY ROALD STRAUSS"  , 0  // no text
@@ -723,15 +795,15 @@ MenuItemNew zBlastMenu =
 MenuItemNew basicMenu;
 MenuItemNew hyperoidsMenu =
 {
-  5,    // ID
+  301,    // ID
   "HYPEROIDS",    // no name
   0,    // no start directory
-  "vhyperoid.img",    // no start image
+  IMG_FILE_PREFIX "vhyperoid.img",    // no start image
   0,    // no parameter
   0,    // no parameter
   hyperList, // icon
   0, // smallicon
-  0,    // has no parent
+  &computerMenu,    // has no parent
   0,    // ! firstChild must be set
   &zBlastMenu,    // ! left must be set
   &basicMenu,    // ! right must be set
@@ -742,15 +814,15 @@ MenuItemNew hyperoidsMenu =
 MenuItemNew newKindMenu;
 MenuItemNew basicMenu =
 {
-  6,    // ID
+  302,    // ID
   "GS BASIC",    // no name
   0,    // no start directory
-  "gsbasic.img",    // no start image
+  IMG_FILE_PREFIX "gsbasic.img",    // no start image
   0,    // no parameter
   0,    // no parameter
   0, // icon
   0, // smallicon
-  0,    // has no parent
+  &computerMenu,    // has no parent
   0,    // ! firstChild must be set
   &hyperoidsMenu,    // ! left must be set
   &newKindMenu,    // ! right must be set
@@ -761,15 +833,15 @@ MenuItemNew basicMenu =
 MenuItemNew wwviMenu;
 MenuItemNew newKindMenu =
 {
-  7,    // ID
+  303,    // ID
   "ELITE (BETA)",    // no name
   0,    // no start directory
-  "newkind.img",    // no start image
+  IMG_FILE_PREFIX "newkind.img",    // no start image
   0,    // no parameter
   0,    // no parameter
   eliteList, // icon
   0, // smallicon
-  0,    // has no parent
+  &computerMenu,    // has no parent
   0,    // ! firstChild must be set
   &basicMenu,    // ! left must be set
   &wwviMenu,    // ! right must be set
@@ -777,25 +849,46 @@ MenuItemNew newKindMenu =
   "","","","","A GAME BY CHRISTIAN PINDER","OIGINAL BY", "DAVID BRABEN", "IAN BELL", 0   // no text
 };
 
+MenuItemNew bz2Menu;
 MenuItemNew wwviMenu =
 {
-  8,    // ID
+  304,    // ID
   "WW VI (BETA)",    // no name
   0,    // no start directory
-  "ww_vi.img",    // no start image
+  IMG_FILE_PREFIX "ww_vi.img",    // no start image
   0,    // no parameter
   0,    // no parameter
-  0, // icon
+  WWVIIcon, // icon
   0, // smallicon
-  0,    // has no parent
+  &computerMenu,    // has no parent
   0,    // ! firstChild must be set
   &newKindMenu,    // ! left must be set
-  0,    // ! right must be set
+  &bz2Menu,    // ! right must be set
   0,    // scrolltext
   "","","","","A GAME BY STEPHEN M. CAMERON", 0   // no text
 };
+MenuItemNew bz2Menu =
+{
+  305,    // ID
+  "BZ2 (BETA)",    // no name
+  0,    // no start directory
+  IMG_FILE_PREFIX "bz2.img",    // no start image
+  0,    // no parameter
+  0,    // no parameter
+  Bz2Icon, // icon
+  0, // smallicon
+  &computerMenu,    // has no parent
+  0,    // ! firstChild must be set
+  &wwviMenu,    // ! left must be set
+  0,    // ! right must be set
+  0,    // scrolltext
+  "","","","","A GAME BY PETER HIRSCHBERG","","(NO SOUND)", 0   // no text
+};
 
 
+//////////////////////////////////////////
+// Vectrex "Menu"
+//////////////////////////////////////////
 
 MenuItemNew karlQuappeeMenu;
 MenuItemNew speedMenu;
@@ -804,7 +897,7 @@ MenuItemNew vectorbladeMenu =
   100,    // ID
   "VECTORBLADE",    // no name
   0,    // directory
-  "vectorblade.img",    // no start image
+  IMG_FILE_PREFIX "vectorblade.img",    // no start image
   0,    // no parameter
   0,    // no parameter
   vb2List, // icon
@@ -839,7 +932,9 @@ MenuItemNew speedMenu =
   0,    // scrolltext
   {"","","","","  SPEEDY VECTREX", 0},    // no text
 };
-
+//////////////////////////////////////////
+// Vectrex Speed "Menu"
+//////////////////////////////////////////
 
 MenuItemNew berzerkSpeedMenu;
 MenuItemNew webWarsSpeedMenu =
@@ -847,7 +942,7 @@ MenuItemNew webWarsSpeedMenu =
   1020,    // ID
   " WEB WARS",    // no name
   0,    // directory
-  "vectrexspeedy.img",    // no start image
+  IMG_FILE_PREFIX "vectrexspeedy.img",    // no start image
   "original/WEBWARS.BIN",    // no parameter
   0,    // no parameter
   webWarsList, // icon
@@ -872,7 +967,7 @@ MenuItemNew berzerkSpeedMenu =
   1021,    // ID
   " BERZERK",    // no name
   0,    // directory
-  "vectrexspeedy.img",    // no start image
+  IMG_FILE_PREFIX "vectrexspeedy.img",    // no start image
   "original/BERZERK.BIN",    // no parameter
   0,    // no parameter
   berzerkList, // icon
@@ -884,13 +979,12 @@ MenuItemNew berzerkSpeedMenu =
   0,    // scrolltext
   {"","","","","GCE CHRIS KING", 0},    // no text
 };
-
 MenuItemNew mine2SpeedMenu =
 {
   1022,    // ID
   "MINESTORM 2",    // no name
   0,    // directory
-  "vectrexspeedy.img",    // no start image
+  IMG_FILE_PREFIX "vectrexspeedy.img",    // no start image
   "original/MSTORM2.BIN",    // no parameter
   0,    // no parameter
   mineStormList, // icon
@@ -907,7 +1001,7 @@ MenuItemNew darkTowerSpeedMenu =
   1023,    // ID
   "DARK TOWER",    // no name
   0,    // directory
-  "vectrexspeedy.img",    // no start image
+  IMG_FILE_PREFIX "vectrexspeedy.img",    // no start image
   "original/DKTOWER.BIN",    // no parameter
   0,    // no parameter
   darkTowerList, // icon
@@ -924,7 +1018,7 @@ MenuItemNew starCastleSpeedMenu =
   1024,    // ID
   "STAR CASTLE",    // no name
   0,    // directory
-  "vectrexspeedy.img",    // no start image
+  IMG_FILE_PREFIX "vectrexspeedy.img",    // no start image
   "original/CASTLE.BIN",    // no parameter
   0,    // no parameter
   starCastleList, // icon
@@ -941,7 +1035,7 @@ MenuItemNew narzodSpeedMenu =
   1025,    // ID
   "FORTRESS OF NARZOD",    // no name
   0,    // directory
-  "vectrexspeedy.img",    // no start image
+  IMG_FILE_PREFIX "vectrexspeedy.img",    // no start image
   "original/NARZOD.BIN",    // no parameter
   0,    // no parameter
   narzodList, // icon
@@ -953,13 +1047,12 @@ MenuItemNew narzodSpeedMenu =
   0,    // scrolltext
   {"","","","","GCE JOHN HALL", 0},    // no text
 };
-
 MenuItemNew scrambleSpeedMenu =
 {
   1026,    // ID
   "SCRAMBLE",    // no name
   0,    // directory
-  "vectrexspeedy.img",    // no start image
+  IMG_FILE_PREFIX "vectrexspeedy.img",    // no start image
   "original/SCRAMBLE.BIN",    // no parameter
   0,    // no parameter
   scrambleList, // icon
@@ -976,7 +1069,7 @@ MenuItemNew solarSpeedMenu =
   1027,    // ID
   "SOLAR QUEST",    // no name
   0,    // directory
-  "vectrexspeedy.img",    // no start image
+  IMG_FILE_PREFIX "vectrexspeedy.img",    // no start image
   "original/SOLAR.BIN",    // no parameter
   0,    // no parameter
   solarList, // icon
@@ -989,9 +1082,9 @@ MenuItemNew solarSpeedMenu =
   {"","","","","GCE SCOTT BODEN", 0},    // no text
 };
 
-
-
-
+//////////////////////////////////////////
+// Vectrex Exact "Menu"
+//////////////////////////////////////////
 MenuItemNew exactMenuRelease;
 MenuItemNew exactkarlQuappeMenu;
 MenuItemNew demoMenu;
@@ -1018,7 +1111,7 @@ MenuItemNew exactkarlQuappeMenu =
   1070,    // ID
   "KARL QUAPPE",    // no name
   0,    // directory
-  "vectrexexact.img",    // no start image
+  IMG_FILE_PREFIX "vectrexexact.img",    // no start image
   "KARL_QUAPPE.BIN",    // no parameter
   0,    // no parameter
   froggerList, // icon
@@ -1031,13 +1124,12 @@ MenuItemNew exactkarlQuappeMenu =
   {"","","","","A GAME BY MALBAN","NO PERSISTENCY YET !", 0},    // no text
 };
 MenuItemNew exactmrBoston;
-
 MenuItemNew exactMenuRelease =
 {
   1071,    // ID
   "RELEASE",    // no name
   0,    // directory
-  "vectrexexact.img",    // no start image
+  IMG_FILE_PREFIX "vectrexexact.img",    // no start image
   "RELEASE.BIN",    // no parameter
   0,    // no parameter
   releaseList, // icon
@@ -1051,14 +1143,13 @@ MenuItemNew exactMenuRelease =
 
   {"","","","","GAME BY MALBAN!","ORIGINAL BY GIMOGAMES", 0},    // no text
 };
-
 MenuItemNew exactPickOne;
 MenuItemNew exactmrBoston =
 {
   1072,    // ID
   "MR BOSTON",    // no name
   0,    // directory
-  "vectrexexact.img",    // no start image
+  IMG_FILE_PREFIX "vectrexexact.img",    // no start image
   "original/MR_BOSTON.BIN",    // no parameter
   0,    // no parameter
   bostenList, // icon
@@ -1077,7 +1168,7 @@ MenuItemNew exactPickOne =
   9999,    // ID
   "PICK A GAME",    // no name
   0,    // directory
-  "vectrexexact.img",    // no start image
+  IMG_FILE_PREFIX "vectrexexact.img",    // no start image
   0,    // no parameter
   0,    // no parameter
   0, // icon
@@ -1092,8 +1183,9 @@ MenuItemNew exactPickOne =
   {"", 0},    // no text
 };
 
-
-
+//////////////////////////////////////////
+// Vectrex Demo "Menu"
+//////////////////////////////////////////
 MenuItemNew demo1Menu;
 MenuItemNew demo2Menu;
 MenuItemNew demo3Menu;
@@ -1115,13 +1207,12 @@ MenuItemNew demoMenu =
   0,    // scrolltext
   {"","","","","VECTREX SCENE DEMOS!", 0},    // no text
 };
-
 MenuItemNew demo1Menu =
 {
   1080,    // ID
   "RAIDING PARTY",    // no name
   0,    // directory
-  "vectrexexact.img",    // no start image
+  IMG_FILE_PREFIX "vectrexexact.img",    // no start image
   "demos/RaidingParty.bin",    // no parameter
   0,    // no parameter
   0, // icon
@@ -1133,13 +1224,12 @@ MenuItemNew demo1Menu =
   0,    // scrolltext
   {"BY FELL AND BEX", 0},    // no text
 };
-
 MenuItemNew demo2Menu =
 {
   1081,    // ID
   "BRESENHAM",    // no name
   0,    // directory
-  "vectrexexact.img",    // no start image
+  IMG_FILE_PREFIX "vectrexexact.img",    // no start image
   "demos/bresenham.bin",    // no parameter
   0,    // no parameter
   0, // icon
@@ -1151,13 +1241,12 @@ MenuItemNew demo2Menu =
   0,    // scrolltext
   {"NUANCE AND METALVOTZE", 0},    // no text
 };
-
 MenuItemNew demo3Menu =
 {
   1082,    // ID
   "EPIC REALTIME",    // no name
   0,    // directory
-  "vectrexexact.img",    // no start image
+  IMG_FILE_PREFIX "vectrexexact.img",    // no start image
   "demos/epic.bin",    // no parameter
   0,    // no parameter
   0, // icon
@@ -1174,7 +1263,7 @@ MenuItemNew demo4Menu =
   1082,    // ID
   "WHATPG",    // no name
   0,    // directory
-  "vectrexexact.img",    // no start image
+  IMG_FILE_PREFIX "vectrexexact.img",    // no start image
   "demos/whatpg.bin",    // no parameter
   0,    // no parameter
   0, // icon
@@ -1186,125 +1275,167 @@ MenuItemNew demo4Menu =
   0,    // scrolltext
   {"WHERE HAVE ALL", "THE PIXELS GONE", "CMCC", 0},    // no text
 };
-MenuItemNew speedfreakMenu;
-MenuItemNew tailgunnerMenu;
 
 
-
-MenuItemNew asteroidsMenu;
-MenuItemNew tailgunnerMenu =
-{
-  2000,    // ID
-  "TAILGUNNER",    // no name
-  0,    // directory
-  "tailgunner.img",    // no start image
-  0,    // no parameter
-  0,    // no parameter
-  tailgunnerList, // icon
-  0, // icon
-  &arcadeMenu,    // has no parent
-  0,    // ! firstChild must be set
-  0,    // ! left must be set
-  &asteroidsMenu,    // ! right must be set
-  0,    // scrolltext
-  {"","","","","","GRAHAMS PASSION!", 0},    // no text
-};
+//////////////////////////////////////////
+// Vectrex Arcade "Menu"
+//////////////////////////////////////////
+MenuItemNew swsbtMenu;
 MenuItemNew allCinematronicsMenu;
-MenuItemNew asteroidsMenu =
-{
-  2001,    // ID
-  "ASTEROIDS",    // no name
-  0,    // directory
-  "asteroids_sbt.img",    // no start image
-  0,    // no parameter
-  0,    // no parameter
-  asteroidList, // icon
-  0, // icon
-  &arcadeMenu,    // has no parent
-  0,    // ! firstChild must be set
-  &tailgunnerMenu,    // ! left must be set
-  &allCinematronicsMenu,    // ! right must be set
-  0,    // scrolltext
-  {"","","","","","THOMAS PASSION!", 0},    // no text
-};
 
-MenuItemNew simMenu;
-MenuItemNew allCinematronicsMenu =
+MenuItemNew atariMenu =
 {
-  5000,    // ID
-  "CINEMATRONICS",    // no name
-  0,    // directory
-  0,    // no start image
-  0,    // no parameter
-  0,    // no parameter
-  0, // icon
-  0, // icon
-  &arcadeMenu,    // has no parent
-  &speedfreakMenu,    // ! firstChild must be set
-  &asteroidsMenu,    // ! left must be set
-  &simMenu,    // ! right must be set
-  0,    // scrolltext
-  {"A MULTI EMULATOR","VERY MUCH WORK IN","PROGRESS","","GRAHAMS PASSION!", 0},    // no text
-};
-
-MenuItemNew battleZoneMenu;
-MenuItemNew aaeMenu;
-MenuItemNew simMenu =
-{
-  5000,    // ID
+  200,    // ID
   "ATARI",    // no name
   0,    // directory
   0,    // no start image
   0,    // no parameter
   0,    // no parameter
-  0, // icon
-  0, // icon
+  AtarilIcon, // icon
+  AtariSmallIcon, // icon
   &arcadeMenu,    // has no parent
-  &battleZoneMenu,    // ! firstChild must be set
-  &allCinematronicsMenu,    // ! left must be set
-  &aaeMenu,    // ! right must be set
-  0,    // scrolltext
-  {"A MULTI EMULATOR","","","","", 0},    // no text
-};
-
-
-MenuItemNew aaeMenu =
-{
-  6000,    // ID
-  "AAE",    // no name
-  0,    // directory
-  "aae.img",    // no start image
-  0,    // no parameter
-  0,    // no parameter
-  0, // icon
-  0, // icon
-  0,    // has no parent
-  0,    // ! firstChild must be set
-  &simMenu,    // ! left must be set
-  0,    // ! right must be set
+  &swsbtMenu,    // ! firstChild must be set
+  0,    // ! left must be set
+  &allCinematronicsMenu,    // ! right must be set
   0,    // scrolltext
   {"","","","","", 0},    // no text
 };
 
 
+MenuItemNew segaMenu;
+MenuItemNew tailgunnerMenu;
+MenuItemNew allCinematronicsMenu =
+{
+  201,    // ID
+  "CINEMATRONICS",    // no name
+  0,    // directory
+  0,    // no start image
+  0,    // no parameter
+  0,    // no parameter
+  CinematronicslIcon, // icon
+  CinematronicsSmallIcon, // icon
+  &arcadeMenu,    // has no parent
+  &tailgunnerMenu,    // ! firstChild must be set
+  &atariMenu,    // ! left must be set
+  &segaMenu,    // ! right must be set
+  0,    // scrolltext
+  {"","","","","GRAHAMS PASSION!", 0},    // no text
+};
+MenuItemNew zektorMenu;
+MenuItemNew otherArcadeMenu;
+MenuItemNew segaMenu =
+{
+  202,    // ID
+  "SEGA",    // no name
+  0,    // directory
+  0,    // no start image
+  0,    // no parameter
+  0,    // no parameter
+  SegaIcon, // icon
+  SegaVerySmallIcon, // icon
+  &arcadeMenu,    // has no parent
+  &zektorMenu,    // ! firstChild must be set
+  &allCinematronicsMenu,    // ! left must be set
+  &otherArcadeMenu,    // ! right must be set
+  0,    // scrolltext
+  {"","","","","", 0},    // no text
+};
+MenuItemNew omegaMenu;
+MenuItemNew otherArcadeMenu =
+{
+  203,    // ID
+  "OTHER ARCADE",    // no name
+  0,    // directory
+  0,    // no start image
+  0,    // no parameter
+  0,    // no parameter
+  0, // icon
+  0, // icon
+  &arcadeMenu,    // has no parent
+  &omegaMenu,    // ! firstChild must be set
+  &segaMenu,    // ! left must be set
+  0,    // ! right must be set
+  0,    // scrolltext
+  {"","","","","", 0},    // no text
+};
 
+//////////////////////////////////////////
+// Other Atari "Menu"
+//////////////////////////////////////////
+MenuItemNew omegaMenu =
+{
+  5000,    // ID
+  "OMEGA RACE",    // no name
+  0,    // directory
+  IMG_FILE_PREFIX "aae.img",
+  "\x0a",    // no parameter
+  0,    // no parameter
+  OmegaIcon, // icon
+  0, // icon
+  &otherArcadeMenu,    // has no parent
+  0,    // ! firstChild must be set
+  0,    // ! left must be set
+  0,    // ! right must be set
+  0,    // scrolltext
+  {"","","","","WORK IN PROGRESS!!","NO SOUND!",  0},    // no text
+};
+
+//////////////////////////////////////////
+// Atari "Menu"
+//////////////////////////////////////////
+MenuItemNew asteroidsMenu;
+MenuItemNew swsbtMenu =
+{
+  2000,    // ID
+  "Star Wars (SBT)",    // no name
+  0,    // directory
+  IMG_FILE_PREFIX "swsbt.img",    // no start image
+  0,    // no parameter
+  0,    // no parameter
+  StarWarsIcon, // icon
+  0, // icon
+  &atariMenu,    // has no parent
+  0,    // ! firstChild must be set
+  0,    // ! left must be set
+  &asteroidsMenu,    // ! right must be set
+  0,    // scrolltext
+  {"","","","","", 0},    // no text
+};
+MenuItemNew battleZoneMenu;
+MenuItemNew asteroidsMenu =
+{
+  2001,    // ID
+  "ASTEROIDS",    // no name
+  0,    // directory
+  IMG_FILE_PREFIX "asteroids_sbt.img",    // no start image
+  0,    // no parameter
+  0,    // no parameter
+  asteroidList, // icon
+  0, // icon
+  &atariMenu,    // has no parent
+  0,    // ! firstChild must be set
+  &swsbtMenu,    // ! left must be set
+  &battleZoneMenu,    // ! right must be set
+  0,    // scrolltext
+  {"","","","","","THOMAS PASSION!", 0},    // no text
+};
 MenuItemNew blackWidowMenu;
 MenuItemNew battleZoneMenu =
 {
   2002,    // ID
   "BATTLE ZONE",    // no name
   0,    // directory
-  "battlezone.img",    // no start image
+  IMG_FILE_PREFIX "battlezone.img",    // no start image
   0,    // no parameter
   0,    // no parameter
   bzList, // icon
   0, // icon
-  &simMenu,    // has no parent
+  &atariMenu,    // has no parent
   0,    // ! firstChild must be setvecxExactList
-  0,    // ! left must be set
+  &asteroidsMenu,    // ! left must be set
   &blackWidowMenu,    // ! right must be set
   0,    // scrolltext
-  {"","","","","","WORK IN PROGRESS!!","FLICKER, NO SOUND!",  0},    // no text
+  {"","","","","","","",  0},    // no text
 };
 MenuItemNew redBaronMenu;
 MenuItemNew blackWidowMenu =
@@ -1312,12 +1443,12 @@ MenuItemNew blackWidowMenu =
   2003,    // ID
   "BLACK WIDOW",    // no name
   0,    // directory
-  "blackwidow.img",    // no start image
+  IMG_FILE_PREFIX "blackwidow.img",    // no start image
   0,    // no parameter
   0,    // no parameter
   teklaList, // icon
   0, // icon
-  &simMenu,    // has no parent
+  &atariMenu,    // has no parent
   0,    // ! firstChild must be set
   &battleZoneMenu,    // ! left must be set
   &redBaronMenu,    // ! right must be set
@@ -1330,31 +1461,30 @@ MenuItemNew redBaronMenu =
   2004,    // ID
   "RED BARON",    // no name
   0,    // directory
-  "redbaron.img",    // no start image
+  IMG_FILE_PREFIX "redbaron.img",    // no start image
   0,    // no parameter
   0,    // no parameter
   baronlist, // icon
   0, // icon
-  &simMenu,    // has no parent
+  &atariMenu,    // has no parent
   0,    // ! firstChild must be set
   &blackWidowMenu,    // ! left must be set
   &lunarMenu,    // ! right must be set
   0,    // scrolltext
   {"","","","","WORK IN PROGRESS!!","FLICKER, NO SOUND!",  0},    // no text
 };
-
 MenuItemNew gravitarMenu;
 MenuItemNew lunarMenu =
 {
   2005,    // ID
   "LUNAR LANDER",    // no name
   0,    // directory
-  "lunar.img",    // no start image
+  IMG_FILE_PREFIX "lunar.img",    // no start image
   0,    // no parameter
   0,    // no parameter
   landerList, // icon
   0, // icon
-  &simMenu,    // has no parent
+  &atariMenu,    // has no parent
   0,    // ! firstChild must be set
   &redBaronMenu,    // ! left must be set
   &gravitarMenu,    // ! right must be set
@@ -1367,12 +1497,12 @@ MenuItemNew gravitarMenu =
   2006,    // ID
   "GRAVITAR",    // no name
   0,    // directory
-  "gravitar.img",    // no start image
+  IMG_FILE_PREFIX "gravitar.img",    // no start image
   0,    // no parameter
   0,    // no parameter
   gravitarList, // icon
   0, // icon
-  &simMenu,    // has no parent
+  &atariMenu,    // has no parent
   0,    // ! firstChild must be set
   &lunarMenu,    // ! left must be set
   &spaceDuelMenu,    // ! right must be set
@@ -1385,101 +1515,145 @@ MenuItemNew spaceDuelMenu =
   2007,    // ID
   "SPACE DUEL",    // no name
   0,    // directory
-  "spaceduel.img",    // no start image
+  IMG_FILE_PREFIX "spaceduel.img",    // no start image
   0,    // no parameter
   0,    // no parameter
   duelList, // icon
   0, // icon
-  &simMenu,    // has no parent
+  &atariMenu,    // has no parent
   0,    // ! firstChild must be set
   &gravitarMenu,    // ! left must be set
   &tempestMenu,    // ! right must be set
   0,    // scrolltext
   {"","","","","WORK IN PROGRESS!!","FLICKER, NO SOUND!",  0},    // no text
 };
+
 MenuItemNew asteroids2Menu;
+MenuItemNew majorHavocMenu;
 MenuItemNew tempestMenu =
 {
   2008,    // ID
   "TEMPEST",    // no name
   0,    // directory
-  "tempest.img",    // no start image
+  IMG_FILE_PREFIX "tempest.img",    // no start image
   0,    // no parameter
   0,    // no parameter
   tempestList, // icon
   0, // icon
-  &simMenu,    // has no parent
+  &atariMenu,    // has no parent
   0,    // ! firstChild must be set
   &spaceDuelMenu,    // ! left must be set
-  &asteroids2Menu,    // ! right must be set
+  &majorHavocMenu,    // ! right must be set
   0,    // scrolltext
   {"","","","","WORK IN PROGRESS!!","FLICKER, NO SOUND!",  0},    // no text
 };
+
 MenuItemNew asteroidsDeluxeMenu;
-MenuItemNew asteroids2Menu =
+MenuItemNew majorHavocMenu =
 {
   2009,    // ID
-  "ASTEROIDS (NO SBT)",    // no name
+  "MAJOR HAVOC",    // no name
   0,    // directory
-  "asteroids.img",    // no start image
+  IMG_FILE_PREFIX "aae.img",
+  "\x2d",    // no parameter
   0,    // no parameter
-  0,    // no parameter
+  MajorHavocIcon, // icon
   0, // icon
-  0, // icon
-  &simMenu,    // has no parent
+  &atariMenu,    // has no parent
   0,    // ! firstChild must be set
   &tempestMenu,    // ! left must be set
   &asteroidsDeluxeMenu,    // ! right must be set
   0,    // scrolltext
-  {"","","","","WORK IN PROGRESS!!","FLICKER, NO SOUND!","","EVEN CRASHES!",  0},    // no text
+  {"","","","","WORK IN PROGRESS!!","FLICKER, NO SOUND!",  0},    // no text
 };
 
-MenuItemNew speedfreakMenu;
+MenuItemNew quantumMenu;
 MenuItemNew asteroidsDeluxeMenu =
 {
   2010,    // ID
   "ASTEROIDS DELUXE",    // no name
   0,    // directory
-  "deluxe.img",    // no start image
+  IMG_FILE_PREFIX "aae.img",
+  "\x09",    // no parameter
   0,    // no parameter
-  0,    // no parameter
+  Asteroids2Icon, // icon
   0, // icon
-  0, // icon
-  &simMenu,    // has no parent
+  &atariMenu,    // has no parent
   0,    // ! firstChild must be set
-  &asteroids2Menu,    // ! left must be set
-  0,    // ! right must be set
+  &majorHavocMenu,    // ! left must be set
+  &quantumMenu,    // ! right must be set
   0,    // scrolltext
-  {"WORK IN PROGRESS!!","FLICKER, NO SOUND!","","DISTORTED ASTEROIDS!",  0},    // no text
+  {"","","","","WORK IN PROGRESS!!","FLICKER, NO SOUND!","","",  0},    // no text
 };
 
+MenuItemNew quantumMenu =
+{
+  2011,    // ID
+  "QUANTUM",    // no name
+  0,    // directory
+  IMG_FILE_PREFIX "aae.img",
+  "\x36",    // no parameter
+  0,    // no parameter
+  QuantumIcon, // icon
+  0, // icon
+  &atariMenu,    // has no parent
+  0,    // ! firstChild must be set
+  &asteroidsDeluxeMenu,    // ! left must be set
+  0,    // ! right must be set
+  0,    // scrolltext
+  {"","","","","WORK IN PROGRESS!!","FLICKER, NO SOUND!","","",  0},    // no text
+};
+
+//////////////////////////////////////////
+// Vectrex Cine "Menu"
+//////////////////////////////////////////
+MenuItemNew speedfreakMenu;
+MenuItemNew tailgunnerMenu =
+{
+  3000,    // ID
+  "TAILGUNNER",    // no name
+  0,    // directory
+  IMG_FILE_PREFIX "tailgunner.img",    // no start image
+  0,    // no parameter
+  0,    // no parameter
+  tailgunnerList, // icon
+  0, // icon
+  &allCinematronicsMenu,    // has no parent
+  0,    // ! firstChild must be set
+  0,    // ! left must be set
+  &speedfreakMenu,    // ! right must be set
+  0,    // scrolltext
+  {"","","","","","GRAHAMS PASSION!", 0},    // no text
+};
 MenuItemNew armorAttackMenu;
 MenuItemNew speedfreakMenu =
 {
-  5001,    // ID
+  3001,    // ID
   "SPEEDFREAK",    // no name
   0,    // directory
-  "cine.img",    // no start image
-  "speedfreak",    // no parameter
+//  IMG_FILE_PREFIX "cine.img",    // no start image
+//  "speedfreak",    // no parameter
+  IMG_FILE_PREFIX "aae.img",
+  "\x42",    // no parameter
   0,    // no parameter
   speedfrkList, // icon
   0, // icon
   &allCinematronicsMenu,    // has no parent
   0,    // ! firstChild must be set
-  0,    // ! left must be set
+  &tailgunnerMenu,    // ! left must be set
   &armorAttackMenu,    // ! right must be set
   0,    // scrolltext
-  {"","","CINEMATRONICS EMU","","WORK IN PROGRESS!!","NO UPPER GEARS",  0},    // no text
+  {"","","","","AAE EMU","","No SOUND",  0},    // no text
 };
-
 MenuItemNew boxingbugsMenu;
 MenuItemNew armorAttackMenu =
 {
-  5002,    // ID
+  3002,    // ID
   "ARMOR ATTACK",    // no name
   0,    // directory
-  "cine.img",    // no start image
-  "armorattack",    // no parameter
+//  IMG_FILE_PREFIX "cine.img",    // no start image
+  IMG_FILE_PREFIX "aae.img",
+  "\x3a",    // no parameter
   0,    // no parameter
   armoraList, // icon
   0, // icon
@@ -1488,17 +1662,18 @@ MenuItemNew armorAttackMenu =
   &speedfreakMenu,    // ! left must be set
   &boxingbugsMenu,    // ! right must be set
   0,    // scrolltext
-  {"","","","","CINEMATRONICS EMU","","WORK IN PROGRESS!!","WITHOUT OVERLAY...",  0},    // no text
+  {"","","","","AAE EMU","","No SOUND",  0},    // no text
 };
-
 MenuItemNew demonMenu;
 MenuItemNew boxingbugsMenu =
 {
-  5003,    // ID
+  3003,    // ID
   "BOXING BUGS",    // no name
   0,    // directory
-  "cine.img",    // no start image
-  "boxingbugs",    // no parameter
+//  IMG_FILE_PREFIX "cine.img",    // no start image
+//  "boxingbugs",    // no parameter
+  IMG_FILE_PREFIX "aae.img",
+  "\x44",    // no parameter
   0,    // no parameter
   bbList, // icon
   0, // icon
@@ -1507,15 +1682,15 @@ MenuItemNew boxingbugsMenu =
   &armorAttackMenu,    // ! left must be set
   &demonMenu,    // ! right must be set
   0,    // scrolltext
-  {"","","","","CINEMATRONICS EMU","","NOT WORKING YET","INPUTS MISSING",  0},    // no text
+  {"","","","","AAE EMU","","No SOUND",  0},    // no text
 };
 MenuItemNew ripoffMenu;
 MenuItemNew demonMenu =
 {
-  5004,    // ID
+  3004,    // ID
   "DEMON",    // no name
   0,    // directory
-  "cine.img",    // no start image
+  IMG_FILE_PREFIX "cine.img",    // no start image
   "demon",    // no parameter
   0,    // no parameter
   demonList, // icon
@@ -1530,11 +1705,13 @@ MenuItemNew demonMenu =
 MenuItemNew spaceWarsMenu;
 MenuItemNew ripoffMenu =
 {
-  5005,    // ID
+  3005,    // ID
   "RIPOFF",    // no name
   0,    // directory
-  "cine.img",    // no start image
-  "ripoff",    // no parameter
+//  IMG_FILE_PREFIX "cine.img",    // no start image
+//  "ripoff",    // no parameter
+  IMG_FILE_PREFIX "aae.img",
+  "\x3e",    // no parameter
   0,    // no parameter
   ripoffList, // icon
   0, // icon
@@ -1543,15 +1720,15 @@ MenuItemNew ripoffMenu =
   &boxingbugsMenu,    // ! left must be set
   &spaceWarsMenu,    // ! right must be set
   0,    // scrolltext
-  {"","","","","CINEMATRONICS EMU","","WORK IN PROGRESS",  0},    // no text
+  {"","","","","AAE EMU","","No SOUND",  0},    // no text
 };
 MenuItemNew starcastleMenu;
 MenuItemNew spaceWarsMenu =
 {
-  5006,    // ID
+  3006,    // ID
   "SPACE WARS",    // no name
   0,    // directory
-  "cine.img",    // no start image
+  IMG_FILE_PREFIX "cine.img",    // no start image
   "spacewars",    // no parameter
   0,    // no parameter
   0, // icon
@@ -1566,29 +1743,33 @@ MenuItemNew spaceWarsMenu =
 MenuItemNew sundanceMenu;
 MenuItemNew starcastleMenu =
 {
-  5007,    // ID
+  3007,    // ID
   "STAR CASTLE",    // no name
   0,    // directory
-  "cine.img",    // no start image
-  "starcastle",    // no parameter
+//  IMG_FILE_PREFIX "cine.img",    // no start image
+//  "starcastle",    // no parameter
+  IMG_FILE_PREFIX "aae.img",
+  "\x39",    // no parameter
   0,    // no parameter
-  0, // icon
+  starCastleIcon, // icon
   0, // icon
   &allCinematronicsMenu,    // has no parent
   0,    // ! firstChild must be set
   &spaceWarsMenu,    // ! left must be set
   &sundanceMenu,    // ! right must be set
   0,    // scrolltext
-  {"","","","","CINEMATRONICS EMU","","NOT WORKING YET",  0},    // no text
+  {"","","","","AAE EMU","","No SOUND",  0},    // no text
 };
 MenuItemNew waroftheworldsMenu;
 MenuItemNew sundanceMenu =
 {
-  5008,    // ID
+  3008,    // ID
   "SUNDANCE",    // no name
   0,    // directory
-  "cine.img",    // no start image
-  "sundance",    // no parameter
+//  IMG_FILE_PREFIX "cine.img",    // no start image
+//  "sundance",    // no parameter
+  IMG_FILE_PREFIX "aae.img",
+  "\x3c",    // no parameter
   0,    // no parameter
   sundanceList, // icon
   0, // icon
@@ -1597,35 +1778,37 @@ MenuItemNew sundanceMenu =
   &starcastleMenu,    // ! left must be set
   &waroftheworldsMenu,    // ! right must be set
   0,    // scrolltext
-  {"","","","","CINEMATRONICS EMU","","NOT FINISHED",  0},    // no text
+  {"","","","","AAE EMU","","No SOUND",  0},    // no text
 };
 MenuItemNew barrierMenu;
 MenuItemNew waroftheworldsMenu =
 {
-  5009,    // ID
+  3009,    // ID
   "WAR OF THE WORLDS",    // no name
   0,    // directory
-  "cine.img",    // no start image
-  "waroftheworlds",    // no parameter
+//  IMG_FILE_PREFIX "cine.img",    // no start image
+//  "waroftheworlds",    // no parameter
+  IMG_FILE_PREFIX "aae.img",
+  "\x45",    // no parameter
   0,    // no parameter
-  0, // icon
+  WOTWIcon, // icon
   0, // icon
   &allCinematronicsMenu,    // has no parent
   0,    // ! firstChild must be set
   &sundanceMenu,    // ! left must be set
   &barrierMenu,    // ! right must be set
   0,    // scrolltext
-  {"","","","","CINEMATRONICS EMU","","NOT WORKING",  0},    // no text
+  {"","","","","AAE EMU","","No SOUND",  0},    // no text
 };
 MenuItemNew qb3Menu;
 MenuItemNew cosmicchasmMenu;
 MenuItemNew solarquestMenu;
 MenuItemNew barrierMenu =
 {
-  5010,    // ID
+  3010,    // ID
   "BARRIER",    // no name
   0,    // directory
-  "cine.img",    // no start image
+  IMG_FILE_PREFIX "cine.img",    // no start image
   "barrier",    // no parameter
   0,    // no parameter
   barrierList, // icon
@@ -1637,14 +1820,13 @@ MenuItemNew barrierMenu =
   0,    // scrolltext
   {"","","","","CINEMATRONICS EMU","","STRANGE GAME",  0},    // no text
 };
-
 // I don't know how to load cosmic chasm...
 MenuItemNew cosmicchasmMenu =
 {
-  5011,    // ID
+  3011,    // ID
   "COSMIC CHASM",    // no name
   0,    // directory
-  "cine.img",    // no start image
+  IMG_FILE_PREFIX "cine.img",    // no start image
   "cosmicchasm",    // no parameter
   0,    // no parameter
   0, // icon
@@ -1659,10 +1841,10 @@ MenuItemNew cosmicchasmMenu =
 // Not qorking and crashing....
 MenuItemNew qb3Menu =
 {
-  5012,    // ID
+  3012,    // ID
   "QB3",    // no name
   0,    // directory
-  "cine.img",    // no start image
+  IMG_FILE_PREFIX "cine.img",    // no start image
   "qb3",    // no parameter
   0,    // no parameter
   0, // icon
@@ -1677,29 +1859,33 @@ MenuItemNew qb3Menu =
 MenuItemNew starhawkMenu;
 MenuItemNew solarquestMenu =
 {
-  5013,    // ID
+  3013,    // ID
   "SOLAR QUEST",    // no name
   0,    // directory
-  "cine.img",    // no start image
-  "solarquest",    // no parameter
+//  IMG_FILE_PREFIX "cine.img",    // no start image
+//  "solarquest",    // no parameter
+  IMG_FILE_PREFIX "aae.img",
+  "\x38",    // no parameter
   0,    // no parameter
-  0, // icon
+  solarQuestIcon, // icon
   0, // icon
   &allCinematronicsMenu,    // has no parent
   0,    // ! firstChild must be set
   &barrierMenu,    // ! left must be set
   &starhawkMenu,    // ! right must be set
   0,    // scrolltext
-  {"","","","","CINEMATRONICS EMU","","INPUT NOT WORKING",  0},    // no text
+  {"","","","","AAE EMU","","No SOUND",  0},    // no text
 };
 MenuItemNew warriorMenu;
 MenuItemNew starhawkMenu =
 {
-  5014,    // ID
+  3014,    // ID
   "STAR HAWK",    // no name
   0,    // directory
-  "cine.img",    // no start image
-  "starhawk",    // no parameter
+//  IMG_FILE_PREFIX "cine.img",    // no start image
+//  "starhawk",    // no parameter
+  IMG_FILE_PREFIX "aae.img",
+  "\x40",    // no parameter
   0,    // no parameter
   shawkList, // icon
   0, // icon
@@ -1708,33 +1894,36 @@ MenuItemNew starhawkMenu =
   &solarquestMenu,    // ! left must be set
   &warriorMenu,    // ! right must be set
   0,    // scrolltext
-  {"","","","","CINEMATRONICS EMU","","WORKING",  0},    // no text
+  {"","","","","AAE EMU","","No SOUND",  0},    // no text
 };
 MenuItemNew tailgunner2Menu;
 MenuItemNew warriorMenu =
 {
-  5015,    // ID
+  3015,    // ID
   "WARRIOR",    // no name
   0,    // directory
-  "cine.img",    // no start image
-  "warrior",    // no parameter
+//  IMG_FILE_PREFIX "cine.img",    // no start image
+//  "warrior",    // no parameter
+  IMG_FILE_PREFIX "aae.img",
+  "\x3d",    // no parameter
   0,    // no parameter
   warriorList, // icon
   0, // icon
   &allCinematronicsMenu,    // has no parent
   0,    // ! firstChild must be set
   &starhawkMenu,    // ! left must be set
-  &tailgunner2Menu,    // ! right must be set
+  0,    // ! right must be set
   0,    // scrolltext
-  {"","","","","CINEMATRONICS EMU","WORKING", "DIFFICULT WITHOUT","OVERLAY",  0},    // no text
+  {"","","","","AAE EMU","","No SOUND",  0},    // no text
 };
+/*
 MenuItemNew tailgunner2Menu =
 {
-  5016,    // ID
+  2000,    // ID
   "TAILGUNNER",    // no name
   0,    // directory
-  "cine.img",    // no start image
-  "tailgunner",    // no parameter
+  IMG_FILE_PREFIX "tailgunner.img",    // no start image
+  0,    // no parameter
   0,    // no parameter
   tailgunnerList, // icon
   0, // icon
@@ -1743,7 +1932,146 @@ MenuItemNew tailgunner2Menu =
   &warriorMenu,    // ! left must be set
   0,    // ! right must be set
   0,    // scrolltext
-  {"","","","","CINEMATRONICS EMU","","INPUT NOT WORKING",  0},    // no text
+  {"","","","SBT","","GRAHAMS PASSION!", 0},    // no text
+};
+*/
+
+
+//////////////////////////////////////////
+// Vectrex Sega "Menu"
+//////////////////////////////////////////
+
+MenuItemNew tacscanMenu;
+MenuItemNew zektorMenu =
+{
+  4000,    // ID
+  "Zektor",    // no name
+  0,    // directory
+//  IMG_FILE_PREFIX "cine.img",    // no start image
+//  "starhawk",    // no parameter
+  IMG_FILE_PREFIX "aae.img",
+  "\x22",    // no parameter
+  0,    // no parameter
+  ZektorIcon, // icon
+  0, // icon
+  &segaMenu,    // has no parent
+  0,    // ! firstChild must be set
+  0,    // ! left must be set
+  &tacscanMenu,    // ! right must be set
+  0,    // scrolltext
+  {"","","","","AAE EMU","","No SOUND",  0},    // no text
+};
+
+MenuItemNew starTrekMenu;
+MenuItemNew tacscanMenu =
+{
+  4001,    // ID
+  "TACSCAN",    // no name
+  0,    // directory
+//  IMG_FILE_PREFIX "cine.img",    // no start image
+//  "starhawk",    // no parameter
+  IMG_FILE_PREFIX "aae.img",
+  "\x23",    // no parameter
+  0,    // no parameter
+  TacScanIcon, // icon
+  0, // icon
+  &segaMenu,    // has no parent
+  0,    // ! firstChild must be set
+  &zektorMenu,    // ! left must be set
+  &starTrekMenu,    // ! right must be set
+  0,    // scrolltext
+  {"","","","","AAE EMU","","No SOUND",  0},    // no text
+};
+
+MenuItemNew spaceFuryMenu;
+MenuItemNew starTrekMenu =
+{
+  4002,    // ID
+  "STARTREK",    // no name
+  0,    // directory
+//  IMG_FILE_PREFIX "cine.img",    // no start image
+//  "starhawk",    // no parameter
+  IMG_FILE_PREFIX "aae.img",
+  "\x24",    // no parameter
+  0,    // no parameter
+  StarTrekIcon, // icon
+  0, // icon
+  &segaMenu,    // has no parent
+  0,    // ! firstChild must be set
+  &tacscanMenu,    // ! left must be set
+  &spaceFuryMenu,    // ! right must be set
+  0,    // scrolltext
+  {"","","","","AAE EMU","","No SOUND",  0},    // no text
+}; 
+
+MenuItemNew eleminatorMenu;
+MenuItemNew spaceFuryMenu =
+{
+  4003,    // ID
+  "SPACFURY",    // no name
+  0,    // directory
+//  IMG_FILE_PREFIX "cine.img",    // no start image
+//  "starhawk",    // no parameter
+  IMG_FILE_PREFIX "aae.img",
+  "\x25",    // no parameter
+  0,    // no parameter
+  SpaceFuryIcon, // icon
+  0, // icon
+  &segaMenu,    // has no parent
+  0,    // ! firstChild must be set
+  &starTrekMenu,    // ! left must be set
+  &eleminatorMenu,    // ! right must be set
+  0,    // scrolltext
+  {"","","","","AAE EMU","","No SOUND",  0},    // no text
+};
+MenuItemNew eleminatorMenu =
+{
+  4004,    // ID
+  "ELEMINATOR",    // no name
+  0,    // directory
+//  IMG_FILE_PREFIX "cine.img",    // no start image
+//  "starhawk",    // no parameter
+  IMG_FILE_PREFIX "aae.img",
+  "\x28",    // no parameter
+  0,    // no parameter
+  EleminatorIcon, // icon
+  0, // icon
+  &segaMenu,    // has no parent
+  0,    // ! firstChild must be set
+  &spaceFuryMenu,    // ! left must be set
+  0,    // ! right must be set
+  0,    // scrolltext
+  {"","","","","AAE EMU","","No SOUND",  0},    // no text
+};
+
+
+
+
+
+
+
+
+
+
+MenuItemNew aaeMenu;
+
+
+MenuItemNew aaeMenu =
+{
+  6000,    // ID
+  "AAE",    // no name
+  0,    // directory
+  IMG_FILE_PREFIX "aae.img",    // 
+  0,    // no parameter
+  0,    // no parameter
+  0, // icon
+  0, // icon
+  0,    // has no parent
+  0,    // ! firstChild must be set
+  0,    // ! left must be set
+  0,    // ! right must be set
+  0,    // scrolltext
+  {"","","","","", 0},    // no text
 };
 
 
@@ -1755,7 +2083,7 @@ MenuItemNew badAppleMenu =
   300,    // ID
   "BAD APPLE",    // no name
   0,    // directory
-  "vectrexvideo.img",    // no start image
+  IMG_FILE_PREFIX "vectrexvideo.img",    // no start image
   "vectrex/movies",    // no parameter
   "BadApple.bin",    // no parameter
   badAppleList, // icon
@@ -1773,7 +2101,7 @@ MenuItemNew blablaMenu =
   301,    // ID
   "BLA BLA",    // no name
   0,    // directory
-  "vectrexvideo.img",    // no start image
+  IMG_FILE_PREFIX "vectrexvideo.img",    // no start image
   "vectrex/movies",    // no parameter
   "BlaBla.bin",    // no parameter
   blablaList, // icon
@@ -1791,7 +2119,7 @@ MenuItemNew laLineaMenu =
   302,    // ID
   "LA LINEA",    // no name
   0,    // directory
-  "vectrexvideo.img",    // no start image 
+  IMG_FILE_PREFIX "vectrexvideo.img",    // no start image 
   "vectrex/movies",    // no parameter
   "LaLinea.bin",    // no parameter
   lineaList, // icon
@@ -1808,7 +2136,7 @@ MenuItemNew badAppleDeMenu =
   303,    // ID
   "BAD APPLE DE",    // no name
   0,    // directory
-  "vectrexvideo.img",    // no start image
+  IMG_FILE_PREFIX "vectrexvideo.img",    // no start image
   "vectrex/movies",    // no parameter
   "BadAppleDE.bin",    // no parameter
   badAppleList, // icon
@@ -1827,7 +2155,7 @@ MenuItemNew bohemianMenu =
   400,    // ID
   "QUEEN",    // no name
   0,    // directory
-  "vectrexaudio.img",    // no start image
+  IMG_FILE_PREFIX "vectrexaudio.img",    // no start image
   "vectrex/waves",    // no parameter
   "Bohemian.bin",    // no parameter
   0, // icon
@@ -1845,7 +2173,7 @@ MenuItemNew purpleMenu =
 
   "PRINCE",    // no name
   0,    // directory
-  "vectrexaudio.img",    // no start image
+  IMG_FILE_PREFIX "vectrexaudio.img",    // no start image
   "vectrex/waves",    // no parameter
   "PurpleRain.bin",    // no parameter
   0, // icon
@@ -1857,50 +2185,19 @@ MenuItemNew purpleMenu =
   0,    // scrolltext
   {"DIGITIZED MUSIC", "SAMPLED WITH 12KHZ", 0},    // no text
 };
-int scrollReset = 1;
 
-int loadFileNames();
-
-void initMenu()
-{
-  currentMenuItem = &vectrexMenu;
-
-  vectrexMenu.right = &arcadeMenu;
-  vectrexMenu.child = &vectorbladeMenu;
-
-  arcadeMenu.left = &vectrexMenu;
-  arcadeMenu.right = &videoMenu;
-  arcadeMenu.child = &tailgunnerMenu;
-  
-  videoMenu.left = &arcadeMenu;
-  videoMenu.right = &audioMenu;
-  videoMenu.child = &badAppleMenu;
-
-  audioMenu.left = &videoMenu;
-  audioMenu.child = &bohemianMenu;
-  selectionMade = 0;
-  currentMenuItem = &vectrexMenu;
-  initTestRoms();
-  loadFileNames();
-  scrollReset = 1;
-}
-
+// todo - all other roms!
 int testOneRomId(int id)
 {
   char *testPath;
   switch (id)
   {
-    case 1071: // release
+    case 2000: // release
     {
-      testPath = "vectrex/RELEASE.BIN";
+      testPath = "roms/aae/starwars.zip";
       break;
     }
-    case 2000: // tailgunner
-    {
-      testPath = "roms/tailg.zip";
-      break;
-    }
-    case 2001: // asteroids
+    case 2001: // asteroids_sbt.img
     {
       testPath = "roms/asteroid2.zip";
       break;
@@ -1940,14 +2237,119 @@ int testOneRomId(int id)
       testPath = "roms/tempest.zip";
       break;
     }
-    case 2009: // Asteroid non sbt
+    case 2009: //
     {
-      testPath = "roms/asteroid2.zip";
+      testPath = "roms/aae/mhavoc.zip";
       break;
     }
     case 2010: // Asteroid deluce
     {
-      testPath = "roms/astdelux.zip";
+      testPath = "roms/aae/astdelux.zip";
+      break;
+    }
+    case 2011: // 
+    {
+      testPath = "roms/aae/quantum.zip";
+      break;
+    }
+    case 3000: // tailgunner
+    {
+      testPath = "roms/tailg.zip";
+      break;
+    }
+    case 3001: // tailgunner
+    {
+      testPath = "roms/aae/speedfrk.zip";
+      break;
+    }
+    case 3002: // 
+    {
+      testPath = "roms/aae/armora.zip";
+      break;
+    }
+    case 3003: // 
+    {
+      testPath = "roms/aae/boxingb.zip";
+      break;
+    }
+    case 3004: // 
+    {
+      testPath = "roms/demon.zip";
+      break;
+    }
+    case 3005: // 
+    {
+      testPath = "roms/aae/ripoff.zip";
+      break;
+    }
+    case 3006: // 
+    {
+      testPath = "roms/spacewar.zip";
+      break;
+    }
+    case 3007: // 
+    {
+      testPath = "roms/aae/starcas.zip";
+      break;
+    }
+    case 3008: // 
+    {
+      testPath = "roms/aae/sundance.zip";
+      break;
+    }
+    case 3009: // 
+    {
+      testPath = "roms/aae/wotw.zip";
+      break;
+    }
+    case 3010: // 
+    {
+      testPath = "roms/barrier.zip";
+      break;
+    }
+    case 3013: // 
+    {
+      testPath = "roms/aae/solarq.zip";
+      break;
+    }
+    case 3014: // 
+    {
+      testPath = "roms/aae/starhawk.zip";
+      break;
+    }
+    case 3015: // 
+    {
+      testPath = "roms/aae/warrior.zip";
+      break;
+    }
+    case 4000: // 
+    {
+      testPath = "roms/aae/zektor.zip";
+      break;
+    }
+    case 4001: // 
+    {
+      testPath = "roms/aae/tacscan.zip";
+      break;
+    }
+    case 4002: // 
+    {
+      testPath = "roms/aae/startrek.zip";
+      break;
+    }
+    case 4003: // 
+    {
+      testPath = "roms/aae/spacfury.zip";
+      break;
+    }
+    case 4004: // 
+    {
+      testPath = "roms/aae/elim2.zip";
+      break;
+    }
+    case 5000: // 
+    {
+      testPath = "roms/aae/omegrace.zip";
       break;
     }
     
@@ -2216,88 +2618,86 @@ void displayMenu()
   static char *aaeList[]=
   {
 //Lunar Lander Hardware
- "LLANDER1",  
- "LLANDER",   
+/* 00 */ "LLANDER1",  			
+/* 01 */ "LLANDER",   
 //Asteroids Hardware
- "METEORTS",  
- "ASTEROCK",  
- "ASTEROIB",  
- "ASTEROI1",  
- "ASTEROID",  
- "ASTDELU1",  
- "ASTDELU2",  
- "ASTDELUX",  
+/* 02 */ "METEORTS",  
+/* 03 */ "ASTEROCK",  
+/* 04 */ "ASTEROIB",  
+/* 05 */ "ASTEROI1",  
+/* 06 */ "ASTEROID",  
+/* 07 */ "ASTDELU1",  
+/* 08 */ "ASTDELU2",  
+/* 09 */ "ASTDELUX",  
 //Midway Omega Race Hardware
- "OMEGRACE",  
- "DELTRACE",  
+/* 0a */ "OMEGRACE",  
+/* 0b */ "DELTRACE",  
 //BattleZone Hardware
- "BZONE",     
- "BZONE2",    
- "BZONEC",    
- "BZONEP",    
- "REDBARON",  
- "BRADLEY (NOT)",   
+/* 0c */ "BZONE",     
+/* 0d */ "BZONE2",    
+/* 0e */ "BZONEC",    
+/* 0f */ "BZONEP",    
+/* 10 */ "REDBARON",  
+/* 11 */ "BRADLEY (NOT)",   
 //Spacduel Hardware
- "SPACDUEL",  
- "BWIDOW",    
- "GRAVITAR",  
- "GRAVITR2", 
- "GRAVP",     
- "LUNARBAT",  
- "LUNARBA1",  
+/* 12 */ "SPACDUEL",  
+/* 13 */ "BWIDOW",    
+/* 14 */ "GRAVITAR",  
+/* 15*/ "GRAVITR2", 
+/* 16 */ "GRAVP",     
+/* 17 */ "LUNARBAT",  
+/* 18 */ "LUNARBA1",  
 //Tempest Hardware
- "TEMPESTM",  
- "TEMPEST",   
- "TEMPEST3",  
- "TEMPEST2", 
- "TEMPEST1",  
- "TEMPTUBE",  
- "ALIENST",   
- "VBREAK",    
- "VORTEX",    
+/* 19 */ "TEMPESTM",  
+/* 1a */ "TEMPEST",   
+/* 1b */ "TEMPEST3",  
+/* 1c */ "TEMPEST2", 
+/* 1d */ "TEMPEST1",  
+/* 1e */ "TEMPTUBE",  
+/* 1f */ "ALIENST",   
+/* 20 */ "VBREAK",    
+/* 21 */ "VORTEX",    
 //Sega G80 Vector Hardware
- "ZEKTOR",    
- "TACSCAN",   
- "STARTREK",  
- "SPACFURY", 
- "SPACFURA",  
- "SPACFURB",  
- "ELIM2",     
- "ELIM2A",    
- "ELIM2C",    
- "ELIM4",     
- "ELIM4P",    
+/* 22 */ "ZEKTOR",    
+/* 23 */ "TACSCAN",   
+/* 24 */ "STARTREK",  
+/* 25 */ "SPACFURY", 
+/* 26 */ "SPACFURA",  
+/* 27 */ "SPACFURB",  
+/* 28 */ "ELIM2",     
+/* 29 */ "ELIM2A",    
+/* 2a */ "ELIM2C",    
+/* 2b */ "ELIM4",     
+/* 2c */ "ELIM4P",    
 //Major Havoc Hardware
- "MHAVOC",    
- "MHAVOC2",   
- "MHAVOCRV",  
- "MHAVOCP",   
- "ALPHAONE",  
- "ALPHAONA",  
+/* 2d */ "MHAVOC",    
+/* 2e */ "MHAVOC2",   
+/* 2f */ "MHAVOCRV",  
+/* 30 */ "MHAVOCP",   
+/* 31 */ "ALPHAONE",  
+/* 32 */ "ALPHAONA",  
 //Star Wars Hardware
- "STARWARS",  
- "STARWAR1",  
+/* 33 */ "STARWARS",  
+/* 34 */ "STARWAR1",  
 //Quantum Hardware
- "QUANTUM1 (NOT)",  
- "QUANTUM",  
- "QUANTUMP (NOT)",  
+/* 35 */ "QUANTUM1 (NOT)",  
+/* 36 */ "QUANTUM",  
+/* 37 */ "QUANTUMP (NOT)",  
 //Cinematronics Hardware
- "SOLARQ",    
- "STARCAS",   
- "ARMORA",    
- "BARRIER (NOT)",   
- "SUNDANCE",  
- "WARRIOR",   
- "RIPOFF",    
- "TAILG",     
- "STARHAWK",  
- "SPACEWAR (NOT)",  
- "SPEEDFRK",  
- "DEMON (NOT)",     
- "BOXINGB",   
- "WOTW", 
-
-
+/* 38 */ "SOLARQ",    
+/* 39 */ "STARCAS",   
+/* 3a */ "ARMORA",    
+/* 3b */ "BARRIER (NOT)",   
+/* 3c */ "SUNDANCE",  
+/* 3d */ "WARRIOR",   
+/* 3e */ "RIPOFF",    
+/* 3f */ "TAILG",     
+/* 40 */ "STARHAWK",  
+/* 41 */ "SPACEWAR (NOT)",  
+/* 42 */ "SPEEDFRK",  
+/* 43 */ "DEMON (NOT)",     
+/* 44 */ "BOXINGB",   
+/* 45 */ "WOTW", 
 
     0,
     0,
@@ -2419,7 +2819,7 @@ void displayMenu()
     reloadLoader();
   }  
 }
-
+#if 0
 void v_printBitmapUni(unsigned char *bitmapBlob, int width, int height, int sizeX, int x, int y);
 // 9x75
 unsigned char __uniDirectional[] =
@@ -2534,3 +2934,948 @@ void doBitmap()
   v_disableReturnToLoader();  
   
 }
+
+
+// for SMP test
+#if RASPPI != 1 
+
+const signed char HavocTitle[]=
+{	(signed char) 110, // count of vectors
+	(signed char) 0x5B, (signed char) 0x77, (signed char) 0x53, (signed char) 0x74,	// y0, x0, y1, x1
+	(signed char) 0x53, (signed char) 0x74, (signed char) 0x53, (signed char) 0x1A,	// y0, x0, y1, x1
+	(signed char) 0x53, (signed char) 0x1A, (signed char) 0x61, (signed char) 0x20,	// y0, x0, y1, x1
+	(signed char) 0x61, (signed char) 0x20, (signed char) 0x61, (signed char) 0x18,	// y0, x0, y1, x1
+	(signed char) 0x61, (signed char) 0x18, (signed char) 0x53, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0x53, (signed char) 0x12, (signed char) 0x53, (signed char) 0xAA,	// y0, x0, y1, x1
+	(signed char) 0x53, (signed char) 0xAA, (signed char) 0x69, (signed char) 0xB2,	// y0, x0, y1, x1
+	(signed char) 0x69, (signed char) 0xB2, (signed char) 0x53, (signed char) 0xA5,	// y0, x0, y1, x1
+	(signed char) 0x53, (signed char) 0xA5, (signed char) 0x53, (signed char) 0x9A,	// y0, x0, y1, x1
+	(signed char) 0x53, (signed char) 0x9A, (signed char) 0x69, (signed char) 0x9F,	// y0, x0, y1, x1
+	(signed char) 0x69, (signed char) 0x9F, (signed char) 0x53, (signed char) 0x94,	// y0, x0, y1, x1
+	(signed char) 0x53, (signed char) 0x94, (signed char) 0x53, (signed char) 0x89,	// y0, x0, y1, x1
+	(signed char) 0x53, (signed char) 0x89, (signed char) 0x74, (signed char) 0x9D,	// y0, x0, y1, x1
+	(signed char) 0x74, (signed char) 0x9D, (signed char) 0x74, (signed char) 0xA7,	// y0, x0, y1, x1
+	(signed char) 0x74, (signed char) 0xA7, (signed char) 0x5B, (signed char) 0xA2,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0xA2, (signed char) 0x74, (signed char) 0xB2,	// y0, x0, y1, x1
+	(signed char) 0x74, (signed char) 0xB2, (signed char) 0x74, (signed char) 0xBD,	// y0, x0, y1, x1
+	(signed char) 0x74, (signed char) 0xBD, (signed char) 0x5B, (signed char) 0xB2,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0xB2, (signed char) 0x5B, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0x0D, (signed char) 0x74, (signed char) 0x18,	// y0, x0, y1, x1
+	(signed char) 0x74, (signed char) 0x18, (signed char) 0x74, (signed char) 0x20,	// y0, x0, y1, x1
+	(signed char) 0x74, (signed char) 0x20, (signed char) 0x66, (signed char) 0x1A,	// y0, x0, y1, x1
+	(signed char) 0x66, (signed char) 0x1A, (signed char) 0x66, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0x66, (signed char) 0x22, (signed char) 0x74, (signed char) 0x27,	// y0, x0, y1, x1
+	(signed char) 0x74, (signed char) 0x27, (signed char) 0x74, (signed char) 0x30,	// y0, x0, y1, x1
+	(signed char) 0x74, (signed char) 0x30, (signed char) 0x5B, (signed char) 0x25,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0x25, (signed char) 0x5B, (signed char) 0x77,	// y0, x0, y1, x1
+	(signed char) 0x61, (signed char) 0xC0, (signed char) 0x61, (signed char) 0xC3,	// y0, x0, y1, x1
+	(signed char) 0x61, (signed char) 0xC3, (signed char) 0x69, (signed char) 0xC8,	// y0, x0, y1, x1
+	(signed char) 0x69, (signed char) 0xC8, (signed char) 0x5B, (signed char) 0xBB,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0xBB, (signed char) 0x5B, (signed char) 0xB5,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0xB5, (signed char) 0x6E, (signed char) 0xC5,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0xC5, (signed char) 0x6E, (signed char) 0xD0,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0xD0, (signed char) 0x5B, (signed char) 0xC8,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0xC8, (signed char) 0x5B, (signed char) 0xC0,	// y0, x0, y1, x1
+	(signed char) 0x5E, (signed char) 0xCE, (signed char) 0x66, (signed char) 0xD0,	// y0, x0, y1, x1
+	(signed char) 0x66, (signed char) 0xD0, (signed char) 0x66, (signed char) 0xD5,	// y0, x0, y1, x1
+	(signed char) 0x66, (signed char) 0xD5, (signed char) 0x61, (signed char) 0xD3,	// y0, x0, y1, x1
+	(signed char) 0x61, (signed char) 0xD3, (signed char) 0x61, (signed char) 0xD9,	// y0, x0, y1, x1
+	(signed char) 0x61, (signed char) 0xD9, (signed char) 0x6E, (signed char) 0xDE,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0xDE, (signed char) 0x6E, (signed char) 0xE3,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0xE3, (signed char) 0x5B, (signed char) 0xDB,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0xDB, (signed char) 0x5B, (signed char) 0xD0,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0xD0, (signed char) 0x5E, (signed char) 0xCE,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0xE6, (signed char) 0x6E, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0xF6, (signed char) 0x5B, (signed char) 0xEE,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0xEE, (signed char) 0x5B, (signed char) 0xDE,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0xDE, (signed char) 0x6E, (signed char) 0xE6,	// y0, x0, y1, x1
+	(signed char) 0x69, (signed char) 0xE8, (signed char) 0x69, (signed char) 0xEE,	// y0, x0, y1, x1
+	(signed char) 0x69, (signed char) 0xEE, (signed char) 0x61, (signed char) 0xE8,	// y0, x0, y1, x1
+	(signed char) 0x61, (signed char) 0xE8, (signed char) 0x61, (signed char) 0xE6,	// y0, x0, y1, x1
+	(signed char) 0x61, (signed char) 0xE6, (signed char) 0x69, (signed char) 0xE8,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0xF9, (signed char) 0x5B, (signed char) 0xF1,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0xF1, (signed char) 0x6E, (signed char) 0xF9,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0xF9, (signed char) 0x6E, (signed char) 0x04,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0x04, (signed char) 0x6C, (signed char) 0x07,	// y0, x0, y1, x1
+	(signed char) 0x6C, (signed char) 0x07, (signed char) 0x66, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0x66, (signed char) 0x00, (signed char) 0x5B, (signed char) 0x04,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0x04, (signed char) 0x5B, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0x00, (signed char) 0x66, (signed char) 0xFE,	// y0, x0, y1, x1
+	(signed char) 0x66, (signed char) 0xFE, (signed char) 0x69, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0x69, (signed char) 0x00, (signed char) 0x69, (signed char) 0xFE,	// y0, x0, y1, x1
+	(signed char) 0x69, (signed char) 0xFE, (signed char) 0x5B, (signed char) 0xF9,	// y0, x0, y1, x1
+	(signed char) 0x61, (signed char) 0x36, (signed char) 0x61, (signed char) 0x36,	// y0, x0, y1, x1
+	(signed char) 0x61, (signed char) 0x36, (signed char) 0x69, (signed char) 0x3B,	// y0, x0, y1, x1
+	(signed char) 0x69, (signed char) 0x3B, (signed char) 0x5B, (signed char) 0x30,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0x30, (signed char) 0x5B, (signed char) 0x2B,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0x2B, (signed char) 0x6E, (signed char) 0x38,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0x38, (signed char) 0x6E, (signed char) 0x43,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0x43, (signed char) 0x5B, (signed char) 0x3D,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0x3D, (signed char) 0x5B, (signed char) 0x32,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0x45, (signed char) 0x6E, (signed char) 0x4B,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0x4B, (signed char) 0x61, (signed char) 0x48,	// y0, x0, y1, x1
+	(signed char) 0x61, (signed char) 0x48, (signed char) 0x71, (signed char) 0x53,	// y0, x0, y1, x1
+	(signed char) 0x71, (signed char) 0x53, (signed char) 0x71, (signed char) 0x59,	// y0, x0, y1, x1
+	(signed char) 0x71, (signed char) 0x59, (signed char) 0x5B, (signed char) 0x4B,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0x4B, (signed char) 0x5B, (signed char) 0x3D,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0x3D, (signed char) 0x6E, (signed char) 0x45,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0x59, (signed char) 0x6E, (signed char) 0x69,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0x69, (signed char) 0x5B, (signed char) 0x61,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0x61, (signed char) 0x5B, (signed char) 0x50,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0x50, (signed char) 0x6E, (signed char) 0x59,	// y0, x0, y1, x1
+	(signed char) 0x69, (signed char) 0x5E, (signed char) 0x69, (signed char) 0x61,	// y0, x0, y1, x1
+	(signed char) 0x69, (signed char) 0x61, (signed char) 0x61, (signed char) 0x5E,	// y0, x0, y1, x1
+	(signed char) 0x61, (signed char) 0x5E, (signed char) 0x61, (signed char) 0x59,	// y0, x0, y1, x1
+	(signed char) 0x61, (signed char) 0x59, (signed char) 0x69, (signed char) 0x5E,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0x63, (signed char) 0x6E, (signed char) 0x6C,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0x6C, (signed char) 0x6E, (signed char) 0x7C,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0x7C, (signed char) 0x66, (signed char) 0x79,	// y0, x0, y1, x1
+	(signed char) 0x66, (signed char) 0x79, (signed char) 0x66, (signed char) 0x71,	// y0, x0, y1, x1
+	(signed char) 0x66, (signed char) 0x71, (signed char) 0x69, (signed char) 0x74,	// y0, x0, y1, x1
+	(signed char) 0x69, (signed char) 0x74, (signed char) 0x69, (signed char) 0x6E,	// y0, x0, y1, x1
+	(signed char) 0x69, (signed char) 0x6E, (signed char) 0x61, (signed char) 0x6C,	// y0, x0, y1, x1
+	(signed char) 0x61, (signed char) 0x6C, (signed char) 0x61, (signed char) 0x6E,	// y0, x0, y1, x1
+	(signed char) 0x61, (signed char) 0x6E, (signed char) 0x63, (signed char) 0x71,	// y0, x0, y1, x1
+	(signed char) 0x63, (signed char) 0x71, (signed char) 0x63, (signed char) 0x77,	// y0, x0, y1, x1
+	(signed char) 0x63, (signed char) 0x77, (signed char) 0x5B, (signed char) 0x74,	// y0, x0, y1, x1
+	(signed char) 0x5B, (signed char) 0x74, (signed char) 0x5B, (signed char) 0x63,	// y0, x0, y1, x1
+	(signed char) 0x53, (signed char) 0x8F, (signed char) 0x6E, (signed char) 0x9F,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0x9F, (signed char) 0x6E, (signed char) 0xA2,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0xA2, (signed char) 0x56, (signed char) 0x9F,	// y0, x0, y1, x1
+	(signed char) 0x56, (signed char) 0x9F, (signed char) 0x56, (signed char) 0xA2,	// y0, x0, y1, x1
+	(signed char) 0x56, (signed char) 0xA2, (signed char) 0x6E, (signed char) 0xB2,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0xB2, (signed char) 0x6E, (signed char) 0xB8,	// y0, x0, y1, x1
+	(signed char) 0x6E, (signed char) 0xB8, (signed char) 0x56, (signed char) 0xB0,	// y0, x0, y1, x1
+	(signed char) 0x56, (signed char) 0xB0, (signed char) 0x56, (signed char) 0x0F,	// y0, x0, y1, x1
+	(signed char) 0x56, (signed char) 0x0F, (signed char) 0x74, (signed char) 0x1D,	// y0, x0, y1, x1
+	(signed char) 0x63, (signed char) 0x15, (signed char) 0x63, (signed char) 0x25,	// y0, x0, y1, x1
+	(signed char) 0x74, (signed char) 0x2D, (signed char) 0x56, (signed char) 0x20,	// y0, x0, y1, x1
+	(signed char) 0x56, (signed char) 0x20, (signed char) 0x56, (signed char) 0x77,	// y0, x0, y1, x1
+};
+
+
+
+
+const signed char HavocText[]={
+//720, // count of vectors
+	(signed char) 0x36, (signed char) 0xCA, (signed char) 0x3B, (signed char) 0xCC,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0xCC, (signed char) 0x3E, (signed char) 0xCA,	// y0, x0, y1, x1
+	(signed char) 0x3E, (signed char) 0xCA, (signed char) 0x3E, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0x3E, (signed char) 0xC4, (signed char) 0x3B, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0xC4, (signed char) 0x36, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0xC4, (signed char) 0x36, (signed char) 0xCA,	// y0, x0, y1, x1
+	(signed char) 0x39, (signed char) 0xCA, (signed char) 0x39, (signed char) 0xC7,	// y0, x0, y1, x1
+	(signed char) 0x39, (signed char) 0xC7, (signed char) 0x3B, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0xC4, (signed char) 0x3B, (signed char) 0xC7,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0xC7, (signed char) 0x3B, (signed char) 0xCA,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0xCC, (signed char) 0x3B, (signed char) 0xCC,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0xCC, (signed char) 0x39, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0x39, (signed char) 0xCF, (signed char) 0x3B, (signed char) 0xD2,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0xD2, (signed char) 0x36, (signed char) 0xD2,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0xDA, (signed char) 0x36, (signed char) 0xD7,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0xD7, (signed char) 0x39, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0x39, (signed char) 0xD4, (signed char) 0x3B, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0xD4, (signed char) 0x3B, (signed char) 0xDA,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0xDA, (signed char) 0x3B, (signed char) 0xDA,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0xDA, (signed char) 0x39, (signed char) 0xDC,	// y0, x0, y1, x1
+	(signed char) 0x39, (signed char) 0xDC, (signed char) 0x3B, (signed char) 0xDF,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0xDF, (signed char) 0x36, (signed char) 0xDF,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0xE2, (signed char) 0x3B, (signed char) 0xE2,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0xE2, (signed char) 0x36, (signed char) 0xE7,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0xE7, (signed char) 0x3B, (signed char) 0xEC,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0xE7, (signed char) 0x36, (signed char) 0xEC,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0xEF, (signed char) 0x3B, (signed char) 0xF2,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0xEF, (signed char) 0x36, (signed char) 0xF2,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0xF4, (signed char) 0x3B, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0xF4, (signed char) 0x36, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0xF8, (signed char) 0x36, (signed char) 0xFA,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0xF8, (signed char) 0x3B, (signed char) 0xF8,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0xF8, (signed char) 0x3B, (signed char) 0xFA,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0xFD, (signed char) 0x36, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0x00, (signed char) 0x3B, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0xFD, (signed char) 0x3B, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0x05, (signed char) 0x36, (signed char) 0x08,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0x05, (signed char) 0x3B, (signed char) 0x05,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0x05, (signed char) 0x3B, (signed char) 0x08,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0x10, (signed char) 0x39, (signed char) 0x10,	// y0, x0, y1, x1
+	(signed char) 0x39, (signed char) 0x10, (signed char) 0x3B, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0x12, (signed char) 0x3B, (signed char) 0x15,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0x15, (signed char) 0x36, (signed char) 0x15,	// y0, x0, y1, x1
+	(signed char) 0x39, (signed char) 0x10, (signed char) 0x39, (signed char) 0x15,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0x1A, (signed char) 0x3B, (signed char) 0x1A,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0x18, (signed char) 0x3B, (signed char) 0x1A,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0x1D, (signed char) 0x39, (signed char) 0x1D,	// y0, x0, y1, x1
+	(signed char) 0x39, (signed char) 0x1D, (signed char) 0x3B, (signed char) 0x20,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0x20, (signed char) 0x3B, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0x22, (signed char) 0x36, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0x39, (signed char) 0x1D, (signed char) 0x39, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0x28, (signed char) 0x39, (signed char) 0x28,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0x25, (signed char) 0x3B, (signed char) 0x25,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0x25, (signed char) 0x3B, (signed char) 0x28,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0x28, (signed char) 0x3B, (signed char) 0x28,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0x28, (signed char) 0x39, (signed char) 0x28,	// y0, x0, y1, x1
+	(signed char) 0x39, (signed char) 0x28, (signed char) 0x39, (signed char) 0x25,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0x2A, (signed char) 0x36, (signed char) 0x30,	// y0, x0, y1, x1
+	(signed char) 0x36, (signed char) 0x2D, (signed char) 0x3B, (signed char) 0x2D,	// y0, x0, y1, x1
+	(signed char) 0x3B, (signed char) 0x2A, (signed char) 0x3B, (signed char) 0x30,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0x8A, (signed char) 0x13, (signed char) 0x8D,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0x8D, (signed char) 0x11, (signed char) 0x8D,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0x8D, (signed char) 0x11, (signed char) 0x8A,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0x8A, (signed char) 0x0E, (signed char) 0x8A,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x8A, (signed char) 0x0E, (signed char) 0x8D,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x90, (signed char) 0x0E, (signed char) 0x90,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x90, (signed char) 0x0E, (signed char) 0x90,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x98, (signed char) 0x13, (signed char) 0x98,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0x98, (signed char) 0x13, (signed char) 0x9A,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0x9A, (signed char) 0x11, (signed char) 0x9D,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0x9D, (signed char) 0x0E, (signed char) 0x9A,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x9A, (signed char) 0x0E, (signed char) 0x98,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x9D, (signed char) 0x0E, (signed char) 0xA2,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x9D, (signed char) 0x13, (signed char) 0x9D,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0x9D, (signed char) 0x13, (signed char) 0xA2,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xA0, (signed char) 0x11, (signed char) 0x9D,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xA2, (signed char) 0x0E, (signed char) 0xA4,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xA4, (signed char) 0x0E, (signed char) 0xA7,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xA7, (signed char) 0x11, (signed char) 0xA2,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xA2, (signed char) 0x13, (signed char) 0xA2,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xA2, (signed char) 0x13, (signed char) 0xA4,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xAA, (signed char) 0x13, (signed char) 0xAA,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xA7, (signed char) 0x13, (signed char) 0xAA,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xAF, (signed char) 0x11, (signed char) 0xAF,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xAC, (signed char) 0x13, (signed char) 0xAC,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xAC, (signed char) 0x13, (signed char) 0xAF,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xAF, (signed char) 0x11, (signed char) 0xAF,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xAF, (signed char) 0x11, (signed char) 0xAF,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xAF, (signed char) 0x11, (signed char) 0xAC,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xB4, (signed char) 0x11, (signed char) 0xB4,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xB4, (signed char) 0x13, (signed char) 0xB4,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xB4, (signed char) 0x13, (signed char) 0xB2,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xB2, (signed char) 0x11, (signed char) 0xB2,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xB2, (signed char) 0x0E, (signed char) 0xB2,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xB2, (signed char) 0x0E, (signed char) 0xB4,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xB7, (signed char) 0x11, (signed char) 0xBA,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xBA, (signed char) 0x0E, (signed char) 0xB7,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xC2, (signed char) 0x13, (signed char) 0xC2,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xC2, (signed char) 0x11, (signed char) 0xC2,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xC2, (signed char) 0x13, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xC4, (signed char) 0x0E, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xCA, (signed char) 0x11, (signed char) 0xCA,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xCA, (signed char) 0x13, (signed char) 0xCA,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xCA, (signed char) 0x13, (signed char) 0xC7,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xC7, (signed char) 0x11, (signed char) 0xC7,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xC7, (signed char) 0x0E, (signed char) 0xC7,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xC7, (signed char) 0x0E, (signed char) 0xCA,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xCC, (signed char) 0x13, (signed char) 0xCC,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xCA, (signed char) 0x13, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xCF, (signed char) 0x13, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xCF, (signed char) 0x11, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xD4, (signed char) 0x0E, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xD4, (signed char) 0x0E, (signed char) 0xDA,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xD4, (signed char) 0x13, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xD4, (signed char) 0x13, (signed char) 0xDA,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xD7, (signed char) 0x11, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xDF, (signed char) 0x11, (signed char) 0xDC,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xDA, (signed char) 0x13, (signed char) 0xDA,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xDA, (signed char) 0x13, (signed char) 0xDC,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xDC, (signed char) 0x11, (signed char) 0xDF,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xDF, (signed char) 0x11, (signed char) 0xDC,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xDC, (signed char) 0x11, (signed char) 0xDA,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xDF, (signed char) 0x0E, (signed char) 0xE2,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xE2, (signed char) 0x0E, (signed char) 0xE4,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xE4, (signed char) 0x11, (signed char) 0xDF,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xDF, (signed char) 0x13, (signed char) 0xE2,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xE2, (signed char) 0x13, (signed char) 0xE2,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xE4, (signed char) 0x13, (signed char) 0xE4,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xE4, (signed char) 0x11, (signed char) 0xEA,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xEA, (signed char) 0x0E, (signed char) 0xEA,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xEA, (signed char) 0x0E, (signed char) 0xEC,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xEC, (signed char) 0x13, (signed char) 0xEC,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xEA, (signed char) 0x13, (signed char) 0xEC,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xEF, (signed char) 0x13, (signed char) 0xEF,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xEF, (signed char) 0x13, (signed char) 0xF2,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xF2, (signed char) 0x11, (signed char) 0xF2,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xF2, (signed char) 0x11, (signed char) 0xF2,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xF2, (signed char) 0x11, (signed char) 0xEF,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xF6, (signed char) 0x13, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xF6, (signed char) 0x13, (signed char) 0xF8,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xF8, (signed char) 0x11, (signed char) 0xF8,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xF8, (signed char) 0x0E, (signed char) 0xF8,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xF8, (signed char) 0x0E, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xFA, (signed char) 0x0E, (signed char) 0xFD,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0xFA, (signed char) 0x13, (signed char) 0xFA,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0xFA, (signed char) 0x13, (signed char) 0xFD,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0xFD, (signed char) 0x11, (signed char) 0xFA,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x00, (signed char) 0x13, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0x00, (signed char) 0x13, (signed char) 0x02,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0x02, (signed char) 0x11, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x05, (signed char) 0x0E, (signed char) 0x08,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x05, (signed char) 0x13, (signed char) 0x05,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0x05, (signed char) 0x13, (signed char) 0x08,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0x08, (signed char) 0x11, (signed char) 0x05,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x0A, (signed char) 0x13, (signed char) 0x0A,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0x0A, (signed char) 0x0E, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x0D, (signed char) 0x13, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x0D, (signed char) 0x0E, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x12, (signed char) 0x0E, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x12, (signed char) 0x11, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0x0D, (signed char) 0x13, (signed char) 0x10,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0x10, (signed char) 0x13, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x12, (signed char) 0x0E, (signed char) 0x18,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x12, (signed char) 0x13, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0x12, (signed char) 0x13, (signed char) 0x18,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0x15, (signed char) 0x11, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x18, (signed char) 0x0E, (signed char) 0x1A,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x1A, (signed char) 0x0E, (signed char) 0x1D,	// y0, x0, y1, x1
+	(signed char) 0x0E, (signed char) 0x1D, (signed char) 0x11, (signed char) 0x18,	// y0, x0, y1, x1
+	(signed char) 0x11, (signed char) 0x18, (signed char) 0x13, (signed char) 0x1A,	// y0, x0, y1, x1
+	(signed char) 0x13, (signed char) 0x1A, (signed char) 0x13, (signed char) 0x1A,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x8A, (signed char) 0x01, (signed char) 0x8D,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x8A, (signed char) 0x03, (signed char) 0x8D,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x8D, (signed char) 0xFE, (signed char) 0x8D,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x8D, (signed char) 0xFE, (signed char) 0x8A,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x90, (signed char) 0xFE, (signed char) 0x90,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x90, (signed char) 0xFE, (signed char) 0x90,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x98, (signed char) 0x03, (signed char) 0x98,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x98, (signed char) 0xFE, (signed char) 0x9D,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x9D, (signed char) 0x01, (signed char) 0x9D,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x9D, (signed char) 0x03, (signed char) 0xA0,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xA0, (signed char) 0x03, (signed char) 0xA2,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xA2, (signed char) 0xFE, (signed char) 0xA2,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x9D, (signed char) 0x01, (signed char) 0xA2,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xA2, (signed char) 0x03, (signed char) 0xA2,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xA2, (signed char) 0xFE, (signed char) 0xA7,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xA7, (signed char) 0x03, (signed char) 0xA7,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xA7, (signed char) 0x03, (signed char) 0xA7,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xA7, (signed char) 0x03, (signed char) 0xAA,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xAA, (signed char) 0x01, (signed char) 0xAA,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0xAA, (signed char) 0xFE, (signed char) 0xAA,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xAA, (signed char) 0xFE, (signed char) 0xA7,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xB4, (signed char) 0x01, (signed char) 0xB4,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0xB4, (signed char) 0x03, (signed char) 0xB4,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xB4, (signed char) 0x03, (signed char) 0xB2,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xB2, (signed char) 0x01, (signed char) 0xB2,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0xB2, (signed char) 0xFE, (signed char) 0xB2,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xB2, (signed char) 0xFE, (signed char) 0xB4,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xB7, (signed char) 0x03, (signed char) 0xB7,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xB7, (signed char) 0xFE, (signed char) 0xBA,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xBA, (signed char) 0x03, (signed char) 0xBA,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xC2, (signed char) 0xFE, (signed char) 0xC2,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xC2, (signed char) 0x03, (signed char) 0xC2,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xC2, (signed char) 0xFE, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xC4, (signed char) 0x03, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xC4, (signed char) 0x03, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0xC4, (signed char) 0x01, (signed char) 0xCA,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xCA, (signed char) 0xFE, (signed char) 0xCA,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xCC, (signed char) 0xFE, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xCC, (signed char) 0x03, (signed char) 0xCC,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xCC, (signed char) 0x03, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xD2, (signed char) 0x03, (signed char) 0xD2,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xCF, (signed char) 0x03, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xD4, (signed char) 0xFE, (signed char) 0xDA,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xD4, (signed char) 0x03, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xD4, (signed char) 0x03, (signed char) 0xDA,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0xD7, (signed char) 0x01, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xDF, (signed char) 0x03, (signed char) 0xDF,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xDF, (signed char) 0x03, (signed char) 0xE2,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xE2, (signed char) 0x01, (signed char) 0xE2,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0xE2, (signed char) 0x01, (signed char) 0xE2,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0xE2, (signed char) 0x01, (signed char) 0xDF,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xE4, (signed char) 0x03, (signed char) 0xE4,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xE4, (signed char) 0xFE, (signed char) 0xE7,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xEA, (signed char) 0x01, (signed char) 0xEA,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0xEA, (signed char) 0x03, (signed char) 0xEC,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xEC, (signed char) 0x03, (signed char) 0xEC,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xEC, (signed char) 0xFE, (signed char) 0xEC,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0xEA, (signed char) 0x01, (signed char) 0xEC,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xEF, (signed char) 0x03, (signed char) 0xEF,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xEF, (signed char) 0x03, (signed char) 0xF2,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xF4, (signed char) 0x03, (signed char) 0xF4,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xF4, (signed char) 0x03, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0xF6, (signed char) 0x01, (signed char) 0xF4,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xF8, (signed char) 0x01, (signed char) 0xF8,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0xF8, (signed char) 0x03, (signed char) 0xF8,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xF8, (signed char) 0x03, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xF6, (signed char) 0x01, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0xF6, (signed char) 0xFE, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xF6, (signed char) 0xFE, (signed char) 0xF8,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xFD, (signed char) 0x01, (signed char) 0xFD,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0xFA, (signed char) 0x03, (signed char) 0xFA,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xFA, (signed char) 0x03, (signed char) 0xFD,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0xFD, (signed char) 0x01, (signed char) 0xFD,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0xFD, (signed char) 0x01, (signed char) 0xFD,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0xFD, (signed char) 0x01, (signed char) 0xFA,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x00, (signed char) 0x03, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x00, (signed char) 0x01, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x00, (signed char) 0x03, (signed char) 0x02,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x02, (signed char) 0xFE, (signed char) 0x02,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x0D, (signed char) 0x01, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x0D, (signed char) 0x03, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x0D, (signed char) 0x03, (signed char) 0x0A,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x0A, (signed char) 0x01, (signed char) 0x08,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x08, (signed char) 0xFE, (signed char) 0x0A,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x0A, (signed char) 0xFE, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x0D, (signed char) 0x03, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x0D, (signed char) 0x03, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x10, (signed char) 0x01, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x18, (signed char) 0x03, (signed char) 0x18,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x18, (signed char) 0x03, (signed char) 0x1A,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x1A, (signed char) 0x01, (signed char) 0x1D,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x1D, (signed char) 0xFE, (signed char) 0x1A,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x1A, (signed char) 0xFE, (signed char) 0x18,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x1D, (signed char) 0xFE, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x1D, (signed char) 0x03, (signed char) 0x1D,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x1D, (signed char) 0x03, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x20, (signed char) 0x01, (signed char) 0x1D,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x22, (signed char) 0x03, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x22, (signed char) 0x03, (signed char) 0x25,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x25, (signed char) 0x01, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x28, (signed char) 0xFE, (signed char) 0x2A,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x28, (signed char) 0x03, (signed char) 0x28,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x28, (signed char) 0x03, (signed char) 0x2A,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x2A, (signed char) 0x01, (signed char) 0x28,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x2D, (signed char) 0x01, (signed char) 0x2D,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x2D, (signed char) 0x03, (signed char) 0x30,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x30, (signed char) 0x03, (signed char) 0x30,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x30, (signed char) 0xFE, (signed char) 0x30,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x2D, (signed char) 0x01, (signed char) 0x30,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x32, (signed char) 0x03, (signed char) 0x32,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x32, (signed char) 0x03, (signed char) 0x35,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x38, (signed char) 0xFE, (signed char) 0x3A,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x38, (signed char) 0x03, (signed char) 0x38,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x38, (signed char) 0x03, (signed char) 0x3A,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x3A, (signed char) 0x01, (signed char) 0x38,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x3D, (signed char) 0x03, (signed char) 0x3D,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x3D, (signed char) 0x03, (signed char) 0x40,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x40, (signed char) 0x01, (signed char) 0x40,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x40, (signed char) 0xFE, (signed char) 0x40,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x40, (signed char) 0xFE, (signed char) 0x3D,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x45, (signed char) 0x03, (signed char) 0x45,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x45, (signed char) 0x01, (signed char) 0x48,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x48, (signed char) 0x03, (signed char) 0x4A,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x4A, (signed char) 0xFE, (signed char) 0x4A,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x4C, (signed char) 0x01, (signed char) 0x4F,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x4F, (signed char) 0x03, (signed char) 0x4C,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x4C, (signed char) 0x03, (signed char) 0x4C,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x4C, (signed char) 0x01, (signed char) 0x4A,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x4A, (signed char) 0xFE, (signed char) 0x4C,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x4C, (signed char) 0xFE, (signed char) 0x4C,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x52, (signed char) 0x03, (signed char) 0x52,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x4F, (signed char) 0x03, (signed char) 0x54,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x54, (signed char) 0x03, (signed char) 0x54,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x54, (signed char) 0x01, (signed char) 0x5A,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x5A, (signed char) 0xFE, (signed char) 0x5A,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x5A, (signed char) 0xFE, (signed char) 0x5C,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x5A, (signed char) 0x03, (signed char) 0x5A,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x5A, (signed char) 0x03, (signed char) 0x5C,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x5C, (signed char) 0x01, (signed char) 0x5A,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x62, (signed char) 0x01, (signed char) 0x62,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x5F, (signed char) 0x03, (signed char) 0x5F,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x5F, (signed char) 0x03, (signed char) 0x62,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x62, (signed char) 0x01, (signed char) 0x62,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x62, (signed char) 0x01, (signed char) 0x62,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x62, (signed char) 0x01, (signed char) 0x5F,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x64, (signed char) 0xFE, (signed char) 0x67,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x67, (signed char) 0xFE, (signed char) 0x67,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x67, (signed char) 0x01, (signed char) 0x64,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x64, (signed char) 0x03, (signed char) 0x64,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x64, (signed char) 0x03, (signed char) 0x67,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x6A, (signed char) 0x03, (signed char) 0x6A,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x6A, (signed char) 0x01, (signed char) 0x6C,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x6C, (signed char) 0xFE, (signed char) 0x6C,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x6F, (signed char) 0xFE, (signed char) 0x72,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x6F, (signed char) 0x03, (signed char) 0x6F,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x6F, (signed char) 0x03, (signed char) 0x72,	// y0, x0, y1, x1
+	(signed char) 0xFE, (signed char) 0x74, (signed char) 0x03, (signed char) 0x74,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x74, (signed char) 0x03, (signed char) 0x77,	// y0, x0, y1, x1
+	(signed char) 0x03, (signed char) 0x77, (signed char) 0x01, (signed char) 0x77,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x77, (signed char) 0x01, (signed char) 0x77,	// y0, x0, y1, x1
+	(signed char) 0x01, (signed char) 0x77, (signed char) 0x01, (signed char) 0x74,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x8A, (signed char) 0xF1, (signed char) 0x8A,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0x8A, (signed char) 0xF1, (signed char) 0x8D,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x8D, (signed char) 0xEF, (signed char) 0x8D,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x90, (signed char) 0xEF, (signed char) 0x90,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x90, (signed char) 0xEF, (signed char) 0x90,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x9A, (signed char) 0xEF, (signed char) 0x9A,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x9A, (signed char) 0xF3, (signed char) 0x9A,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x9A, (signed char) 0xF3, (signed char) 0x9A,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x9D, (signed char) 0xF3, (signed char) 0x9D,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x9D, (signed char) 0xEF, (signed char) 0xA2,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xA2, (signed char) 0xF3, (signed char) 0xA2,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xA7, (signed char) 0xF3, (signed char) 0xA7,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xA7, (signed char) 0xF1, (signed char) 0xAA,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0xAA, (signed char) 0xF3, (signed char) 0xAA,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xAA, (signed char) 0xEF, (signed char) 0xAA,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xAC, (signed char) 0xF1, (signed char) 0xAC,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0xAC, (signed char) 0xF3, (signed char) 0xAF,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xAF, (signed char) 0xF3, (signed char) 0xAF,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xAF, (signed char) 0xEF, (signed char) 0xAF,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0xAC, (signed char) 0xF1, (signed char) 0xAF,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xB2, (signed char) 0xF3, (signed char) 0xB4,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xB4, (signed char) 0xEF, (signed char) 0xB2,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xB2, (signed char) 0xEF, (signed char) 0xB4,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xB7, (signed char) 0xEF, (signed char) 0xBA,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xB7, (signed char) 0xF3, (signed char) 0xB7,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xB7, (signed char) 0xF3, (signed char) 0xBA,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0xBA, (signed char) 0xF1, (signed char) 0xB7,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xBC, (signed char) 0xEF, (signed char) 0xBC,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xBC, (signed char) 0xEF, (signed char) 0xBC,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xBC, (signed char) 0xEF, (signed char) 0xBC,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xC4, (signed char) 0xF3, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xC4, (signed char) 0xF3, (signed char) 0xCA,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0xCA, (signed char) 0xF1, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xCC, (signed char) 0xEF, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xCC, (signed char) 0xF3, (signed char) 0xCC,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xCC, (signed char) 0xF3, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xCF, (signed char) 0xF3, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xCF, (signed char) 0xEF, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xD4, (signed char) 0xF3, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xD4, (signed char) 0xF3, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xD4, (signed char) 0xF3, (signed char) 0xD7,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xD7, (signed char) 0xF1, (signed char) 0xDA,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0xDA, (signed char) 0xEF, (signed char) 0xD7,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xD7, (signed char) 0xEF, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xE2, (signed char) 0xF3, (signed char) 0xE2,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xDF, (signed char) 0xF3, (signed char) 0xE2,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xE4, (signed char) 0xF3, (signed char) 0xE4,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0xE4, (signed char) 0xF1, (signed char) 0xE7,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xE7, (signed char) 0xEF, (signed char) 0xE7,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xEA, (signed char) 0xEF, (signed char) 0xEC,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xEA, (signed char) 0xF3, (signed char) 0xEA,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xEA, (signed char) 0xF3, (signed char) 0xEC,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0xEC, (signed char) 0xF1, (signed char) 0xEA,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xF6, (signed char) 0xF1, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xF4, (signed char) 0xF3, (signed char) 0xF4,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xF4, (signed char) 0xF3, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xF6, (signed char) 0xF1, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0xF6, (signed char) 0xF1, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0xF6, (signed char) 0xF1, (signed char) 0xF4,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xF6, (signed char) 0xEF, (signed char) 0xF8,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xF6, (signed char) 0xF3, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xF6, (signed char) 0xF3, (signed char) 0xF8,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0xF8, (signed char) 0xF1, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0xFA, (signed char) 0xF1, (signed char) 0xFA,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0xFA, (signed char) 0xF3, (signed char) 0xFA,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xFA, (signed char) 0xF3, (signed char) 0xFD,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0xFD, (signed char) 0xEF, (signed char) 0xFD,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0xFA, (signed char) 0xF1, (signed char) 0xFD,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x02, (signed char) 0xEF, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x00, (signed char) 0xF1, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0x00, (signed char) 0xF3, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x00, (signed char) 0xF3, (signed char) 0x02,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x05, (signed char) 0xF3, (signed char) 0x05,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x05, (signed char) 0xF3, (signed char) 0x08,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x0D, (signed char) 0xF1, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0x0D, (signed char) 0xF3, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x0D, (signed char) 0xF3, (signed char) 0x0A,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x0A, (signed char) 0xF1, (signed char) 0x08,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0x08, (signed char) 0xEF, (signed char) 0x0A,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x0A, (signed char) 0xEF, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x10, (signed char) 0xEF, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x10, (signed char) 0xF3, (signed char) 0x10,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x10, (signed char) 0xF3, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x12, (signed char) 0xF3, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x12, (signed char) 0xF3, (signed char) 0x15,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x15, (signed char) 0xF1, (signed char) 0x18,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0x18, (signed char) 0xEF, (signed char) 0x15,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x15, (signed char) 0xEF, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x1D, (signed char) 0xF1, (signed char) 0x1D,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0x1D, (signed char) 0xF3, (signed char) 0x20,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x20, (signed char) 0xF3, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x22, (signed char) 0xEF, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0x1D, (signed char) 0xF1, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x22, (signed char) 0xF3, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x22, (signed char) 0xEF, (signed char) 0x25,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x25, (signed char) 0xF3, (signed char) 0x25,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x28, (signed char) 0xF3, (signed char) 0x28,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x28, (signed char) 0xF3, (signed char) 0x2A,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x2A, (signed char) 0xF1, (signed char) 0x2A,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0x2A, (signed char) 0xEF, (signed char) 0x2A,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x2A, (signed char) 0xEF, (signed char) 0x28,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x32, (signed char) 0xF3, (signed char) 0x32,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x32, (signed char) 0xF3, (signed char) 0x35,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x3A, (signed char) 0xF1, (signed char) 0x3A,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0x3A, (signed char) 0xF3, (signed char) 0x3A,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x3A, (signed char) 0xF3, (signed char) 0x38,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x38, (signed char) 0xF1, (signed char) 0x38,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0x38, (signed char) 0xEF, (signed char) 0x38,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x38, (signed char) 0xEF, (signed char) 0x3A,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x3D, (signed char) 0xF3, (signed char) 0x3D,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x40, (signed char) 0xEF, (signed char) 0x40,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x40, (signed char) 0xEF, (signed char) 0x3D,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x3D, (signed char) 0xEF, (signed char) 0x3D,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x45, (signed char) 0xEF, (signed char) 0x42,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x42, (signed char) 0xF1, (signed char) 0x40,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0x40, (signed char) 0xF3, (signed char) 0x42,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x42, (signed char) 0xF3, (signed char) 0x45,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x45, (signed char) 0xF3, (signed char) 0x45,	// y0, x0, y1, x1
+	(signed char) 0xF1, (signed char) 0x45, (signed char) 0xF1, (signed char) 0x4A,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x4A, (signed char) 0xEF, (signed char) 0x4A,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x4F, (signed char) 0xEF, (signed char) 0x52,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x52, (signed char) 0xF3, (signed char) 0x52,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x4F, (signed char) 0xF3, (signed char) 0x52,	// y0, x0, y1, x1
+	(signed char) 0xEF, (signed char) 0x57, (signed char) 0xF3, (signed char) 0x57,	// y0, x0, y1, x1
+	(signed char) 0xF3, (signed char) 0x54, (signed char) 0xF3, (signed char) 0x5A,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x8A, (signed char) 0xE3, (signed char) 0x8D,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x8D, (signed char) 0xE5, (signed char) 0x8D,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x8D, (signed char) 0xE5, (signed char) 0x8A,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x8A, (signed char) 0xE5, (signed char) 0x8A,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x8A, (signed char) 0xE5, (signed char) 0x8D,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x90, (signed char) 0xE3, (signed char) 0x90,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x90, (signed char) 0xE3, (signed char) 0x90,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x98, (signed char) 0xE3, (signed char) 0x9D,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x98, (signed char) 0xE5, (signed char) 0x98,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x98, (signed char) 0xE5, (signed char) 0x9D,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x9A, (signed char) 0xE5, (signed char) 0x98,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x9D, (signed char) 0xE5, (signed char) 0xA2,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x9D, (signed char) 0xE3, (signed char) 0xA2,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xA2, (signed char) 0xE3, (signed char) 0xA4,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xA4, (signed char) 0xE5, (signed char) 0xA4,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xA2, (signed char) 0xE5, (signed char) 0xA4,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xAA, (signed char) 0xE5, (signed char) 0xAA,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xA7, (signed char) 0xE5, (signed char) 0xAA,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xB2, (signed char) 0xE5, (signed char) 0xB2,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xB2, (signed char) 0xE5, (signed char) 0xB4,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xB4, (signed char) 0xE5, (signed char) 0xB4,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xB4, (signed char) 0xE3, (signed char) 0xB4,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xB7, (signed char) 0xE5, (signed char) 0xB7,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xB7, (signed char) 0xE5, (signed char) 0xB7,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xB7, (signed char) 0xE5, (signed char) 0xBA,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xBA, (signed char) 0xE3, (signed char) 0xBA,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xB7, (signed char) 0xE5, (signed char) 0xBA,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xBC, (signed char) 0xE5, (signed char) 0xBF,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xBF, (signed char) 0xE3, (signed char) 0xBC,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xBC, (signed char) 0xE3, (signed char) 0xBF,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xC2, (signed char) 0xE3, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xC2, (signed char) 0xE5, (signed char) 0xC2,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xC2, (signed char) 0xE5, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xC4, (signed char) 0xE5, (signed char) 0xC2,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xCA, (signed char) 0xE5, (signed char) 0xCA,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xCA, (signed char) 0xE5, (signed char) 0xCC,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xCC, (signed char) 0xE5, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xCF, (signed char) 0xE3, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xCF, (signed char) 0xE3, (signed char) 0xCA,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xCA, (signed char) 0xE5, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xCF, (signed char) 0xE3, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xCF, (signed char) 0xE5, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xCF, (signed char) 0xE5, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xD2, (signed char) 0xE5, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xD4, (signed char) 0xE5, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xD4, (signed char) 0xE5, (signed char) 0xDA,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xD7, (signed char) 0xE5, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xDC, (signed char) 0xE5, (signed char) 0xDF,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xDF, (signed char) 0xE5, (signed char) 0xDC,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xDC, (signed char) 0xE5, (signed char) 0xDA,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xDA, (signed char) 0xE5, (signed char) 0xDA,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xDA, (signed char) 0xE3, (signed char) 0xDA,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xDA, (signed char) 0xE3, (signed char) 0xDC,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xE2, (signed char) 0xE5, (signed char) 0xE2,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xDF, (signed char) 0xE5, (signed char) 0xDF,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xDF, (signed char) 0xE5, (signed char) 0xE2,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xE2, (signed char) 0xE5, (signed char) 0xE4,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xE4, (signed char) 0xE5, (signed char) 0xE2,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xE2, (signed char) 0xE5, (signed char) 0xDF,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xE4, (signed char) 0xE3, (signed char) 0xE7,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xE4, (signed char) 0xE5, (signed char) 0xE4,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xE4, (signed char) 0xE5, (signed char) 0xE7,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xE7, (signed char) 0xE5, (signed char) 0xE4,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xF2, (signed char) 0xE5, (signed char) 0xF2,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xEF, (signed char) 0xE5, (signed char) 0xEF,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xEF, (signed char) 0xE5, (signed char) 0xF2,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xF2, (signed char) 0xE5, (signed char) 0xF2,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xF2, (signed char) 0xE5, (signed char) 0xF2,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xF2, (signed char) 0xE5, (signed char) 0xEF,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xF4, (signed char) 0xE3, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xF4, (signed char) 0xE5, (signed char) 0xF4,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xF4, (signed char) 0xE5, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xF6, (signed char) 0xE5, (signed char) 0xF4,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xF6, (signed char) 0xE5, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xF6, (signed char) 0xE5, (signed char) 0xF8,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xF8, (signed char) 0xE5, (signed char) 0xF8,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xF8, (signed char) 0xE3, (signed char) 0xF8,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xF6, (signed char) 0xE5, (signed char) 0xF8,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xFD, (signed char) 0xE3, (signed char) 0xFD,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0xFD, (signed char) 0xE5, (signed char) 0xFA,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xFA, (signed char) 0xE5, (signed char) 0xFA,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xFA, (signed char) 0xE5, (signed char) 0xFD,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x00, (signed char) 0xE5, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x00, (signed char) 0xE5, (signed char) 0x02,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x08, (signed char) 0xE5, (signed char) 0x08,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x08, (signed char) 0xE5, (signed char) 0x08,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x08, (signed char) 0xE5, (signed char) 0x05,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x05, (signed char) 0xE5, (signed char) 0x05,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x05, (signed char) 0xE3, (signed char) 0x05,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x05, (signed char) 0xE3, (signed char) 0x08,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x0A, (signed char) 0xE3, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x0A, (signed char) 0xE5, (signed char) 0x0A,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x0A, (signed char) 0xE5, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x0D, (signed char) 0xE5, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x0D, (signed char) 0xE5, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x12, (signed char) 0xE5, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x12, (signed char) 0xE3, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x12, (signed char) 0xE3, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x18, (signed char) 0xE5, (signed char) 0x18,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x18, (signed char) 0xE5, (signed char) 0x1A,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x1A, (signed char) 0xE5, (signed char) 0x1D,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x1D, (signed char) 0xE3, (signed char) 0x1D,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x1D, (signed char) 0xE3, (signed char) 0x18,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x18, (signed char) 0xE5, (signed char) 0x1D,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x1D, (signed char) 0xE5, (signed char) 0x1D,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x1D, (signed char) 0xE3, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x25, (signed char) 0xE5, (signed char) 0x28,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x28, (signed char) 0xE5, (signed char) 0x25,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x25, (signed char) 0xE5, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x22, (signed char) 0xE5, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x22, (signed char) 0xE3, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x22, (signed char) 0xE3, (signed char) 0x25,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x28, (signed char) 0xE3, (signed char) 0x2A,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x2A, (signed char) 0xE5, (signed char) 0x2A,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x2A, (signed char) 0xE3, (signed char) 0x2A,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x2A, (signed char) 0xE5, (signed char) 0x2A,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x2D, (signed char) 0xE3, (signed char) 0x30,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x30, (signed char) 0xE3, (signed char) 0x30,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x30, (signed char) 0xE5, (signed char) 0x2D,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x2D, (signed char) 0xE5, (signed char) 0x2D,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x2D, (signed char) 0xE5, (signed char) 0x30,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x38, (signed char) 0xE5, (signed char) 0x38,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x3A, (signed char) 0xE3, (signed char) 0x3A,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x3A, (signed char) 0xE3, (signed char) 0x38,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x38, (signed char) 0xE3, (signed char) 0x38,	// y0, x0, y1, x1
+	(signed char) 0xE3, (signed char) 0x3D, (signed char) 0xE5, (signed char) 0x3D,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x3D, (signed char) 0xE5, (signed char) 0x40,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x40, (signed char) 0xE5, (signed char) 0x40,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x40, (signed char) 0xE5, (signed char) 0x40,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0x40, (signed char) 0xE5, (signed char) 0x3D,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x8A, (signed char) 0xC5, (signed char) 0x8A,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x8A, (signed char) 0xC3, (signed char) 0x8D,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x8D, (signed char) 0xC5, (signed char) 0x8D,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x92, (signed char) 0xC5, (signed char) 0x92,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x92, (signed char) 0xC5, (signed char) 0x92,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x92, (signed char) 0xC5, (signed char) 0x90,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x90, (signed char) 0xC5, (signed char) 0x8D,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x8D, (signed char) 0xC3, (signed char) 0x90,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x90, (signed char) 0xC3, (signed char) 0x92,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x95, (signed char) 0xC5, (signed char) 0x95,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x92, (signed char) 0xC5, (signed char) 0x98,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x98, (signed char) 0xC3, (signed char) 0x9D,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x98, (signed char) 0xC5, (signed char) 0x98,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x98, (signed char) 0xC5, (signed char) 0x9D,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x9A, (signed char) 0xC5, (signed char) 0x98,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x9D, (signed char) 0xC5, (signed char) 0xA2,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xA2, (signed char) 0xC5, (signed char) 0xA7,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xA7, (signed char) 0xC5, (signed char) 0xA7,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xA7, (signed char) 0xC5, (signed char) 0xAA,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xAA, (signed char) 0xC3, (signed char) 0xAA,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xAF, (signed char) 0xC5, (signed char) 0xAF,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xAF, (signed char) 0xC5, (signed char) 0xAF,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xAF, (signed char) 0xC5, (signed char) 0xAC,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xAC, (signed char) 0xC5, (signed char) 0xAC,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xAC, (signed char) 0xC3, (signed char) 0xAC,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xAC, (signed char) 0xC3, (signed char) 0xAF,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xB2, (signed char) 0xC5, (signed char) 0xB2,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xB2, (signed char) 0xC3, (signed char) 0xB4,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xB7, (signed char) 0xC5, (signed char) 0xB7,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xB7, (signed char) 0xC5, (signed char) 0xBA,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xBA, (signed char) 0xC5, (signed char) 0xBA,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xBA, (signed char) 0xC3, (signed char) 0xBA,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xBA, (signed char) 0xC3, (signed char) 0xB7,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xC2, (signed char) 0xC3, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xC4, (signed char) 0xC3, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xC4, (signed char) 0xC5, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xC4, (signed char) 0xC5, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xCA, (signed char) 0xC3, (signed char) 0xCA,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xCA, (signed char) 0xC3, (signed char) 0xC7,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xC7, (signed char) 0xC3, (signed char) 0xC4,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xCA, (signed char) 0xC5, (signed char) 0xCA,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xCA, (signed char) 0xC5, (signed char) 0xCC,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xCC, (signed char) 0xC5, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xCF, (signed char) 0xC3, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xCF, (signed char) 0xC5, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xCF, (signed char) 0xC5, (signed char) 0xD2,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xD2, (signed char) 0xC5, (signed char) 0xD4,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xD4, (signed char) 0xC5, (signed char) 0xD2,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xD2, (signed char) 0xC5, (signed char) 0xCF,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xDA, (signed char) 0xC5, (signed char) 0xDA,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xDA, (signed char) 0xC5, (signed char) 0xDC,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xDC, (signed char) 0xC5, (signed char) 0xDF,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xDF, (signed char) 0xC3, (signed char) 0xDF,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xDF, (signed char) 0xC3, (signed char) 0xDA,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xDA, (signed char) 0xC5, (signed char) 0xDF,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xDF, (signed char) 0xC5, (signed char) 0xDF,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xE2, (signed char) 0xC3, (signed char) 0xE2,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xE2, (signed char) 0xC3, (signed char) 0xE2,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xE2, (signed char) 0xC3, (signed char) 0xDF,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xE7, (signed char) 0xC5, (signed char) 0xE7,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xE4, (signed char) 0xC5, (signed char) 0xE7,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xEC, (signed char) 0xC5, (signed char) 0xEC,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xEA, (signed char) 0xC5, (signed char) 0xEC,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xF2, (signed char) 0xC5, (signed char) 0xF2,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xF2, (signed char) 0xC5, (signed char) 0xF2,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xF2, (signed char) 0xC5, (signed char) 0xEF,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xEF, (signed char) 0xC5, (signed char) 0xEF,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xEF, (signed char) 0xC3, (signed char) 0xEF,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xEF, (signed char) 0xC3, (signed char) 0xF2,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xF4, (signed char) 0xC5, (signed char) 0xF4,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xF4, (signed char) 0xC3, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xF6, (signed char) 0xC5, (signed char) 0xF6,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0xFA, (signed char) 0xC5, (signed char) 0xFA,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xFA, (signed char) 0xC5, (signed char) 0xFD,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0xFD, (signed char) 0xC5, (signed char) 0xFA,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x02, (signed char) 0xC5, (signed char) 0x02,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x02, (signed char) 0xC5, (signed char) 0x02,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x02, (signed char) 0xC5, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x00, (signed char) 0xC5, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x00, (signed char) 0xC3, (signed char) 0x00,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x00, (signed char) 0xC3, (signed char) 0x02,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x08, (signed char) 0xC5, (signed char) 0x05,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x05, (signed char) 0xC5, (signed char) 0x05,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x05, (signed char) 0xC5, (signed char) 0x08,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x08, (signed char) 0xC5, (signed char) 0x08,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x08, (signed char) 0xC5, (signed char) 0x05,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x05, (signed char) 0xC5, (signed char) 0x05,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x0D, (signed char) 0xC5, (signed char) 0x0D,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x0D, (signed char) 0xC5, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x12, (signed char) 0xC3, (signed char) 0x12,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x15, (signed char) 0xC3, (signed char) 0x15,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x15, (signed char) 0xC5, (signed char) 0x15,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x15, (signed char) 0xC5, (signed char) 0x15,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x1A, (signed char) 0xC5, (signed char) 0x18,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x18, (signed char) 0xC5, (signed char) 0x1A,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x1A, (signed char) 0xC5, (signed char) 0x1D,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x1A, (signed char) 0xC5, (signed char) 0x1D,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x1D, (signed char) 0xC3, (signed char) 0x1D,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x1D, (signed char) 0xC3, (signed char) 0x1A,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x1D, (signed char) 0xC5, (signed char) 0x1D,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x1D, (signed char) 0xC5, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x22, (signed char) 0xC3, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x22, (signed char) 0xC3, (signed char) 0x25,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x22, (signed char) 0xC5, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x22, (signed char) 0xC5, (signed char) 0x25,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x25, (signed char) 0xC5, (signed char) 0x22,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x2A, (signed char) 0xC5, (signed char) 0x2A,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x28, (signed char) 0xC5, (signed char) 0x28,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x28, (signed char) 0xC5, (signed char) 0x2A,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x2A, (signed char) 0xC5, (signed char) 0x2A,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x2A, (signed char) 0xC5, (signed char) 0x2A,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x2A, (signed char) 0xC5, (signed char) 0x28,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x32, (signed char) 0xC3, (signed char) 0x35,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x35, (signed char) 0xC3, (signed char) 0x35,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x35, (signed char) 0xC5, (signed char) 0x35,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x38, (signed char) 0xC5, (signed char) 0x38,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x3A, (signed char) 0xC3, (signed char) 0x3A,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x3A, (signed char) 0xC3, (signed char) 0x38,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x38, (signed char) 0xC3, (signed char) 0x38,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x3D, (signed char) 0xC5, (signed char) 0x3D,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x3D, (signed char) 0xC5, (signed char) 0x3D,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x3D, (signed char) 0xC5, (signed char) 0x40,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x40, (signed char) 0xC3, (signed char) 0x40,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x42, (signed char) 0xC5, (signed char) 0x42,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x42, (signed char) 0xC5, (signed char) 0x45,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x45, (signed char) 0xC5, (signed char) 0x45,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x45, (signed char) 0xC5, (signed char) 0x45,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x45, (signed char) 0xC5, (signed char) 0x42,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x45, (signed char) 0xC3, (signed char) 0x4A,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x4A, (signed char) 0xC3, (signed char) 0x4A,	// y0, x0, y1, x1
+	(signed char) 0xC3, (signed char) 0x4A, (signed char) 0xC5, (signed char) 0x45,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x45, (signed char) 0xC5, (signed char) 0x48,	// y0, x0, y1, x1
+	(signed char) 0xC5, (signed char) 0x48, (signed char) 0xC5, (signed char) 0x4A,	// y0, x0, y1, x1
+};
+
+
+
+
+
+
+void __displayLargeList(const signed char list[])
+{
+  int count = *list++;
+
+  while (count >0)  
+  {
+    int y0 = *list++;
+    int x0 = *list++;
+    int y1 = *list++;
+    int x1 = *list++;
+    v_directDraw32(x0<<7, y0<<7,x1<<7,y1<<7, 0x5f);
+    count --;
+  }
+}
+void __displaySmallList(const signed char list[])
+{
+  int count = 720;
+
+  while (count >0)  
+  {
+    int y0 = *list++;
+    int x0 = *list++;
+    int y1 = *list++;
+    int x1 = *list++;
+    v_directDraw32(x0<<6, (y0<<6)+000,x1<<6,(y1<<6)+000, 0x3f);
+    count --;
+  }
+}
+
+void handlePipeline();
+
+// example of L2 cache disturbances by pressing button
+static unsigned long int next = 1;
+void goHavoc()
+{
+
+  v_setRefresh(50);
+  v_setClientHz(2000);
+  v_setupSMPHandling();
+  v_enableJoystickAnalog(1,1,1,1);
+  v_enableSoundOut(1);
+  v_enableButtons(1);
+  useDoubleTimer = 0;
+    
+  int t=10;
+  v_setCustomClipping(1, -16000, -14000, 14400, 15000);
+  __displayLargeList(HavocTitle);
+  __displaySmallList(HavocText);
+
+  printf("PipelineSize = %i\n", sizeof(VectorPipeline)*1900);
+  
+  
+  
+//  if the complete emulation can run in say 300K of "RAM"
+//  than perhaps this can run in parallel to core 1
+  
+  while (1)
+  {
+    v_playAllSFX();
+    v_doSound();    // not needed in IRQ Mode
+    v_readButtons(); // not neededin IRQ mode
+    v_readJoystick1Analog(); // not neededin IRQ mode
+
+    v_WaitRecal();
+
+    while ((((volatile unsigned char)currentButtonState&0x0f)) == (0x08)) 
+    {
+      extern VectorPipeline tmp_VPL[MAX_PIPELINE];
+      extern VectorPipeline *_VPL[];
+      extern int vectorPipeLineWriting;
+      register unsigned int * p= (unsigned int *)_VPL[vectorPipeLineWriting];
+      volatile register int a;
+      while (1) 
+      {
+	//    for (register int i=0; i<MAX_PIPELINE*sizeof(VectorPipeline)/4; i++ )
+            for (register int i=0; i<1900*sizeof(VectorPipeline)/4; i++ )
+	    {
+	      a += *(p+i);
+	    }
+	    if (a==1) break;
+	    printf("Looping\n");
+      }     
+      
+      v_readButtons(); // not neededin IRQ mode
+      printf("%i\n",a);
+    }
+  }    
+
+  while (1)  
+    v_WaitRecal();
+}
+#endif
+
+#endif // ifdef 0

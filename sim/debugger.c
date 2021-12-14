@@ -25,14 +25,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-#ifdef FREESTANDING
-#include <ff.h>
-#include <baremetal/rpi-aux.h>
-#include <baremetal/rpi-base.h>
-#include <baremetal/rpi-gpio.h>
-extern char * getErrorText(int errNo);
-#else
-#endif
+#include <baremetal/pi_support.h>
   
 
 #include "memory.h"
@@ -64,7 +57,7 @@ struct hdr
   unsigned long irq_cycle;
   unsigned long icount;
 };
-#ifdef FREESTANDING
+
 static int dumpworld (char *name)
 {
   FILE *fp;
@@ -182,99 +175,6 @@ int reload (char *name)
   f_close(&file_object_rd);
   return (0);
 }
-#else
-static int dumpworld (char *s)
-{
-  FILE *fp;
-  struct hdr h;
-  byte tagr, tagw;
-  byte val;
-  long i;
-  
-  fp = fopen(s, "wb");
-  if(!fp) 
-    {
-      printf("Cannot save to dumpfile %s\n", s);
-      return (1);
-    }
-  h.pc = save_PC - 1;
-  h.a = save_A;
-  h.x = save_X;
-  h.y = save_Y;
-  h.sp = SP;
-  h.flags = save_flags;
-#ifdef INST_COUNT
-  h.icount = icount;
-#else
-  h.icount = 0;
-#endif
-  h.totcycles = save_totcycles;
-#ifdef WRAP_CYC_COUNT
-  h.cyc_wraps = cyc_wraps;
-#else
-  h.cyc_wraps = 0;
-#endif
-  h.irq_cycle = irq_cycle;
-  fwrite(&h, sizeof(h), 1, fp);
-    
-  for(i=0;i < 65536;i++) 
-    {
-      tagr = mem[i].tagr;
-      tagw = mem[i].tagw;
-      val  = mem[i].cell;
-      fwrite (&tagr, 1, 1, fp);
-      fwrite (&tagw, 1, 1, fp);
-      fwrite (&val, 1, 1, fp);
-    }
-  fclose(fp);
-  return (0);
-}
-
-int reload (char *s)
-{
-  FILE *fp;
-  struct hdr h;
-  byte tagr, tagw;
-  byte val;
-  long i;
-    
-  fp = fopen(s, "rb");
-  if(!fp) 
-    {
-      printf("Cannot read dumpfile %s\n", s);
-      return (1);
-    }
-  fread(&h, sizeof(h), 1, fp);
-  save_PC = h.pc;
-  save_A = h.a;
-  save_X = h.x;
-  save_Y = h.y;
-  SP = h.sp;
-  save_flags = h.flags;
-#ifdef INST_COUNT
-  icount = h.icount;
-#endif
-  irq_cycle = h.irq_cycle;
-  save_totcycles = h.totcycles;
-#ifdef WRAP_CYC_COUNT
-  cyc_wraps = h.cyc_wraps;
-#endif
-    
-  for(i=0;i < 65536;i++) 
-    {
-      fread (&tagr, 1, 1, fp);
-      fread (&tagw, 1, 1, fp);
-      fread (&val, 1, 1, fp);
-      mem [i].tagr = tagr;
-      mem [i].tagw = tagw;
-      mem [i].cell = val;
-    }
-
-  fclose(fp);
-  return (0);
-}
-#endif
-
 
 static char hex_digits [] = "0123456789abcdef";
 
@@ -890,7 +790,6 @@ static void execute_command (int argc, char *argv [])
 }
 
 #define MAX_LINE 200
-#ifdef FREESTANDING
 static char commandBuffer[MAX_LINE];
 static char *commandBufferPointer;
 static int commandBufferCounter;
@@ -929,21 +828,8 @@ char *readline(char *prompt)
   }
   return (commandBuffer);
 }
-#else
 
-/*
- * print prompt, get a line of input, return a copy
- * caller must free
- */
-char *readline (char *prompt)
-{
-  char inbuf [MAX_LINE];
-  if (prompt)
-    printf (prompt);
-  fgets (inbuf, MAX_LINE, stdin);
-  return (strdup (& inbuf [0]));
-}
-#endif
+
 int debugger (int type)
 {
   char *cmd;

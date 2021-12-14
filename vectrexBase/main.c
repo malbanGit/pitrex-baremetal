@@ -7,11 +7,9 @@
 
 #include "vecx.h"
 
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
 #include <vectrex/osWrapper.h>
 #include <vectrex/ini.h>
-#include <pitrex/bcm2835.h>
 #include "e6809.h"
 #include "e8910.h"
 #include "e6522.h"
@@ -78,6 +76,7 @@ return;
 }
 
 
+volatile uint64_t bcm2835_st_read(void); // from pitrexio-gpio.c
 
 #define GET_SYSTEM_TIMER bcm2835_st_read()
  
@@ -126,10 +125,11 @@ int c=0;
             if (vectrexButtonState != 0x1ff)
             {
 //              if ((vectrexButtonState & 0xff) == 0xf0) // only 4 button of joy 1 (Vecmania does something strange and presses all 8! buttons!
-              if ((vectrexButtonState & 0xf0) == 0xf0) // only 4 button of joy 1 (Vecmania does something strange and presses all 8! buttons!
+              if ((vectrexButtonState & 0x0f) == 0x00) // only 4 button of joy 1 (Vecmania does something strange and presses all 8! buttons!
               {
-printf("Vectrex 1 button press detected!\r\n");
-                vectrexResetCount++;
+//printf("Vectrex 1 button press detected $%02x!\r\n", vectrexButtonState);
+
+		vectrexResetCount++;
                 if (vectrexResetCount == 10) // 1/20 second 
                 {
                   printf("Vectrex 4 button press detected!\r\n");

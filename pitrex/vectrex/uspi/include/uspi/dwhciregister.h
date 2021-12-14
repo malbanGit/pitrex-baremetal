@@ -55,7 +55,7 @@ void DWHCIRegisterSetBit (TDWHCIRegister *pThis, unsigned nBit);
 void DWHCIRegisterClearAll (TDWHCIRegister *pThis);
 void DWHCIRegisterSetAll (TDWHCIRegister *pThis);
 
-#ifndef NDEBUG
+#ifdef USPIDEBUG
 
 void DWHCIRegisterDump (TDWHCIRegister *pThis);
 

@@ -2,9 +2,7 @@
 #include <unistd.h>
 #include "vecx.h"
 
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
-#include <vectrex/baremetalUtil.h>
 
 
 #include "e6809.h"
@@ -168,7 +166,7 @@ void write8_port_b(uint8_t data)
 	dac_update();
 }
 
-static uint8_t read8(uint16_t address)
+static uint8_t vx_read8(uint16_t address)
 {
 	uint8_t data = 0xff;
 
@@ -238,7 +236,7 @@ waitCounter1Mark((DELAY_AFTER_T1_END_VALUE_DIRECT-2));
                   if (snd_select == 0xe)
                   {
                     vectrexButtonState = data;
-//printf("%04x: vectrexButtonState = = $%02x\n\r", CPU.reg_pc, vectrexButtonState);
+//printf("%04x: vectrexButtonState = $%02x\n\r", CPU.reg_pc, vectrexButtonState);
                   }
                 }
               }
@@ -293,8 +291,7 @@ void writeExtreme(int addr, unsigned char data)
         }
 }
 #endif      
-
-static void write8(uint16_t address, uint8_t data)
+static void vx_write8(uint16_t address, uint8_t data)
 {
 	if ((address & 0xe000) == 0xe000)
 	{
@@ -315,7 +312,7 @@ static void write8(uint16_t address, uint8_t data)
 
 		if (address & 0x1000)
 		{
-			via_write(address, data);
+		  via_write(address, data);
 		}
 	}
 	else if (address < 0xbfff)
@@ -392,8 +389,8 @@ void vecx_reset(void)
 
 	via_reset();
 
-	e6809_read8 = read8;
-	e6809_write8 = write8;
+	e6809_read8 = vx_read8;
+	e6809_write8 = vx_write8;
 	oldT2Trigger = 0;
 	e6809_reset();
     
@@ -414,12 +411,12 @@ int32_t PrintStr(int32_t cycles)
 
     int address = CPU.reg_u;
     int counter=0;
-    unsigned char c = read8(address++);
+    unsigned char c = vx_read8(address++);
     while ((c & 0x80) != 0x80)
     {
       if (counter < 39)
         printbuffer[counter++] = c;
-      c = read8(address++);
+      c = vx_read8(address++);
     }
     printbuffer[counter++] = 0x80;
 
@@ -438,7 +435,7 @@ int32_t PrintStr(int32_t cycles)
    
     //Vec_Text_Height EQU     $C82A   ;Default text height
     //Vec_Text_Width  EQU     $C82B   ;Default text width
-    cyclesemulated  = v_printStringRaster(x, y, printbuffer, read8(0xC82B), read8(0xC82A), 0x80);
+    cyclesemulated  = v_printStringRaster(x, y, printbuffer, vx_read8(0xC82B), vx_read8(0xC82A), 0x80);
 
     cycles -= cyclesemulated;
     cycleCount += cyclesemulated;
@@ -469,12 +466,12 @@ int32_t PrintStr_d(int32_t cycles, int width, int height, unsigned char *rlines[
 
     int address = CPU.reg_u;
     int counter=0;
-    unsigned char c = read8(address++);
+    unsigned char c = vx_read8(address++);
     while ((c & 0x80) != 0x80)
     {
       if (counter < 39)
         printbuffer[counter++] = c;
-      c = read8(address++);
+      c = vx_read8(address++);
     }
     printbuffer[counter++] = 0x80;
     int cyclesemulated  = 0;
@@ -516,7 +513,7 @@ void vecx_emulate(int32_t cycles)
         {
           case 0xF434: // Draw_Pat_VL_a for intro screen
           {
-            uint8_t pattern = read8(0xC829);             
+            uint8_t pattern = vx_read8(0xC829);             
             int count = CPU.reg_a;        
             uint16_t listStartAdr = (uint16_t) CPU.reg_x;
             uint8_t scale = (uint8_t)VIA.t1ll; 
@@ -530,8 +527,8 @@ void vecx_emulate(int32_t cycles)
             int y1=0;
             for (;count>=0;count--)
             {
-              y1 = y0+(((signed char)read8(listStartAdr++))*scale);
-              x1 = x0+(((signed char)read8(listStartAdr++))*scale);
+              y1 = y0+(((signed char)vx_read8(listStartAdr++))*scale);
+              x1 = x0+(((signed char)vx_read8(listStartAdr++))*scale);
               
               v_directDraw32Patterned(x0, y0, x1, y1, brightness, pattern);
               x0 = x1;
@@ -549,10 +546,10 @@ void vecx_emulate(int32_t cycles)
             vector_draw_cnt = 0;
             fcycles = FCYCLES_INIT;
 
-            int c = ((uint16_t)read8(0xC825))*256 + ((uint16_t)read8(0xC826)); // Vec_Loop_Count
+            int c = ((uint16_t)vx_read8(0xC825))*256 + ((uint16_t)vx_read8(0xC826)); // Vec_Loop_Count
             c++;
-            write8(0xC825, (c>>8)&0xff);
-            write8(0xC826, (c)&0xff);
+            vx_write8(0xC825, (c>>8)&0xff);
+            vx_write8(0xC826, (c)&0xff);
 
             CPU.reg_pc = 0xF36A; // any RTS          
             CPU.reg_dp = 0xd0;
@@ -930,6 +927,86 @@ void vecx_direct(int32_t cycles)
 // vectrex on speed gets its
 // own pattern draw routine
 // the title screen looks better :-)
+        else if (CPU.reg_pc == 0xF35B) // Reset_Pen
+        {
+/*
+;-----------------------------------------------------------------------;
+;       F312    Moveto_d                                                ;
+;                                                                       ;
+; This routine uses the current scale factor, and moves the pen to the  ;
+; (y,x) position specified in D register.                               ;
+;                                                                       ;
+; ENTRY DP = $D0                                                        ;
+;       A-reg = Y coordinate                                            ;
+;       B-reg = X coordinate                                            ;
+;                                                                       ;
+;       D-reg trashed                                                   ;
+;-----------------------------------------------------------------------;
+;-----------------------------------------------------------------------;
+;       F308    Moveto_ix_FF                                            ;
+;       F30C    Moveto_ix_7F                                            ;
+;       F30E    Moveto_ix_b                                             ;
+;                                                                       ;
+; These routines force the scale factor to 0xFF, 0X7F, or the           ;
+; A register, and then move the pen to the (y,x) position pointed to    ;
+; by the X-register.  The X-register is then incremented by 2.          ;
+;                                                                       ;
+; ENTRY DP = $D0                                                        ;
+;       X-reg points to the (y,x) coordinate pair                       ;
+;       B-reg contains the scale factor (Moveto_ix_b only)              ;
+;                                                                       ;
+; EXIT: X-reg has been incremented by 2                                 ;
+;                                                                       ;
+;       D-reg trashed                                                   ;
+;-----------------------------------------------------------------------;
+;-----------------------------------------------------------------------;
+;       F35B    Reset_Pen                                               ;
+;                                                                       ;
+;       Reset the pen to the origin.                                    ;
+;                                                                       ;
+; ENTRY DP = $D0                                                        ;
+;                                                                       ;
+;       D-reg trashed                                                   ;
+;-----------------------------------------------------------------------;
+*/
+// not NOT enought zero time
+// not cranky related
+// not cycle equivalent related
+// DELAY_NOW(1000);
+        }
+        
+        else if (CPU.reg_pc == 0xF312) // Moveto_d
+	{
+/*	  
+;-----------------------------------------------------------------------;
+;       F312    Moveto_d                                                ;
+;                                                                       ;
+; This routine uses the current scale factor, and moves the pen to the  ;
+; (y,x) position specified in D register.                               ;
+;                                                                       ;
+; ENTRY DP = $D0                                                        ;
+;       A-reg = Y coordinate                                            ;
+;       B-reg = X coordinate                                            ;
+;                                                                       ;
+;       D-reg trashed                                                   ;
+;-----------------------------------------------------------------------;
+*/
+UNZERO();
+lastScale = currentScale = VIA.t1ll; // just start the timer
+
+// 
+	  v_moveToImmediate8(CPU.reg_b, CPU.reg_a);
+          CPU.reg_pc = 0xf57d; // RTS - any
+//          CPU.reg_pc = 0xF345; 
+//          CPU.reg_b = 0x40; 
+// printf("M %02x, %02x, %04x \n", CPU.reg_b, CPU.reg_a, currentScale);
+          
+          mustWork = 0;
+
+	}
+        
+        
+
         else if (CPU.reg_pc == 0xF434) // pattern draw_a
         {
           uint8_t pattern = ram[0xC829&0x3ff];
@@ -957,11 +1034,15 @@ void vecx_direct(int32_t cycles)
             }
             v_immediateDraw32Patterned(x1, y1, pattern);
           }
-          ZERO_AND_CONTINUE();
+//          ZERO_AND_CONTINUE();
+//	  DELAY_NOW(10);
+	  ZERO_AND_WAIT();
+
           CPU.reg_pc = 0xF34F;// check 0 ref 
           CPU.reg_pc = 0xf57d; // RTS
           mustWork = 0;
         }
+        
 #endif
         if (mustWork)
         {

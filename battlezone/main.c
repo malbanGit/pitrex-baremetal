@@ -203,6 +203,12 @@ int engine2Rate = 10000;
 
 //AM_RANGE(0x1840, 0x1840) AM_WRITE(bzone_sounds_w)
 
+// one complete out lasts 3 "rounds" 4th round is "off"
+unsigned char OneTrackV_data[]=
+{
+	0xEF, 0xFF, 0x0F, 0x00, 0x8A, 0x8A, 0x20, 0x00, 0x00, 0xD0, 
+	0x20, 
+};
 
 
 extern void (*gameCallback)(int);
@@ -287,7 +293,6 @@ static inline void handleDiscretSound()
     }
   }
 /*
-  
   // engine on sample channel 2
   if (((oldDiscreteSound & 0x80) == 0) && ((currentDiscreteSound & 0x80) == 0x80) )
   {
@@ -305,7 +310,98 @@ static inline void handleDiscretSound()
     }
   }
 */  
-  CORRECT_DISCRETE();  
+  // engine on sample channel 2
+//                   *     $10: engine rev - 0=rev down, 1=rev up                                   *
+  
+  int revUp = (currentDiscreteSound&0x10);
+  
+  static int repeatSound = 0;
+  static int repeatSoundDelay = 15;
+  static int delayInc = 3;
+  
+//  if (((oldDiscreteSound & 0x80) == 0) && ((currentDiscreteSound & 0x80) == 0x80) )
+  
+// this COLLDIES with PSG<->Pokey emulation!  
+  if ((currentDiscreteSound & 0x80) == 0x80)
+  {
+    enginePlaying = 1;
+    repeatSound--;
+
+    int freq = 0x0f; // slowest
+    int vol = 12;
+    freq -= (15-repeatSoundDelay);
+    
+    if (repeatSoundDelay>7) vol = 11;
+    if (repeatSoundDelay>10) vol = 10;
+    
+    unsigned char reg7 = v_readPSG_double_buffered(7);
+    reg7=reg7 & 0x3e; // enable tone channel A
+
+    v_writePSG_double_buffered(0, 0xff); // freq lo byte (8bit)
+    v_writePSG_double_buffered(1, freq); // freq hi byte (4bit)
+    v_writePSG_double_buffered(7, reg7); // enable tone chan A
+    v_writePSG_double_buffered(8, vol); // amplitude chan A
+
+
+    
+    if (repeatSound <= 0)
+    {
+        v_playSFXStart(OneTrackV_data, 2, 0);
+	repeatSound = repeatSoundDelay;
+	
+	delayInc--;
+	if (delayInc==0)
+	{
+	  if (revUp) 
+	  {
+	    repeatSoundDelay--;
+	    delayInc=3;
+	  }
+	  else 
+	  {
+	    repeatSoundDelay++;
+	    delayInc=1;
+	  }
+	  
+	  if (repeatSoundDelay>15) repeatSoundDelay = 15;
+	  if (repeatSoundDelay<6) repeatSoundDelay = 6;
+	}
+      
+	
+    }
+    
+    
+/*
+    if (currentDiscreteSound&2)
+    {
+      // play loud sample
+      v_playIRQSample2(engine1Sample, engine1Size, engine1Rate, PLAY_ONCE);
+    }
+    else
+    {
+      // play soft sample
+      v_playIRQSample2(engine2Sample, engine1Size, engine1Rate, PLAY_ONCE);
+    }
+*/    
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CORRECT_DISCRETE();  
 }
 
 
@@ -1199,7 +1295,9 @@ int main(int argc, char *argv[])
   v_setRefresh(50);
   v_setClientHz(41); // this should be 
   v_setupIRQHandling();
-  v_enableSoundOut(1);
+  v_enableSoundOut(1); // samples
+  v_enableExtendedSoundOut(1); //ym, aysfx
+
   v_enableButtons(1);
   v_enableJoystickAnalog(1,1,1,1);
   useDoubleTimer = 1;

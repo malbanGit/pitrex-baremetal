@@ -85,7 +85,7 @@ void DWHCIDeviceTimerHandler (TKernelTimerHandle hTimer, void *pParam, void *pCo
 unsigned DWHCIDeviceAllocateChannel (TDWHCIDevice *pThis);
 void DWHCIDeviceFreeChannel (TDWHCIDevice *pThis, unsigned nChannel);
 boolean DWHCIDeviceWaitForBit (TDWHCIDevice *pThis, TDWHCIRegister *pRegister, u32 nMask,boolean bWaitUntilSet, unsigned nMsTimeout);
-#ifndef NDEBUG
+#ifdef USPIDEBUG
 void DWHCIDeviceDumpRegister (TDWHCIDevice *pThis, const char *pName, u32 nAddress);
 void DWHCIDeviceDumpStatus (TDWHCIDevice *pThis, unsigned nChannel /* = 0 */);
 #endif
@@ -108,9 +108,7 @@ void _DWHCIDevice (TDWHCIDevice *pThis)
 boolean DWHCIDeviceInitialize (TDWHCIDevice *pThis)
 {
 	assert (pThis != 0);
-
 	DataMemBarrier ();
-
 	TDWHCIRegister VendorId;
 	DWHCIRegister (&VendorId, DWHCI_CORE_VENDOR_ID);
 	if (DWHCIRegisterRead (&VendorId) != 0x4F54280A)
@@ -122,10 +120,11 @@ boolean DWHCIDeviceInitialize (TDWHCIDevice *pThis)
 
 	if (!SetPowerStateOn (DEVICE_ID_USB_HCD))
 	{
-		LogWrite (FromDWHCI, LOG_ERROR, "Cannot power on");
+		LogWrite (FromDWHCI, LOG_ERROR, "Cannot power on, powered on twice?");
 		_DWHCIRegister (&VendorId);
 		return FALSE;
 	}
+	
 	
 	// Disable all interrupts
 	TDWHCIRegister AHBConfig;
@@ -143,7 +142,6 @@ boolean DWHCIDeviceInitialize (TDWHCIDevice *pThis)
 		_DWHCIRegister (&VendorId);
 		return FALSE;
 	}
-	
 	DWHCIDeviceEnableGlobalInterrupts (pThis);
 	
 	if (!DWHCIDeviceInitHost (pThis))
@@ -1299,12 +1297,12 @@ boolean DWHCIDeviceWaitForBit (TDWHCIDevice *pThis, TDWHCIRegister *pRegister, u
 	while ((DWHCIRegisterRead (pRegister) & nMask) ? !bWaitUntilSet : bWaitUntilSet)
 	{
 		MsDelay (1);
-
+//printf("Wait 11\n");
 		if (--nMsTimeout == 0)
 		{
-			//LogWrite (FromDWHCI, LOG_WARNING, "Timeout");
-#ifndef NDEBUG
-			//DWHCIRegisterDump (pRegister);
+			LogWrite (FromDWHCI, LOG_WARNING, "Timeout");
+#ifdef USPIDEBUG
+			DWHCIRegisterDump (pRegister);
 #endif
 			return FALSE;
 		}
@@ -1378,7 +1376,7 @@ void DWHCIDeviceDisableRootPort (TDWHCIDevice *pThis)
 	_DWHCIRegister (&HostPort);
 }
 
-#ifndef NDEBUG
+#ifdef USPIDEBUG
 
 void DWHCIDeviceDumpRegister (TDWHCIDevice *pThis, const char *pName, u32 nAddress)
 {

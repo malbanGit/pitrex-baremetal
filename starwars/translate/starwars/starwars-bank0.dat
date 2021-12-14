@@ -1,0 +1,2417 @@
+ORG 6000
+data  6000-6001
+label 6000 MATHROM
+data  6002-6003
+data  6004-6004
+code 6005
+label 6005 L6005
+code 601A
+label 601A L601A
+code 602F
+label 602F L602F
+code 6032
+label 6032 L6032
+code 6036
+label 6036 L6036
+code 603A
+label 603A L603A
+data  6044-6045
+data  6046-6047
+data  6048-6049
+data  604A-604B
+data  604C-604D
+data  604E-604F
+data  6050-6051
+data  6052-6053
+data  6054-6055
+data  6056-6057
+data  6058-6059
+data  605A-605B
+data  605C-605D
+data  605E-605F
+data  6060-6061
+data  6062-6063
+data  6064-6065
+data  6066-6067
+data  6068-6069
+data  606A-606B
+data  606C-606D
+data  606E-606F
+data  6070-6071
+data  6072-6073
+data  6074-6075
+data  6076-6077
+data  6078-6079
+data  607A-607B
+data  607C-607D
+data  607E-607F
+data  6080-6081
+data  6082-6083
+data  6084-6085
+data  6086-6087
+data  6088-6089
+data  608A-608B
+data  608C-608D
+data  608E-608F
+data  6090-6091
+data  6092-6093
+data  6094-6095
+data  6096-6097
+data  6098-6099
+data  609A-609B
+data  609C-609D
+data  609E-609F
+data  60A0-60A1
+data  60A2-60A3
+data  60A4-60A5
+data  60A6-60A7
+data  60A8-60A9
+data  60AA-60AB
+data  60AC-60AD
+data  60AE-60AF
+data  60B0-60B1
+data  60B2-60B3
+data  60B4-60B5
+data  60B6-60B7
+data  60B8-60B9
+data  60BA-60BB
+data  60BC-60BD
+label 60BC Jump_Table_1
+code 60BE
+label 60BE L60BE
+code 60CA
+label 60CA L60CA
+code 60D4
+label 60D4 L60D4
+code 60E4
+label 60E4 L60E4
+code 60F4
+label 60F4 L60F4
+code 6112
+label 6112 L6112
+code 611E
+label 611E L611E
+code 6124
+label 6124 L6124
+code 612F
+label 612F L612F
+code 6155
+label 6155 L6155
+code 615A
+label 615A L615A
+code 6161
+label 6161 L6161
+code 6171
+label 6171 L6171
+code 617D
+label 617D L617D
+code 6196
+label 6196 L6196
+code 61B5
+label 61B5 L61B5
+code 61EC
+label 61EC L61EC
+code 61F3
+label 61F3 L61F3
+code 620F
+label 620F L620F
+code 6212
+label 6212 L6212
+code 622D
+label 622D L622D
+code 623C
+label 623C L623C
+code 623E
+label 623E L623E
+code 624B
+label 624B L624B
+code 6257
+label 6257 L6257
+code 6269
+label 6269 L6269
+code 6274
+label 6274 locret_6274
+code 6275
+label 6275 L6275
+code 62D5
+label 62D5 L62D5
+code 62E3
+label 62E3 locret_62E3
+code 62E4
+label 62E4 L62E4
+code 6306
+label 6306 L6306
+code 6322
+label 6322 L6322
+code 6326
+label 6326 L6326
+code 6348
+label 6348 L6348
+code 6364
+label 6364 L6364
+code 6368
+label 6368 L6368
+code 637D
+label 637D L637D
+code 638E
+label 638E L638E
+code 639A
+label 639A L639A
+code 639D
+label 639D L639D
+code 63A8
+label 63A8 L63A8
+code 63C3
+label 63C3 L63C3
+code 63C6
+label 63C6 L63C6
+code 63D5
+label 63D5 L63D5
+code 63E4
+label 63E4 L63E4
+code 63E6
+label 63E6 L63E6
+code 63EB
+label 63EB L63EB
+code 63F0
+label 63F0 L63F0
+code 6404
+label 6404 L6404
+code 640E
+label 640E L640E
+code 6410
+label 6410 L6410
+code 641E
+label 641E L641E
+code 6420
+label 6420 L6420
+code 6435
+label 6435 L6435
+code 6442
+label 6442 L6442
+code 6453
+label 6453 L6453
+code 6458
+label 6458 locret_6458
+code 6459
+label 6459 L6459
+code 6483
+label 6483 L6483
+code 648F
+label 648F L648F
+code 64A6
+label 64A6 L64A6
+code 64A9
+label 64A9 L64A9
+code 64C9
+label 64C9 L64C9
+code 64CD
+label 64CD L64CD
+code 64E2
+label 64E2 L64E2
+code 64F1
+label 64F1 L64F1
+code 6507
+label 6507 L6507
+code 6512
+label 6512 locret_6512
+code 6513
+label 6513 L6513
+code 652F
+label 652F L652F
+code 6532
+label 6532 L6532
+code 655D
+label 655D L655D
+code 656B
+label 656B locret_656B
+code 656C
+label 656C L656C
+code 6586
+label 6586 L6586
+data  6593-6594
+label 6593 word_6593
+data  6595-6596
+data  6597-6598
+data  6599-659A
+data  659B-659C
+data  659D-659E
+code 659F
+label 659F L659F
+code 65BD
+label 65BD L65BD
+code 65C3
+label 65C3 L65C3
+code 65E7
+label 65E7 L65E7
+code 65EA
+label 65EA L65EA
+code 660B
+label 660B L660B
+code 6618
+label 6618 L6618
+code 6626
+label 6626 L6626
+code 663A
+label 663A L663A
+code 6667
+label 6667 locret_6667
+code 6668
+label 6668 L6668
+code 6670
+label 6670 L6670
+code 66AC
+label 66AC L66AC
+code 66CE
+label 66CE L66CE
+code 66E3
+label 66E3 L66E3
+code 6707
+label 6707 locret_6707
+code 6708
+label 6708 L6708
+code 670D
+label 670D L670D
+code 6722
+label 6722 L6722
+code 6725
+label 6725 L6725
+code 6737
+label 6737 L6737
+code 6758
+label 6758 locret_6758
+data  6759-675A
+label 6759 off_6759
+data  675B-675C
+data  675D-675E
+data  675F-6760
+code 6761
+data  6761-6762
+label 6761 L6761
+label 6761 off_6761
+data  6763-6764
+data  6765-6766
+data  6767-6768
+data  6769-676A
+code 676B
+label 676B L676B
+code 6780
+label 6780 L6780
+code 6787
+label 6787 L6787
+code 679A
+label 679A L679A
+code 67AA
+label 67AA L67AA
+code 67D1
+label 67D1 L67D1
+code 67D2
+label 67D2 L67D2
+code 67D4
+label 67D4 L67D4
+code 67D6
+label 67D6 L67D6
+code 67E5
+label 67E5 L67E5
+code 67FD
+label 67FD L67FD
+code 6802
+label 6802 L6802
+code 6818
+label 6818 L6818
+code 681E
+label 681E L681E
+code 682A
+label 682A L682A
+code 682F
+label 682F L682F
+code 6838
+label 6838 L6838
+code 6857
+label 6857 L6857
+code 6859
+label 6859 L6859
+code 6862
+label 6862 L6862
+code 68A1
+label 68A1 L68A1
+code 68A4
+label 68A4 L68A4
+code 68A6
+label 68A6 L68A6
+code 68B1
+label 68B1 L68B1
+code 68BC
+label 68BC L68BC
+code 68C6
+label 68C6 L68C6
+code 68CF
+label 68CF locret_68CF
+code 68D0
+label 68D0 L68D0
+code 68D5
+label 68D5 L68D5
+code 6901
+label 6901 L6901
+code 6911
+label 6911 locret_6911
+code 6912
+label 6912 L6912
+code 692A
+label 692A L692A
+code 692D
+label 692D L692D
+code 6930
+label 6930 L6930
+code 6933
+label 6933 L6933
+code 6952
+label 6952 locret_6952
+code 6953
+label 6953 L6953
+code 6962
+label 6962 L6962
+code 6968
+label 6968 L6968
+code 6977
+label 6977 L6977
+code 6993
+label 6993 L6993
+code 6995
+label 6995 L6995
+code 6997
+label 6997 L6997
+code 69A6
+label 69A6 L69A6
+code 69A9
+label 69A9 L69A9
+code 69B3
+label 69B3 L69B3
+code 69BF
+label 69BF L69BF
+code 69F4
+label 69F4 L69F4
+code 6A0C
+label 6A0C L6A0C
+code 6A26
+label 6A26 L6A26
+code 6A36
+label 6A36 L6A36
+code 6A39
+label 6A39 L6A39
+code 6A4F
+label 6A4F locret_6A4F
+code 6A50
+label 6A50 L6A50
+code 6A60
+label 6A60 L6A60
+code 6A6C
+label 6A6C L6A6C
+code 6A7E
+label 6A7E L6A7E
+code 6A89
+label 6A89 L6A89
+code 6A9E
+label 6A9E L6A9E
+code 6AAA
+label 6AAA locret_6AAA
+code 6AAB
+label 6AAB L6AAB
+code 6ABF
+label 6ABF L6ABF
+code 6AFE
+label 6AFE locret_6AFE
+code 6AFF
+label 6AFF L6AFF
+code 6B1A
+label 6B1A L6B1A
+code 6B1D
+label 6B1D L6B1D
+code 6B22
+label 6B22 L6B22
+code 6B32
+label 6B32 L6B32
+code 6B68
+label 6B68 L6B68
+code 6B7A
+label 6B7A L6B7A
+code 6B81
+label 6B81 L6B81
+code 6B83
+label 6B83 L6B83
+code 6B8F
+label 6B8F L6B8F
+code 6B96
+label 6B96 L6B96
+code 6B99
+label 6B99 L6B99
+code 6BC6
+label 6BC6 L6BC6
+code 6BCC
+label 6BCC L6BCC
+code 6BD0
+label 6BD0 L6BD0
+code 6BD4
+label 6BD4 L6BD4
+code 6BD8
+label 6BD8 L6BD8
+code 6BDA
+label 6BDA locret_6BDA
+code 6BDB
+label 6BDB L6BDB
+code 6BDC
+label 6BDC L6BDC
+code 6BF1
+label 6BF1 L6BF1
+code 6BFA
+label 6BFA L6BFA
+code 6BFE
+label 6BFE L6BFE
+code 6C09
+label 6C09 L6C09
+code 6C13
+label 6C13 L6C13
+code 6C22
+label 6C22 L6C22
+code 6C2C
+label 6C2C L6C2C
+code 6C46
+label 6C46 L6C46
+code 6C5A
+label 6C5A L6C5A
+code 6C5D
+label 6C5D L6C5D
+code 6C69
+label 6C69 L6C69
+code 6C75
+label 6C75 locret_6C75
+code 6C76
+label 6C76 L6C76
+code 6C84
+label 6C84 L6C84
+code 6CB5
+label 6CB5 locret_6CB5
+code 6CB6
+label 6CB6 L6CB6
+code 6CC4
+label 6CC4 L6CC4
+code 6CE0
+label 6CE0 locret_6CE0
+code 6CE1
+label 6CE1 L6CE1
+code 6CEF
+label 6CEF L6CEF
+code 6D0B
+label 6D0B locret_6D0B
+code 6D0C
+label 6D0C L6D0C
+code 6D15
+label 6D15 L6D15
+code 6D33
+label 6D33 L6D33
+code 6D38
+label 6D38 L6D38
+code 6D3B
+label 6D3B L6D3B
+code 6D54
+label 6D54 L6D54
+code 6D73
+label 6D73 L6D73
+code 6D7D
+label 6D7D L6D7D
+code 6D80
+label 6D80 L6D80
+code 6D86
+label 6D86 L6D86
+code 6D94
+label 6D94 locret_6D94
+code 6D95
+label 6D95 L6D95
+code 6D98
+label 6D98 L6D98
+code 6DA4
+label 6DA4 locret_6DA4
+code 6DA5
+label 6DA5 L6DA5
+code 6DB6
+label 6DB6 L6DB6
+code 6DC0
+label 6DC0 L6DC0
+code 6DCA
+label 6DCA L6DCA
+code 6DD2
+label 6DD2 L6DD2
+code 6DDF
+label 6DDF L6DDF
+code 6DE4
+label 6DE4 L6DE4
+code 6DF0
+label 6DF0 L6DF0
+code 6DFA
+label 6DFA L6DFA
+code 6E07
+label 6E07 L6E07
+code 6E0C
+label 6E0C L6E0C
+code 6E18
+label 6E18 L6E18
+code 6E22
+label 6E22 L6E22
+code 6E2B
+label 6E2B L6E2B
+code 6E2C
+label 6E2C L6E2C
+code 6E2E
+label 6E2E L6E2E
+code 6E33
+label 6E33 L6E33
+code 6E3E
+label 6E3E L6E3E
+code 6E45
+label 6E45 L6E45
+code 6E50
+label 6E50 L6E50
+code 6E63
+label 6E63 L6E63
+code 6E65
+label 6E65 L6E65
+code 6E6E
+label 6E6E L6E6E
+code 6E70
+label 6E70 L6E70
+code 6E7D
+label 6E7D L6E7D
+code 6E7F
+label 6E7F L6E7F
+code 6E88
+label 6E88 L6E88
+code 6EA0
+label 6EA0 locret_6EA0
+code 6EA1
+label 6EA1 nullL1
+code 6EA2
+label 6EA2 L6EA2
+code 6EAA
+label 6EAA L6EAA
+code 6EB9
+label 6EB9 L6EB9
+code 6EC3
+label 6EC3 L6EC3
+code 6ECB
+label 6ECB L6ECB
+code 6EDB
+label 6EDB L6EDB
+code 6EE0
+label 6EE0 L6EE0
+code 6EED
+label 6EED L6EED
+code 6EF2
+label 6EF2 L6EF2
+code 6EF7
+label 6EF7 L6EF7
+code 6F19
+label 6F19 L6F19
+code 6F29
+label 6F29 L6F29
+code 6F39
+label 6F39 L6F39
+code 6F3D
+label 6F3D L6F3D
+code 6F3E
+label 6F3E L6F3E
+code 6F46
+label 6F46 L6F46
+code 6F54
+label 6F54 L6F54
+code 6F5F
+label 6F5F L6F5F
+code 6F67
+label 6F67 L6F67
+code 6F6F
+label 6F6F L6F6F
+code 6F7D
+label 6F7D L6F7D
+code 6F8E
+label 6F8E L6F8E
+code 6F98
+label 6F98 L6F98
+code 6FB2
+label 6FB2 L6FB2
+code 6FBC
+label 6FBC L6FBC
+code 6FD0
+label 6FD0 L6FD0
+code 6FD9
+label 6FD9 L6FD9
+code 6FE0
+label 6FE0 L6FE0
+code 6FEF
+label 6FEF L6FEF
+code 6FF1
+label 6FF1 L6FF1
+code 6FF6
+label 6FF6 L6FF6
+code 7000
+label 7000 L7000
+code 7004
+label 7004 L7004
+code 7023
+label 7023 L7023
+code 7026
+label 7026 L7026
+code 703B
+label 703B L703B
+code 7052
+label 7052 L7052
+code 7053
+label 7053 L7053
+code 705B
+label 705B L705B
+code 706D
+label 706D L706D
+code 7076
+label 7076 L7076
+code 708C
+label 708C L708C
+code 7096
+label 7096 L7096
+code 70AD
+label 70AD L70AD
+code 70B6
+label 70B6 L70B6
+code 70B8
+label 70B8 L70B8
+code 70BD
+label 70BD L70BD
+code 70CB
+label 70CB locret_70CB
+code 70CC
+label 70CC L70CC
+code 70DA
+label 70DA locret_70DA
+code 70DB
+label 70DB L70DB
+code 70F0
+label 70F0 L70F0
+code 70F5
+label 70F5 L70F5
+code 7105
+label 7105 L7105
+code 7107
+label 7107 L7107
+code 710E
+label 710E L710E
+code 7111
+label 7111 L7111
+code 7116
+label 7116 L7116
+code 712F
+label 712F L712F
+code 713A
+label 713A L713A
+code 7153
+label 7153 L7153
+code 715E
+label 715E L715E
+code 7160
+label 7160 L7160
+code 7176
+label 7176 L7176
+code 7181
+label 7181 L7181
+code 7197
+label 7197 L7197
+code 71A2
+label 71A2 L71A2
+code 71B8
+label 71B8 L71B8
+code 71C3
+label 71C3 locret_71C3
+code 71C4
+label 71C4 L71C4
+code 71C7
+label 71C7 L71C7
+code 71D9
+label 71D9 L71D9
+data  71DD-71DE
+label 71DD word_71DD
+data  71DF-71DF
+data  71E0-71E1
+data  71E2-71E2
+data  71E3-71E4
+data  71E5-71E5
+data  71E6-71E7
+data  71E8-71E8
+data  71E9-71EA
+data  71EB-71EB
+data  71EC-71ED
+data  71EE-71EE
+data  71EF-71F0
+data  71F1-71F1
+data  71F2-71F3
+data  71F4-71F4
+data  71F5-71F6
+data  71F7-71F7
+data  71F8-71F9
+data  71FA-71FA
+data  71FB-71FC
+data  71FD-71FD
+data  71FE-71FF
+data  7200-7200
+data  7201-7202
+data  7203-7203
+data  7204-7205
+data  7206-7206
+data  7207-7208
+data  7209-7209
+data  720A-720B
+data  720C-720C
+data  720D-720E
+data  720F-720F
+data  7210-7211
+data  7212-7212
+data  7213-7214
+data  7215-7215
+data  7216-7217
+data  7218-7218
+data  7219-721A
+data  721B-721B
+data  721C-721D
+data  721E-721E
+data  721F-7220
+data  7221-7221
+data  7222-7223
+data  7224-7224
+data  7225-7226
+data  7227-7227
+data  7228-7229
+data  722A-722A
+data  722B-722C
+data  722D-722D
+data  722E-722F
+data  7230-7230
+data  7231-7232
+data  7233-7233
+data  7234-7235
+data  7236-7236
+data  7237-7238
+data  7239-7239
+data  723A-723B
+data  723C-723C
+data  723D-723E
+data  723F-723F
+data  7240-7241
+data  7242-7242
+data  7243-7244
+data  7245-7245
+data  7246-7247
+data  7248-7248
+data  7249-724A
+data  724B-724B
+data  724C-724D
+data  724E-724E
+data  724F-7250
+data  7251-7251
+data  7252-7253
+data  7254-7254
+data  7255-7256
+data  7257-7257
+data  7258-7259
+data  725A-725A
+data  725B-725C
+data  725D-725D
+data  725E-725F
+data  7260-7260
+data  7261-7262
+data  7263-7263
+data  7264-7265
+data  7266-7266
+data  7267-7268
+data  7269-7269
+data  726A-726B
+data  726C-726C
+data  726D-726E
+data  726F-726F
+data  7270-7271
+data  7272-7272
+data  7273-7274
+data  7275-7275
+data  7276-7277
+data  7278-7278
+data  7279-727A
+data  727B-727B
+data  727C-727D
+data  727E-727E
+data  727F-7280
+data  7281-7281
+data  7282-7283
+data  7284-7284
+data  7285-7286
+data  7287-7287
+data  7288-7289
+data  728A-728A
+data  728B-728C
+data  728D-728D
+data  728E-728F
+data  7290-7290
+data  7291-7292
+data  7293-7293
+data  7294-7295
+data  7296-7296
+data  7297-7298
+data  7299-7299
+data  729A-729B
+data  729C-729C
+data  729D-729E
+data  729F-729F
+data  72A0-72A1
+data  72A2-72A2
+data  72A3-72A4
+data  72A5-72A5
+data  72A6-72A7
+data  72A8-72A8
+data  72A9-72AA
+data  72AB-72AB
+data  72AC-72AD
+data  72AE-72AE
+data  72AF-72B0
+data  72B1-72B1
+data  72B2-72B3
+data  72B4-72B4
+data  72B5-72B6
+data  72B7-72B7
+data  72B8-72B9
+data  72BA-72BA
+data  72BB-72BC
+data  72BD-72BD
+data  72BE-72BF
+data  72C0-72C0
+data  72C1-72C2
+data  72C3-72C3
+data  72C4-72C5
+data  72C6-72C6
+code 72C7
+label 72C7 L72C7
+code 72EB
+label 72EB L72EB
+comment 72EB "Shoot Tie Fighters text index"
+code 72ED
+label 72ED L72ED
+comment 72ED "Print text string from pointer table"
+code 72F0
+comment 72F0 "Insert vector instructions for shields"
+label 72F0 L72F0
+code 7315
+label 7315 L7315
+code 733C
+label 733C L733C
+code 736F
+label 736F L736F
+code 737E
+label 737E L737E
+code 7382
+label 7382 L7382
+code 7390
+label 7390 L7390
+code 73A8
+label 73A8 L73A8
+code 73B0
+label 73B0 L73B0
+code 73C3
+label 73C3 L73C3
+code 73D4
+label 73D4 L73D4
+code 73EA
+label 73EA L73EA
+code 7413
+label 7413 L7413
+code 743C
+label 743C L743C
+code 744E
+label 744E L744E
+code 745A
+label 745A L745A
+code 7464
+label 7464 L7464
+code 7482
+comment 7482 "Game over/insert coins timer"
+label 7482 L7482
+code 7486
+label 7486 L7486
+code 748A
+label 748A L748A
+code 748C
+label 748C L748C
+code 748E
+label 748E L748E
+comment 748E "Print text string from pointer table"
+code 7491
+label 7491 L7491
+code 74A5
+label 74A5 L74A5
+code 74B3
+label 74B3 L74B3
+code 74B6
+comment 74B6 "Insert vector instructions for shields"
+label 74B6 L74B6
+code 74CC
+label 74CC L74CC
+code 74D5
+label 74D5 L74D5
+code 74F2
+comment 74F2 "Insert vector instructions for shields"
+label 74F2 L74F2
+code 750F
+comment 750F "Game Over text handling"
+label 750F L750F
+code 7519
+label 7519 L7519
+code 755A
+comment 755A "Attract screen/game phase  timer"
+label 755A L755A
+code 757C
+label 757C L757C
+code 7599
+label 7599 L7599
+comment 7599 "Print text string from pointer table"
+code 759C
+comment 759C "Attract screen/game phase  timer"
+label 759C L759C
+code 75B2
+comment 75B2 "Insert vector laser explosion small circle"
+label 75B2 L75B2
+code 75B9
+label 75B9 L75B9
+code 75CC
+comment 75CC "Insert vector instructions for shields"
+label 75CC L75CC
+code 75D9
+label 75D9 L75D9
+code 760A
+label 760A L760A
+code 761D
+label 761D L761D
+code 762A
+label 762A L762A
+code 762C
+label 762C L762C
+code 762E
+label 762E L762E
+code 7630
+label 7630 L7630
+code 7632
+label 7632 L7632
+code 7634
+label 7634 L7634
+code 764D
+label 764D L764D
+code 7651
+label 7651 L7651
+code 766E
+label 766E L766E
+code 768D
+label 768D L768D
+code 76CE
+label 76CE L76CE
+code 76D3
+label 76D3 L76D3
+code 76FC
+label 76FC L76FC
+code 7706
+label 7706 locret_7706
+code 7707
+label 7707 L7707
+code 7710
+label 7710 L7710
+code 7720
+label 7720 L7720
+code 772C
+label 772C L772C
+code 774E
+label 774E L774E
+code 7765
+label 7765 L7765
+code 777A
+comment 777A "Ax2"
+label 777A L777A
+code 778C
+comment 778C "Ax2"
+label 778C L778C
+code 778F
+label 778F L778F
+code 77A3
+label 77A3 locret_77A3
+code 77A4
+label 77A4 L77A4
+code 77B9
+comment 77B9 "Ax2"
+label 77B9 L77B9
+code 77CB
+comment 77CB "Ax2"
+label 77CB L77CB
+code 77D3
+label 77D3 locret_77D3
+code 77D4
+label 77D4 L77D4
+code 780E
+label 780E L780E
+code 7819
+label 7819 L7819
+code 781C
+label 781C L781C
+code 782A
+label 782A L782A
+code 7839
+label 7839 L7839
+code 7848
+label 7848 L7848
+code 7857
+label 7857 L7857
+code 785B
+label 785B L785B
+code 7863
+label 7863 L7863
+code 786A
+label 786A L786A
+code 786D
+label 786D L786D
+comment 786D "Pointer to Tie fighter data"
+code 7876
+label 7876 L7876
+comment 7876 "Pointer to Tie fighter data"
+code 7880
+label 7880 locret_7880
+code 7881
+label 7881 L7881
+code 78BB
+label 78BB L78BB
+code 78C9
+label 78C9 L78C9
+code 78E4
+label 78E4 L78E4
+code 78F3
+label 78F3 L78F3
+code 78FD
+label 78FD L78FD
+code 78FF
+label 78FF L78FF
+code 7909
+label 7909 L7909
+comment 7909 "Math result X"
+code 796A
+label 796A L796A
+code 796D
+label 796D L796D
+code 796F
+label 796F L796F
+code 7972
+label 7972 L7972
+code 7997
+label 7997 L7997
+code 79A5
+label 79A5 L79A5
+code 79CF
+label 79CF L79CF
+code 79E9
+label 79E9 L79E9
+comment 79E9 "Pointer to Tie fighter data"
+data  7A08-7A09
+comment 7A08 "Tie fighter colour table"
+label 7A08 word_7A08
+data  7A0A-7A0B
+data  7A0C-7A0D
+data  7A0E-7A0F
+data  7A10-7A11
+data  7A12-7A13
+data  7A14-7A15
+data  7A16-7A17
+data  7A18-7A19
+data  7A1A-7A1B
+data  7A1C-7A1D
+data  7A1E-7A1F
+data  7A20-7A21
+data  7A22-7A23
+data  7A24-7A25
+data  7A26-7A27
+data  7A28-7A29
+data  7A2A-7A2B
+data  7A2C-7A2D
+data  7A2E-7A2F
+data  7A30-7A31
+data  7A32-7A33
+data  7A34-7A35
+data  7A36-7A37
+data  7A38-7A39
+data  7A3A-7A3B
+data  7A3C-7A3D
+data  7A3E-7A3F
+data  7A40-7A41
+data  7A42-7A43
+data  7A44-7A45
+data  7A46-7A47
+code 7A48
+label 7A48 L7A48
+code 7A5A
+label 7A5A L7A5A
+data  7A7B-7A82
+data  7A83-7A8A
+data  7A8B-7A8F
+data  7A90-7A97
+data  7A98-7A9F
+data  7AA0-7AA7
+data  7AA8-7AAF
+data  7AB0-7AB7
+data  7AB8-7ABF
+data  7AC0-7AC7
+data  7AC8-7ACF
+data  7AD0-7AD7
+data  7AD8-7ADF
+data  7AE0-7AE7
+data  7AE8-7AEF
+data  7AF0-7AF7
+data  7AF8-7B0C
+label 7AF8 aCopyright1983At_1
+data  7B0C-7B0D
+data  7B0E-7B15
+data  7B16-7B1D
+data  7B1E-7B3D
+label 7B1E off_7B1E
+data  7B3E-7B5D
+label 7B3E off_7B3E
+data  7B5E-7B7D
+label 7B5E off_7B5E
+data  7B7E-7B9D
+label 7B7E off_7B7E
+data  7B9E-7BBD
+label 7B9E off_7B9E
+data  7BBE-7BDD
+label 7BBE off_7BBE
+data  7BDE-7BFD
+label 7BDE off_7BDE
+data  7BFE-7C1D
+label 7BFE off_7BFE
+data  7C1E-7C3D
+label 7C1E off_7C1E
+data  7C3E-7C5D
+label 7C3E off_7C3E
+data  7C5E-7C7D
+label 7C5E off_7C5E
+data  7C7E-7C9D
+label 7C7E off_7C7E
+data  7C9E-7CBF
+label 7C9E off_7C9E
+data  7CC0-7CD5
+label 7CC0 off_7CC0
+comment 7CC0 "Trench catwalk/turrets data?"
+data  7CD6-7CF7
+label 7CD6 byte_7CD6
+data  7CF8-7D10
+label 7CF8 byte_7CF8
+data  7D11-7D41
+label 7D11 byte_7D11
+data  7D42-7D5A
+label 7D42 byte_7D42
+data  7D5B-7D7F
+label 7D5B byte_7D5B
+data  7D80-7D99
+label 7D80 byte_7D80
+data  7D9A-7DB0
+label 7D9A byte_7D9A
+data  7DB1-7DC9
+label 7DB1 byte_7DB1
+data  7DCA-7DE2
+label 7DCA byte_7DCA
+data  7DE3-7E07
+label 7DE3 byte_7DE3
+data  7E08-7E20
+label 7E08 byte_7E08
+data  7E21-7E3C
+label 7E21 byte_7E21
+data  7E3D-7E55
+label 7E3D byte_7E3D
+data  7E56-7E74
+label 7E56 byte_7E56
+data  7E75-7E9C
+label 7E75 byte_7E75
+data  7E9D-7EAE
+label 7E9D byte_7E9D
+data  7EAF-7EB8
+label 7EAF byte_7EAF
+data  7EB9-7ED7
+label 7EB9 byte_7EB9
+data  7ED8-7EF0
+label 7ED8 byte_7ED8
+data  7EF1-7F15
+label 7EF1 byte_7EF1
+data  7F16-7F46
+label 7F16 byte_7F16
+data  7F47-7F77
+label 7F47 byte_7F47
+data  7F78-7F96
+label 7F78 byte_7F78
+data  7F97-7FB8
+label 7F97 byte_7F97
+data  7FB9-7FD1
+label 7FB9 byte_7FB9
+data  7FD2-8002
+label 7FD2 byte_7FD2
+code 6402
+label 953B L953B
+
+comment 6000 segment ROM
+comment 601E Opt0_Shadow
+comment 6023 Check DIP switch for freeze mode
+comment 6032 Vector pointer state
+comment 6036 Game mode/screen state
+comment 6038 Check game state for out of bounds
+comment 60BE Game over/insert coins timer
+comment 60CA Credits
+comment 60DC Credits
+comment 60E7 Credits
+comment 6112 Vector pointer state
+comment 6116 Set new vector pointer value
+comment 6118 Vector JRSL to draw four blue dots in screen corners
+comment 611E Copies vector data. Called at start of attract screen 2
+comment 6134 Vector HALT
+comment 613D Vector pointer state
+comment 6143 Copies Star Wars logo vector data to vector RAM
+comment 6157 Vector pointer state
+comment 615A Initialise tie fighters and fireballs
+comment 6173 Star intensity
+comment 6175 3x Tie fighter data structure ($19 bytes per Tie)
+comment 6178 3x Tie fighter math data structure ($20 bytes per Tie)
+comment 6189 3x Tie fighter data structure ($19 bytes per Tie)
+comment 618E 6x Fireball data structure 2 ($6 bytes per fireball)
+comment 6191 6x Fireball math data structure 2 ($8 bytes per Tie)
+comment 61A2 6x Fireball data structure 2 ($6 bytes per fireball)
+comment 61AC Copy XYZ data to math RAM
+comment 61B1 Copy XYZ data to math RAM
+comment 61B8 Math zero constant
+comment 61BE Math 1.000 constant
+comment 61C4 Constant -0.5 ?
+comment 61CA Math Constant $0080
+comment 61D0 Math Constant $0040
+comment 61D6 Sine for rotation
+comment 61DC Cosine for rotation
+comment 61E2 Math 1.000 constant
+comment 61EE Star intensity
+comment 622D Joystick X
+comment 6235 Game mode/screen state
+comment 623A Game mode/screen state
+comment 6244 Game mode/screen state
+comment 6249 Game mode/screen state
+comment 6254 Credits
+comment 6257 Credits
+comment 6264 Game mode/screen state
+comment 6266 Credits
+comment 6272 Game mode/screen state
+comment 6275 Disable interrupts
+comment 627A Read NOVRAM
+comment 6283 Joystick pitch data structure
+comment 6295 Joystick roll data structure
+comment 62A1 n      ; Enable interrupts
+comment 62A5 Game mode/screen state
+comment 62AC Set up math constants
+comment 62AF More stars/ties init stuff
+comment 62B2 Copies Star Wars logo vector data to vector RAM
+comment 62B5 Init stars math data
+comment 62BD Score millions
+comment 62BF Score hundred thousands
+comment 62C1 Score thousands
+comment 62C3 Score
+comment 62C7 Sheild being depleted
+comment 62E7 Attract text position for scrolling
+comment 62ED Attract screen/game phase  timer
+comment 62FD Attract text colour/intensity for fading
+comment 6303 Game mode/screen state
+comment 6306 Insert vector data for four blue dots in screen corners
+comment 6309 Display score
+comment 630C Check credits status
+comment 6312 Starfield
+comment 6315 Vector instructions end
+comment 6318 Attract screen 3 stars YT move
+comment 631B Attract screen/game phase  timer
+comment 6320 Game mode/screen state
+comment 6322 Check joystick X to show high scores if moved
+comment 6326 Called once before attract screen 4
+comment 6329 Attract text position for scrolling
+comment 632F Attract screen/game phase  timer
+comment 633F Attract text colour/intensity for fading
+comment 6345 Game mode/screen state
+comment 6348 Insert vector data for four blue dots in screen corners
+comment 634B Display score
+comment 634E Check credits status
+comment 6354 Starfield
+comment 6357 Vector instructions end
+comment 635A Attract screen 4 stars ZT move
+comment 635D Attract screen/game phase  timer
+comment 6362 Game mode/screen state
+comment 6364 Check joystick X to show high scores if moved
+comment 6368 Attract screen/game phase  timer
+comment 636E Attract screen/game phase  timer
+comment 637A Called from select screen, attract screen 1 + 3 when writing text
+comment 638B Called from select screen, attract screen 1 + 3 when writing text
+comment 639D Attract text position for scrolling
+comment 63A8 Attract text position for scrolling
+comment 63AB Attract screen/game phase  timer
+comment 63B4 Attract text intensity
+comment 63C0 Attract screen/game phase  timer
+comment 63C3 Attract text intensity
+comment 63C6 Attract text position for scrolling
+comment 63CC Attract text colour/intensity for fading
+comment 63D1 Called from Attract screen 3 + 4
+comment 63D5 Credits
+comment 63DA Game over/insert coins timer
+comment 63E6 Print text string from pointer table
+comment 63ED Print text string from pointer table
+comment 63F0 Credits
+comment 63F5 Half credit
+comment 63FA Game over/insert coins timer
+comment 640B Print text string from pointer table
+comment 6410 Credits
+comment 6413 Half credit
+comment 6420 Print text string from pointer table
+comment 642D Half credit
+comment 6439 Credits
+comment 6446 Display BCD numbers
+comment 6449 Half credit
+comment 6459 Called once before attract screen 1
+comment 645C Attract text position for scrolling
+comment 6465 Attract screen/game phase  timer
+comment 646B Attract text colour/intensity for fading
+comment 6471 Set up math constants
+comment 6474 More stars/ties init stuff
+comment 6477 Matrix 2
+comment 647A Initialise math registers matrix
+comment 6480 Game mode/screen state
+comment 6483 Insert vector data for four blue dots in screen corners
+comment 6486 Print Star Wars and copyright text
+comment 6489 Starfield
+comment 648C Display score
+comment 648F Check credits status
+comment 6492 Attract screen/game phase  timer
+comment 649B Attract text intensity
+comment 64A6 Attract text intensity
+comment 64A9 Attract text colour/intensity for fading
+comment 64AE Display high scores
+comment 64B1 Called from attract screen 1
+comment 64B4 Vector instructions end
+comment 64B7 Move stars XT translate position
+comment 64BA Attract screen/game phase  timer
+comment 64C0 Attract screen/game phase  timer
+comment 64C7 Game mode/screen state
+comment 64C9 Check joystick X to show high scores if moved
+comment 64CF Print text string from pointer table
+comment 64D4 Print text string from pointer table
+comment 64D9 Print text string from pointer table
+comment 64DE Print text string from pointer table
+comment 64E8 Attract text position for scrolling
+comment 64EE Game mode/screen state
+comment 64F1 Accounting time stats
+comment 64F4 Display accounting screen
+comment 64F7 Called from attract screen 1
+comment 64FA Vector instructions end
+comment 6505 Game mode/screen state
+comment 6510 Game mode/screen state
+comment 652F Game mode/screen state
+comment 6532 Game options
+comment 654E Called from attract screen 1
+comment 6551 Vector instructions end
+comment 6569 Game mode/screen state
+comment 656F Attract screen/game phase  timer
+comment 6575 Attract text position for scrolling
+comment 657E Attract text colour/intensity for fading
+comment 6588 Called from select screen, attract screen 1 + 3 when writing text
+comment 6590 Game mode/screen state
+comment 659F Attract screen/game phase  timer
+comment 65A5 Attract screen/game phase  timer
+comment 65B1 Game mode/screen state
+comment 65BD Insert vector data for four blue dots in screen corners
+comment 65EC Insert vector instructions at joystick position for laser explosion 3
+comment 65EF Called from attract screen 1
+comment 65FC Attract screen/game phase  timer
+comment 660B Display BCD numbers
+comment 660E Vector instructions end
+comment 665C Game mode/screen state
+comment 6673 Attract screen/game phase  timer
+comment 6676 Attract text position for scrolling
+comment 667F Attract text colour/intensity for fading
+comment 6687 Called from select screen, attract screen 1 + 3 when writing text
+comment 668C Called from select screen, attract screen 1 + 3 when writing text
+comment 6691 Called from select screen, attract screen 1 + 3 when writing text
+comment 6696 Called from select screen, attract screen 1 + 3 when writing text
+comment 669B Called from select screen, attract screen 1 + 3 when writing text
+comment 66A0 Called from select screen, attract screen 1 + 3 when writing text
+comment 66A9 Game mode/screen state
+comment 66AC Insert vector data for four blue dots in screen corners
+comment 66AF Display score
+comment 66B2 Check credits status
+comment 66B5 Display high scores
+comment 66B8 Called from attract screen 1
+comment 66BB Vector instructions end
+comment 66CB Attract screen/game phase  timer
+comment 66CE Attract screen/game phase  timer
+comment 66D4 Attract screen/game phase  timer
+comment 66EA Game mode/screen state
+comment 66F7 High scores RAM
+comment 6708 Game mode/screen state
+comment 670A Copies Star Wars logo vector data to vector RAM
+comment 6713 Attract text position for scrolling
+comment 6719 Initialise before game start
+comment 671C Set up math constants
+comment 671F More stars/ties init stuff
+comment 6722 Matrix 2
+comment 6725 Initialise math registers matrix
+comment 6737 Called once before attract screen 2
+comment 6756 Play random attract sound
+comment 676B Attract screen 2
+comment 676E Starfield
+comment 6771 Attract screen 2 large Star Wars logo handling
+comment 6777 Check credits status
+comment 677A Display score
+comment 677D Vector instructions end
+comment 6780 Attract screen 2 stars forward and down translate
+comment 6783 Check joystick X to show high scores if moved
+comment 6789 Attract screen/game phase  timer
+comment 6797 Game mode/screen state
+comment 679C Game mode/screen state
+comment 67AC Shield count
+comment 67C1 Sheild being depleted
+comment 67C3 Score millions
+comment 67C5 Score hundred thousands
+comment 67C7 Score thousands
+comment 67C9 Score
+comment 67D6 Joystick roll data structure
+comment 67D9 Joystick pitch data structure
+comment 67E5 Set up math constants
+comment 67E8 More stars/ties init stuff
+comment 67EB Init stars math data
+comment 67F0 Matrix 4
+comment 67FB Game mode/screen state
+comment 67FF Game mode/screen state
+comment 682D Game mode/screen state
+comment 6831 Game mode/screen state
+comment 6838 Initialise tie fighters and fireballs
+comment 6841 Attract screen/game phase  timer
+comment 6854 Attract screen/game phase  timer
+comment 6857 Game mode/screen state
+comment 6859 Space wave
+comment 685C Shield count
+comment 6862 Fireball movement
+comment 6868 Check if tie/bunker/tower been hit
+comment 686B Fireball timer 3
+comment 686E Process shields
+comment 687A BIC points to Matrix 4
+comment 687C Copy transform data from [BIC] to matrix 2
+comment 6882 Attract screen/game phase  timer
+comment 6888 Attract screen/game phase  timer
+comment 689C Imperial March
+comment 68A1 Space wave 1 music
+comment 68AC Space Wave 2 music
+comment 68B7 Enter Death Star
+comment 68C4 Game mode/screen state
+comment 68D3 Game mode/screen state
+comment 68D5 Entering Death Star
+comment 68D8 Shield count
+comment 68DE Fireball movement
+comment 68E4 Check if tie/bunker/tower been hit
+comment 68E7 Fireball timer 3
+comment 68EA Process shields
+comment 68F6 BIC points to Matrix 4
+comment 68F8 Copy transform data from [BIC] to matrix 2
+comment 68FE 3x Tie fighter data structure ($19 bytes per Tie)
+comment 6908 3x Tie fighter data structure ($19 bytes per Tie)
+comment 690F Game mode/screen state
+comment 6915 Zoom value
+comment 691A Death Star zoom value
+comment 692A Red 5 Im going in
+comment 692D R2 beeps entering Death Star
+comment 6930 Game mode/screen state
+comment 6933 End of space wave? Also Trench catwalks
+comment 6936 Check if tie/bunker/tower been hit
+comment 6939 Fireball timer 3
+comment 693C Process shields
+comment 6945 Matrix 4
+comment 6950 Game mode/screen state
+comment 695F Look at the size of that thing
+comment 6965 Game mode/screen state
+comment 696E Fireball timer 3
+comment 6971 Process shields
+comment 697A Death Star zoom value
+comment 697E Zoom value
+comment 6982 Zoom value
+comment 6995 Game mode/screen state
+comment 6997 Death Star zoom value
+comment 699C Death Star zoom value
+comment 699E Star intensity
+comment 69A6 Star intensity
+comment 69C2 More stars/ties init stuff
+comment 69C5 Init towers surface dots
+comment 69EB Attract screen/game phase  timer
+comment 69EE Towers 1 music
+comment 69F1 Game mode/screen state
+comment 69F4 Towers/Bunkers wave
+comment 69F7 Shield count
+comment 69FD Fireball movement
+comment 6A00 Fireball timer 3
+comment 6A03 Process shields
+comment 6A06 Check if tie/bunker/tower been hit
+comment 6A0F BIC points to Matrix 4
+comment 6A11 Copy transform data from [BIC] to matrix 2
+comment 6A26 Game over/insert coins timer
+comment 6A2C Attract screen/game phase  timer
+comment 6A33 Towers 2 music
+comment 6A36 Attract screen/game phase  timer
+comment 6A4D Game mode/screen state
+comment 6A6F Called when starting trench
+comment 6A78 Attract screen/game phase  timer
+comment 6A7B Game mode/screen state
+comment 6A7E More stars/ties init stuff
+comment 6A81 Entering trench
+comment 6A86 Game mode/screen state
+comment 6A89 Towers
+comment 6A8C Fireball timer 3
+comment 6A8F Process shields
+comment 6A92 Check if tie/bunker/tower been hit
+comment 6A98 Attract screen/game phase  timer
+comment 6A9E Attract screen/game phase  timer
+comment 6AA8 Game mode/screen state
+comment 6AB4 Attract screen/game phase  timer
+comment 6ABA Entering trench
+comment 6ABD Game mode/screen state
+comment 6AC2 Fireball timer 3
+comment 6AC5 Process shields
+comment 6AC8 Check if tie/bunker/tower been hit
+comment 6ACE Attract screen/game phase  timer
+comment 6AD4 Attract screen/game phase  timer
+comment 6AE7 More stars/ties init stuff
+comment 6AFC Game mode/screen state
+comment 6B03 More stars/ties init stuff
+comment 6B06 Entering trench
+comment 6B1F Game mode/screen state
+comment 6B27 Attract screen/game phase  timer
+comment 6B30 Game mode/screen state
+comment 6B32 Trench
+comment 6B35 Shield count
+comment 6B3B Fireball movement
+comment 6B44 Fireball timer 2
+comment 6B47 Process shields
+comment 6B50 BIC points to Matrix 4
+comment 6B52 Copy transform data from [BIC] to matrix 2
+comment 6B55 Trench viewpoint calc
+comment 6B58 Game over/insert coins timer
+comment 6B5E Attract screen/game phase  timer
+comment 6B65 Trench music
+comment 6B6E Attract screen/game phase  timer
+comment 6B75 Luke trust me
+comment 6B7E Yahoo youre all clear kid
+comment 6B83 Attract screen/game phase  timer
+comment 6B93 Force is strong in this one
+comment 6B96 Attract screen/game phase  timer
+comment 6BB1 Explosion
+comment 6BB7 Shield count
+comment 6BBF Game mode/screen state
+comment 6BC8 Game mode/screen state
+comment 6BDB Set up math constants
+comment 6BDE More stars/ties init stuff
+comment 6BE3 Matrix 4
+comment 6BEB Attract screen/game phase  timer
+comment 6BEE Game mode/screen state
+comment 6BF1 Game over/insert coins timer
+comment 6BF7 Attract screen/game phase  timer
+comment 6BFA Attract screen/game phase  timer
+comment 6C06 Exhaust port score
+comment 6C09 Attract screen/game phase  timer
+comment 6C10 Shield bonus score
+comment 6C13 Attract screen/game phase  timer
+comment 6C22 Attract screen/game phase  timer
+comment 6C29 Death Star starting wave bonus score
+comment 6C2F Process shields
+comment 6C35 Attract screen/game phase  timer
+comment 6C73 Game mode/screen state
+comment 6C76 Stay in attack formation
+comment 6C7B Game mode/screen state
+comment 6C80 Attract screen/game phase  timer
+comment 6C87 Fireball movement
+comment 6C8A Fireball timer
+comment 6C90 Check if tie/bunker/tower been hit
+comment 6C96 Sine for rotation
+comment 6C9C Cosine for rotation
+comment 6C9F Run math program $00 Roll on Matrix 4
+comment 6CA2 Attract screen/game phase  timer
+comment 6CA8 Attract screen/game phase  timer
+comment 6CB3 Game mode/screen state
+comment 6CB6 Stay in attack formation
+comment 6CBB Game mode/screen state
+comment 6CC0 Attract screen/game phase  timer
+comment 6CC4 Towers
+comment 6CC7 Fireball movement
+comment 6CCA Fireball timer
+comment 6CCD Attract screen/game phase  timer
+comment 6CD3 Attract screen/game phase  timer
+comment 6CDE Game mode/screen state
+comment 6CE1 Stay in attack formation
+comment 6CE6 Game mode/screen state
+comment 6CEB Attract screen/game phase  timer
+comment 6CEF Game over
+comment 6CF2 Fireball movement
+comment 6CF5 Fireball timer
+comment 6CF8 Attract screen/game phase  timer
+comment 6CFE Attract screen/game phase  timer
+comment 6D09 Game mode/screen state
+comment 6D0C Remember
+comment 6D12 Game mode/screen state
+comment 6D15 Set up math constants
+comment 6D18 More stars/ties init stuff
+comment 6D1B Init stars math data
+comment 6D1E Matrix 2
+comment 6D21 Initialise math registers matrix
+comment 6D24 NVRAM something
+comment 6D27 Score
+comment 6D33 High score
+comment 6D38 Game mode/screen state
+comment 6D3B Exhaust port hit init
+comment 6D3E Zoom value
+comment 6D43 Death Star zoom value
+comment 6D45 Init stars math data
+comment 6D48 Matrix 2
+comment 6D4B Initialise math registers matrix
+comment 6D4E Game mode/screen state
+comment 6D50 Death Star destroyed
+comment 6D54 Death Star hit zoom out
+comment 6D57 Process shields
+comment 6D5A Fireball timer 3
+comment 6D5D Death Star zoom value
+comment 6D60 Zoom value
+comment 6D67 Zoom value
+comment 6D71 Game mode/screen state
+comment 6D73 Death Star zoom value
+comment 6D7D Death Star zoom value
+comment 6D80 Death Star explosion init
+comment 6D83 Game mode/screen state
+comment 6D86 Space wave
+comment 6D92 Game mode/screen state
+comment 6D95 Game mode/screen state
+comment 6D98 Death Star explosion
+comment 6DA2 Game mode/screen state
+comment 6DE4 Sine for rotation
+comment 6DEA Cosine for rotation
+comment 6DED Run math program $00 Roll on Matrix 4
+comment 6E0C Sine for rotation
+comment 6E12 Cosine for rotation
+comment 6E15 Run math program $00 Roll on Matrix 4
+comment 6E40 Joystick X
+comment 6E48 Joystick X
+comment 6E54 Towers collision roll limits
+comment 6E98 Some joystick driven matrix rotations for pitch/roll
+comment 6E9D Run math program $00 Roll on Matrix 4
+comment 6EA7 3x Tie fighter data structure ($19 bytes per Tie)
+comment 6EB4 Pointer to Tie fighter data
+comment 6EB6 Point BIC to 5080
+comment 6EC6 3x Tie fighter data structure ($19 bytes per Tie)
+comment 6ED1 Matrix 4
+comment 6EE3 Matrix 4
+comment 6EF7 BIC points to Matrix 4
+comment 6EF9 Copy transform data from [BIC] to matrix 2
+comment 6EFC Update Roll, Pitch and Yaw for [A, B, C][x, y, z] 2
+comment 6EFF Pointer to Tie fighter data
+comment 6F0E Do math program run
+comment 6F11 Math result X
+comment 6F16 Math result Y
+comment 6F19 Math result X
+comment 6F1C Math result X
+comment 6F29 Math result Z
+comment 6F2C Math result Z
+comment 6F31 Math result Z
+comment 6F34 Math result Z
+comment 6F39 Math result Y
+comment 6F46 Math result Z
+comment 6F49 Math result Z
+comment 6F4E Math result Z
+comment 6F51 Math result Z
+comment 6F58 Math result Z
+comment 6F69 Shift D register left
+comment 6F80 XT2
+comment 6F89 Joystick X
+comment 6F90 Joystick X
+comment 6FA4 YT2
+comment 6FAD Joystick Y
+comment 6FB4 Joystick Y
+comment 6FDC ZT2
+comment 701C Towers roll calcs
+comment 7023 Towers roll calcs
+comment 7026 Sine for rotation
+comment 702C Cosine for rotation
+comment 702F Run math program $00 Roll on Matrix 4
+comment 7037 Towers collision roll limits
+comment 7044 XT2
+comment 704D Joystick X
+comment 7053 Joystick X
+comment 705B Trench X min/max limits
+comment 7079 YT2
+comment 7087 Joystick Y
+comment 708E Joystick Y
+comment 70A4 Trench Y top/bottom limits
+comment 70B9 ZT2
+comment 70BD Joystick pitch data structure
+comment 70C0 Some joystick data calculation ?
+comment 70C3 Some joystick driven matrix rotations for pitch/roll
+comment 70C8 Run math program $0E Pitch on Matrix 4
+comment 70CC Joystick roll data structure
+comment 70CF Some joystick data calculation ?
+comment 70D2 Some joystick driven matrix rotations for pitch/roll
+comment 70D7 Run math program $1C Yaw on Matrix 4
+comment 70DB Disable interrupts
+comment 70DF Joystick Y
+comment 70E3 Joystick X
+comment 70ED n      ; Enable interrupts
+comment 711D Cosine for rotation
+comment 712B Sine for rotation
+comment 7136 Sine for rotation
+comment 7141 Cosine for rotation
+comment 714F Sine for rotation
+comment 715A Sine for rotation
+comment 7170 Sine for rotation
+comment 7173 Sine for rotation
+comment 7177 Point BIC to[ A,B,C ][x, y, z] 2
+comment 717C Pitch program
+comment 717E Do math program run
+comment 7191 Sine for rotation
+comment 7194 Sine for rotation
+comment 7198 Point BIC to[ A,B,C ][x, y, z] 2
+comment 719D Yaw program
+comment 719F Do math program run
+comment 71B2 Sine for rotation
+comment 71B5 Sine for rotation
+comment 71B9 Point BIC to[ A,B,C ][x, y, z] 2
+comment 71BE Roll program
+comment 71C0 Do math program run
+comment 71D0 Sine for rotation
+comment 71D9 Cosine for rotation
+comment 72C7 Insert vector data for four blue dots in screen corners
+comment 72CA BIC points to Matrix 4
+comment 72CC Copy transform data from [BIC] to matrix 2
+comment 72CF Update Roll, Pitch and Yaw for [A, B, C][x, y, z] 2
+comment 72D2 Display score
+comment 72DA Attract screen/game phase  timer
+comment 72EB Shoot Tie Fighters text index
+comment 72ED Print text string from pointer table
+comment 72F0 Insert vector instructions for shields
+comment 72F3 Space wave sub_7765
+comment 72F6 Insert vector instructions at joystick position for laser explosion 2
+comment 72F9 Starfield
+comment 72FC Process tie/tower/bunker explosions
+comment 7302 Process tie fighters and insert vectors
+comment 7305 Fireball processing
+comment 730E Insert vector laser explosion small circle
+comment 7311 Vector instructions end
+comment 7315 Insert vector data for four blue dots in screen corners
+comment 7318 BIC points to Matrix 4
+comment 731A Copy transform data from [BIC] to matrix 2
+comment 731D Update Roll, Pitch and Yaw for [A, B, C][x, y, z] 2
+comment 7320 Display score
+comment 7323 Insert vector instructions for shields
+comment 7326 Starfield
+comment 7329 Process tie/tower/bunker explosions
+comment 732C Process tie fighters and insert vectors
+comment 732F Fireball processing
+comment 7332 Game Over text handling
+comment 7335 Insert vector laser explosion small circle
+comment 7338 Vector instructions end
+comment 733C Insert vector data for four blue dots in screen corners
+comment 733F BIC points to Matrix 4
+comment 7341 Copy transform data from [BIC] to matrix 2
+comment 7344 Update Roll, Pitch and Yaw for [A, B, C][x, y, z] 2
+comment 7347 Display score
+comment 734A Insert vector instructions for shields
+comment 734D Insert vector instructions at joystick position for laser explosion 2
+comment 7350 Starfield
+comment 7353 Space wave sub_7765
+comment 7356 Process tie/tower/bunker explosions
+comment 735C Process tie fighters and insert vectors
+comment 735F Fireball processing
+comment 7368 Insert vector laser explosion small circle
+comment 736B Vector instructions end
+comment 736F Insert vector data for four blue dots in screen corners
+comment 7372 BIC points to Matrix 4
+comment 7374 Copy transform data from [BIC] to matrix 2
+comment 7377 Update Roll, Pitch and Yaw for [A, B, C][x, y, z] 2
+comment 737A Display score
+comment 737D Insert vector instructions for shields
+comment 7380 Insert vector instructions at joystick position for laser explosion 2
+comment 7383 Starfield
+comment 7389 Insert vector laser explosion small circle
+comment 738C Vector instructions end
+comment 7390 Towers/Bunkers wave
+comment 7393 BIC points to Matrix 4
+comment 7395 Copy transform data from [BIC] to matrix 2
+comment 7398 Update Roll, Pitch and Yaw for [A, B, C][x, y, z] 2
+comment 739B Display score
+comment 739E Display tower count and hit score
+comment 73A1 Insert vector instructions for shields
+comment 73A4 Insert vector instructions at joystick position for laser explosion 2
+comment 73A7 Towers surface dots
+comment 73AD Fireball processing
+comment 73B9 Process tie/tower/bunker explosions
+comment 73BC Insert vector laser explosion small circle
+comment 73BF Vector instructions end
+comment 73C3 Insert vector data for four blue dots in screen corners
+comment 73C6 BIC points to Matrix 4
+comment 73C8 Copy transform data from [BIC] to matrix 2
+comment 73CB Update Roll, Pitch and Yaw for [A, B, C][x, y, z] 2
+comment 73CE Display score
+comment 73D1 Display tower count and hit score
+comment 73D4 Insert vector instructions for shields
+comment 73D7 Towers surface dots
+comment 73DA Fireball processing
+comment 73E0 Game Over text handling
+comment 73E3 Insert vector laser explosion small circle
+comment 73E6 Vector instructions end
+comment 73EA Insert vector data for four blue dots in screen corners
+comment 73ED BIC points to Matrix 4
+comment 73EF Copy transform data from [BIC] to matrix 2
+comment 73F2 Update Roll, Pitch and Yaw for [A, B, C][x, y, z] 2
+comment 73F5 Display score
+comment 73F8 Towers left to shoot count
+comment 73FD Print text string from pointer table
+comment 7400 Insert vector instructions for shields
+comment 7403 Insert vector instructions at joystick position for laser explosion 2
+comment 7406 Towers surface dots
+comment 7409 Process tie/tower/bunker explosions
+comment 740C Insert vector laser explosion small circle
+comment 740F Vector instructions end
+comment 7413 Insert vector data for four blue dots in screen corners
+comment 7416 BIC points to Matrix 4
+comment 7418 Copy transform data from [BIC] to matrix 2
+comment 741B Update Roll, Pitch and Yaw for [A, B, C][x, y, z] 2
+comment 741E Display score
+comment 7421 Towers left to shoot count
+comment 7426 Print text string from pointer table
+comment 7429 Insert vector instructions for shields
+comment 742C Insert vector instructions at joystick position for laser explosion 2
+comment 7432 Process tie/tower/bunker explosions
+comment 7435 Insert vector laser explosion small circle
+comment 7438 Vector instructions end
+comment 743C Insert vector data for four blue dots in screen corners
+comment 743F BIC points to Matrix 4
+comment 7441 Copy transform data from [BIC] to matrix 2
+comment 7444 Update Roll, Pitch and Yaw for [A, B, C][x, y, z] 2
+comment 7447 Display score
+comment 744A Attract screen/game phase  timer
+comment 7455 Towers left to shoot count
+comment 7461 Print text string from pointer table
+comment 7469 Attract screen/game phase  timer
+comment 7482 Game over/insert coins timer
+comment 748E Print text string from pointer table
+comment 74A2 Print text string from pointer table
+comment 74AE Print text string from pointer table
+comment 74B6 Insert vector instructions for shields
+comment 74B9 Insert vector instructions at joystick position for laser explosion 2
+comment 74C2 Fireball processing
+comment 74CE Insert vector laser explosion small circle
+comment 74D1 Vector instructions end
+comment 74D5 Insert vector data for four blue dots in screen corners
+comment 74D8 BIC points to Matrix 4
+comment 74DA Copy transform data from [BIC] to matrix 2
+comment 74DD Update Roll, Pitch and Yaw for [A, B, C][x, y, z] 2
+comment 74E0 Display score
+comment 74EF Print text string from pointer table
+comment 74F2 Insert vector instructions for shields
+comment 74F8 Fireball processing
+comment 750C Print text string from pointer table
+comment 750F Game Over text handling
+comment 7512 Insert vector laser explosion small circle
+comment 7515 Vector instructions end
+comment 7519 Insert vector data for four blue dots in screen corners
+comment 751C BIC points to Matrix 4
+comment 751E Copy transform data from [BIC] to matrix 2
+comment 7521 Update Roll, Pitch and Yaw for [A, B, C][x, y, z] 2
+comment 7524 Display score
+comment 7527 Insert vector instructions for shields
+comment 752A Insert vector instructions at joystick position for laser explosion 2
+comment 752D Starfield
+comment 7532 Print text string from pointer table
+comment 7535 Attract screen/game phase  timer
+comment 753E Print text string from pointer table
+comment 7543 Print text string from pointer table
+comment 755A Attract screen/game phase  timer
+comment 7574 Shield count
+comment 7599 Print text string from pointer table
+comment 759C Attract screen/game phase  timer
+comment 75AF Print text string from pointer table
+comment 75B2 Insert vector laser explosion small circle
+comment 75B5 Vector instructions end
+comment 75B9 Insert vector data for four blue dots in screen corners
+comment 75BC BIC points to Matrix 4
+comment 75BE Copy transform data from [BIC] to matrix 2
+comment 75C1 Display score
+comment 75CC Insert vector instructions for shields
+comment 75CF Insert vector instructions at joystick position for laser explosion 2
+comment 75D5 Vector instructions end
+comment 75D9 Insert vector data for four blue dots in screen corners
+comment 75DC BIC points to Matrix 4
+comment 75DE Copy transform data from [BIC] to matrix 2
+comment 75E1 Display score
+comment 75E4 Insert vector instructions for shields
+comment 75E7 Insert vector instructions at joystick position for laser explosion 2
+comment 7603 Death Star explosion animation
+comment 7606 Vector instructions end
+comment 760A Insert vector data for four blue dots in screen corners
+comment 760D Display score
+comment 7610 Insert vector instructions for shields
+comment 7613 Insert vector instructions at joystick position for laser explosion 2
+comment 7616 Death Star explosion animation
+comment 7619 Vector instructions end
+comment 7666 Display BCD number text
+comment 7684 Display BCD numbers
+comment 768D Display tower hit score
+comment 7695 Towers left to shoot count
+comment 7697 Game over/insert coins timer
+comment 769F Print text string from pointer table
+comment 76A2 Vector STAT 2,80 instruction
+comment 76A7 Vector draw to position
+comment 76B5 Temporary score adder towers 1
+comment 76B8 Display BCD numbers
+comment 76BB Temporary score adder towers 2
+comment 76BE Display BCD numbers
+comment 76C1 Temporary score adder towers 3
+comment 76C4 Display BCD numbers
+comment 76C7 Vector CNTR instruction
+comment 76CC Towers left to shoot count
+comment 76D0 Print text string from pointer table
+comment 76D3 Display towers left to shoot count
+comment 76DB Print text string from pointer table
+comment 76DE Vector STAT 2,80 instruction
+comment 76F4 Display BCD numbers
+comment 76F7 Vector CNTR instruction
+comment 7703 Print text string from pointer table
+comment 7707 Attract screen/game phase  timer
+comment 771C Print text string from pointer table
+comment 7765 Ax2
+comment 776D Ay2
+comment 7770 Math result Y
+comment 777A Ax2
+comment 777F Az2
+comment 7782 Math result Z
+comment 778C Ax2
+comment 7791 Get divider result and multiply by Math result Z, insert VCTR instruction
+comment 7799 Vector JRSL Small Death Star
+comment 77A4 Ax2
+comment 77AC Ay2
+comment 77AF Math result Y
+comment 77B9 Ax2
+comment 77BE Az2
+comment 77C1 Math result Z
+comment 77CB Ax2
+comment 77D4 Get divider result and multiply by Math result Z, insert VCTR instruction
+comment 77D9 Zoom value
+comment 77DF Zoom value
+comment 7801 Zoom value
+comment 786A 3x Tie fighter data structure ($19 bytes per Tie)
+comment 786D Pointer to Tie fighter data
+comment 7876 Pointer to Tie fighter data
+comment 787B 3x Tie fighter data structure ($19 bytes per Tie)
+comment 7881 Pointer to Tie fighter data
+comment 788D Do math program run
+comment 7890 Math result X
+comment 7896 Math result Y
+comment 789C Math result Z
+comment 7909 Math result X
+comment 791F XT
+comment 7922 Math result Y
+comment 7925 YT
+comment 7932 Math result Z
+comment 7935 ZT
+comment 7942 Pointer to Tie fighter data
+comment 7974 Run math program $80 Copy [BIC] to Matrix 3
+comment 7977 Get divider result and multiply by Math result Z, insert VCTR instruction
+comment 797D Math result Y
+comment 7980 Reg02 = Reg02 x Reg00
+comment 7982 Do math program run
+comment 7985 Math result Y
+comment 79C1 XT
+comment 79CB Pointer to Tie fighter data
+comment 79D9 Pointer to Tie fighter data
+comment 79E9 Pointer to Tie fighter data
+comment 79ED Tie fighter colour table
+comment 79F5 Matrix 1 = Matrix 2 x Matrix 3
+comment 79F7 Do math program run
+comment 79FC Math program 0x50. Matrix Multiply - Transposed
+comment 79FC Then do perspective division?
+comment 79FF Format vectors for ties, and tower/bunker explosions
+comment 7A02 Insert vector CNTR instruction
+comment 7A4B Initialise math registers matrix
+comment 7A5D Timer for fireball hit?
+commentline 6000 ===========================================================================
+commentline 6000 Segment type: Pure code
+commentline 6005 =============== S U B R O U T I N E =======================================
+commentline 601A ---------------------------------------------------------------------------
+commentline 6042 End of function sub_6005
+commentline 6042 ---------------------------------------------------------------------------
+commentline 60BE =============== S U B R O U T I N E =======================================
+commentline 60D4 ---------------------------------------------------------------------------
+commentline 60E4 ---------------------------------------------------------------------------
+commentline 60EF ---------------------------------------------------------------------------
+commentline 6111 End of function sub_60BE
+commentline 6112 =============== S U B R O U T I N E =======================================
+commentline 6112 Insert vector data for four blue dots in screen corners
+commentline 611D End of function sub_6112
+commentline 611E =============== S U B R O U T I N E =======================================
+commentline 611E Copies Star Wars logo vector data to vector RAM
+commentline 612E End of function sub_611E
+commentline 612F =============== S U B R O U T I N E =======================================
+commentline 612F Vector instructions end
+commentline 6159 End of function sub_612F
+commentline 615A =============== S U B R O U T I N E =======================================
+commentline 615A More stars/ties init stuff
+commentline 6160 End of function sub_615A
+commentline 6161 =============== S U B R O U T I N E =======================================
+commentline 6161 Initialise tie fighters and fireballs
+commentline 61B4 End of function sub_6161
+commentline 61B5 =============== S U B R O U T I N E =======================================
+commentline 61B5 Set up math constants
+commentline 61EB End of function sub_61B5
+commentline 61EC =============== S U B R O U T I N E =======================================
+commentline 61EC Init stars math data
+commentline 620E End of function sub_61EC
+commentline 620F =============== S U B R O U T I N E =======================================
+commentline 620F Init towers surface dots
+commentline 622C End of function sub_620F
+commentline 622D =============== S U B R O U T I N E =======================================
+commentline 622D Check joystick X to show high scores if moved
+commentline 623E ---------------------------------------------------------------------------
+commentline 6274 End of function sub_622D
+commentline 6275 =============== S U B R O U T I N E =======================================
+commentline 6275 Game initialisation
+commentline 62D4 End of function sub_6275
+commentline 62D5 =============== S U B R O U T I N E =======================================
+commentline 62E3 End of function sub_62D5
+commentline 62E4 =============== S U B R O U T I N E =======================================
+commentline 62E4 Called once before attract screen 3
+commentline 6305 End of function sub_62E4
+commentline 6306 =============== S U B R O U T I N E =======================================
+commentline 6306 Attract screen 3
+commentline 6325 End of function sub_6306
+commentline 6326 =============== S U B R O U T I N E =======================================
+commentline 6347 End of function sub_6326
+commentline 6348 =============== S U B R O U T I N E =======================================
+commentline 6348 Attract screen 4
+commentline 6367 End of function sub_6348
+commentline 6368 =============== S U B R O U T I N E =======================================
+commentline 63D4 End of function sub_6368
+commentline 63D5 =============== S U B R O U T I N E =======================================
+commentline 63D5 Check credits status
+commentline 63E4 ---------------------------------------------------------------------------
+commentline 63EB ---------------------------------------------------------------------------
+commentline 6402 ---------------------------------------------------------------------------
+commentline 6404 ---------------------------------------------------------------------------
+commentline 6410 ---------------------------------------------------------------------------
+commentline 641E ---------------------------------------------------------------------------
+commentline 6458 End of function sub_63D5
+commentline 6459 =============== S U B R O U T I N E =======================================
+commentline 6482 End of function sub_6459
+commentline 6483 =============== S U B R O U T I N E =======================================
+commentline 6483 Attract screen 1
+commentline 64CC End of function sub_6483
+commentline 64CD =============== S U B R O U T I N E =======================================
+commentline 64CD Print Star Wars and copyright text
+commentline 64E1 End of function sub_64CD
+commentline 64E2 =============== S U B R O U T I N E =======================================
+commentline 64F0 End of function sub_64E2
+commentline 64F1 =============== S U B R O U T I N E =======================================
+commentline 6512 End of function sub_64F1
+commentline 6513 =============== S U B R O U T I N E =======================================
+commentline 6531 End of function sub_6513
+commentline 6532 =============== S U B R O U T I N E =======================================
+commentline 6532 FUNCTION CHUNK AT ROM:F261 SIZE 000000CD BYTES
+commentline 6532 FUNCTION CHUNK AT ROM:F36E SIZE 000001AF BYTES
+commentline 6532 FUNCTION CHUNK AT ROM:F520 SIZE 000001ED BYTES
+commentline 6532 FUNCTION CHUNK AT ROM:F720 SIZE 00000003 BYTES
+commentline 6532 FUNCTION CHUNK AT ROM:FD07 SIZE 0000007E BYTES
+commentline 6532 FUNCTION CHUNK AT ROM:FF24 SIZE 00000033 BYTES
+commentline 655D ---------------------------------------------------------------------------
+commentline 656B End of function sub_6532
+commentline 656C =============== S U B R O U T I N E =======================================
+commentline 656C Start select screen
+commentline 6592 End of function sub_656C
+commentline 6592 ---------------------------------------------------------------------------
+commentline 659F =============== S U B R O U T I N E =======================================
+commentline 65BD ---------------------------------------------------------------------------
+commentline 65E7 ---------------------------------------------------------------------------
+commentline 6668 ---------------------------------------------------------------------------
+commentline 666F End of function sub_659F
+commentline 6670 =============== S U B R O U T I N E =======================================
+commentline 66AB End of function sub_6670
+commentline 66AC =============== S U B R O U T I N E =======================================
+commentline 6707 End of function sub_66AC
+commentline 6708 =============== S U B R O U T I N E =======================================
+commentline 6708 Called once before attract screen 2
+commentline 6737 ---------------------------------------------------------------------------
+commentline 6758 End of function sub_6708
+commentline 6758 ---------------------------------------------------------------------------
+commentline 676B =============== S U B R O U T I N E =======================================
+commentline 6786 End of function sub_676B
+commentline 6787 =============== S U B R O U T I N E =======================================
+commentline 6787 Called once before difficulty select screen
+commentline 6799 End of function sub_6787
+commentline 679A =============== S U B R O U T I N E =======================================
+commentline 679A Called once before difficulty select screen
+commentline 67E4 End of function sub_679A
+commentline 67E5 =============== S U B R O U T I N E =======================================
+commentline 6801 End of function sub_67E5
+commentline 6802 =============== S U B R O U T I N E =======================================
+commentline 6802 Next space wave after Death Star explosion
+commentline 6837 End of function sub_6802
+commentline 6838 =============== S U B R O U T I N E =======================================
+commentline 6838 Next space wave after Death Star explosion
+commentline 6838 FUNCTION CHUNK AT ROM:6C76 SIZE 0000000E BYTES
+commentline 68A1 ---------------------------------------------------------------------------
+commentline 68A6 ---------------------------------------------------------------------------
+commentline 68B1 ---------------------------------------------------------------------------
+commentline 68BC ---------------------------------------------------------------------------
+commentline 68CF End of function sub_6838
+commentline 68D0 =============== S U B R O U T I N E =======================================
+commentline 6911 End of function sub_68D0
+commentline 6912 =============== S U B R O U T I N E =======================================
+commentline 692A ---------------------------------------------------------------------------
+commentline 6932 End of function sub_6912
+commentline 6933 =============== S U B R O U T I N E =======================================
+commentline 6933 Entering Death Star 2nd part
+commentline 6952 End of function sub_6933
+commentline 6953 =============== S U B R O U T I N E =======================================
+commentline 6967 End of function sub_6953
+commentline 6968 =============== S U B R O U T I N E =======================================
+commentline 6968 Entering Death Star zoom in
+commentline 6993 ---------------------------------------------------------------------------
+commentline 69A8 End of function sub_6968
+commentline 69A9 =============== S U B R O U T I N E =======================================
+commentline 69A9 Towers/Bunkers init
+commentline 69F3 End of function sub_69A9
+commentline 69F4 =============== S U B R O U T I N E =======================================
+commentline 69F4 Towers/Bunkers wave
+commentline 69F4 FUNCTION CHUNK AT ROM:6CB6 SIZE 0000000E BYTES
+commentline 6A09 End of function sub_69F4
+commentline 6A0C =============== S U B R O U T I N E =======================================
+commentline 6A4F End of function sub_6A0C
+commentline 6A50 =============== S U B R O U T I N E =======================================
+commentline 6A50 Entering Death Star zoomed fully in
+commentline 6A7D End of function sub_6A50
+commentline 6A7E =============== S U B R O U T I N E =======================================
+commentline 6A88 End of function sub_6A7E
+commentline 6A89 =============== S U B R O U T I N E =======================================
+commentline 6AAA End of function sub_6A89
+commentline 6AAB =============== S U B R O U T I N E =======================================
+commentline 6AFE End of function sub_6AAB
+commentline 6AFF =============== S U B R O U T I N E =======================================
+commentline 6B21 End of function sub_6AFF
+commentline 6B22 =============== S U B R O U T I N E =======================================
+commentline 6B22 FUNCTION CHUNK AT ROM:6CE1 SIZE 0000000E BYTES
+commentline 6B7A ---------------------------------------------------------------------------
+commentline 6B83 ---------------------------------------------------------------------------
+commentline 6B8F ---------------------------------------------------------------------------
+commentline 6BC6 ---------------------------------------------------------------------------
+commentline 6BDA End of function sub_6B22
+commentline 6BDB =============== S U B R O U T I N E =======================================
+commentline 6BF0 End of function sub_6BDB
+commentline 6BF1 =============== S U B R O U T I N E =======================================
+commentline 6BF1 Death Star explosion complete
+commentline 6C75 End of function sub_6BF1
+commentline 6C76 ---------------------------------------------------------------------------
+commentline 6C76 START OF FUNCTION CHUNK FOR sub_6838
+commentline 6C83 END OF FUNCTION CHUNK FOR sub_6838
+commentline 6C84 =============== S U B R O U T I N E =======================================
+commentline 6C84 Towers
+commentline 6CB5 End of function sub_6C84
+commentline 6CB6 ---------------------------------------------------------------------------
+commentline 6CB6 START OF FUNCTION CHUNK FOR sub_69F4
+commentline 6CC3 END OF FUNCTION CHUNK FOR sub_69F4
+commentline 6CC4 =============== S U B R O U T I N E =======================================
+commentline 6CE0 End of function sub_6CC4
+commentline 6CE1 ---------------------------------------------------------------------------
+commentline 6CE1 START OF FUNCTION CHUNK FOR sub_6B22
+commentline 6CEE END OF FUNCTION CHUNK FOR sub_6B22
+commentline 6CEF =============== S U B R O U T I N E =======================================
+commentline 6CEF Game over
+commentline 6D0B End of function sub_6CEF
+commentline 6D0C =============== S U B R O U T I N E =======================================
+commentline 6D0C Game over init
+commentline 6D14 End of function sub_6D0C
+commentline 6D15 =============== S U B R O U T I N E =======================================
+commentline 6D15 Game over
+commentline 6D33 ---------------------------------------------------------------------------
+commentline 6D3A End of function sub_6D15
+commentline 6D3B =============== S U B R O U T I N E =======================================
+commentline 6D53 End of function sub_6D3B
+commentline 6D54 =============== S U B R O U T I N E =======================================
+commentline 6D7F End of function sub_6D54
+commentline 6D80 =============== S U B R O U T I N E =======================================
+commentline 6D85 End of function sub_6D80
+commentline 6D86 =============== S U B R O U T I N E =======================================
+commentline 6D86 Space wave init
+commentline 6D94 End of function sub_6D86
+commentline 6D95 =============== S U B R O U T I N E =======================================
+commentline 6D97 End of function sub_6D95
+commentline 6D98 =============== S U B R O U T I N E =======================================
+commentline 6DA4 End of function sub_6D98
+commentline 6DA5 =============== S U B R O U T I N E =======================================
+commentline 6DA5 Attract screen 2 stars forward and down translate
+commentline 6DB5 End of function sub_6DA5
+commentline 6DB6 =============== S U B R O U T I N E =======================================
+commentline 6DB6 Attract screen 3 stars YT move
+commentline 6DBF End of function sub_6DB6
+commentline 6DC0 =============== S U B R O U T I N E =======================================
+commentline 6DC0 Attract screen 4 stars ZT move
+commentline 6DC9 End of function sub_6DC0
+commentline 6DCA =============== S U B R O U T I N E =======================================
+commentline 6DCA Move stars XT translate position
+commentline 6DD1 End of function sub_6DCA
+commentline 6DD2 =============== S U B R O U T I N E =======================================
+commentline 6DDF ---------------------------------------------------------------------------
+commentline 6DF9 End of function sub_6DD2
+commentline 6DFA =============== S U B R O U T I N E =======================================
+commentline 6E07 ---------------------------------------------------------------------------
+commentline 6E21 End of function sub_6DFA
+commentline 6E22 =============== S U B R O U T I N E =======================================
+commentline 6E2B ---------------------------------------------------------------------------
+commentline 6E65 ---------------------------------------------------------------------------
+commentline 6E6E End of function sub_6E22
+commentline 6E70 =============== S U B R O U T I N E =======================================
+commentline 6E70 Towers collision roll limits
+commentline 6E7F ---------------------------------------------------------------------------
+commentline 6EA0 End of function sub_6E70
+commentline 6EA1 =============== S U B R O U T I N E =======================================
+commentline 6EA1 End of function nullsub_1
+commentline 6EA2 =============== S U B R O U T I N E =======================================
+commentline 6EB9 ---------------------------------------------------------------------------
+commentline 6EDB ---------------------------------------------------------------------------
+commentline 6EED ---------------------------------------------------------------------------
+commentline 6EF7 ---------------------------------------------------------------------------
+commentline 6F29 ---------------------------------------------------------------------------
+commentline 6F39 ---------------------------------------------------------------------------
+commentline 6F46 ---------------------------------------------------------------------------
+commentline 6F5E End of function sub_6EA2
+commentline 6F5F =============== S U B R O U T I N E =======================================
+commentline 6F66 End of function sub_6F5F
+commentline 6F67 =============== S U B R O U T I N E =======================================
+commentline 6F6E End of function sub_6F67
+commentline 6F6F =============== S U B R O U T I N E =======================================
+commentline 6FD0 ---------------------------------------------------------------------------
+commentline 6FDF End of function sub_6F6F
+commentline 6FE0 =============== S U B R O U T I N E =======================================
+commentline 6FEF End of function sub_6FE0
+commentline 6FF1 =============== S U B R O U T I N E =======================================
+commentline 7023 ---------------------------------------------------------------------------
+commentline 703A End of function sub_6FF1
+commentline 703B =============== S U B R O U T I N E =======================================
+commentline 703B Trench viewpoint calc
+commentline 70BC End of function sub_703B
+commentline 70BD =============== S U B R O U T I N E =======================================
+commentline 70CB End of function sub_70BD
+commentline 70CC =============== S U B R O U T I N E =======================================
+commentline 70DA End of function sub_70CC
+commentline 70DB =============== S U B R O U T I N E =======================================
+commentline 70EF End of function sub_70DB
+commentline 70F0 =============== S U B R O U T I N E =======================================
+commentline 70F0 Some joystick data calculation ?
+commentline 7107 ---------------------------------------------------------------------------
+commentline 7110 End of function sub_70F0
+commentline 7111 =============== S U B R O U T I N E =======================================
+commentline 7111 Some joystick driven matrix rotations for pitch/roll
+commentline 712F ---------------------------------------------------------------------------
+commentline 713A ---------------------------------------------------------------------------
+commentline 7153 ---------------------------------------------------------------------------
+commentline 715E ---------------------------------------------------------------------------
+commentline 715F End of function sub_7111
+commentline 7160 =============== S U B R O U T I N E =======================================
+commentline 7160 Update Roll, Pitch and Yaw for [A, B, C][x, y, z] 2
+commentline 71C3 End of function sub_7160
+commentline 71C4 =============== S U B R O U T I N E =======================================
+commentline 71DC End of function sub_71C4
+commentline 71DC ---------------------------------------------------------------------------
+commentline 72C7 =============== S U B R O U T I N E =======================================
+commentline 72C7 Space wave
+commentline 72EB ---------------------------------------------------------------------------
+commentline 7314 End of function sub_72C7
+commentline 7315 =============== S U B R O U T I N E =======================================
+commentline 733B End of function sub_7315
+commentline 733C =============== S U B R O U T I N E =======================================
+commentline 733C End of space wave? Also Trench catwalks
+commentline 736E End of function sub_733C
+commentline 736F =============== S U B R O U T I N E =======================================
+commentline 738F End of function sub_736F
+commentline 7390 =============== S U B R O U T I N E =======================================
+commentline 7390 Towers/Bunkers wave
+commentline 73C2 End of function sub_7390
+commentline 73C3 =============== S U B R O U T I N E =======================================
+commentline 73C3 Towers
+commentline 73E9 End of function sub_73C3
+commentline 73EA =============== S U B R O U T I N E =======================================
+commentline 73EA Towers
+commentline 7412 End of function sub_73EA
+commentline 7413 =============== S U B R O U T I N E =======================================
+commentline 743B End of function sub_7413
+commentline 743C =============== S U B R O U T I N E =======================================
+commentline 745A ---------------------------------------------------------------------------
+commentline 7482 ---------------------------------------------------------------------------
+commentline 748C ---------------------------------------------------------------------------
+commentline 74B3 ---------------------------------------------------------------------------
+commentline 74D4 End of function sub_743C
+commentline 74D5 =============== S U B R O U T I N E =======================================
+commentline 74D5 Game over
+commentline 7518 End of function sub_74D5
+commentline 7519 =============== S U B R O U T I N E =======================================
+commentline 757C ---------------------------------------------------------------------------
+commentline 75B8 End of function sub_7519
+commentline 75B9 =============== S U B R O U T I N E =======================================
+commentline 75D8 End of function sub_75B9
+commentline 75D9 =============== S U B R O U T I N E =======================================
+commentline 75D9 Space wave
+commentline 7609 End of function sub_75D9
+commentline 760A =============== S U B R O U T I N E =======================================
+commentline 760A Death Star explosion
+commentline 761C End of function sub_760A
+commentline 761D =============== S U B R O U T I N E =======================================
+commentline 761D Display score
+commentline 768C End of function sub_761D
+commentline 768D =============== S U B R O U T I N E =======================================
+commentline 768D Display tower count and hit score
+commentline 76CE ---------------------------------------------------------------------------
+commentline 76D0 End of function sub_768D
+commentline 76D3 =============== S U B R O U T I N E =======================================
+commentline 76D3 Towers left to shoot count
+commentline 7706 End of function sub_76D3
+commentline 7707 =============== S U B R O U T I N E =======================================
+commentline 7707 Game Over text handling
+commentline 771F End of function sub_7707
+commentline 7720 =============== S U B R O U T I N E =======================================
+commentline 774D End of function sub_7720
+commentline 774E =============== S U B R O U T I N E =======================================
+commentline 7764 End of function sub_774E
+commentline 7765 =============== S U B R O U T I N E =======================================
+commentline 7765 Space wave sub_7765
+commentline 77A3 End of function sub_7765
+commentline 77A4 =============== S U B R O U T I N E =======================================
+commentline 77D3 End of function sub_77A4
+commentline 77D4 =============== S U B R O U T I N E =======================================
+commentline 7819 ---------------------------------------------------------------------------
+commentline 782A ---------------------------------------------------------------------------
+commentline 7848 ---------------------------------------------------------------------------
+commentline 785A End of function sub_77D4
+commentline 785B =============== S U B R O U T I N E =======================================
+commentline 7861 End of function sub_785B
+commentline 7863 =============== S U B R O U T I N E =======================================
+commentline 7869 End of function sub_7863
+commentline 786A =============== S U B R O U T I N E =======================================
+commentline 786A Process tie fighters and insert vectors
+commentline 7880 End of function sub_786A
+commentline 7881 =============== S U B R O U T I N E =======================================
+commentline 78E4 ---------------------------------------------------------------------------
+commentline 78F3 ---------------------------------------------------------------------------
+commentline 78FF ---------------------------------------------------------------------------
+commentline 796A ---------------------------------------------------------------------------
+commentline 796F ---------------------------------------------------------------------------
+commentline 7A07 End of function sub_7881
+commentline 7A07 ---------------------------------------------------------------------------
+commentline 7A48 =============== S U B R O U T I N E =======================================
+commentline 7A7A End of function sub_7A48
+commentline 7A7A ---------------------------------------------------------------------------

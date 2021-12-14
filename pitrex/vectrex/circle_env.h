@@ -1,5 +1,5 @@
 #pragma once
-
+#include <baremetal/pi_support.h>
 
 
 
@@ -30,16 +30,7 @@ int SetPowerStateOn (unsigned nDeviceId);
 int GetMACAddress (unsigned char Buffer[6]);
 
 
-
-
-
-
-
-
-
-
-    typedef unsigned long TKernelTimerHandle;
-
+typedef unsigned long TKernelTimerHandle;
 typedef void TKernelTimerHandler (TKernelTimerHandle hTimer, void *pParam, void *pContext);
 
 // returns the timer handle (hTimer)
@@ -48,6 +39,15 @@ unsigned StartKernelTimer (unsigned         nHzDelay,   // in HZ units (see "sys
                void *pParam, void *pContext);   // handed over to the timer handler
 
 void CancelKernelTimer (unsigned hTimer);
+
+
+#ifdef NDEBUG
+	#define assert(expr)	((void) 0)
+#else
+	void assertion_failed (const char *pExpr, const char *pFile, unsigned nLine);
+
+	#define assert(expr)	((expr)	? ((void) 0) : assertion_failed (#expr, __FILE__, __LINE__))
+#endif
 
 
 
@@ -197,46 +197,32 @@ boolean BcmPropertyTagsGetTag (TBcmPropertyTags *pThis,
                    unsigned  nRequestParmSize /* = 0 */);   // number of parameter bytes
 
 
+#if RASPPI == 1
+#define ARM_IO_BASE		0x20000000
+#else
+#define ARM_IO_BASE		0x3F000000
+#endif
+
+#define GPU_IO_BASE		0x7E000000
+
+#define GPU_CACHED_BASE		0x40000000
+#define GPU_UNCACHED_BASE	0xC0000000
+
+#if RASPPI == 1
+	#ifdef GPU_L2_CACHE_ENABLED
+		#define _GPU_MEM_BASE	GPU_CACHED_BASE
+	#else
+		#define _GPU_MEM_BASE	GPU_UNCACHED_BASE
+	#endif
+#else
+	#define _GPU_MEM_BASE	GPU_UNCACHED_BASE
+#endif
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#define ARM_IO_BASE     0x20000000
-#define GPU_IO_BASE     0x7E000000
-#define GPU_CACHED_BASE     0x40000000
-#define GPU_UNCACHED_BASE   0xC0000000
-
-#define GPU_MEM_BASE    GPU_CACHED_BASE
-//        #define GPU_MEM_BASE    GPU_UNCACHED_BASE
 
 // Convert physical ARM address into bus address
 // (does even work, if a bus address is provided already)
-#define BUS_ADDRESS(phys)   (((phys) & ~0xC0000000) | GPU_MEM_BASE)
+#define BUS_ADDRESS(phys)   (((phys) & ~0xC0000000) | _GPU_MEM_BASE)
 
 //
 // General Purpose I/O

@@ -18,7 +18,7 @@
 
 extern char *gamename[];
 extern int gamenum;
-
+UINT8 bSwapXY;
 static int cframe=0;
 
 /////NEW VARIABLES AND STUFF
@@ -531,6 +531,130 @@ void demon_input()
 }
 
 */
+static int armor_cx = 0, armor_cy = 0;
+void armor_moveto(int x, int y, int q) {
+  int dx=2048, dy=2048;
+  x -= dx; y -= dy;
+  if (q&1) x = -x;
+  if (q&2) y = -y;
+  x+=dx; y+=dy;
+  armor_cx = x; armor_cy = y;
+}
+
+void armor_lineto(int x, int y, int q) {
+  // coordinates from pseudo-overlay code extracted from Mame
+  // needed to be rescaled and a small Y offset applied to match
+  // the internal coordinates used by the game.
+  int dx=2048, dy=2048;
+  x -= dx; y -= dy;
+  if (q&1) x = -x;
+  if (q&2) y = -y;
+  x+=dx; y+=dy;
+  
+//  line (armor_cx/4, armor_cy*2/11 + 10, x/4, y*2/11 + 10, 6);
+#define X_OFFSET_AA (-65)  
+#define Y_OFFSET_AA (-125)  
+  
+ add_line(armor_cx/4+X_OFFSET_AA, armor_cy*2/11 + 10+Y_OFFSET_AA, x/4+X_OFFSET_AA, y*2/11 + 10+Y_OFFSET_AA, 6,0,0);
+  
+  armor_cx = x; armor_cy = y;
+}
+
+void virtualOverlay_ArmorAttack()
+{
+  int q;
+
+  for (q = 0; q < 4; q++) 
+  {
+    // Upper Right Quadrant
+    // Outer structure
+
+
+    armor_moveto(3446, 2048, q);
+
+    // reset to zero before drawing one quarter
+    int oh = commonHints;
+    commonHints |= PL_BASE_FORCE_ZERO;
+    armor_lineto(3446, 2224, q); //
+    commonHints = oh;
+
+
+    armor_lineto(3958, 2224, q);
+    armor_lineto(3958, 3059, q);
+    armor_lineto(3323, 3059, q);
+    armor_lineto(3323, 3225, q);
+    armor_lineto(3194, 3225, q);
+    armor_lineto(3194, 3393, q);
+    armor_lineto(3067, 3393, q);
+    armor_lineto(3067, 3901, q);
+    armor_lineto(2304, 3901, q);
+    armor_lineto(2304, 3225, q);
+    armor_lineto(2048, 3225, q);
+    // Center structure
+    armor_moveto(2048, 2373, q);
+    armor_lineto(2562, 2373, q); //
+    armor_lineto(2562, 2738, q);
+    armor_lineto(2430, 2738, q);
+    armor_lineto(2430, 2893, q);
+    armor_lineto(2306, 2893, q);
+    armor_lineto(2306, 3065, q);
+    armor_lineto(2048, 3065, q);
+    // Big structure
+    armor_moveto(2938, 2209, q);
+    armor_lineto(3198, 2209, q); //
+    armor_lineto(3198, 2383, q);
+    armor_lineto(3706, 2383, q);
+    armor_lineto(3706, 2738, q);
+    armor_lineto(2938, 2738, q);
+    armor_lineto(2938, 2209, q);
+    // Small structure
+    armor_moveto(2551, 3055, q);
+    armor_lineto(2816, 3055, q); //
+    armor_lineto(2816, 3590, q);
+    armor_lineto(2422, 3590, q);
+    armor_lineto(2422, 3231, q);
+    armor_lineto(2555, 3231, q);
+    armor_lineto(2555, 3055, q);
+  }
+}
+
+static int warrior_cx = 0, warrior_cy = 0;
+void warrior_moveto(int x, int y) 
+{
+  warrior_cx = x; warrior_cy = y;
+}
+
+void warrior_lineto(int x, int y) {
+#define X_OFFSET_WA (-65)  
+#define Y_OFFSET_WA (-125)  
+  add_line(warrior_cx/4+X_OFFSET_WA, warrior_cy*2/11 + 10+Y_OFFSET_WA, x/4+X_OFFSET_WA, y*2/11 + 10+Y_OFFSET_WA, 6,0,0);
+  warrior_cx = x; warrior_cy = y;
+}
+
+void virtualOverlay_Warrior()
+{
+  warrior_moveto(1187, 2232);
+
+  // reset to zero before drawing one quarter
+  int oh = commonHints;
+  commonHints |= PL_BASE_FORCE_ZERO;
+  warrior_lineto(1863, 2232);
+  commonHints = oh;
+  warrior_lineto(1863, 1372);
+  warrior_lineto(1187, 1372);
+  warrior_lineto(1187, 2232);
+
+  warrior_moveto(2273, 2498);
+  commonHints |= PL_BASE_FORCE_ZERO;
+  warrior_lineto(2949, 2498);
+  commonHints = oh;
+
+//  warrior_lineto(2949, 2498);
+  warrior_lineto(2949, 1658);
+  warrior_lineto(2273, 1658);
+  warrior_lineto(2273, 2498);
+  
+}
 
 void run_cinemat(void)
 {
@@ -548,10 +672,17 @@ void run_cinemat(void)
 	//if (KeyCheck(config.ktest))      {testsw^=1;}
     // if (KeyCheck(config.kreset))     {cineReset();}
 		
+   if (gamenum == ARMORA)
+   {
+     virtualOverlay_ArmorAttack();
+   }
+   if (gamenum == WARRIOR)
+   {
+     virtualOverlay_Warrior();
+   }
+   
 }
 
-
- 
 int init_cinemat(void)
 {
  	 log_it("start init");	

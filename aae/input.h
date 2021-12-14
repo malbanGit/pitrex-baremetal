@@ -467,7 +467,7 @@ int s3;
 int timer;
 
 } MY_Input; 
-MY_Input the_input[256];		
+extern MY_Input the_input[256];		
 
 extern UINT8 in_port_1_r(UINT32 address, struct MemoryReadByte *psMemRead);
 extern UINT8 in_port_2_r(UINT32 address, struct MemoryReadByte *psMemRead);

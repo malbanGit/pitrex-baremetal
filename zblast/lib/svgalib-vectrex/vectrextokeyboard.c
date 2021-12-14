@@ -5,7 +5,6 @@
  */
 
 #include <stdio.h>
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
 #include "svgalib-vectrex.h"
 #include "vectrextokeyboard.h"

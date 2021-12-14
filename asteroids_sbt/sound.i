@@ -51,7 +51,7 @@ unsigned char Ast_PlayerShot_data[]=
   0xAE, 0x7F, 0x00, 0xAD, 0x87, 0x00, 0xAD, 0x9A, 0x00, 0x8C,
   0xAC, 0xB4, 0x00, 0xAC, 0xC4, 0x00, 0xAC, 0xF0, 0x00, 0xAC,
   0x0E, 0x01, 0xAC, 0x68, 0x01, 0xB0, 0x00, 0x00, 0xD0, 0x20,
- };
+};
  
  // AYFX - Data of file[]= "/Users/chrissalo/NetBeansProjects/Vide/tmp/AstSound/Ast_Saucer.afx"
 unsigned char Ast_Saucer_data[]=
@@ -151,7 +151,7 @@ void handleSound()
 //    printf("      pl: ptich: %02x\n\r", explPitch); 
     if (explPitch == 0x30) // Medium asteroid, player, small ufo
     {
-      if (useSamples)
+      if ((useSamples) && ((isIRQMode) || (isSMPMode)))
       {
         v_playIRQSample(explosion2Sample, explostion2Size, explosion2Rate, PLAY_ONCE);
       }
@@ -165,7 +165,7 @@ void handleSound()
     else
     if (explPitch == 0x00) // Big asteroid, Big Ufo
     {
-      if (useSamples)
+      if ((useSamples) && ((isIRQMode) || (isSMPMode)))
       {
         v_playIRQSample(explosion1Sample, explostion1Size, explosion1Rate, PLAY_ONCE);
       }
@@ -177,7 +177,7 @@ void handleSound()
     else
     if (explPitch == 0x20) // Small asteroid
     {
-      if (useSamples)
+      if ((useSamples) && ((isIRQMode) || (isSMPMode)))
       {
         v_playIRQSample(explosion3Sample, explostion3Size, explosion3Rate, PLAY_ONCE);
       }
@@ -195,7 +195,7 @@ void handleSound()
       if (explosionOngoing!=2)
       {
         explosionOngoing = 2;
-        if (useSamples)
+	if ((useSamples) && ((isIRQMode) || (isSMPMode)))
         {
           v_playIRQSample(explosion3Sample, explostion3Size, explosion3Rate, PLAY_ONCE);
         }
@@ -210,7 +210,7 @@ void handleSound()
     else if ((ReadMemory(0x69)&0x3f) ==0x3e )
     {
       explosionOngoing = 1;
-      if (useSamples)
+      if ((useSamples) && ((isIRQMode) || (isSMPMode)))
       {
         v_playIRQSample(explosion1Sample, explostion1Size, explosion1Rate, PLAY_ONCE);
       }
@@ -251,6 +251,7 @@ void handleSound()
   if (latch3Thrust != ReadMemory(0x3c03))
   {
   }
+//printf("Thrust Sound: %02x\n\r", ReadMemory(0x3c03));
   if (ReadMemory(0x3c03) != 0)
   {
      if (!ReadMemory(0x3c00))
@@ -284,7 +285,7 @@ void handleSound()
       if (ReadMemory(0x3c05) == 0x00)
         if (ReadMemory(0x3c04) == 0x00)
         {
-          if (useSamples)
+	  if ((useSamples) && ((isIRQMode) || (isSMPMode)))
             v_playIRQSample(sfireSample, sfireSize, sfireRate, PLAY_ONCE);
           else
               v_playSFXCont(Ast_SaucerShot_data, 0, 0);

@@ -1,45 +1,27 @@
-#include <string.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include "pi_support.h"
 
-#include "vectors.h"
-#include "rpi-gpio.h"
-#include "rpi-aux.h"
-#include "bcm2835_vc.h"
-
-extern int __bss_start__;
-extern int __bss_end__;
 extern int main(int argc, char *argv[]);
 
+extern unsigned int auxControl;
 
 /** Main function - we'll never return from here */
 void  kernelMain( unsigned int r0, unsigned int r1, unsigned int atags )
 {
-    tweakVectors();
-    int32_t arm_clock = lib_bcm2835_vc_get_clock_rate(BCM2835_VC_CLOCK_ID_ARM);
-#ifdef MHZ1000
-    if (arm_clock != 1000000000)
+    sys_time_init();
+    (void) lib_bcm2835_vc_set_power_state(BCM2835_VC_POWER_ID_SDCARD, BCM2835_VC_SET_POWER_STATE_ON_WAIT);
+    FRESULT result = f_mount(&fat_fs, (const TCHAR *) "", (BYTE) 1);
+    if (result != FR_OK) 
     {
-      lib_bcm2835_vc_set_clock_rate(BCM2835_VC_CLOCK_ID_ARM, 1000000000);
-      RPI_AuxMiniUartInit( 115200, 8, 400000000);
+      char buffer[32];
+      snprintf(buffer, 31, "f_mount failed! %d\n", (int) result);
+      printf("NO filesystem...: %s\n\r", buffer);
     }
-#else
-    if (arm_clock != 700000000)
+    else
     {
-       lib_bcm2835_vc_set_clock_rate(BCM2835_VC_CLOCK_ID_ARM, 700000000);
-       RPI_AuxMiniUartInit( 115200, 8, 250000000);
+      printf("FAT filesystem found!\n\r");
     }
-#endif    
-    /* Print to the UART using the standard libc functions */
-    printf("PiTrex starting...\r\n" );
-    printf("BSS start: %X, end: %X\r\n", &__bss_start__, &__bss_end__);
     
-    arm_clock = lib_bcm2835_vc_get_clock_rate(BCM2835_VC_CLOCK_ID_ARM);
-    printf("ARM CLOCK  : %d MHz\r\n", (int) arm_clock);
-    int32_t vc_clock = lib_bcm2835_vc_get_clock_rate(BCM2835_VC_CLOCK_ID_CORE);
-    printf("GPU CLOCK  : %d MHz\r\n", (int) vc_clock);
-    int32_t uart_clock = lib_bcm2835_vc_get_clock_rate(BCM2835_VC_CLOCK_ID_UART);
-    printf("UART CLOCK : %d MHz\r\n", (int) uart_clock);
     
     /* Never exit as there is no OS to exit to! */
     while(1)
@@ -47,3 +29,5 @@ void  kernelMain( unsigned int r0, unsigned int r1, unsigned int atags )
       main(0,0); // starting the "normal" main
     }
 }
+
+

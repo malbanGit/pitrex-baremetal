@@ -35,6 +35,8 @@ CINESTATE opINP_A_AA (int opcode)
     fprintf(codefile, "%sregister_A = cmp_new = get_io_shields();\n", cur_tabs);
   } else if ((opcode&0x0F) == 7) {
     fprintf(codefile, "%sregister_A = cmp_new = get_io_startbutton();\n", cur_tabs);
+  } else if ((opcode&0x0F) == 13) {
+    fprintf(codefile, "%sregister_A = cmp_new = get_io_laserstyle();\n", cur_tabs);
   } else {
     fprintf(codefile, "%sregister_A = cmp_new = get_io_bit(0x%01x);\n", cur_tabs, opcode & 0x0F);
   }

@@ -9,7 +9,6 @@
 
 #include <unistd.h>
 #include <stdio.h>
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
 #include "svgalib-vectrex.h"
 #include "vectrextokeyboard.h"
@@ -213,9 +212,6 @@ extern int vga_init(void)
 	  printf("Could Not Initialise Vectrex Connection\n");
 	  return -1;
 	 }
-#ifndef FREESTANDING
-	 v_setName(program_invocation_short_name);
-#endif     
 	 v_init();
 	 svgalib_initialised = 1;
 	}

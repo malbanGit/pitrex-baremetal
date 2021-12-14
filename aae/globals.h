@@ -9,7 +9,7 @@
 #include "dips.h"
 
 
-UINT32 dwElapsedTicks;
+extern UINT32 dwElapsedTicks;
 #define str_eq(s1,s2)  (!strcmp ((s1),(s2))); //Equate string1 and sring2 true is equal
 #define EPSILON 0.0001   // Define your own tolerance
 #define FLOAT_EQ(x,v) (((v - EPSILON) < x) && (x <( v + EPSILON)))
@@ -235,7 +235,7 @@ typedef struct {
 	//int numbertag;
  } glist;                      //Only one gamelist at a time
 
-glist gamelist[256];
+extern glist gamelist[256];
 
 
 typedef struct
@@ -254,9 +254,9 @@ typedef struct
 } GAMEKEYS;
 
 //GAMEKEYS *gamekeys;
-GAMEKEYS *MK;
-GAMEKEYS *GK;
-GAMEKEYS *FOO;
+extern GAMEKEYS *MK;
+extern GAMEKEYS *GK;
+extern GAMEKEYS *FOO;
 
 struct AAEDriver
 {   
@@ -294,31 +294,31 @@ extern struct AAEDriver driver[];
 
 #define MAX_ACPU 4
 //RAM Variables
-unsigned char *membuffer;
-unsigned char vec_ram[0x1fff];
-unsigned char *GI[5]; //Global 6502/Z80/6809 GameImage 
+extern unsigned char *membuffer;
+extern unsigned char vec_ram[0x1fff];
+extern unsigned char *GI[5]; //Global 6502/Z80/6809 GameImage 
 
 //CPU Contexts
-CONTEXTM6502 *c6502[MAX_ACPU];
-CONTEXTMZ80 cMZ80[MAX_ACPU];
+extern CONTEXTM6502 *c6502[MAX_ACPU];
+extern CONTEXTMZ80 cMZ80[MAX_ACPU];
 //struct S68000CONTEXT c68k[MAX_ACPU];
 
-int art_loaded[6];
+extern int art_loaded[6];
 
 //TEMPORARY GRAPHICS GLOBALS
-int msx,msy,esx,esy; //Main full screen adjustments for debug
-int b1sx,b1sy,b2sx,b2sy; //bezel full screen adjustments
-float bezelzoom;
-int bezelx;
-int bezely;
-float overalpha;
-struct game_rect GameRect;
+extern int msx,msy,esx,esy; //Main full screen adjustments for debug
+extern int b1sx,b1sy,b2sx,b2sy; //bezel full screen adjustments
+extern float bezelzoom;
+extern int bezelx;
+extern int bezely;
+extern float overalpha;
+extern struct game_rect GameRect;
 
 //GLOBAL AUDIO VARIABLES
-int gammaticks; //Needed for Pokey Sound for Major Havoc
-int chip;  //FOR POKEY            
-int gain;  //FOR POKEY  
-int BUFFER_SIZE;  //FOR POKEY
+extern int gammaticks; //Needed for Pokey Sound for Major Havoc
+extern int chip;  //FOR POKEY            
+extern int gain;  //FOR POKEY  
+extern int BUFFER_SIZE;  //FOR POKEY
 
 //SAMPLE *game_sounds[60]; //Global Samples
 //AUDIOSTREAM *stream; //Global Streaming Sound 1
@@ -329,42 +329,42 @@ int BUFFER_SIZE;  //FOR POKEY
 
 
 
-int in_gui;
-int frames; //Global Framecounter
-int frameavg;
-int testsw; //testswitch for many games
+extern int in_gui;
+extern int frames; //Global Framecounter
+extern int frameavg;
+extern int testsw; //testswitch for many games
 
 //Shared variable for GUI
 
-int gamenum; //Global Gamenumber (really need this one)
-int have_error; //Global Error handler
-int showinfo; //Global info handler
-int done; //End of emulation indicator
-int paused; //Paused indicator
-double fps_count; //FPS Counter
-int showfps;   //ShowFPS Toggle
-int show_menu; //ShowMenu Toggle
-int showifo; //No clue what this does
-int scalef; //SCALING FACOR FOR RASTER GAMES
-int gamefps; //GAME REQUIRED FPS
-int num_games; //Total number of games ?? needed?
-int num_samples; //Total number of samples for selected game
+extern int gamenum; //Global Gamenumber (really need this one)
+extern int have_error; //Global Error handler
+extern int showinfo; //Global info handler
+extern int done; //End of emulation indicator
+extern int paused; //Paused indicator
+extern double fps_count; //FPS Counter
+extern int showfps;   //ShowFPS Toggle
+extern int show_menu; //ShowMenu Toggle
+extern int showifo; //No clue what this does
+extern int scalef; //SCALING FACOR FOR RASTER GAMES
+extern int gamefps; //GAME REQUIRED FPS
+extern int num_games; //Total number of games ?? needed?
+extern int num_samples; //Total number of samples for selected game
 
 //KEY VARIABLES
-int mouseb[5];
-int WATCHDOG;
-int menulevel;//Top Level
-int menuitem; //TOP VAL
-int key_set_flag;
-int total_length;
+extern int mouseb[5];
+extern int WATCHDOG;
+extern int menulevel;//Top Level
+extern int menuitem; //TOP VAL
+extern int key_set_flag;
+extern int total_length;
 
 //Vector Video Variables
 typedef struct colorsarray {int r,g,b;} colors; 
-colors vec_colors[1024];
+extern colors vec_colors[1024];
 
 //Video VARS
-int sx,ex,sy,ey;
-int testblend;
+extern int sx,ex,sy,ey;
+extern int testblend;
 typedef struct {
   
 char rompath[256];
@@ -471,7 +471,7 @@ int kbleds;
 
 }aae_settings;
 
-aae_settings config;
+extern aae_settings config;
 
 
 #endif

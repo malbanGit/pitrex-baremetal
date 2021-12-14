@@ -825,6 +825,12 @@ void setHighliteItemZero()
 char *fillStringTo(char *s, int upTo)
 {
   int c=0;
+/*  
+  asm __volatile__ ("nop\n" );   \
+  asm __volatile__ ("nop\n" );   \
+  asm __volatile__ ("nop\n" );   \
+  asm __volatile__ ("nop\n" );   \
+*/  
   while (c<upTo)
   {
     if (*(s+c) ==0)
@@ -835,7 +841,6 @@ char *fillStringTo(char *s, int upTo)
     c++;
   }
   return s;
-  
 }
 
 void display_stock_price (int i)
@@ -847,11 +852,15 @@ void display_stock_price (int i)
     y = i * 15 + 55;
 
 //  gfx_display_text (16, y, stock_market[i].name);
+
+
     sprintf (str, "%s", stock_market[i].name);
+
     strcat(str2,str);
+
+
     fillStringTo(str2, 15);
-    
-    
+   
 //  gfx_display_text (180, y, unit_name[stock_market[i].units]);
 //    strcat(str2,unit_name[stock_market[i].units]);
 //    fillStringTo(str2, 12+5);
@@ -869,6 +878,7 @@ void display_stock_price (int i)
         strcpy (str, "-");
 //    gfx_display_text (338, y, str);
     strcat(str2,str);
+
     fillStringTo(str2, 31);
 
     if (cmdr.current_cargo[i] > 0)
@@ -878,6 +888,7 @@ void display_stock_price (int i)
         strcpy (str, "-");
 
 //  gfx_display_text (444, y, str);
+
     strcat(str2,str);
 //           "01234567890123456789012345678901234567890"    
 //    strcat("PRODUCT      UNIT PRICE  FOR SALE IN HOLD", str);
@@ -983,7 +994,8 @@ void sell_stock (void)
 
 void display_market_prices (void)
 {
-    char str[100];
+  
+  char str[100];
     char planet_name[16];
     int i;
 
@@ -1023,6 +1035,7 @@ void display_market_prices (void)
 //  gfx_display_colour_text (314, 40, "FOR SALE", GFX_COL_GREEN_1);
 //  gfx_display_colour_text (420, 40, "IN HOLD", GFX_COL_GREEN_1);
 
+    
     defaultDisplayList.itemCount=0;
     for (i = 0; i < 17; i++)
     {
@@ -1041,6 +1054,7 @@ void display_market_prices (void)
     gfx_display_text (16, 340, str);
     
     hilite_item = defaultDisplayList.currentMainItem;
+  
 }
 
 

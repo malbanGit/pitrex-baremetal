@@ -1,0 +1,1607 @@
+commentline A1CE =============== S U B R O U T I N E =======================================
+comment A1CE Tie fighter data 1
+comment A1D7 Tie fighter data 1
+comment A206 Temporary score adder towers 1
+comment A20C Temporary score adder towers 3
+commentline A213 End of function sub_A1CE
+commentline A214 =============== S U B R O U T I N E =======================================
+comment A218 Trench left side turret calcs
+comment A21E XT2
+comment A221 YT2
+comment A224 ZT2
+comment A227 Some Towers code
+comment A22D XT2
+comment A233 YT2
+comment A239 ZT2
+comment A24F Pointer to Tie fighter data
+comment A271 Do math program run
+comment A274 Math result X
+comment A27B Math result X
+comment A28D Math result Y
+comment A296 Math result X
+comment A29B Tie fighter data 1
+commentline A2B0 ---------------------------------------------------------------------------
+comment A2B0 Pointer to Tie fighter data
+comment A2B2 Tie fighter data 1
+commentline A2C2 ---------------------------------------------------------------------------
+commentline A2D6 ---------------------------------------------------------------------------
+comment A2ED Pointer to Tie fighter data
+commentline A2F7 End of function sub_A214
+commentline A2F8 =============== S U B R O U T I N E =======================================
+comment A2F8 Pointer to Tie fighter data
+commentline A304 ---------------------------------------------------------------------------
+comment A30E Tie fighter data 1
+commentline A32E ---------------------------------------------------------------------------
+commentline A333 ---------------------------------------------------------------------------
+commentline A33C ---------------------------------------------------------------------------
+comment A347 Math result X
+comment A360 Math result X
+comment A36D Shield count
+comment A374 Math result X
+comment A38B Shield count
+comment A392 Explosion
+comment A399 Math result Y
+commentline A3A7 ---------------------------------------------------------------------------
+comment A3A7 ZT2
+comment A3B2 Pointer to Tie fighter data
+comment A3B4 Tie fighter data 1
+comment A3C1 ZT2
+comment A3C9 Math result X
+comment A3DA Shield count
+comment A3E1 Explosion
+comment A3EA Math result Y
+comment A3F4 Math result X
+commentline A400 ---------------------------------------------------------------------------
+comment A403 Function select for an object
+comment A406 Some Towers code
+commentline A409 End of function sub_A2F8
+commentline A40A =============== S U B R O U T I N E =======================================
+commentline A40A Some Towers code
+comment A40A Swap Matrix 2  x, y, z to  x, y, z
+comment A420 Point BIC to $5078 MReg3C
+comment A423 *      ; Reg00 = (([BIC,0] - XT) x Ax2)  +  (([BIC,1] - YT) x Bx2)  +  (([BIC,2] - ZT) x Cx2)
+comment A423 Reg01 = (([BIC,0] - XT) x Ay2)  +  (([BIC,1] - YT) x By2)  +  (([BIC,2] - ZT) x Cy2)
+comment A423 Reg02 = (([BIC,0] - XT) x Az2)  +  (([BIC,1] - YT) x Bz2)  +  (([BIC,2] - ZT) x Cz2)
+comment A423 BIC++
+comment A425 Do math program run
+comment A428 Math result Y
+comment A42E Math result Z
+comment A449 Math result Z
+comment A455 Called during towers phase only
+commentline A458 End of function sub_A40A
+commentline A459 =============== S U B R O U T I N E =======================================
+commentline A459 Some Towers code
+comment A459 Pointer to Tie fighter data
+comment A465 YT2
+comment A468 Math result Y
+comment A46E ZT2
+comment A471 Math result Z
+comment A477 Math result X
+comment A47A MReg02 = MReg02 x MReg00
+comment A47C Do math program run
+comment A47F Math result Y
+comment A482 YT
+comment A485 Math result Z
+comment A488 ZT
+comment A494 Math result Y
+comment A49A Math result Z
+commentline A49F ---------------------------------------------------------------------------
+comment A49F Tie fighter data 1
+comment A4B1 Math result Y
+comment A4B7 Math result Z
+comment A4BA Math result X
+comment A4C5 Math result X
+comment A4C8 MReg02 = MReg02 x MReg00
+comment A4CA Do math program run
+comment A4CD YT
+comment A4D0 Math result Y
+comment A4E2 Math result Y
+comment A4EC ZT
+comment A4F1 Math result Z
+commentline A50A ---------------------------------------------------------------------------
+comment A50D Math result Y
+comment A510 MReg02 = MReg02 x MReg00
+comment A512 Do math program run
+comment A51B ZT
+comment A51E Math result Y
+comment A523 Tie fighter data 1
+commentline A53E ---------------------------------------------------------------------------
+commentline A54A End of function sub_A459
+commentline A54B ---------------------------------------------------------------------------
+commentline A54B START OF FUNCTION CHUNK FOR sub_B2D2
+comment A557 XT
+comment A55C YT
+comment A55F Tie fighter data 1
+comment A575 ZT
+comment A57B Laser tower score
+commentline A580 ---------------------------------------------------------------------------
+comment A583 ZT
+comment A589 Towers incrementing score
+commentline A58F END OF FUNCTION CHUNK FOR sub_B2D2
+commentline A58F ---------------------------------------------------------------------------
+commentline A591 =============== S U B R O U T I N E =======================================
+commentline A591 FUNCTION CHUNK AT ROM:A728 SIZE 0000008E BYTES
+comment A591 Shield count
+comment A595 Pointer to Tie fighter data
+comment A597 Tie fighter data 1
+commentline A5B2 ---------------------------------------------------------------------------
+commentline A5B3 ---------------------------------------------------------------------------
+comment A5BB Math result X
+comment A5C1 Math result Z
+comment A5C7 Math result Y
+comment A5CA MReg02 = MReg02 x MReg00
+comment A5CC Do math program run
+comment A5CF Math result Z
+comment A5D2 ZT2
+commentline A5DE ---------------------------------------------------------------------------
+comment A5DE Math result Y
+comment A5F4 Emit fireballs from towers/bunkers
+comment A5FC Emit fireballs from towers/bunkers 2
+commentline A608 ---------------------------------------------------------------------------
+comment A610 Math result X
+comment A616 Math result Z
+comment A61C Math result Y
+comment A61F MReg02 = MReg02 x MReg00
+comment A621 Do math program run
+comment A624 Math result Z
+comment A627 ZT2
+commentline A633 ---------------------------------------------------------------------------
+comment A633 Math result Y
+comment A649 Emit fireballs from towers/bunkers 2
+commentline A655 ---------------------------------------------------------------------------
+commentline A669 ---------------------------------------------------------------------------
+commentline A671 ---------------------------------------------------------------------------
+commentline A674 ---------------------------------------------------------------------------
+commentline A674 End of function sub_A591
+commentline A674 ---------------------------------------------------------------------------
+commentline A68B =============== S U B R O U T I N E =======================================
+commentline A68B Emit fireballs from tie fighters
+comment A68B Fireball data pointer
+commentline A6C7 End of function sub_A68B
+commentline A6C7 ---------------------------------------------------------------------------
+commentline A6E0 =============== S U B R O U T I N E =======================================
+commentline A6E0 Emit fireballs from towers 4
+commentline A6EC ---------------------------------------------------------------------------
+commentline A6F2 End of function sub_A6E0
+commentline A6F4 =============== S U B R O U T I N E =======================================
+commentline A703 End of function sub_A6F4
+commentline A705 =============== S U B R O U T I N E =======================================
+commentline A705 Emit fireballs from towers 3
+comment A705 6x Fireball data structure 2 ($6 bytes per fireball)
+comment A708 Fireball data pointer
+comment A710 6x Fireball data structure 2 ($6 bytes per fireball)
+comment A715 Do not return to last function call ?
+commentline A717 End of function sub_A705
+commentline A717 ---------------------------------------------------------------------------
+commentline A728 ---------------------------------------------------------------------------
+commentline A728 START OF FUNCTION CHUNK FOR sub_A591
+comment A728 Emit fireballs from towers 4
+comment A733 Pointer to Tie fighter data
+commentline A742 ---------------------------------------------------------------------------
+comment A786 Joystick X
+commentline A790 ---------------------------------------------------------------------------
+comment A790 Joystick X
+commentline A79E ---------------------------------------------------------------------------
+commentline A7AE ---------------------------------------------------------------------------
+commentline A7B5 END OF FUNCTION CHUNK FOR sub_A591
+commentline A7B6 =============== S U B R O U T I N E =======================================
+commentline A7B6 Emit fireballs from towers/bunkers
+commentline A7B6 FUNCTION CHUNK AT ROM:A7D1 SIZE 0000000E BYTES
+comment A7B6 Emit fireballs from towers 3
+commentline A7BD End of function sub_A7B6
+commentline A7BF =============== S U B R O U T I N E =======================================
+comment A7BF Emit fireballs from towers 3
+commentline A7C6 End of function sub_A7BF
+commentline A7C8 =============== S U B R O U T I N E =======================================
+commentline A7C8 Emit fireballs from towers/bunkers 2
+comment A7C8 Emit fireballs from towers 3
+commentline A7CF End of function sub_A7C8
+commentline A7D1 START OF FUNCTION CHUNK FOR sub_A7B6
+comment A7D9 Pointer to Tie fighter data
+commentline A7DD END OF FUNCTION CHUNK FOR sub_A7B6
+commentline A7DF =============== S U B R O U T I N E =======================================
+comment A7EE ZT2
+commentline A7F6 End of function sub_A7DF
+commentline A7F7 =============== S U B R O U T I N E =======================================
+comment A7FB Emit fireballs from towers 3
+commentline A800 ---------------------------------------------------------------------------
+commentline A809 End of function sub_A7F7
+commentline A80B =============== S U B R O U T I N E =======================================
+comment A80F Emit fireballs from towers 3
+commentline A814 ---------------------------------------------------------------------------
+commentline A848 End of function sub_A80B
+commentline A849 =============== S U B R O U T I N E =======================================
+commentline A849 Fireball movement
+comment A849 6x Fireball data structure 2 ($6 bytes per fireball)
+comment A84C Fireball data pointer
+comment A85C Fireball movement processing
+commentline A860 ---------------------------------------------------------------------------
+comment A861 Fireball data pointer
+comment A865 6x Fireball data structure 2 ($6 bytes per fireball)
+commentline A86A End of function sub_A849
+commentline A86B =============== S U B R O U T I N E =======================================
+commentline A874 End of function sub_A86B
+commentline A875 =============== S U B R O U T I N E =======================================
+commentline A880 ---------------------------------------------------------------------------
+commentline A8A6 End of function sub_A875
+commentline A8A7 =============== S U B R O U T I N E =======================================
+commentline A8B2 ---------------------------------------------------------------------------
+commentline A8D6 ---------------------------------------------------------------------------
+commentline A8D9 End of function sub_A8A7
+commentline A8DA =============== S U B R O U T I N E =======================================
+commentline A8DA Some towers processing
+commentline A8E6 ---------------------------------------------------------------------------
+commentline A8F9 ---------------------------------------------------------------------------
+commentline A90C ---------------------------------------------------------------------------
+commentline A920 ---------------------------------------------------------------------------
+commentline A933 ---------------------------------------------------------------------------
+commentline A946 ---------------------------------------------------------------------------
+commentline A978 ---------------------------------------------------------------------------
+comment A978 Shift D register right
+commentline A9A3 ---------------------------------------------------------------------------
+comment A9C5 Shift D register right
+commentline A9D5 ---------------------------------------------------------------------------
+commentline AA00 ---------------------------------------------------------------------------
+commentline AA23 ---------------------------------------------------------------------------
+commentline AA7D ---------------------------------------------------------------------------
+commentline AA85 End of function sub_A8DA
+commentline AA86 =============== S U B R O U T I N E =======================================
+commentline AA86 Exhaust port processing
+commentline AAA5 ---------------------------------------------------------------------------
+commentline AAB3 End of function sub_AA86
+commentline AAB5 =============== S U B R O U T I N E =======================================
+commentline AAD4 ---------------------------------------------------------------------------
+commentline AAE2 End of function sub_AAB5
+commentline AAE4 =============== S U B R O U T I N E =======================================
+commentline AAE4 Fireball processing
+comment AAE4 6x Fireball data structure 2 ($6 bytes per fireball)
+comment AAE7 Fireball data pointer
+comment AAF3 Shield lost by fireball animation
+commentline AAF9 ---------------------------------------------------------------------------
+comment AB00 XT2
+comment AB06 YT2
+comment AB0C ZT2
+commentline AB11 ---------------------------------------------------------------------------
+comment AB14 XT2
+comment AB17 YT2
+comment AB1A ZT2
+comment AB25 Do math program run
+comment AB28 Math result X
+comment AB3E XT
+comment AB41 Math result Y
+comment AB44 YT
+comment AB4D Math result X
+comment AB54 Math result Z
+comment AB57 ZT
+comment AB60 Math result X
+comment AB67 Get divider result and multiply by Math result Z, insert VCTR instruction
+comment AB6A Fireball data pointer
+comment AB75 Math result Y
+comment AB78 Reg02 = Reg02 x Reg00
+comment AB7A Do math program run
+comment AB7D Math result Y
+comment ABB2 XT
+comment ABBC Fireball data pointer
+comment ABC6 XT
+commentline ABDB ---------------------------------------------------------------------------
+commentline ABF0 ---------------------------------------------------------------------------
+commentline AC00 ---------------------------------------------------------------------------
+comment AC0D Fireball destroyed
+comment AC10 Fireball data pointer
+commentline AC14 ---------------------------------------------------------------------------
+comment AC14 Shield lost by fireball hit
+comment AC1C Shield lost by fireball animation
+commentline AC22 ---------------------------------------------------------------------------
+comment AC22 Fireball animation
+commentline AC27 ---------------------------------------------------------------------------
+commentline AC31 ---------------------------------------------------------------------------
+comment AC34 Fireball data pointer
+comment AC38 Check for all 6 fireball slots
+comment AC42 XT2
+comment AC48 YT2
+comment AC4E ZT2
+commentline AC51 End of function sub_AAE4
+commentline AC52 =============== S U B R O U T I N E =======================================
+commentline AC52 Fireball animation
+comment AC52 Fireball data pointer
+comment AC58 XT
+commentline AC7C ---------------------------------------------------------------------------
+commentline AC8A ---------------------------------------------------------------------------
+commentline ACB0 End of function sub_AC52
+commentline ACB1 =============== S U B R O U T I N E =======================================
+commentline ACB1 Shield lost by fireball animation
+comment ACB1 Fireball data pointer
+commentline ACDF End of function sub_ACB1
+commentline ACE0 =============== S U B R O U T I N E =======================================
+commentline ACE0 Shield lost by fireball hit
+comment AD13 Shield count
+commentline AD1F End of function sub_ACE0
+commentline AD20 =============== S U B R O U T I N E =======================================
+commentline AD20 Fireball destroyed
+comment AD37 Fireball score
+commentline AD3D End of function sub_AD20
+commentline AD3E =============== S U B R O U T I N E =======================================
+comment AD54 6x Fireball data structure 2 ($6 bytes per fireball)
+comment AD59 Fireball destroyed
+comment AD60 6x Fireball data structure 2 ($6 bytes per fireball)
+commentline AD6B End of function sub_AD3E
+commentline AD6C =============== S U B R O U T I N E =======================================
+commentline ADA3 ---------------------------------------------------------------------------
+commentline ADAE End of function sub_AD6C
+commentline ADAF =============== S U B R O U T I N E =======================================
+commentline ADBA End of function sub_ADAF
+commentline ADBD =============== S U B R O U T I N E =======================================
+commentline ADD3 End of function sub_ADBD
+commentline ADD4 =============== S U B R O U T I N E =======================================
+comment ADD4 Point BIC to $5078 MReg3C
+comment ADDC Do math program run
+comment ADDF Math result X
+comment ADEB Math result X
+comment ADF7 XT
+comment ADFA Math result Y
+comment AE03 Math result X
+comment AE08 Math result Z
+comment AE11 Math result X
+comment AE19 Math result X
+comment AE1C Reg02 = Reg02 x Reg00
+comment AE1E Do math program run
+comment AE21 Math result Z
+comment AE2B Math result Y
+comment AE3B XT
+commentline AE5F End of function sub_ADD4
+commentline AE60 =============== S U B R O U T I N E =======================================
+commentline AE6E ---------------------------------------------------------------------------
+commentline AEBC End of function sub_AE60
+commentline AEBD =============== S U B R O U T I N E =======================================
+commentline AEC4 ---------------------------------------------------------------------------
+commentline AF86 End of function sub_AEBD
+commentline AF87 =============== S U B R O U T I N E =======================================
+commentline AF9A ---------------------------------------------------------------------------
+commentline B006 ---------------------------------------------------------------------------
+commentline B04E End of function sub_AF87
+commentline B04E ---------------------------------------------------------------------------
+commentline B071 =============== S U B R O U T I N E =======================================
+comment B086 Fireball destroyed
+commentline B094 End of function sub_B071
+commentline B095 =============== S U B R O U T I N E =======================================
+comment B098 XT2
+comment B0A7 YT2
+comment B0B6 ZT2
+comment B0C7 ZT2
+comment B0D1 YT2
+comment B0D4 Math result Y
+comment B0D9 XT2
+comment B0DC Math result Z
+comment B0E2 Math result X
+comment B0E5 Reg02 = Reg02 x Reg00
+comment B0E7 Do math program run
+comment B0EC Math result Y
+commentline B0F9 ---------------------------------------------------------------------------
+comment B103 Math result Z
+comment B11A XT2
+commentline B158 ---------------------------------------------------------------------------
+comment B16A YT2
+comment B174 ZT2
+comment B177 Math result Z
+comment B17C XT2
+comment B17F Math result Y
+comment B185 Math result X
+comment B188 Reg02 = Reg02 x Reg00
+comment B18A Do math program run
+comment B18F Math result Z
+commentline B19E ---------------------------------------------------------------------------
+comment B1AF Math result Y
+comment B1C6 XT2
+commentline B1E3 ---------------------------------------------------------------------------
+comment B1ED YT2
+comment B1F5 ZT2
+comment B1F8 Math result Z
+comment B1FD XT2
+comment B200 Math result Y
+comment B206 Math result X
+comment B209 Reg02 = Reg02 x Reg00
+comment B20B Do math program run
+comment B210 Math result Z
+commentline B21D ---------------------------------------------------------------------------
+comment B22C Math result Y
+comment B243 XT2
+commentline B260 ---------------------------------------------------------------------------
+commentline B261 ---------------------------------------------------------------------------
+commentline B266 ---------------------------------------------------------------------------
+commentline B292 ---------------------------------------------------------------------------
+commentline B29C ---------------------------------------------------------------------------
+comment B2B9 Trench green squares score
+commentline B2C1 ---------------------------------------------------------------------------
+comment B2CB Trench turrets score
+commentline B2D1 End of function sub_B095
+commentline B2D2 =============== S U B R O U T I N E =======================================
+commentline B2D2 FUNCTION CHUNK AT ROM:A54B SIZE 00000045 BYTES
+comment B2DE Fireball destroyed
+commentline B2E3 ---------------------------------------------------------------------------
+commentline B2E4 ---------------------------------------------------------------------------
+commentline B2F8 ---------------------------------------------------------------------------
+commentline B307 ---------------------------------------------------------------------------
+commentline B32A End of function sub_B2D2
+commentline B32B =============== S U B R O U T I N E =======================================
+commentline B32B FUNCTION CHUNK AT ROM:8ACF SIZE 0000009E BYTES
+commentline B339 ---------------------------------------------------------------------------
+commentline B33E ---------------------------------------------------------------------------
+comment B342 Fireball destroyed
+commentline B345 ---------------------------------------------------------------------------
+commentline B349 End of function sub_B32B
+commentline B349 ---------------------------------------------------------------------------
+commentline B3E4 =============== S U B R O U T I N E =======================================
+commentline B3E7 End of function sub_B3E4
+commentline B3E9 =============== S U B R O U T I N E =======================================
+comment B3FA Trench left side turret calcs
+comment B404 Trench right side turret calcs
+comment B414 Trench left side turret calcs
+comment B41E Trench right side turret calcs
+comment B42E Trench left side turret calcs
+comment B438 Trench right side turret calcs
+commentline B43E End of function sub_B3E9
+commentline B43F =============== S U B R O U T I N E =======================================
+comment B43F Trench
+comment B44F XT2
+comment B45B Pointer to Tie fighter data
+comment B45D XT2
+comment B475 Pointer to Tie fighter data
+comment B481 Pointer to Tie fighter data
+comment B491 Point BIC to $5078 MReg3C
+comment B499 Do math program run
+comment B4B8 XT2
+comment B4C7 Math result X
+comment B4CF YT2
+comment B4DA ZT2
+comment B4E7 XT2
+comment B4F3 Shield count
+comment B4FA Explosion
+comment B50B Trench calcs
+commentline B510 ---------------------------------------------------------------------------
+comment B513 Function select for an object
+comment B52D Pointer to Tie fighter data
+commentline B53D ---------------------------------------------------------------------------
+comment B56E XT2
+commentline B578 End of function sub_B43F
+commentline B579 =============== S U B R O U T I N E =======================================
+comment B589 XT2
+comment B595 Pointer to Tie fighter data
+comment B597 XT2
+comment B5AF Pointer to Tie fighter data
+comment B5BB Pointer to Tie fighter data
+comment B5CE Point BIC to $5078 MReg3C
+comment B5D3 Do math program run
+comment B5F2 XT2
+comment B601 Math result X
+comment B609 YT2
+comment B614 ZT2
+comment B621 XT2
+comment B62D Shield count
+comment B634 Explosion
+comment B645 Trench calcs
+commentline B64A ---------------------------------------------------------------------------
+comment B64D Function select for an object
+comment B667 Pointer to Tie fighter data
+commentline B677 ---------------------------------------------------------------------------
+comment B6A8 XT2
+commentline B6B2 End of function sub_B579
+commentline B6B2 ---------------------------------------------------------------------------
+commentline B6B9 =============== S U B R O U T I N E =======================================
+commentline B6B9 Insert vector instructions at joystick position for laser explosion 2
+comment B6BC Insert vector instructions at joystick position for laser explosion
+commentline B6BF End of function sub_B6B9
+commentline B6C0 =============== S U B R O U T I N E =======================================
+commentline B6C0 Insert vector instructions at joystick position for laser explosion 3
+comment B6C3 Insert vector instructions at joystick position for laser explosion
+commentline B6C6 End of function sub_B6C0
+commentline B6C7 =============== S U B R O U T I N E =======================================
+commentline B6CA End of function sub_B6C7
+commentline B6CC =============== S U B R O U T I N E =======================================
+commentline B6D6 End of function sub_B6CC
+commentline B6D7 =============== S U B R O U T I N E =======================================
+commentline B6D7 Insert vector instructions at joystick position for laser explosion
+comment B6D7 Joystick X
+comment B6DF Joystick X
+comment B6F8 Joystick Y
+comment B700 Joystick Y
+commentline B738 End of function sub_B6D7
+commentline B739 =============== S U B R O U T I N E =======================================
+commentline B747 End of function sub_B739
+commentline B747 ---------------------------------------------------------------------------
+commentline B76C =============== S U B R O U T I N E =======================================
+comment B77E Shift D register right
+comment B78C Shift D register right
+comment B79A Shift D register right
+comment B7B3 Shift D register right
+comment B7BE Shift D register right
+comment B7C9 Shift D register right
+commentline B7FE ---------------------------------------------------------------------------
+commentline B80C ---------------------------------------------------------------------------
+commentline B83E End of function sub_B76C
+commentline B83F =============== S U B R O U T I N E =======================================
+commentline B851 End of function sub_B83F
+commentline B852 =============== S U B R O U T I N E =======================================
+commentline B85C End of function sub_B852
+commentline B85E =============== S U B R O U T I N E =======================================
+comment B873 XT
+comment B878 YT
+comment B87F ZT
+comment B889 XT
+comment B88C Shift D register right
+comment B899 YT
+comment B89C Shift D register right
+comment B8B9 XT
+comment B8C0 YT
+comment B8C5 ZT
+comment B8CF XT
+comment B8D2 Shift D register right
+comment B8DD YT
+comment B8E0 Shift D register right
+comment B8FD XT
+comment B902 YT
+comment B909 ZT
+comment B913 XT
+comment B916 Shift D register right
+comment B923 YT
+comment B926 Shift D register right
+comment B92E Game over/insert coins timer
+commentline B938 End of function sub_B85E
+commentline B939 =============== S U B R O U T I N E =======================================
+comment B939 3D Object state data 2. 8 slots of 14 bytes
+comment B93E Free up object state slot
+comment B942 3D Object state data 2. 8 slots of 14 bytes
+commentline B947 End of function sub_B939
+commentline B948 =============== S U B R O U T I N E =======================================
+comment B948 3D Object slot select
+comment B951 3D Object slot select
+comment B956 3D Object state data 2. 8 slots of 14 bytes
+commentline B95B End of function sub_B948
+commentline B95C ---------------------------------------------------------------------------
+commentline B95C START OF FUNCTION CHUNK FOR sub_B98B
+comment B95F Sine for rotation
+comment B965 Cosine for rotation
+comment B96B Point BIC to $50C0
+comment B96E Roll
+comment B970 Do math program run
+comment B976 Sine for rotation
+comment B97C Cosine for rotation
+comment B982 Point BIC to $50C0
+comment B985 Pitch
+comment B987 Do math program run
+commentline B98A END OF FUNCTION CHUNK FOR sub_B98B
+commentline B98B =============== S U B R O U T I N E =======================================
+commentline B98B Check if tie/bunker/tower been hit
+commentline B98B FUNCTION CHUNK AT ROM:B95C SIZE 0000002F BYTES
+comment B98B 3D Object state data 2. 8 slots of 14 bytes
+comment B990 If object state slot active then
+comment B9A3 3D Object state data 2. 8 slots of 14 bytes
+comment B9A6 Loop until all 3D Object states processed
+comment B9A8 3D Object state data 2. 8 slots of 14 bytes
+commentline B9B2 ---------------------------------------------------------------------------
+comment B9B4 3D Object state data 2. 8 slots of 14 bytes
+comment B9BC Initialise math registers matrix
+commentline B9BF End of function sub_B98B
+commentline B9C0 =============== S U B R O U T I N E =======================================
+comment B9CB Shift D register right
+comment B9DD Shift D register right
+commentline B9F8 End of function sub_B9C0
+commentline B9F9 =============== S U B R O U T I N E =======================================
+commentline BA11 End of function sub_B9F9
+commentline BA12 =============== S U B R O U T I N E =======================================
+commentline BA12 Process tie/tower/bunker explosions
+comment BA12 BIC points to $50C0
+comment BA14 Run math program $80 Copy [BIC] to Matrix 3
+comment BA17 @      ; Matrix 1 = Matrix 2 x Matrix 3
+comment BA19 Do math program run
+comment BA1C 3D Object state data 2. 8 slots of 14 bytes
+comment BA1F Pointer to Tie fighter data
+comment BA25 Tie/bunker/tower hit explosion
+comment BA28 Pointer to Tie fighter data
+comment BA2C 3D Object state data 2. 8 slots of 14 bytes
+commentline BA31 End of function sub_BA12
+commentline BA32 =============== S U B R O U T I N E =======================================
+comment BA44 Point BIC to $5078 MReg3C
+comment BA49 Do math program run
+comment BA4C Math result X
+comment BA4F If object behind observer then remove
+comment BA51 XT
+comment BA57 Math result Y
+comment BA5A YT
+comment BA63 XT
+comment BA66 Remove object if outside visible limit
+comment BA68 Math result Z
+comment BA6B ZT
+comment BA76 XT
+comment BA79 Remove object if outside visible limit
+comment BA82 Tie/bunker/tower fragments table
+comment BA86 Work out which colour for tie/bunker/ tower fragments
+comment BA88 Copy object 3D data to math ram
+comment BA8B Do 3D object transform using Matrix 1
+comment BA8E Format vectors for ties, and tower/bunker explosions
+comment BA96 Insert vector CNTR instruction
+commentline BA9D ---------------------------------------------------------------------------
+comment BA9D Remove/clear object state flag
+commentline BA9F End of function sub_BA32
+commentline BAA0 =============== S U B R O U T I N E =======================================
+commentline BAA4 ---------------------------------------------------------------------------
+commentline BAA8 ---------------------------------------------------------------------------
+commentline BAAC ---------------------------------------------------------------------------
+commentline BAB0 ---------------------------------------------------------------------------
+commentline BAB4 ---------------------------------------------------------------------------
+comment BABA g      ; Tower fragments colour
+commentline BABE ---------------------------------------------------------------------------
+comment BAC0 d      ; Bunker fragments colour
+commentline BACE ---------------------------------------------------------------------------
+comment BAE5 Point BIC to $5078 MReg3C
+comment BAE8 ZT
+comment BAED YT
+comment BAF0 XT
+comment BAF5 Do math program run
+comment BAF8 XT
+comment BAFB YT
+comment BB00 ZT
+comment BB03 Math result X
+comment BB06 Do division
+comment BB09 Get divider result and multiply by Math result Z, insert VCTR instruction
+comment BB0C r      ; Vector SCAL instruction
+comment BB0E XT
+commentline BB15 End of function sub_BAA0
+commentline BB16 =============== S U B R O U T I N E =======================================
+commentline BB18 End of function sub_BB16
+commentline BB1A =============== S U B R O U T I N E =======================================
+commentline BB1C End of function sub_BB1A
+commentline BB1E =============== S U B R O U T I N E =======================================
+comment BB28 Tie fighter hit colour cycle table
+commentline BB2D End of function sub_BB1E
+commentline BB2F =============== S U B R O U T I N E =======================================
+commentline BB2F Tie fighter hit colour cycle table
+comment BB37 Get divider result and multiply by Math result Z, insert VCTR instruction
+commentline BB3A End of function sub_BB2F
+commentline BB3A ---------------------------------------------------------------------------
+commentline BB7B =============== S U B R O U T I N E =======================================
+comment BB7D Death Star explosion state
+commentline BB84 End of function sub_BB7B
+commentline BB85 =============== S U B R O U T I N E =======================================
+commentline BB85 Death Star explosion animation
+comment BB85 Death Star explosion state
+commentline BB8D End of function sub_BB85
+commentline BB8D ---------------------------------------------------------------------------
+commentline BB98 =============== S U B R O U T I N E =======================================
+comment BBB5 Death Star explosion state
+commentline BBBA End of function sub_BB98
+commentline BBBB =============== S U B R O U T I N E =======================================
+comment BC18 Death Star explosion state
+commentline BC1D End of function sub_BBBB
+commentline BC1E =============== S U B R O U T I N E =======================================
+comment BC7F Death Star explosion state
+commentline BC84 End of function sub_BC1E
+commentline BC85 =============== S U B R O U T I N E =======================================
+commentline BCA9 ---------------------------------------------------------------------------
+comment BCAB Death Star explosion state
+commentline BCAD End of function sub_BC85
+commentline BCAE =============== S U B R O U T I N E =======================================
+commentline BCC7 End of function sub_BCAE
+commentline BCC8 =============== S U B R O U T I N E =======================================
+commentline BCE8 End of function sub_BCC8
+commentline BCE9 ---------------------------------------------------------------------------
+commentline BCE9 START OF FUNCTION CHUNK FOR Sound_3
+commentline BCF8 END OF FUNCTION CHUNK FOR Sound_3
+commentline BCF9 =============== S U B R O U T I N E =======================================
+commentline BCFB End of function Sound_1
+commentline BCFE =============== S U B R O U T I N E =======================================
+commentline BD00 End of function Sound_2
+commentline BD03 =============== S U B R O U T I N E =======================================
+commentline BD03 Attributes: noreturn
+commentline BD03 FUNCTION CHUNK AT ROM:BCE9 SIZE 00000010 BYTES
+commentline BD05 End of function Sound_3
+commentline BD08 =============== S U B R O U T I N E =======================================
+commentline BD0A End of function Sound_4
+commentline BD0D =============== S U B R O U T I N E =======================================
+commentline BD0F End of function Sound_5
+commentline BD12 =============== S U B R O U T I N E =======================================
+commentline BD14 End of function Sound_6
+commentline BD17 =============== S U B R O U T I N E =======================================
+commentline BD19 End of function Sound_7
+commentline BD1C =============== S U B R O U T I N E =======================================
+commentline BD1E End of function Sound_8
+commentline BD21 =============== S U B R O U T I N E =======================================
+commentline BD23 End of function Sound_9
+commentline BD26 =============== S U B R O U T I N E =======================================
+commentline BD28 End of function Sound_A
+commentline BD2B =============== S U B R O U T I N E =======================================
+commentline BD2D End of function Sound_B
+commentline BD30 =============== S U B R O U T I N E =======================================
+commentline BD32 End of function Sound_C
+commentline BD35 =============== S U B R O U T I N E =======================================
+commentline BD37 End of function Sound_D
+commentline BD3A =============== S U B R O U T I N E =======================================
+commentline BD3C End of function Sound_E
+commentline BD3F =============== S U B R O U T I N E =======================================
+commentline BD41 End of function Sound_F
+commentline BD44 =============== S U B R O U T I N E =======================================
+commentline BD46 End of function Sound_10
+commentline BD49 =============== S U B R O U T I N E =======================================
+commentline BD49 Remember
+commentline BD4B End of function Sound_11
+commentline BD4E =============== S U B R O U T I N E =======================================
+commentline BD50 End of function Sound_12
+commentline BD53 =============== S U B R O U T I N E =======================================
+commentline BD53 Look at the size of that thing
+commentline BD55 End of function Sound_13
+commentline BD58 =============== S U B R O U T I N E =======================================
+commentline BD58 Stay in attack formation
+commentline BD5A End of function Sound_14
+commentline BD5D =============== S U B R O U T I N E =======================================
+commentline BD5F End of function Sound_15
+commentline BD62 =============== S U B R O U T I N E =======================================
+commentline BD62 Force is strong in this one
+commentline BD64 End of function Sound_16
+commentline BD67 =============== S U B R O U T I N E =======================================
+commentline BD67 Red 5 Im going in
+commentline BD69 End of function Sound_17
+commentline BD6C =============== S U B R O U T I N E =======================================
+commentline BD6C Luke trust me
+commentline BD6E End of function Sound_18
+commentline BD71 =============== S U B R O U T I N E =======================================
+commentline BD73 End of function Sound_19
+commentline BD76 =============== S U B R O U T I N E =======================================
+commentline BD76 Yahoo youre all clear kid
+commentline BD78 End of function Sound_1A
+commentline BD7B =============== S U B R O U T I N E =======================================
+commentline BD7B High score
+commentline BD7D End of function Sound_1B
+commentline BD80 =============== S U B R O U T I N E =======================================
+commentline BD82 End of function Sound_1C
+commentline BD85 =============== S U B R O U T I N E =======================================
+commentline BD85 Imperial March
+commentline BD87 End of function Sound_1D
+commentline BD8A =============== S U B R O U T I N E =======================================
+commentline BD8A Enter Death Star
+commentline BD8C End of function Sound_1E
+commentline BD8F =============== S U B R O U T I N E =======================================
+commentline BD8F Death Star destroyed
+commentline BD91 End of function Sound_1F
+commentline BD94 =============== S U B R O U T I N E =======================================
+commentline BD94 Towers 1 music
+commentline BD96 End of function Sound_20
+commentline BD99 =============== S U B R O U T I N E =======================================
+commentline BD99 Towers 2 music
+commentline BD9B End of function Sound_21
+commentline BD9E =============== S U B R O U T I N E =======================================
+commentline BD9E Trench music
+commentline BDA0 End of function Sound_22
+commentline BDA3 =============== S U B R O U T I N E =======================================
+commentline BDA5 End of function Sound_23
+commentline BDA8 =============== S U B R O U T I N E =======================================
+commentline BDA8 Space wave 1 music
+commentline BDAA End of function Sound_24
+commentline BDAD =============== S U B R O U T I N E =======================================
+commentline BDAD Space Wave 2 music
+commentline BDAF End of function Sound_25
+commentline BDB2 =============== S U B R O U T I N E =======================================
+commentline BDB2 Explosion
+commentline BDB4 End of function Sound_26
+commentline BDB7 =============== S U B R O U T I N E =======================================
+commentline BDB9 End of function Sound_27
+commentline BDBC =============== S U B R O U T I N E =======================================
+commentline BDBE End of function Sound_28
+commentline BDC1 =============== S U B R O U T I N E =======================================
+commentline BDC3 End of function Sound_29
+commentline BDC6 =============== S U B R O U T I N E =======================================
+commentline BDC8 End of function Sound_2A
+commentline BDCB =============== S U B R O U T I N E =======================================
+commentline BDCD End of function Sound_2B
+commentline BDD0 =============== S U B R O U T I N E =======================================
+commentline BDD2 End of function Sound_2C
+commentline BDD5 =============== S U B R O U T I N E =======================================
+commentline BDD7 End of function Sound_2D
+commentline BDDA =============== S U B R O U T I N E =======================================
+commentline BDDC End of function Sound_2E
+commentline BDDF =============== S U B R O U T I N E =======================================
+commentline BDE1 End of function Sound_2F
+commentline BDE4 =============== S U B R O U T I N E =======================================
+commentline BDE6 End of function Sound_30
+commentline BDE9 =============== S U B R O U T I N E =======================================
+commentline BDEB End of function Sound_31
+commentline BDEE =============== S U B R O U T I N E =======================================
+commentline BDEE R2 beeps entering Death Star
+commentline BDF0 End of function Sound_32
+commentline BDF3 =============== S U B R O U T I N E =======================================
+commentline BDF5 End of function Sound_33
+commentline BDF8 =============== S U B R O U T I N E =======================================
+commentline BDFA End of function Sound_34
+commentline BDFD =============== S U B R O U T I N E =======================================
+commentline BDFF End of function Sound_35
+commentline BE02 =============== S U B R O U T I N E =======================================
+commentline BE04 End of function Sound_36
+commentline BE07 =============== S U B R O U T I N E =======================================
+commentline BE09 End of function Sound_37
+commentline BE0C =============== S U B R O U T I N E =======================================
+commentline BE0E End of function Sound_38
+commentline BE11 =============== S U B R O U T I N E =======================================
+commentline BE13 End of function Sound_39
+commentline BE16 =============== S U B R O U T I N E =======================================
+commentline BE18 End of function Sound_3A
+commentline BE1B =============== S U B R O U T I N E =======================================
+commentline BE1D End of function Sound_3B
+commentline BE20 =============== S U B R O U T I N E =======================================
+commentline BE20 Display accounting screen
+comment BE22 Called from select screen, attract screen 1 + 3 when writing text
+comment BE2C Called from select screen, attract screen 1 + 3 when writing text
+comment BE83 Read NOVRAM
+comment BE8C Read NOVRAM
+comment BEBE Display BCD numbers
+comment BEC4 Display BCD numbers
+comment BECA Display BCD numbers
+comment BED5 Read NOVRAM
+comment BEEC Display BCD numbers
+comment BEF2 Display BCD numbers
+comment BEF8 Display BCD numbers
+comment BEFE Display BCD numbers
+comment BF09 Read NOVRAM
+comment BF20 Display BCD numbers
+comment BF26 Display BCD numbers
+comment BF2C Display BCD numbers
+comment BF32 Display BCD numbers
+comment BF3D Read NOVRAM
+comment BF54 Read NOVRAM
+comment BF94 Read NOVRAM
+comment BFAB Read NOVRAM
+comment BFCF Display BCD numbers
+comment BFDC Table for game time history text positions
+commentline BFF4 ---------------------------------------------------------------------------
+commentline C02E End of function sub_BE20
+commentline C02F =============== S U B R O U T I N E =======================================
+commentline C04A ---------------------------------------------------------------------------
+commentline C086 End of function sub_C02F
+commentline C087 =============== S U B R O U T I N E =======================================
+commentline C09C End of function sub_C087
+commentline C09D =============== S U B R O U T I N E =======================================
+comment C0C8 Read NOVRAM
+commentline C0FE End of function sub_C09D
+commentline C0FF =============== S U B R O U T I N E =======================================
+commentline C0FF NVRAM something
+comment C107 Read NOVRAM
+comment C140 Read NOVRAM
+comment C164 Read NOVRAM
+comment C1E9 Joystick pitch data structure
+comment C1F5 Joystick roll data structure
+commentline C209 End of function sub_C0FF
+commentline C20C =============== S U B R O U T I N E =======================================
+comment C20F Read NOVRAM
+commentline C23D ---------------------------------------------------------------------------
+commentline C24B End of function sub_C20C
+commentline C24E =============== S U B R O U T I N E =======================================
+comment C270 NOVRAM
+commentline C27F ---------------------------------------------------------------------------
+comment C293 NOVRAM
+commentline C29B ---------------------------------------------------------------------------
+comment C29E High scores init table
+comment C2A9 High score names
+commentline C2B1 End of function sub_C24E
+commentline C2B3 =============== S U B R O U T I N E =======================================
+commentline C2C2 End of function sub_C2B3
+commentline C2C3 =============== S U B R O U T I N E =======================================
+comment C2D5 NOVRAM
+commentline C305 End of function sub_C2C3
+commentline C306 =============== S U B R O U T I N E =======================================
+comment C306 NOVRAM
+comment C310 NOVRAM
+comment C333 NOVRAM
+comment C342 NOVRAM
+comment C373 NOVRAM
+comment C377 NOVRAM
+commentline C37C ---------------------------------------------------------------------------
+comment C3AE NOVRAM
+comment C3B4 NOVRAM
+comment C3DE Read NOVRAM
+commentline C3ED End of function sub_C306
+commentline C3EE =============== S U B R O U T I N E =======================================
+comment C3F3 NOVRAM
+comment C405 NOVRAM
+commentline C412 End of function sub_C3EE
+commentline C413 =============== S U B R O U T I N E =======================================
+comment C41B NOVRAM
+comment C425 NOVRAM
+comment C42D NOVRAM
+comment C43C NOVRAM
+commentline C44F End of function sub_C413
+commentline C450 =============== S U B R O U T I N E =======================================
+comment C452 Called from select screen, attract screen 1 + 3 when writing text
+comment C45C Called from select screen, attract screen 1 + 3 when writing text
+comment C480 Print text string from pointer table
+comment C4C4 NOVRAM
+comment C4C8 NOVRAM
+commentline C4EA End of function sub_C450
+commentline C4EB =============== S U B R O U T I N E =======================================
+comment C4EB Game over/insert coins timer
+commentline C50C ---------------------------------------------------------------------------
+commentline C557 ---------------------------------------------------------------------------
+comment C58B NOVRAM
+comment C595 NOVRAM
+commentline C5A3 End of function sub_C4EB
+commentline C5A4 =============== S U B R O U T I N E =======================================
+commentline C5E3 ---------------------------------------------------------------------------
+commentline C5EF End of function sub_C5A4
+commentline C5F2 =============== S U B R O U T I N E =======================================
+commentline C5F2 FUNCTION CHUNK AT ROM:C65B SIZE 0000001F BYTES
+comment C5F2 NOVRAM
+comment C5FC NOVRAM
+comment C601 NOVRAM
+comment C609 NOVRAM
+comment C61A NOVRAM
+comment C622 NOVRAM
+commentline C640 ---------------------------------------------------------------------------
+commentline C640 End of function sub_C5F2
+commentline C641 =============== S U B R O U T I N E =======================================
+comment C641 NOVRAM
+comment C64F NOVRAM
+commentline C65A End of function sub_C641
+commentline C65B ---------------------------------------------------------------------------
+commentline C65B START OF FUNCTION CHUNK FOR sub_C5F2
+comment C667 NOVRAM
+comment C671 NOVRAM
+commentline C679 END OF FUNCTION CHUNK FOR sub_C5F2
+commentline C67A =============== S U B R O U T I N E =======================================
+comment C67A NOVRAM
+comment C682 NOVRAM
+commentline C687 End of function sub_C67A
+commentline C688 =============== S U B R O U T I N E =======================================
+commentline C68F End of function sub_C688
+commentline C690 =============== S U B R O U T I N E =======================================
+commentline C69D ---------------------------------------------------------------------------
+comment C6AA Display BCD numbers
+comment C6B4 Print text string from pointer table
+commentline C6B7 End of function sub_C690
+commentline C6B8 =============== S U B R O U T I N E =======================================
+commentline C6D3 End of function sub_C6B8
+commentline C6D4 =============== S U B R O U T I N E =======================================
+commentline C6D4 Read NOVRAM
+commentline C6D4 End of function sub_C6D4
+commentline C6D7 =============== S U B R O U T I N E =======================================
+commentline C6D7 Read NOVRAM
+commentline C6F3 End of function sub_C6D7
+commentline C6F4 =============== S U B R O U T I N E =======================================
+commentline C6F4 End of function sub_C6F4
+commentline C6F7 =============== S U B R O U T I N E =======================================
+commentline C70D End of function sub_C6F7
+commentline C70E =============== S U B R O U T I N E =======================================
+comment C734 Display BCD numbers
+commentline C734 End of function sub_C70E
+commentline C734 ---------------------------------------------------------------------------
+commentline C7FD =============== S U B R O U T I N E =======================================
+commentline C7FD Display high scores
+comment C804 Called from select screen, attract screen 1 + 3 when writing text
+comment C80C High scores text position table
+commentline C811 ---------------------------------------------------------------------------
+comment C813 Called from select screen, attract screen 1 + 3 when writing text
+comment C816 High scores text size
+commentline C847 ---------------------------------------------------------------------------
+comment C847 Attract text colour/intensity for fading
+comment C864 Attract text colour/intensity for fading
+commentline C869 ---------------------------------------------------------------------------
+commentline C86D ---------------------------------------------------------------------------
+commentline C87F ---------------------------------------------------------------------------
+commentline C884 ---------------------------------------------------------------------------
+comment C89C Attract text colour/intensity for fading
+commentline C8A1 ---------------------------------------------------------------------------
+commentline C8A5 ---------------------------------------------------------------------------
+commentline C8B7 ---------------------------------------------------------------------------
+commentline C8BC ---------------------------------------------------------------------------
+comment C8D4 Attract text colour/intensity for fading
+commentline C8D9 ---------------------------------------------------------------------------
+commentline C8DD ---------------------------------------------------------------------------
+commentline C8EF ---------------------------------------------------------------------------
+commentline C8F4 ---------------------------------------------------------------------------
+comment C91C Display BCD numbers
+comment C92E High scores RAM
+commentline C966 ---------------------------------------------------------------------------
+commentline C9B6 ---------------------------------------------------------------------------
+commentline C9F4 ---------------------------------------------------------------------------
+commentline CA4E ---------------------------------------------------------------------------
+comment CA56 Vector CNTR instruction
+commentline CA63 End of function sub_C7FD
+commentline CA63 ---------------------------------------------------------------------------
+commentline CA8C =============== S U B R O U T I N E =======================================
+commentline CA8C Score
+comment CA8C High scores RAM
+comment CA8F Score millions
+comment CA97 Score thousands
+commentline CAA5 ---------------------------------------------------------------------------
+commentline CAB6 End of function sub_CA8C
+commentline CAB7 =============== S U B R O U T I N E =======================================
+comment CAEA Score millions
+comment CAEE Score thousands
+commentline CAF2 End of function sub_CAB7
+commentline CAF3 =============== S U B R O U T I N E =======================================
+commentline CB08 ---------------------------------------------------------------------------
+commentline CB82 ---------------------------------------------------------------------------
+commentline CB91 ---------------------------------------------------------------------------
+commentline CBA3 End of function sub_CAF3
+commentline CBA3 ---------------------------------------------------------------------------
+commentline CC18 =============== S U B R O U T I N E =======================================
+comment CC2D High scores RAM
+comment CC46 High scores RAM
+commentline CC5A End of function sub_CC18
+commentline CC5B =============== S U B R O U T I N E =======================================
+comment CC5E High score names
+comment CC6A High scores RAM
+comment CC6D High scores init table
+commentline CC79 End of function sub_CC5B
+commentline CC79 ---------------------------------------------------------------------------
+commentline CCC0 =============== S U B R O U T I N E =======================================
+commentline CCC0 Initialise object?
+commentline CCCB End of function sub_CCC0
+commentline CCCC =============== S U B R O U T I N E =======================================
+commentline CCCC Copy XYZ data to math RAM
+commentline CCD7 End of function sub_CCCC
+commentline CCD8 =============== S U B R O U T I N E =======================================
+commentline CCD8 Copy object 3D data to math ram
+commentline CCE3 End of function sub_CCD8
+commentline CCE4 =============== S U B R O U T I N E =======================================
+comment CCE6 Change memory page
+commentline CCEF End of function sub_CCE4
+commentline CCF0 =============== S U B R O U T I N E =======================================
+commentline CCF0 Get divider result and multiply by Math result Z, insert VCTR instruction
+commentline CCFB End of function sub_CCF0
+commentline CCFC =============== S U B R O U T I N E =======================================
+commentline CCFC Trench floor lines calcs
+commentline CD07 End of function sub_CCFC
+commentline CD08 =============== S U B R O U T I N E =======================================
+commentline CD08 Trench side vertical lines calcs
+commentline CD13 End of function sub_CD08
+commentline CD14 =============== S U B R O U T I N E =======================================
+commentline CD14 Math program 0x50. Matrix Multiply - Transposed
+commentline CD14 Then do perspective division?
+commentline CD1F End of function sub_CD14
+commentline CD20 =============== S U B R O U T I N E =======================================
+commentline CD20 Do 3D object transform using Matrix 1
+commentline CD2B End of function sub_CD20
+commentline CD2C =============== S U B R O U T I N E =======================================
+commentline CD2C Format vectors for ties, and tower/bunker explosions
+commentline CD37 End of function sub_CD2C
+commentline CD38 =============== S U B R O U T I N E =======================================
+commentline CD38 Trench left side turret calcs
+commentline CD43 End of function sub_CD38
+commentline CD44 =============== S U B R O U T I N E =======================================
+commentline CD44 Trench right side turret calcs
+commentline CD4F End of function sub_CD44
+commentline CD50 =============== S U B R O U T I N E =======================================
+comment CD50 Called during towers
+commentline CD5B End of function sub_CD50
+commentline CD5C =============== S U B R O U T I N E =======================================
+commentline CD5C Trench calcs
+comment CD5C Called during trench start
+commentline CD67 End of function sub_CD5C
+commentline CD68 =============== S U B R O U T I N E =======================================
+comment CD68 Called during towers
+commentline CD73 End of function sub_CD68
+commentline CD74 =============== S U B R O U T I N E =======================================
+commentline CD74 Function select for an object
+commentline CD7F End of function sub_CD74
+commentline CD80 =============== S U B R O U T I N E =======================================
+commentline CD80 Starfield
+comment CD80 Starfield attract screen 1 + 3 + 4
+commentline CD8B End of function sub_CD80
+commentline CD8C =============== S U B R O U T I N E =======================================
+commentline CD8C Towers surface dots
+commentline CD97 End of function sub_CD8C
+commentline CD98 =============== S U B R O U T I N E =======================================
+commentline CD98 Unused
+commentline CD9B End of function sub_CD98
+commentline CD9C =============== S U B R O U T I N E =======================================
+commentline CD9C Shift D register right
+commentline CD9D End of function Shift_D_R_6
+commentline CD9E =============== S U B R O U T I N E =======================================
+commentline CD9E Shift D register right
+commentline CDA8 End of function Shift_D_R_5
+commentline CDA9 =============== S U B R O U T I N E =======================================
+commentline CDA9 Shift D register left
+commentline CDAA End of function sub_CDA9
+commentline CDAB =============== S U B R O U T I N E =======================================
+commentline CDB9 End of function Shift_D_L_7
+commentline CDBA =============== S U B R O U T I N E =======================================
+commentline CDBA Do math program run
+commentline CDC2 End of function Math_Run_Start
+commentline CDC3 =============== S U B R O U T I N E =======================================
+commentline CDC3 Initialise math registers matrix
+commentline CDE6 End of function sub_CDC3
+commentline CDE7 =============== S U B R O U T I N E =======================================
+commentline CDE7 Swap Matrix 2  x, y, z to  x, y, z
+comment CDE7 Ay2
+comment CDEA Bx2
+comment CDED Bx2
+comment CDF0 Ay2
+comment CDF3 Az2
+comment CDF6 Cx2
+comment CDF9 Cx2
+comment CDFC Az2
+comment CDFF Bz2
+comment CE02 Cy2
+comment CE05 Cy2
+comment CE08 Bz2
+commentline CE0B End of function sub_CDE7
+commentline CE0C =============== S U B R O U T I N E =======================================
+commentline CE0C Copy transform data from [BIC] to matrix 2
+comment CE14 Do math program run
+commentline CE17 End of function sub_CE0C
+commentline CE18 =============== S U B R O U T I N E =======================================
+commentline CE18 Run math program $80 Copy [BIC] to Matrix 3
+comment CE20 Do math program run
+commentline CE23 End of function sub_CE18
+commentline CE24 =============== S U B R O U T I N E =======================================
+commentline CE24 Run math program $00 Roll on Matrix 4
+comment CE27 Point BIC to $5080 MReg40 Matrix 4
+comment CE2C Do math program run
+commentline CE2C End of function sub_CE24
+commentline CE2F =============== S U B R O U T I N E =======================================
+commentline CE2F Run math program $0E Pitch on Matrix 4
+comment CE32 Point BIC to $5080 MReg40 Matrix 4
+comment CE37 Do math program run
+commentline CE37 End of function sub_CE2F
+commentline CE3A =============== S U B R O U T I N E =======================================
+commentline CE3A Run math program $1C Yaw on Matrix 4
+comment CE3D Point BIC to $5080 MReg40 Matrix 4
+comment CE42 Do math program run
+commentline CE42 End of function sub_CE3A
+commentline CE45 =============== S U B R O U T I N E =======================================
+commentline CE45 Update random numbers
+commentline CE4E End of function Gen_Random
+commentline CE4E ---------------------------------------------------------------------------
+commentline D660 =============== S U B R O U T I N E =======================================
+comment D660 Point U to vector RAM $38
+comment D663 Animate laser target hit
+comment D666 Vector RTSL instruction
+commentline D68C End of function sub_D660
+commentline D68D =============== S U B R O U T I N E =======================================
+commentline D68D Point U to vector RAM $38
+commentline D68D End of function sub_D68D
+commentline D690 =============== S U B R O U T I N E =======================================
+commentline D690 Animate laser target hit
+comment D690 Laser target animation
+commentline D69F End of function sub_D690
+commentline D6A0 =============== S U B R O U T I N E =======================================
+commentline D6A0 End of function sub_D6A0
+commentline D6A3 =============== S U B R O U T I N E =======================================
+comment D6A3 Laser target animation
+commentline D6BB End of function sub_D6A3
+commentline D6BC =============== S U B R O U T I N E =======================================
+commentline D6BC End of function sub_D6BC
+commentline D6BF =============== S U B R O U T I N E =======================================
+comment D6BF Laser target animation
+commentline D6E6 End of function sub_D6BF
+commentline D6E7 =============== S U B R O U T I N E =======================================
+commentline D6E7 End of function sub_D6E7
+commentline D6EA =============== S U B R O U T I N E =======================================
+comment D6EA Laser target animation
+commentline D708 End of function sub_D6EA
+commentline D709 =============== S U B R O U T I N E =======================================
+commentline D709 Laser target animation
+comment D709 Get random number
+comment D70C Mask 0-15
+comment D710 Multiply by 6 for 0- 90 range
+comment D711 Table of vector SVEC instructions for laser hit target animation
+comment D714 Point X reg to word from table
+commentline D715 End of function sub_D709
+commentline D715 ---------------------------------------------------------------------------
+commentline D776 =============== S U B R O U T I N E =======================================
+commentline D776 Check coin inputs
+comment D77D Check for coin or slam inputs
+commentline D788 ---------------------------------------------------------------------------
+comment D78C Credits
+comment D790 Credits
+commentline D7B0 ---------------------------------------------------------------------------
+commentline D812 ---------------------------------------------------------------------------
+commentline D822 ---------------------------------------------------------------------------
+commentline D841 ---------------------------------------------------------------------------
+commentline D84B ---------------------------------------------------------------------------
+comment D8A8 Credits
+comment D8AA Credits
+commentline D8D7 ---------------------------------------------------------------------------
+commentline D8DE End of function sub_D776
+commentline D8DF =============== S U B R O U T I N E =======================================
+commentline D8DF Called from select screen, attract screen 1 + 3 when writing text
+commentline D8EC ---------------------------------------------------------------------------
+commentline D8F6 End of function sub_D8DF
+commentline D8F7 =============== S U B R O U T I N E =======================================
+commentline D8F7 Doesnt seem to be used anywhere
+commentline D919 End of function sub_D8F7
+commentline D91A =============== S U B R O U T I N E =======================================
+commentline D922 End of function sub_D91A
+commentline D923 =============== S U B R O U T I N E =======================================
+commentline D923 Called from attract screen 1
+comment D932 Text string index
+comment D935 Insert text colour vector instruction
+commentline D941 End of function sub_D923
+commentline D942 =============== S U B R O U T I N E =======================================
+commentline D942 Called from Attract screen 3 + 4
+comment D951 Text string index
+commentline D95D End of function sub_D942
+commentline D95E =============== S U B R O U T I N E =======================================
+commentline D95E Attract screen 2 text position control
+commentline D970 End of function sub_D95E
+commentline D971 =============== S U B R O U T I N E =======================================
+commentline D984 End of function sub_D971
+commentline D985 =============== S U B R O U T I N E =======================================
+comment D997 Text string index
+comment D9B4 Text string index
+comment D9C6 Text handling
+commentline D9DB End of function sub_D985
+commentline D9DC =============== S U B R O U T I N E =======================================
+commentline D9DC Initialise before game start
+commentline D9F9 End of function sub_D9DC
+commentline D9FA =============== S U B R O U T I N E =======================================
+commentline D9FA Attract screen 2 large Star Wars logo handling
+commentline DA1E ---------------------------------------------------------------------------
+commentline DAB3 ---------------------------------------------------------------------------
+commentline DAC1 ---------------------------------------------------------------------------
+comment DB0C Attract screen 2 text position control
+commentline DB1F ---------------------------------------------------------------------------
+commentline DB2E End of function sub_D9FA
+commentline DB2E ---------------------------------------------------------------------------
+commentline E764 =============== S U B R O U T I N E =======================================
+comment E766 Display BCD numbers
+comment E76B Display BCD number text
+commentline E770 End of function sub_E764
+commentline E772 =============== S U B R O U T I N E =======================================
+commentline E772 Display BCD number text
+comment E774 Display BCD numbers
+commentline E78E End of function sub_E772
+commentline E790 =============== S U B R O U T I N E =======================================
+commentline E790 Display BCD numbers
+commentline E7A2 ---------------------------------------------------------------------------
+commentline E7BB ---------------------------------------------------------------------------
+commentline E7C6 End of function Display_Vect_BCD
+commentline E7C7 =============== S U B R O U T I N E =======================================
+commentline E7C7 Print text string from pointer table
+comment E7CB Text string index
+comment E7CE Insert text colour vector instruction
+comment E7D0 Insert text position vector instruction
+commentline E7D2 End of function sub_E7C7
+commentline E7D3 =============== S U B R O U T I N E =======================================
+comment E7D7 Text string index
+comment E7DA Insert text position vector instruction
+commentline E7DC End of function sub_E7D3
+commentline E7DD =============== S U B R O U T I N E =======================================
+commentline E7DD Insert text colour vector instruction
+comment E7DD Text string index
+comment E7E0 Text string colour
+commentline E7E9 End of function sub_E7DD
+commentline E7EA =============== S U B R O U T I N E =======================================
+commentline E7EA Insert text position vector instruction
+comment E7EA Text string index
+comment E7ED Text string position
+commentline E7FC ---------------------------------------------------------------------------
+comment E7FC Text string index
+comment E7FF Text string position
+comment E813 Text handling
+comment E816 Vector SCAL 2,0 instruction
+comment E81B Vector CNTR instruction
+commentline E820 End of function sub_E7EA
+commentline E821 =============== S U B R O U T I N E =======================================
+commentline E821 Text handling
+comment E824 Text string index
+commentline E83C ---------------------------------------------------------------------------
+commentline E845 ---------------------------------------------------------------------------
+commentline E84F ---------------------------------------------------------------------------
+commentline E858 ---------------------------------------------------------------------------
+commentline E861 ---------------------------------------------------------------------------
+commentline E86A ---------------------------------------------------------------------------
+commentline E873 ---------------------------------------------------------------------------
+commentline E87C ---------------------------------------------------------------------------
+commentline E885 ---------------------------------------------------------------------------
+commentline E893 End of function sub_E821
+commentline E893 ---------------------------------------------------------------------------
+commentline EF54 =============== S U B R O U T I N E =======================================
+commentline EF54 Attributes: noreturn
+comment EF54 public BADIRQ
+commentline EF54 End of function BADIRQ
+commentline EF56 =============== S U B R O U T I N E =======================================
+comment EF56 public IRQ
+comment EF58 Bounds check for return address in ROM
+comment EF5E Only allow IRQ calls from lower in ROM than BADIRQ function
+comment EF6B Check sanity byte is $3F
+comment EF81 Check coin inputs
+comment EF84 Credits
+comment EF91 Inputs debounce
+comment EF97 Inputs debounce
+comment EF9D Inputs debounce
+comment EFA3 Inputs debounce
+comment EFCA Joystick processing
+comment F03B Copies Star Wars logo vector data to vector RAM
+commentline F041 ---------------------------------------------------------------------------
+comment F049 If VGHALT is high, VG is ready
+comment F04D Vector pointer state
+comment F05A What the heck is going on here???
+comment F05C Vector pointer state
+comment F067 Seems to toggle vector address $0000 from $E038 and $EA38 JMPL $038 and $A38
+comment F07F Colour cycle blue/cyan for lasers
+comment F084 Points to jump table that jump into vector ROM for laser colour cycle
+comment F085 Copies vector JMPL instructions into vector RAM
+commentline F0A0 ---------------------------------------------------------------------------
+comment F106 Vector RTSL
+comment F10C Cycle through 7 colours
+comment F115 Vector colour cycle count
+comment F11F Vector RTSL
+comment F125 Update laser target hit vector animations
+comment F128 Start vector generator run
+commentline F132 End of function IRQ
+commentline F133 =============== S U B R O U T I N E =======================================
+commentline F133 Inputs debounce
+comment F133 Inputs debounce
+commentline F145 End of function sub_F133
+commentline F146 =============== S U B R O U T I N E =======================================
+commentline F146 Joystick processing
+commentline F16C ---------------------------------------------------------------------------
+commentline F186 ---------------------------------------------------------------------------
+commentline F18C End of function sub_F146
+commentline F18D =============== S U B R O U T I N E =======================================
+comment F18D Joystick pitch data structure
+comment F190 Joystick Y
+comment F1A9 Joystick roll data structure
+comment F1AC Joystick X
+commentline F1C5 End of function sub_F18D
+commentline F1C6 =============== S U B R O U T I N E =======================================
+commentline F1EB ---------------------------------------------------------------------------
+commentline F1FC End of function sub_F1C6
+commentline F1FD =============== S U B R O U T I N E =======================================
+commentline F22A End of function sub_F1FD
+commentline F22B =============== S U B R O U T I N E =======================================
+commentline F260 End of function sub_F22B
+commentline F261 ---------------------------------------------------------------------------
+commentline F261 START OF FUNCTION CHUNK FOR sub_6532
+comment F261 public Reset
+comment F28C Stack top at $4FFF
+comment F290 H      ; Direct Page at $4800
+comment F2CC Check self test switch
+commentline F2D6 ---------------------------------------------------------------------------
+comment F2D6 Read option switches
+comment F2DE Store in shadow RAM
+comment F2FB Clear vector RAM to HALT instructions
+comment F305 Set up first vector instruction to JSRL 38
+comment F30D Vector pointer state
+comment F317 Read NOVRAM
+comment F32B Jump to main game loop
+commentline F32B END OF FUNCTION CHUNK FOR sub_6532
+commentline F32B ---------------------------------------------------------------------------
+commentline F36E ---------------------------------------------------------------------------
+commentline F36E START OF FUNCTION CHUNK FOR sub_6532
+comment F36E Self test
+comment F373 Check Aux coin
+commentline F380 ---------------------------------------------------------------------------
+commentline F39D ---------------------------------------------------------------------------
+commentline F3B5 ---------------------------------------------------------------------------
+commentline F3BE ---------------------------------------------------------------------------
+commentline F3D6 ---------------------------------------------------------------------------
+commentline F3FB ---------------------------------------------------------------------------
+commentline F40B ---------------------------------------------------------------------------
+commentline F41E ---------------------------------------------------------------------------
+comment F430 NOVRAM
+comment F43A NOVRAM
+comment F442 NOVRAM
+comment F44A NOVRAM
+comment F44F NOVRAM
+commentline F464 ---------------------------------------------------------------------------
+commentline F482 ---------------------------------------------------------------------------
+commentline F491 ---------------------------------------------------------------------------
+comment F496 NOVRAM
+comment F49B NOVRAM
+commentline F4B2 ---------------------------------------------------------------------------
+comment F4B2 NOVRAM
+comment F4C0 NOVRAM
+commentline F4CE ---------------------------------------------------------------------------
+comment F50F Point to ROM start address table
+comment F514 Size of each ROM
+commentline F51B END OF FUNCTION CHUNK FOR sub_6532
+commentline F51D =============== S U B R O U T I N E =======================================
+comment F51D Point to ROM start address table
+commentline F51D End of function sub_F51D
+commentline F520 START OF FUNCTION CHUNK FOR sub_6532
+comment F520 Next ROM address start
+comment F522 Size of ROM
+commentline F557 ---------------------------------------------------------------------------
+commentline F56E ---------------------------------------------------------------------------
+comment F59A Print text string from pointer table
+comment F59F Print text string from pointer table
+comment F5AC Print text string from pointer table
+commentline F5B1 ---------------------------------------------------------------------------
+comment F5B9 Print text string from pointer table
+comment F5D7 Display BCD numbers
+comment F5DD Display BCD numbers
+commentline F5ED ---------------------------------------------------------------------------
+commentline F5F9 ---------------------------------------------------------------------------
+commentline F61C ---------------------------------------------------------------------------
+commentline F643 ---------------------------------------------------------------------------
+commentline F679 ---------------------------------------------------------------------------
+commentline F69F ---------------------------------------------------------------------------
+commentline F6C7 ---------------------------------------------------------------------------
+commentline F6EA ---------------------------------------------------------------------------
+commentline F6F0 ---------------------------------------------------------------------------
+commentline F70B END OF FUNCTION CHUNK FOR sub_6532
+commentline F70D =============== S U B R O U T I N E =======================================
+commentline F71C End of function sub_F70D
+commentline F720 START OF FUNCTION CHUNK FOR sub_6532
+commentline F720 END OF FUNCTION CHUNK FOR sub_6532
+commentline F720 ---------------------------------------------------------------------------
+commentline F74F =============== S U B R O U T I N E =======================================
+commentline F767 ---------------------------------------------------------------------------
+commentline F77C End of function sub_F74F
+commentline F77F =============== S U B R O U T I N E =======================================
+comment F795 Print text string from pointer table
+comment F79A Print text string from pointer table
+comment F7B3 Print text string from pointer table
+comment F7EB Display BCD numbers
+comment F80A Display BCD numbers
+comment F824 Print text string from pointer table
+commentline F869 End of function sub_F77F
+commentline F86C =============== S U B R O U T I N E =======================================
+commentline F876 ---------------------------------------------------------------------------
+commentline F883 End of function sub_F86C
+commentline F884 =============== S U B R O U T I N E =======================================
+commentline F889 End of function sub_F884
+commentline F88C =============== S U B R O U T I N E =======================================
+commentline F891 End of function sub_F88C
+commentline F894 =============== S U B R O U T I N E =======================================
+comment F89D Print text string from pointer table
+commentline F8A7 End of function sub_F894
+commentline F8AA =============== S U B R O U T I N E =======================================
+comment F8C1 Print text string from pointer table
+comment F8C6 Print text string from pointer table
+commentline F8C9 End of function sub_F8AA
+commentline F8CC =============== S U B R O U T I N E =======================================
+commentline F900 ---------------------------------------------------------------------------
+commentline F932 ---------------------------------------------------------------------------
+comment F934 Print text string from pointer table
+comment F939 Print text string from pointer table
+commentline F93C End of function sub_F8CC
+commentline F93F =============== S U B R O U T I N E =======================================
+commentline F955 End of function sub_F93F
+commentline F958 =============== S U B R O U T I N E =======================================
+comment F96D Print text string from pointer table
+comment F981 Print text string from pointer table
+commentline F98A ---------------------------------------------------------------------------
+commentline F998 End of function sub_F958
+commentline F99B =============== S U B R O U T I N E =======================================
+commentline F9CE ---------------------------------------------------------------------------
+comment F9DF Display BCD numbers
+comment F9E4 Display BCD numbers
+comment F9EE Display BCD numbers
+comment F9F3 Display BCD numbers
+comment F9FD Display BCD numbers
+comment FA02 Display BCD numbers
+comment FA0C Display BCD numbers
+comment FA11 Display BCD numbers
+commentline FA2E ---------------------------------------------------------------------------
+comment FA30 Print text string from pointer table
+comment FA35 Print text string from pointer table
+commentline FA4C End of function sub_F99B
+commentline FA4E =============== S U B R O U T I N E =======================================
+commentline FA88 ---------------------------------------------------------------------------
+commentline FA92 ---------------------------------------------------------------------------
+comment FAB4 Display BCD numbers
+comment FAB9 Display BCD numbers
+commentline FAD6 ---------------------------------------------------------------------------
+comment FAD8 Print text string from pointer table
+commentline FADE End of function sub_FA4E
+commentline FADE ---------------------------------------------------------------------------
+commentline FB09 =============== S U B R O U T I N E =======================================
+commentline FB09 FUNCTION CHUNK AT ROM:FBF6 SIZE 00000026 BYTES
+commentline FB0D End of function sub_FB09
+commentline FB10 =============== S U B R O U T I N E =======================================
+commentline FB19 ---------------------------------------------------------------------------
+commentline FB20 End of function sub_FB10
+commentline FB23 =============== S U B R O U T I N E =======================================
+commentline FB2D ---------------------------------------------------------------------------
+commentline FB35 End of function sub_FB23
+commentline FB38 ---------------------------------------------------------------------------
+commentline FB38 START OF FUNCTION CHUNK FOR sub_FE7C
+commentline FB49 END OF FUNCTION CHUNK FOR sub_FE7C
+commentline FB49 ---------------------------------------------------------------------------
+commentline FB75 =============== S U B R O U T I N E =======================================
+comment FB78 Math zero constant
+commentline FB80 End of function sub_FB75
+commentline FB82 =============== S U B R O U T I N E =======================================
+comment FB85 Math zero constant
+commentline FB8D End of function sub_FB82
+commentline FB8F =============== S U B R O U T I N E =======================================
+comment FB92 Math zero constant
+commentline FB9A End of function sub_FB8F
+commentline FB9C =============== S U B R O U T I N E =======================================
+commentline FBA1 End of function sub_FB9C
+commentline FBA3 =============== S U B R O U T I N E =======================================
+commentline FBA8 End of function sub_FBA3
+commentline FBAA =============== S U B R O U T I N E =======================================
+comment FBAD Math result X
+comment FBB6 Math result Y
+commentline FBBD End of function sub_FBAA
+commentline FBBF =============== S U B R O U T I N E =======================================
+comment FBC2 Math result X
+comment FBCB Math result Y
+commentline FBD2 End of function sub_FBBF
+commentline FBD4 =============== S U B R O U T I N E =======================================
+comment FBD7 XT
+comment FBDD YT
+comment FBE3 ZT
+comment FBEC Math result X
+commentline FBF3 End of function sub_FBD4
+commentline FBF6 ---------------------------------------------------------------------------
+commentline FBF6 START OF FUNCTION CHUNK FOR sub_FB09
+comment FBFE YT
+comment FC04 ZT
+comment FC0A XT
+comment FC0D XT
+comment FC16 Math result X
+commentline FC19 END OF FUNCTION CHUNK FOR sub_FB09
+commentline FC1C =============== S U B R O U T I N E =======================================
+comment FC32 Math zero constant
+comment FC38 Math 1.000 constant
+comment FC3E Point BIC to $5020 MReg10
+comment FC4D Test routine $5B
+comment FC59 Math result X
+commentline FC62 ---------------------------------------------------------------------------
+commentline FC6F End of function sub_FC1C
+commentline FC72 =============== S U B R O U T I N E =======================================
+comment FC75 XT
+comment FC7B YT
+comment FC81 ZT
+comment FC8D XT
+comment FC93 YT
+comment FC99 ZT
+comment FCA2 Math result X
+commentline FCA9 End of function sub_FC72
+commentline FCAC =============== S U B R O U T I N E =======================================
+comment FCB5 XT
+comment FCBA YT
+comment FCBF ZT
+comment FCC8 Math result X
+commentline FCCE End of function sub_FCAC
+commentline FCCE ---------------------------------------------------------------------------
+commentline FD07 ---------------------------------------------------------------------------
+commentline FD07 START OF FUNCTION CHUNK FOR sub_6532
+commentline FD1A ---------------------------------------------------------------------------
+comment FD1A Self test and Diag selected
+comment FD28 Get diag test option
+comment FD36 Point to Vector RAM start instruction
+comment FD3A Vector instruction JRSL 0x1FAE
+comment FD3F Vector instruction CNTR 0x40
+comment FD44 Get BCD number of diag test from table
+comment FD46 Reset stack pointer
+comment FD4A Display 2 digit BCD number in A
+comment FD4D Vector HALT
+comment FD57 Bounds check
+commentline FD7B ---------------------------------------------------------------------------
+comment FD7D Bounds check
+commentline FD82 END OF FUNCTION CHUNK FOR sub_6532
+commentline FD82 ---------------------------------------------------------------------------
+commentline FDBC =============== S U B R O U T I N E =======================================
+commentline FDC2 ---------------------------------------------------------------------------
+commentline FDD4 ---------------------------------------------------------------------------
+commentline FDD4 End of function sub_FDBC
+commentline FDD7 =============== S U B R O U T I N E =======================================
+commentline FDDD ---------------------------------------------------------------------------
+commentline FDEF ---------------------------------------------------------------------------
+commentline FDEF End of function sub_FDD7
+commentline FDF2 =============== S U B R O U T I N E =======================================
+commentline FE0E ---------------------------------------------------------------------------
+comment FE13 Point to diag vector test instructions
+commentline FE21 ---------------------------------------------------------------------------
+comment FE31 Run diag vector test
+commentline FE34 End of function sub_FDF2
+commentline FE34 ---------------------------------------------------------------------------
+commentline FE4F =============== S U B R O U T I N E =======================================
+commentline FE60 ---------------------------------------------------------------------------
+commentline FE71 ---------------------------------------------------------------------------
+commentline FE7A End of function sub_FE4F
+commentline FE7C =============== S U B R O U T I N E =======================================
+commentline FE7C FUNCTION CHUNK AT ROM:FB38 SIZE 00000013 BYTES
+commentline FE8F ---------------------------------------------------------------------------
+commentline FEA0 ---------------------------------------------------------------------------
+commentline FEA4 End of function sub_FE7C
+commentline FEA7 =============== S U B R O U T I N E =======================================
+commentline FEAE ---------------------------------------------------------------------------
+commentline FF21 End of function sub_FEA7
+commentline FF24 ---------------------------------------------------------------------------
+commentline FF24 START OF FUNCTION CHUNK FOR sub_6532
+commentline FF54 END OF FUNCTION CHUNK FOR sub_6532
+commentline FF54 ---------------------------------------------------------------------------
+commentline FFFE end of ROM

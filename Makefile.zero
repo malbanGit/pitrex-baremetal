@@ -1,0 +1,182 @@
+# export PATH=/home/chrissalo/gcc-arm/bin:$PATH
+
+BUILD_FOR ?= zero2
+BASE_DIR = .
+
+include ./Rules.mk
+
+
+all:	redbaronMake hyperoidMake vecxMake1 vecxMake2 vecxMake3 vecxMake4 vecxMake5 gyrocksMake battlezoneMake \
+	gravitarMake spaceduelMake tempestMake blackwidowMake deluxeMake astMake lunarMake CineMake zblastMake \
+	helloWorldMake aaeMake asteroidsMake tailgunnerMake eliteMake basicMake wwviMake swMake bz2Make
+	
+redbaronMake: 
+	cd redbaron; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+lunarMake: 
+	cd lunar; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+astMake: 
+	cd asteroids; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+deluxeMake: 
+	cd deluxe; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+blackwidowMake: 
+	cd blackwidow; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+tailgunnerMake: 
+	cd tailgunner; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+vecxMake1: 
+	cd vecx.audioplayer; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+vecxMake2: 
+	cd vecx.exact; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+vecxMake3: 
+	cd vecx.speedy; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+vecxMake4: 
+	cd vecx.vectorblade; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+vecxMake5: 
+	cd vecx.videoplayer; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+asteroidsMake: 
+	cd asteroids_sbt; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+gyrocksMake: 
+	cd gyrocks; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+battlezoneMake: 
+	cd battlezone; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+gravitarMake: 
+	cd gravitar; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+spaceduelMake: 
+	cd spaceduel; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	
+tempestMake: 
+	cd tempest; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	
+CineMake:
+	cd cinematronics; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+helloWorldMake:
+	cd hello_world; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+aaeMake:
+	cd aae; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+zblastMake:
+	cd zblast; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+hyperoidMake:
+	cd xhyperoid; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+eliteMake:
+	cd NewKind; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+basicMake:
+	cd gsBasic; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+wwviMake:
+	cd ww_vi; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+swMake:
+	cd starwars; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+bz2Make:
+	cd battlezone2; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+	
+	
+clean::
+	cd lunar; $(MAKE) clean-all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd redbaron; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd asteroids; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd deluxe; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd blackwidow; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd tailgunner; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd vecx.audioplayer; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd vecx.exact; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd aae; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd vecx.speedy; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd vecx.vectorblade; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd vecx.videoplayer; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd asteroids_sbt; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd gyrocks; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd battlezone; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd gravitar; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd spaceduel; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd tempest; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd sim; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd cinematronics; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd hello_world; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd pitrex/vectrex; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd zblast; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd xhyperoid; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd NewKind; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd gsBasic; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd ww_vi; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd starwars; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd battlezone2; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	

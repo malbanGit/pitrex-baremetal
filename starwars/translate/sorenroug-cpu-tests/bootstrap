@@ -1,0 +1,18 @@
+#!/bin/sh
+touch code/ABX1.c code/ABX2.c code/ADCANoC1.c code/ADCANoC2.c code/ADCAWiC.c \
+      code/ADCAWiHC.c code/ADDANoC.c code/ADDAWiC.c code/ADDB1.c code/ADDB2.c \
+      code/ADDB3.c code/ADDB4.c code/ADDD1.c code/ADDD2.c code/ADDD3.c code/ADDDNoC.c \
+      code/ANDA1.c code/ANDA2.c code/ANDA3.c code/ASRB1.c code/ASRB2.c code/ASRMem.c \
+      code/BGT1.c code/BGT2.c code/BGT3.c code/BGT4.c code/BGT5.c code/BHI1.c \
+      code/BITimm.c code/BLE1.c code/BLE2.c code/BLE3.c code/BLE4.c code/BLE5.c \
+      code/CMP16.c code/CMP1.c code/CMP2.c code/CMP3.c code/COMA.c code/DAA1.c \
+      code/DAA2.c code/DAA3.c code/DAA4.c code/DAA5.c code/DAA6.c code/DAA7.c \
+      code/DAA8.c code/DECA0x00.c code/DECA0x32.c code/DECA0x80.c code/Doffset1.c \
+      code/Doffset2.c code/EXGdx.c code/INCA1.c code/INCA2.c code/INCA3.c \
+      code/LEAXinc1.c code/LEAXinc2.c code/LEAXincby2.c code/LEAXno.c code/LEAXpcr.c \
+      code/LSL1.c code/LSL2.c code/LSL3.c code/LSR1.c code/LSR2.c code/LSR3.c \
+      code/MUL2.c code/MUL.c code/NEG0.c code/NEG1.c code/NEG2.c code/NEG80.c \
+      code/ROLB1.c code/ROLB2.c code/ROLB3.c code/RORB1.c code/RORB2.c code/RORB3.c \
+      code/SBCA1.c code/SBCA2.c code/SBCA3.c code/SBCA4.c code/SBCB.c code/SEX1.c \
+      code/SEX2.c code/SUBA1.c code/SUBA2.c code/SUBB1.c code/SUBB2.c code/SUBBY.c \
+      code/TFRax.c code/TFRxb.c code/TFRyx.c code/TSTmemory.c

@@ -39,7 +39,6 @@
 #include "graphics.h"
 
 #include "hyperoid.h"
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
 
 #include "lib/svgalib-vectrex/vectrextokeyboard.h"
@@ -1535,46 +1534,11 @@ void InitHyperoid( void )
 
 void start_timer(void)
 {
-#ifdef FREESTANDING
-#else
-struct sigaction sa;
-struct itimerval itv;
-int tmp=1000000/20;	/* 20 ints/sec */
-
-sigemptyset(&sa.sa_mask);
-sa.sa_handler=sighandler;
-sa.sa_flags=SA_RESTART;
-sigaction(SIGALRM,&sa,NULL);
-
-itv.it_value.tv_sec=itv.it_interval.tv_sec=tmp/1000000;
-itv.it_value.tv_usec=itv.it_interval.tv_usec=tmp%1000000;
-setitimer(ITIMER_REAL,&itv,NULL);
-#endif
 }
 
 
 void wait_for_timer(void)
 {
-#ifdef FREESTANDING
-#else
-
-  #ifdef PITREX
-#else
-sigset_t mask,oldmask;
-
-sigemptyset(&mask);
-sigaddset(&mask,SIGALRM);
-
-/* The procmask stuff is to avoid a race condition (not actually
- * a big deal, would just rarely lose an interrupt, but FWIW...).
- */
-sigprocmask(SIG_BLOCK,&mask,&oldmask);
-if(!timer_flag)
-  while(!timer_flag)
-    sigsuspend(&oldmask);
-sigprocmask(SIG_UNBLOCK,&mask,NULL);
-#endif
-#endif
 timer_flag=0;
 }
 

@@ -1,4 +1,4 @@
-This directory contains a the enhanced 
+This directory contains the enhanced 
 [vecx](http://www.valavan.net/vectrex.html) (Vectrex emulator) base package for PiTrex.
 
 The processor 6809 is emulated - but all accesses to VIA are passed thru to the "real" VIA that the PiTrex is connected to.

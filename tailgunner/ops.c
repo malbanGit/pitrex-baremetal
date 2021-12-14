@@ -26,8 +26,6 @@ default:
       /* Jumping to any illegal address or end of eprom will come here */
       /* we ought to reinitialise or something */
       fprintf(stderr, "*** Uncaught jump to 0x%04x from 0x%04x!\n", register_PC, old_PC);
-#ifndef FREESTANDING
       exit(0);
-#endif
     }
 }

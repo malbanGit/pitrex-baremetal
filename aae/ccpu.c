@@ -28,6 +28,9 @@
 //#include "basetsd.h"
 #include "ccpu.h"
 #include "globals.h"
+UINT8 MUX_VAL;
+UINT8 SOUNDBITS;
+UINT8 CCPUROMSIZE;
 
 extern  void cinemat_vector_callback(INT16 sx, INT16 sy, INT16 ex, INT16 ey, UINT8 shift);
 extern  void cini_sound_control_w(int offset, int data);

@@ -51,11 +51,7 @@ for(f=0;f<NUM_SCORES;f++)
   hitable[f].score=0;
   }
 
-#ifdef FREESTANDING
 if((in=fopen("zblast.scores","r"))==NULL)
-#else
-if((in=fopen(SCORES_FILE,"r"))==NULL)
-#endif
   {
   fprintf(stderr,"Couldn't read scores file\n");
   return 0;
@@ -147,16 +143,7 @@ if((ptr=getenv("ZBLAST_NAME"))==NULL)
   if((ptr=getenv("USER"))==NULL)
     if((ptr=getenv("LOGNAME"))==NULL)
       {
-#ifdef DONT_GETPWUID
       strcpy(name,"someone");
-#else
-#ifndef FREESTANDING
-      pd=getpwuid(getuid());
-      snprintf(name,sizeof(name),"%s",pd->pw_name);
-#else
-      strcpy(name,"someone");
-#endif
-#endif
       }
   }
 
@@ -169,11 +156,7 @@ if(capsify && islower(name[0]))
 /* no more than a certain no. chars... */
 name[NAME_MAX_LEN]=0;
   
-#ifdef FREESTANDING
 if((out=fopen("zblast.scores","a"))==NULL)
-#else
-if((out=fopen(SCORES_FILE,"a"))==NULL)
-#endif
   
   
   fprintf(stderr,"zblast: couldn't write to scores file!\n");

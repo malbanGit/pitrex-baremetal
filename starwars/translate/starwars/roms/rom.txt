@@ -1,0 +1,25 @@
+1. Processor 6809
+unbanked roms (32k):
+copy /B 136021.102 + 136021.203 + 136021.104 + 136021.206 starwars-unbanked.bin
+cat 136021.102 136021.203 136021.104 136021.206 >starwars-unbanked.bin
+
+bank 0 roms (8k) - 1st half:
+copy 136021.214 starwars-bank0.bin
+
+bank 1 roms (8k) - 2st half:
+copy 136021.214 starwars-bank1.bin
+
+split -b 8192 --additional-suffix .bin --suffix-length 1 -d 136021.214 starwars-bank
+
+
+
+2. Processor 6809
+Sound (16k) - loaded to $4000 to code between $73b0 - $7950, $7B65 - $7F5E
+copy /B 136021.107 + 136021.208 starwars-sound.bin
+cat 136021.107 136021.208 >starwars-sound.bin
+
+
+// is this used?
+bank 1 roms (16k) - loaded to $c000 :
+copy /B 136021.107 + 136021.208 starwars-sound.bin
+cat 136021.107 136021.208 >starwars-sound.bin

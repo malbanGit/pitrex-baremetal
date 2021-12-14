@@ -879,7 +879,7 @@ VSample::VSample(unsigned char *filename, int r) :rate(r), loaded(0), size(0)
   
   if (fileRead == 0)
   {
-    printf("File (%s) could not be opened: %s!\r\n",filename, ff_getErrorText(errno));
+    printf("File (%s) could not be opened: %s!\r\n",filename, getErrorText(errno));
     return;
   }
   int len = __filelength(fileRead);
@@ -917,7 +917,7 @@ VYMMusic::VYMMusic(unsigned char *filename) : loaded(0), size(0)
   fileRead = fopen((const char*)filename, "rb");
   if (fileRead == 0)
   {
-    printf("File (%s) could not be opened: %s!\r\n",filename, ff_getErrorText(errno));
+    printf("File (%s) could not be opened: %s!\r\n",filename, getErrorText(errno));
     return;
   }
   int len = __filelength(fileRead);

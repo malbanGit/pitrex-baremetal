@@ -64,7 +64,7 @@ boolean SMSC951xDevicePHYWaitNotBusy (TSMSC951xDevice *pThis);
 boolean SMSC951xDeviceWriteReg (TSMSC951xDevice *pThis, u32 nIndex, u32 nValue);
 boolean SMSC951xDeviceReadReg (TSMSC951xDevice *pThis, u32 nIndex, u32 *pValue);
 
-#ifndef NDEBUG
+#ifdef USPIDEBUG
 void SMSC951xDeviceDumpReg (TSMSC951xDevice *pThis, const char *pName, u32 nIndex);
 void SMSC951xDeviceDumpRegs (TSMSC951xDevice *pThis);
 #endif

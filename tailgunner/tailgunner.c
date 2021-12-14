@@ -3,10 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
-#include <vectrex/baremetalUtil.h>
-#include <vectrex/osWrapper.h>
 
 #include "externs.h"
 #include "mdep.h"

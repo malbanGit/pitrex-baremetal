@@ -30,7 +30,6 @@
 #include "../sim/sim6502.h"
 
 #include <vectrex/vectrexInterface.h>
-#include <ff.h>
 
 
 
@@ -43,11 +42,6 @@ int main(int argc, char *argv[])
   int line_width = 0;
   ProgName = "asteroids"; // defined in display.h
   init_graphics (smallwindow, use_pixmap, line_width, game_name (game));
-
-
-  
-
-
 
   mem = (elem *) gameMemory;
 

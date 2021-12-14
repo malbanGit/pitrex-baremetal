@@ -1,0 +1,2773 @@
+ROM:6000 ; ===========================================================================
+ROM:6000
+ROM:6000 ; Segment type: Pure code
+ROM:6000                 ; segment ROM
+ROM:6000                 org $6000
+ROM:6000 MATHROM:        fdb $7EF2
+ROM:6002                 fdb $61EF
+ROM:6004                 fcb $56 ; V
+ROM:6005 Obj_Tie_Fighter:Object_3D_Data <0, 0, 0>
+ROM:6005                 Object_3D_Data <$FF7E, $FF30, $EA>
+ROM:6005                 Object_3D_Data <$68, $FF30, $EA>
+ROM:6005                 Object_3D_Data <$B6, $FF30, 0>
+ROM:6005                 Object_3D_Data <$68, $FF30, $FF16>
+ROM:6005                 Object_3D_Data <$FF7E, $FF30, $FF16>
+ROM:6005                 Object_3D_Data <$FF30, $FF30, 0>
+ROM:6005                 Object_3D_Data <$FFE6, $FF30, $1A>
+ROM:6005                 Object_3D_Data <0, $FF30, $1A>
+ROM:6005                 Object_3D_Data <$D, $FF30, 0>
+ROM:6005                 Object_3D_Data <0, $FF30, $FFE6>
+ROM:6005                 Object_3D_Data <$FFE6, $FF30, $FFE6>
+ROM:6005                 Object_3D_Data <$FFD9, $FF30, 0>
+ROM:6005                 Object_3D_Data <$FF7E, $D0, $EA>
+ROM:6005                 Object_3D_Data <$68, $D0, $EA>
+ROM:6005                 Object_3D_Data <$B6, $D0, 0>
+ROM:6005                 Object_3D_Data <$68, $D0, $FF16>
+ROM:6005                 Object_3D_Data <$FF7E, $D0, $FF16>
+ROM:6005                 Object_3D_Data <$FF30, $D0, 0>
+ROM:6005                 Object_3D_Data <$FFE6, $D0, $1A>
+ROM:6005                 Object_3D_Data <0, $D0, $1A>
+ROM:6005                 Object_3D_Data <$D, $D0, 0>
+ROM:6005                 Object_3D_Data <0, $D0, $FFE6>
+ROM:6005                 Object_3D_Data <$FFE6, $D0, $FFE6>
+ROM:6005                 Object_3D_Data <$FFD9, $D0, 0>
+ROM:6005                 Object_3D_Data <$FFE6, $FFB2, $1A>
+ROM:6005                 Object_3D_Data <0, $FFB2, $1A>
+ROM:6005                 Object_3D_Data <$D, $FFB2, 0>
+ROM:6005                 Object_3D_Data <0, $FFB2, $FFE6>
+ROM:6005                 Object_3D_Data <$FFE6, $FFB2, $FFE6>
+ROM:6005                 Object_3D_Data <$FFD9, $FFB2, 0>
+ROM:6005                 Object_3D_Data <$FFE6, $4E, $1A>
+ROM:6005                 Object_3D_Data <0, $4E, $1A>
+ROM:6005                 Object_3D_Data <$D, $4E, 0>
+ROM:6005                 Object_3D_Data <0, $4E, $FFE6>
+ROM:6005                 Object_3D_Data <$FFE6, $4E, $FFE6>
+ROM:6005                 Object_3D_Data <$FFD9, $4E, 0>
+ROM:6005                 Object_3D_Data <$FFCC, $FFE6, $4E>
+ROM:6005                 Object_3D_Data <$1A, $FFE6, $4E>
+ROM:6005                 Object_3D_Data <$4E, $FFE6, $27>
+ROM:6005                 Object_3D_Data <$4E, $FFCC, 0>
+ROM:6005                 Object_3D_Data <$4E, $FFE6, $FFD9>
+ROM:6005                 Object_3D_Data <$1A, $FFE6, $FFB2>
+ROM:6005                 Object_3D_Data <$FFCC, $FFE6, $FFB2>
+ROM:6005                 Object_3D_Data <$FF98, $FFE6, 0>
+ROM:6005                 Object_3D_Data <$FFCC, $1A, $4E>
+ROM:6005                 Object_3D_Data <$1A, $1A, $4E>
+ROM:6005                 Object_3D_Data <$4E, $1A, $27>
+ROM:6005                 Object_3D_Data <$4E, $34, 0>
+ROM:6005                 Object_3D_Data <$4E, $1A, $FFD9>
+ROM:6005                 Object_3D_Data <$1A, $1A, $FFB2>
+ROM:6005                 Object_3D_Data <$FFCC, $1A, $FFB2>
+ROM:6005                 Object_3D_Data <$FF98, $1A, 0>
+ROM:6143 Obj_Tie_Wing_Frag_1:Object_3D_Data <0, 0, 0>
+ROM:6143                 Object_3D_Data <$FF7E, $FFE6, $EA>
+ROM:6143                 Object_3D_Data <$68, $FFE6, $EA>
+ROM:6143                 Object_3D_Data <$B6, $FFE6, 0>
+ROM:6143                 Object_3D_Data <$68, $FFE6, $FF16>
+ROM:6143                 Object_3D_Data <$FF7E, $FFE6, $FF16>
+ROM:6143                 Object_3D_Data <$FF30, $FFE6, 0>
+ROM:6143                 Object_3D_Data <$FFE6, $FFE6, $1A>
+ROM:6143                 Object_3D_Data <0, $FFE6, $1A>
+ROM:6143                 Object_3D_Data <$D, $FFE6, 0>
+ROM:6143                 Object_3D_Data <0, $FFE6, $FFE6>
+ROM:6143                 Object_3D_Data <$FFE6, $FFE6, $FFE6>
+ROM:6143                 Object_3D_Data <$FFD9, $FFE6, 0>
+ROM:6143                 Object_3D_Data <$FFE6, $82, $1A>
+ROM:6143                 Object_3D_Data <0, $82, $1A>
+ROM:6143                 Object_3D_Data <$D, $82, 0>
+ROM:6143                 Object_3D_Data <0, $82, $FFE6>
+ROM:6143                 Object_3D_Data <$FFE6, $82, $FFE6>
+ROM:6143                 Object_3D_Data <$FFD9, $82, 0>
+ROM:61B5 Obj_Tie_Wing_Frag_2:Object_3D_Data <0, 0, 0>
+ROM:61B5                 Object_3D_Data <$FF7E, $EA, $1A>
+ROM:61B5                 Object_3D_Data <$68, $EA, $1A>
+ROM:61B5                 Object_3D_Data <$B6, 0, $1A>
+ROM:61B5                 Object_3D_Data <$68, $FF16, $1A>
+ROM:61B5                 Object_3D_Data <$FF7E, $FF16, $1A>
+ROM:61B5                 Object_3D_Data <$FF30, 0, $1A>
+ROM:61B5                 Object_3D_Data <$FFE6, $1A, $1A>
+ROM:61B5                 Object_3D_Data <0, $1A, $1A>
+ROM:61B5                 Object_3D_Data <$D, 0, $1A>
+ROM:61B5                 Object_3D_Data <0, $FFE6, $1A>
+ROM:61B5                 Object_3D_Data <$FFE6, $FFE6, $1A>
+ROM:61B5                 Object_3D_Data <$FFD9, 0, $1A>
+ROM:61B5                 Object_3D_Data <$FFE6, $1A, $FF7E>
+ROM:61B5                 Object_3D_Data <0, $1A, $FF7E>
+ROM:61B5                 Object_3D_Data <$D, 0, $FF7E>
+ROM:61B5                 Object_3D_Data <0, $FFE6, $FF7E>
+ROM:61B5                 Object_3D_Data <$FFE6, $FFE6, $FF7E>
+ROM:61B5                 Object_3D_Data <$FFD9, 0, $FF7E>
+ROM:6227 Obj_Tie_Wing_Frag_3:Object_3D_Data <0, 0, 0>
+ROM:6227                 Object_3D_Data <$FFE6, $FFB2, $1A>
+ROM:6227                 Object_3D_Data <0, $FFB2, $1A>
+ROM:6227                 Object_3D_Data <$D, $FFB2, 0>
+ROM:6227                 Object_3D_Data <0, $FFB2, $FFE6>
+ROM:6227                 Object_3D_Data <$FFE6, $FFB2, $FFE6>
+ROM:6227                 Object_3D_Data <$FFD9, $FFB2, 0>
+ROM:6227                 Object_3D_Data <$FFE6, $4E, $1A>
+ROM:6227                 Object_3D_Data <0, $4E, $1A>
+ROM:6227                 Object_3D_Data <$D, $4E, 0>
+ROM:6227                 Object_3D_Data <0, $4E, $FFE6>
+ROM:6227                 Object_3D_Data <$FFE6, $4E, $FFE6>
+ROM:6227                 Object_3D_Data <$FFD9, $4E, 0>
+ROM:6227                 Object_3D_Data <$FFCC, $FFE6, $4E>
+ROM:6227                 Object_3D_Data <$1A, $FFE6, $4E>
+ROM:6227                 Object_3D_Data <$4E, $FFE6, $27>
+ROM:6227                 Object_3D_Data <$4E, $FFCC, 0>
+ROM:6227                 Object_3D_Data <$4E, $FFE6, $FFD9>
+ROM:6227                 Object_3D_Data <$1A, $FFE6, $FFB2>
+ROM:6227                 Object_3D_Data <$FFCC, $FFE6, $FFB2>
+ROM:6227                 Object_3D_Data <$FF98, $FFE6, 0>
+ROM:6227                 Object_3D_Data <$FFCC, $1A, $4E>
+ROM:6227                 Object_3D_Data <$1A, $1A, $4E>
+ROM:6227                 Object_3D_Data <$4E, $1A, $27>
+ROM:6227                 Object_3D_Data <$4E, $34, 0>
+ROM:6227                 Object_3D_Data <$4E, $1A, $FFD9>
+ROM:6227                 Object_3D_Data <$1A, $1A, $FFB2>
+ROM:6227                 Object_3D_Data <$FFCC, $1A, $FFB2>
+ROM:6227                 Object_3D_Data <$FF98, $1A, 0>
+ROM:62D5 Obj_Darth_Tie:  Object_3D_Data <0, 0, 0>
+ROM:62D5                 Object_3D_Data <$FF4C, $FF4C, $82>
+ROM:62D5                 Object_3D_Data <$B4, $FF4C, $82>
+ROM:62D5                 Object_3D_Data <$B4, $FEF2, $32>
+ROM:62D5                 Object_3D_Data <$B4, $FEF2, $FFCE>
+ROM:62D5                 Object_3D_Data <$B4, $FF4C, $FF7E>
+ROM:62D5                 Object_3D_Data <$FF4C, $FF4C, $FF7E>
+ROM:62D5                 Object_3D_Data <$FF4C, $FEF2, $FFCE>
+ROM:62D5                 Object_3D_Data <$FF4C, $FEF2, $32>
+ROM:62D5                 Object_3D_Data <$FFEC, $FEF2, $1E>
+ROM:62D5                 Object_3D_Data <$14, $FEF2, $1E>
+ROM:62D5                 Object_3D_Data <$14, $FEF2, $FFE2>
+ROM:62D5                 Object_3D_Data <$FFEC, $FEF2, $FFE2>
+ROM:62D5                 Object_3D_Data <$FF4C, $B4, $82>
+ROM:62D5                 Object_3D_Data <$B4, $B4, $82>
+ROM:62D5                 Object_3D_Data <$B4, $10E, $32>
+ROM:62D5                 Object_3D_Data <$B4, $10E, $FFCE>
+ROM:62D5                 Object_3D_Data <$B4, $B4, $FF7E>
+ROM:62D5                 Object_3D_Data <$FF4C, $B4, $FF7E>
+ROM:62D5                 Object_3D_Data <$FF4C, $10E, $FFCE>
+ROM:62D5                 Object_3D_Data <$FF4C, $10E, $32>
+ROM:62D5                 Object_3D_Data <$FFEC, $10E, $1E>
+ROM:62D5                 Object_3D_Data <$14, $10E, $1E>
+ROM:62D5                 Object_3D_Data <$14, $10E, $FFE2>
+ROM:62D5                 Object_3D_Data <$FFEC, $10E, $FFE2>
+ROM:62D5                 Object_3D_Data <$FFC4, $FFC4, $32>
+ROM:62D5                 Object_3D_Data <$3C, $FFC4, $32>
+ROM:62D5                 Object_3D_Data <$3C, $FFC4, $FFCE>
+ROM:62D5                 Object_3D_Data <$FFC4, $FFC4, $FFCE>
+ROM:62D5                 Object_3D_Data <$FFC4, $3C, $32>
+ROM:62D5                 Object_3D_Data <$3C, $3C, $32>
+ROM:62D5                 Object_3D_Data <$3C, $3C, $FFCE>
+ROM:62D5                 Object_3D_Data <$FFC4, $3C, $FFCE>
+ROM:62D5                 Object_3D_Data <$FFE2, $FFE2, $50>
+ROM:62D5                 Object_3D_Data <$1E, $FFE2, $50>
+ROM:62D5                 Object_3D_Data <$50, $FFB0, $1E>
+ROM:62D5                 Object_3D_Data <$50, $FFB0, $FFE2>
+ROM:62D5                 Object_3D_Data <$1E, $FFE2, $FFB0>
+ROM:62D5                 Object_3D_Data <$FFE2, $FFE2, $FFB0>
+ROM:62D5                 Object_3D_Data <$FFB0, $FFB0, $FFE2>
+ROM:62D5                 Object_3D_Data <$FFB0, $FFB0, $1E>
+ROM:62D5                 Object_3D_Data <$FFE2, $1E, $50>
+ROM:62D5                 Object_3D_Data <$1E, $1E, $50>
+ROM:62D5                 Object_3D_Data <$50, $50, $1E>
+ROM:62D5                 Object_3D_Data <$50, $50, $FFE2>
+ROM:62D5                 Object_3D_Data <$1E, $1E, $FFB0>
+ROM:62D5                 Object_3D_Data <$FFE2, $1E, $FFB0>
+ROM:62D5                 Object_3D_Data <$FFB0, $50, $FFE2>
+ROM:62D5                 Object_3D_Data <$FFB0, $50, $1E>
+ROM:62D5                 Object_3D_Data <$32, $FFEC, $3C>
+ROM:62D5                 Object_3D_Data <$32, $14, $3C>
+ROM:62D5                 Object_3D_Data <$50, $3C, $14>
+ROM:62D5                 Object_3D_Data <$50, $3C, $FFEC>
+ROM:62D5                 Object_3D_Data <$32, $14, $FFC4>
+ROM:62D5                 Object_3D_Data <$32, $FFEC, $FFC4>
+ROM:62D5                 Object_3D_Data <$50, $FFC4, $FFEC>
+ROM:62D5                 Object_3D_Data <$50, $FFC4, $14>
+ROM:642B Object_6:       Object_3D_Data <0>
+ROM:6431 Object_7:       Object_3D_Data <0>
+ROM:6437 Object_8:       Object_3D_Data <0, 0, $F100>
+ROM:6437                 Object_3D_Data <$FC40, 0, $F100>
+ROM:6437                 Object_3D_Data <0, $3C0, $F100>
+ROM:6437                 Object_3D_Data <0, $FC40, $F100>
+ROM:6437                 Object_3D_Data <$FE20, 0, $1A40>
+ROM:6437                 Object_3D_Data <0, $1E0, $1A40>
+ROM:6437                 Object_3D_Data <0, $FE20, $1A40>
+ROM:6437                 Object_3D_Data <$FE20, 0, $1770>
+ROM:6437                 Object_3D_Data <0, $1E0, $1770>
+ROM:6437                 Object_3D_Data <0, $FE20, $1770>
+ROM:6437                 Object_3D_Data <$FDA8, 0, $FA60>
+ROM:6437                 Object_3D_Data <0, $258, $FA60>
+ROM:6437                 Object_3D_Data <0, $FDA8, $FA60>
+ROM:6437                 Object_3D_Data <$FD30, 0, $F3D0>
+ROM:6437                 Object_3D_Data <0, $2D0, $F3D0>
+ROM:6437                 Object_3D_Data <0, $FD30, $F3D0>
+ROM:6497 Obj_Trench_Squares:Object_3D_Data <$FF00, 0, $FF40>
+ROM:6497                 Object_3D_Data <$FF00, 0, $C0>
+ROM:6497                 Object_3D_Data <$100, 0, $C0>
+ROM:6497                 Object_3D_Data <$100, 0, $FF40>
+ROM:6497                 Object_3D_Data <$FF80, 0, $FFC0>
+ROM:6497                 Object_3D_Data <$FF80, 0, $40>
+ROM:6497                 Object_3D_Data <$80, 0, $40>
+ROM:6497                 Object_3D_Data <$80, 0, $FFC0>
+ROM:64C7 Object_10:      Object_3D_Data <0, 0, 0>
+ROM:64C7                 Object_3D_Data <$FF00, 0, $C0>
+ROM:64C7                 Object_3D_Data <$100, 0, $C0>
+ROM:64C7                 Object_3D_Data <$100, 0, $FF40>
+ROM:64C7                 Object_3D_Data <$FF00, 0, $FF40>
+ROM:64C7                 Object_3D_Data <$FFA0, $60, $40>
+ROM:64C7                 Object_3D_Data <$60, $20, $40>
+ROM:64C7                 Object_3D_Data <$60, $20, $FFC0>
+ROM:64C7                 Object_3D_Data <$FFA0, $60, $FFC0>
+ROM:64C7                 Object_3D_Data <$FFA0, $20, $FFC0>
+ROM:64C7                 Object_3D_Data <$FFA0, $20, $40>
+ROM:64C7                 Object_3D_Data <$FFA0, $48, $20>
+ROM:64C7                 Object_3D_Data <$FFA0, $38, $20>
+ROM:64C7                 Object_3D_Data <$FFA0, $48, $FFE0>
+ROM:64C7                 Object_3D_Data <$FFA0, $38, $FFE0>
+ROM:6521 Object_11:      Object_3D_Data <$FF00, 0, 0>
+ROM:6521                 Object_3D_Data <$FF00, $200, 0>
+ROM:6521                 Object_3D_Data <0, 0, $FF00>
+ROM:6521                 Object_3D_Data <0, $200, $FF00>
+ROM:6521                 Object_3D_Data <0, 0, $100>
+ROM:6521                 Object_3D_Data <0, $200, $100>
+ROM:6545 Object_12:      Object_3D_Data <$60, $60, 0>
+ROM:6545                 Object_3D_Data <$60, $FFA0, 0>
+ROM:6545                 Object_3D_Data <$FFA0, $60, 0>
+ROM:6545                 Object_3D_Data <$FFA0, $FFA0, 0>
+ROM:6545                 Object_3D_Data <$A0, $A0, 0>
+ROM:6545                 Object_3D_Data <$A0, $FF60, 0>
+ROM:6545                 Object_3D_Data <$FF60, $A0, 0>
+ROM:6545                 Object_3D_Data <$FF60, $FF60, 0>
+ROM:6545                 Object_3D_Data <$100, $100, 0>
+ROM:6545                 Object_3D_Data <$100, $FF00, 0>
+ROM:6545                 Object_3D_Data <$FF00, $100, 0>
+ROM:6545                 Object_3D_Data <$FF00, $FF00, 0>
+ROM:658D Object_13:      Object_3D_Data <0, 0, 0>
+ROM:658D                 Object_3D_Data <$3C, $FF10, $168>
+ROM:658D                 Object_3D_Data <$12C, 0, $168>
+ROM:658D                 Object_3D_Data <$FE5C, $F0, $168>
+ROM:658D                 Object_3D_Data <$3C, $FF10, $FE98>
+ROM:658D                 Object_3D_Data <$12C, 0, $FE98>
+ROM:658D                 Object_3D_Data <$FE5C, $F0, $FE98>
+ROM:65B7 Object_14:      Object_3D_Data <0, 0, 0>
+ROM:65B7                 Object_3D_Data <$78, $FF10, $168>
+ROM:65B7                 Object_3D_Data <$168, 0, $168>
+ROM:65B7                 Object_3D_Data <$78, $F0, $168>
+ROM:65B7                 Object_3D_Data <$FDA8, 0, $168>
+ROM:65B7                 Object_3D_Data <$78, $FF10, $FE98>
+ROM:65B7                 Object_3D_Data <$168, 0, $FE98>
+ROM:65B7                 Object_3D_Data <$78, $F0, $FE98>
+ROM:65B7                 Object_3D_Data <$FDA8, 0, $FE98>
+ROM:65ED Object_15:      Object_3D_Data <0, 0, 0>
+ROM:65ED                 Object_3D_Data <$3C, $F0, $168>
+ROM:65ED                 Object_3D_Data <$12C, 0, $168>
+ROM:65ED                 Object_3D_Data <$FE5C, $FF10, $168>
+ROM:65ED                 Object_3D_Data <$3C, $F0, $FE98>
+ROM:65ED                 Object_3D_Data <$12C, 0, $FE98>
+ROM:65ED                 Object_3D_Data <$FE5C, $FF10, $FE98>
+ROM:6617 Object_16:      Object_3D_Data <0, 0, 0>
+ROM:6617                 Object_3D_Data <$108, $FDE4, $168>
+ROM:6617                 Object_3D_Data <$108, $3C, $168>
+ROM:6617                 Object_3D_Data <$FD48, $1A4, $168>
+ROM:6617                 Object_3D_Data <$108, $FDE4, $FE98>
+ROM:6617                 Object_3D_Data <$108, $3C, $FE98>
+ROM:6617                 Object_3D_Data <$FD48, $1A4, $FE98>
+ROM:6641 Object_17:      Object_3D_Data <0, 0, 0>
+ROM:6641                 Object_3D_Data <$150, $FE98, $168>
+ROM:6641                 Object_3D_Data <$150, $168, $168>
+ROM:6641                 Object_3D_Data <$FD90, 0, $168>
+ROM:6641                 Object_3D_Data <$150, $FE98, $FE98>
+ROM:6641                 Object_3D_Data <$150, $168, $FE98>
+ROM:6641                 Object_3D_Data <$FD90, 0, $FE98>
+ROM:666B Object_18:      Object_3D_Data <0, 0, 0>
+ROM:666B                 Object_3D_Data <$108, $21C, $168>
+ROM:666B                 Object_3D_Data <$108, $FFC4, $168>
+ROM:666B                 Object_3D_Data <$FD48, $FE5C, $168>
+ROM:666B                 Object_3D_Data <$108, $21C, $FE98>
+ROM:666B                 Object_3D_Data <$108, $FFC4, $FE98>
+ROM:666B                 Object_3D_Data <$FD48, $FE5C, $FE98>
+ROM:6695 Object_19:      Object_3D_Data <0, 0, 0>
+ROM:6695                 Object_3D_Data <$FFDD, $FFDD, $FFCE>
+ROM:6695                 Object_3D_Data <$2D, $FFDD, $FFCE>
+ROM:6695                 Object_3D_Data <$FFDD, $FFDD, $6E>
+ROM:6695                 Object_3D_Data <$FFDD, $2D, $FFCE>
+ROM:6695                 Object_3D_Data <$2D, $14, $FFCE>
+ROM:6695                 Object_3D_Data <$FFDD, $2D, $6E>
+ROM:66BF Object_20:      Object_3D_Data <0, 0, 0>
+ROM:66BF                 Object_3D_Data <$FFA6, $FFEC, $FF9C>
+ROM:66BF                 Object_3D_Data <$FFA6, $FFEC, $3C>
+ROM:66BF                 Object_3D_Data <$FFA6, $3C, $3C>
+ROM:66BF                 Object_3D_Data <$FFF6, $23, $FF9C>
+ROM:66BF                 Object_3D_Data <$46, $FFEC, $FF9C>
+ROM:66BF                 Object_3D_Data <$46, 5, $FF9C>
+ROM:66BF                 Object_3D_Data <$96, $FFEC, $3C>
+ROM:66EF Object_21:      Object_3D_Data <0, 0, 0>
+ROM:66EF                 Object_3D_Data <$FFE7, $FFF6, $FF9C>
+ROM:66EF                 Object_3D_Data <$FFE7, $F, $FF9C>
+ROM:66EF                 Object_3D_Data <$37, $FFF6, $FF9C>
+ROM:66EF                 Object_3D_Data <$37, $FFF6, $3C>
+ROM:670D
+ROM:670D ; =============== S U B R O U T I N E =======================================
+ROM:670D
+ROM:670D
+ROM:670D sub_670D:
+ROM:670D                 ldx     #byte_496F
+ROM:6710                 lda     #0
+ROM:6712
+ROM:6712 loc_6712:
+ROM:6712                 sta     ,x+
+ROM:6714                 cmpx    #byte_496F+$1A
+ROM:6717                 bcs     loc_6712
+ROM:6719                 lda     #$60 ; '`'
+ROM:671B                 lsra
+ROM:671C                 sta     <DPbyte_D2
+ROM:671E                 ldd     #$5300
+ROM:6721                 std     <DPbyte_D4
+ROM:6723                 rts
+ROM:6723 ; End of function sub_670D
+ROM:6723
+ROM:6724
+ROM:6724 ; =============== S U B R O U T I N E =======================================
+ROM:6724
+ROM:6724
+ROM:6724 sub_6724:
+ROM:6724                 stb     <DPbyte_DC      ; Selected object model
+ROM:6726                 ldb     <DPbyte_DC      ; Selected object model
+ROM:6728                 ldx     #byte_496F
+ROM:672B                 lda     b,x
+ROM:672D                 bne     locret_6760
+ROM:672F                 lda     <DPbyte_D2
+ROM:6731                 sta     b,x
+ROM:6733                 ldx     #Object_Size_Table ; Array of object sizes?
+ROM:6736                 lda     b,x
+ROM:6738                 sta     <DPbyte_1       ; Number of points in object?
+ROM:673A                 lsra
+ROM:673B                 adda    <DPbyte_D2
+ROM:673D                 bcc     loc_6740
+ROM:673F                 swi
+ROM:6740
+ROM:6740 loc_6740:
+ROM:6740                 sta     <DPbyte_D2
+ROM:6742                 ldx     #Obj_List       ; Table of pointers to object X, Y, Z point data?
+ROM:6745                 aslb
+ROM:6746                 ldx     b,x
+ROM:6748                 ldu     <DPbyte_D4
+ROM:674A
+ROM:674A loc_674A:
+ROM:674A                 ldd     ,x
+ROM:674C                 std     ,u
+ROM:674E                 ldd     2,x
+ROM:6750                 std     2,u
+ROM:6752                 ldd     4,x
+ROM:6754                 std     4,u
+ROM:6756                 leax    6,x
+ROM:6758                 leau    8,u
+ROM:675A                 dec     <DPbyte_1       ; Loop count for object points
+ROM:675C                 bgt     loc_674A        ; Copy XYZ data to math RAM
+ROM:675E                 stu     <DPbyte_D4
+ROM:6760
+ROM:6760 locret_6760:
+ROM:6760                 rts
+ROM:6760 ; End of function sub_6724
+ROM:6760
+ROM:6761
+ROM:6761 ; =============== S U B R O U T I N E =======================================
+ROM:6761
+ROM:6761
+ROM:6761 sub_6761:
+ROM:6761                 ldd     MW0             ; Called during space, towers and trench
+ROM:6764                 std     MReg00          ; Math result X
+ROM:6767                 lda     #$86 ; 'å'      ; Reg01 = Reg01 x Reg00
+ROM:6767                                         ; Reg02 = Reg02 x Reg00
+ROM:6769                 jsr     Math_Run_Start
+ROM:676C                 ldd     MReg02          ; Math result Z
+ROM:676F                 std     <DPbyte_D8
+ROM:6771                 addd    #$FF98
+ROM:6774                 anda    #$1F
+ROM:6776                 std     ,y++
+ROM:6778                 ldd     MReg01          ; Math result Y
+ROM:677B                 std     <DPbyte_D6
+ROM:677D                 anda    #$1F
+ROM:677F                 std     ,y++
+ROM:6781                 rts
+ROM:6781 ; End of function sub_6761
+ROM:6781
+ROM:6782
+ROM:6782 ; =============== S U B R O U T I N E =======================================
+ROM:6782
+ROM:6782
+ROM:6782 sub_6782:
+ROM:6782                 ldd     MW0             ; Calc trench floor lines
+ROM:6785                 std     MReg00          ; Math result X
+ROM:6788                 lda     #$86 ; 'å'      ; Reg01 = Reg01 x Reg00
+ROM:6788                                         ; Reg02 = Reg02 x Reg00
+ROM:678A                 jsr     Math_Run_Start
+ROM:678D                 ldd     MReg02          ; Math result Z
+ROM:6790                 subd    <DPbyte_D8
+ROM:6792                 anda    #$1F
+ROM:6794                 std     ,y++
+ROM:6796                 ldd     MReg02          ; Math result Z
+ROM:6799                 std     <DPbyte_D8
+ROM:679B                 ldd     MReg01          ; Math result Y
+ROM:679E                 subd    <DPbyte_D6
+ROM:67A0                 oraa    #$E0 ; 'a'
+ROM:67A2                 std     ,y++
+ROM:67A4                 ldd     MReg01          ; Math result Y
+ROM:67A7                 std     <DPbyte_D6
+ROM:67A9                 rts
+ROM:67A9 ; End of function sub_6782
+ROM:67A9
+ROM:67AA
+ROM:67AA ; =============== S U B R O U T I N E =======================================
+ROM:67AA
+ROM:67AA
+ROM:67AA sub_67AA:
+ROM:67AA                 ldd     MW0             ; Calc trench vertical lines on walls
+ROM:67AD                 std     MReg00          ; Math result X
+ROM:67B0                 lda     #$86 ; 'å'      ; Reg01 = Reg01 x Reg00
+ROM:67B0                                         ; Reg02 = Reg02 x Reg00
+ROM:67B2                 jsr     Math_Run_Start
+ROM:67B5                 ldd     MReg02          ; Math result Z
+ROM:67B8                 subd    <DPbyte_D8
+ROM:67BA                 anda    #$1F
+ROM:67BC                 std     ,y++
+ROM:67BE                 ldd     MReg02          ; Math result Z
+ROM:67C1                 std     <DPbyte_D8
+ROM:67C3                 ldd     MReg01          ; Math result Y
+ROM:67C6                 subd    <DPbyte_D6
+ROM:67C8                 anda    #$1F
+ROM:67CA                 std     ,y++
+ROM:67CC                 ldd     MReg01          ; Math result Y
+ROM:67CF                 std     <DPbyte_D6
+ROM:67D1                 rts
+ROM:67D1 ; End of function sub_67AA
+ROM:67D1
+ROM:67D2
+ROM:67D2 ; =============== S U B R O U T I N E =======================================
+ROM:67D2
+ROM:67D2
+ROM:67D2 sub_67D2:
+ROM:67D2                 stb     <DPbyte_DC      ; Called during space
+ROM:67D2 ; End of function sub_67D2
+ROM:67D2
+ROM:67D4
+ROM:67D4 ; =============== S U B R O U T I N E =======================================
+ROM:67D4
+ROM:67D4
+ROM:67D4 sub_67D4:
+ROM:67D4                 ldb     <DPbyte_DC      ; Selected object model
+ROM:67D6                 ldx     #Object_Size_Table
+ROM:67D9                 lda     b,x
+ROM:67DB                 sta     <DPbyte_1       ; Loop count for object points
+ROM:67DD                 ldx     #byte_496F
+ROM:67E0                 lda     b,x
+ROM:67E2                 bne     loc_67E5
+ROM:67E4                 swi
+ROM:67E5
+ROM:67E5 loc_67E5:
+ROM:67E5                 asla
+ROM:67E6                 sta     MW2             ; Set BIC
+ROM:67E9                 rola
+ROM:67EA                 sta     MW1
+ROM:67ED                 ldx     #Scratch_RAM_start
+ROM:67F0
+ROM:67F0 loc_67F0:                               ; Math program 0x50. Matrix Multiply - Transposed
+ROM:67F0                 lda     #$50 ; 'P'
+ROM:67F2                 jsr     Math_Run_Start
+ROM:67F5                 ldd     MReg00          ; Math result X
+ROM:67F8                 std     DVSRH
+ROM:67FB                 orcc    #0
+ROM:67FD                 ldd     MW0
+ROM:6800                 std     MReg00          ; Math result X
+ROM:6803                 lda     #$86 ; 'å'      ; Reg01 = Reg01 x Reg00
+ROM:6803                                         ; Reg02 = Reg02 x Reg00
+ROM:6805                 jsr     Math_Run_Start
+ROM:6808                 ldd     MReg01          ; Math result Y
+ROM:680B                 std     ,x
+ROM:680D                 ldd     MReg02          ; Math result Z
+ROM:6810                 std     2,x
+ROM:6812                 leax    4,x
+ROM:6814                 dec     <DPbyte_1       ; Loop until all object points done
+ROM:6816                 bgt     loc_67F0
+ROM:6818                 rts
+ROM:6818 ; End of function sub_67D4
+ROM:6818
+ROM:6819
+ROM:6819 ; =============== S U B R O U T I N E =======================================
+ROM:6819
+ROM:6819 ; Format vectors for ties, and tower/bunker explosions
+ROM:6819
+ROM:6819 sub_6819:
+ROM:6819                 ldx     #JumpTable7610Hi ; Called during space and towers
+ROM:681C                 ldb     <DPbyte_DC      ; Selected object model
+ROM:681E                 aslb
+ROM:681F                 ldu     b,x
+ROM:6821                 ldb     ,u+
+ROM:6823                 beq     loc_6826
+ROM:6825                 swi
+ROM:6826
+ROM:6826 loc_6826:
+ROM:6826                 ldb     ,u+
+ROM:6828                 bitb    #2
+ROM:682A                 beq     loc_6838
+ROM:682C                 cmpb    #$FF
+ROM:682E                 beq     locret_6863
+ROM:6830                 lsrb
+ROM:6831                 lsrb
+ROM:6832                 cmpb    <DPbyte_DB
+ROM:6834                 bhi     loc_6826
+ROM:6836                 bra     locret_6863
+ROM:6838 ; ---------------------------------------------------------------------------
+ROM:6838
+ROM:6838 loc_6838:
+ROM:6838                 clra
+ROM:6839                 bitb    #3
+ROM:683B                 bne     loc_683F
+ROM:683D                 lda     #$E0 ; 'a'      ; Vector is visible
+ROM:683F
+ROM:683F loc_683F:
+ROM:683F                 sta     <DPbyte_DA
+ROM:6841                 andb    #$FC ; 'n'
+ROM:6843                 ldx     #Scratch_RAM_start
+ROM:6846                 abx
+ROM:6847                 ldd     2,x
+ROM:6849                 subd    <DPbyte_D8
+ROM:684B                 anda    #$1F
+ROM:684D                 std     ,y++
+ROM:684F                 ldd     ,x
+ROM:6851                 subd    <DPbyte_D6
+ROM:6853                 anda    #$1F
+ROM:6855                 oraa    <DPbyte_DA
+ROM:6857                 std     ,y++
+ROM:6859                 ldd     ,x
+ROM:685B                 std     <DPbyte_D6
+ROM:685D                 ldd     2,x
+ROM:685F                 std     <DPbyte_D8
+ROM:6861                 bra     loc_6826
+ROM:6863 ; ---------------------------------------------------------------------------
+ROM:6863
+ROM:6863 locret_6863:
+ROM:6863                 rts
+ROM:6863 ; End of function sub_6819
+ROM:6863
+ROM:6864
+ROM:6864 ; =============== S U B R O U T I N E =======================================
+ROM:6864
+ROM:6864
+ROM:6864 sub_6864:
+ROM:6864                 ldd     #0              ; Left hand side of trench turret calculation
+ROM:6867                 std     Math_XT2        ; XT2
+ROM:686A                 std     Math_YT2        ; Clear XT, YT and ZT to zero
+ROM:686D                 std     Math_ZT2        ; ZT2
+ROM:6870                 ldx     #Object_Size_Table
+ROM:6873                 ldb     <DPbyte_DC      ; Selected object model
+ROM:6875                 lda     b,x
+ROM:6877                 sta     <DPbyte_1       ; Loop count for object points
+ROM:6879                 ldx     #Obj_List
+ROM:687C                 aslb
+ROM:687D                 ldu     b,x
+ROM:687F                 ldx     #$5DF0
+ROM:6882
+ROM:6882 loc_6882:
+ROM:6882                 ldd     ,u++
+ROM:6884                 std     word_5E00
+ROM:6887                 ldd     ,u++
+ROM:6889                 std     word_5E02
+ROM:688C                 ldd     ,u++
+ROM:688E                 std     word_5E04
+ROM:6891                 ldd     #$1C0           ; Point BIC to Math RAM $5E00
+ROM:6894                 std     MW1
+ROM:6897                 lda     #$2A ; '*'
+ROM:6899                 jsr     Math_Run_Start
+ROM:689C                 ldd     MReg00          ; Math result X
+ROM:689F                 std     6,x
+ROM:68A1                 ldd     MReg01          ; Math result Y
+ROM:68A4                 std     $18,x
+ROM:68A7                 ldd     MReg02          ; Math result Z
+ROM:68AA                 std     $1A,x
+ROM:68AD                 leax    $10,x
+ROM:68B0                 dec     <DPbyte_1       ; Loop until all object points done
+ROM:68B2                 bgt     loc_6882
+ROM:68B4                 ldd     MReg4C
+ROM:68B7                 std     Math_XT2        ; XT2
+ROM:68BA                 ldd     MReg4D
+ROM:68BD                 std     Math_YT2        ; YT2
+ROM:68C0                 ldd     MReg4E
+ROM:68C3                 std     Math_ZT2        ; ZT2
+ROM:68C6                 rts
+ROM:68C6 ; End of function sub_6864
+ROM:68C6
+ROM:68C7
+ROM:68C7 ; =============== S U B R O U T I N E =======================================
+ROM:68C7
+ROM:68C7
+ROM:68C7 sub_68C7:
+ROM:68C7                 ldd     #0              ; Right hand side of trench turret calculation
+ROM:68CA                 std     Math_XT2        ; XT2
+ROM:68CD                 std     Math_YT2        ; Clear XT, YT and ZT to zero
+ROM:68D0                 std     Math_ZT2        ; ZT2
+ROM:68D3                 ldx     #Object_Size_Table
+ROM:68D6                 ldb     <DPbyte_DC      ; Selected object model
+ROM:68D8                 lda     b,x
+ROM:68DA                 sta     <DPbyte_1       ; Loop count for object points
+ROM:68DC                 ldx     #Obj_List
+ROM:68DF                 aslb
+ROM:68E0                 ldu     b,x
+ROM:68E2                 ldx     #$5DF0
+ROM:68E5
+ROM:68E5 loc_68E5:
+ROM:68E5                 ldd     ,u++
+ROM:68E7                 std     word_5E00
+ROM:68EA                 ldd     #0
+ROM:68ED                 subd    ,u++            ; Negate
+ROM:68EF                 std     word_5E02
+ROM:68F2                 ldd     ,u++
+ROM:68F4                 std     word_5E04
+ROM:68F7                 ldd     #$1C0           ; Point BIC to Math RAM $5E00
+ROM:68FA                 std     MW1
+ROM:68FD                 lda     #$2A ; '*'
+ROM:68FF                 jsr     Math_Run_Start
+ROM:6902                 ldd     MReg00          ; Math result X
+ROM:6905                 std     6,x
+ROM:6907                 ldd     MReg01          ; Math result Y
+ROM:690A                 std     $18,x
+ROM:690D                 ldd     MReg02          ; Math result Z
+ROM:6910                 std     $1A,x
+ROM:6913                 leax    $10,x
+ROM:6916                 dec     <DPbyte_1       ; Loop count for object points
+ROM:6918                 bgt     loc_68E5
+ROM:691A                 ldd     MReg4C
+ROM:691D                 std     Math_XT2        ; XT2
+ROM:6920                 ldd     MReg4D
+ROM:6923                 std     Math_YT2        ; YT2
+ROM:6926                 ldd     MReg4E
+ROM:6929                 std     Math_ZT2        ; ZT2
+ROM:692C                 rts
+ROM:692C ; End of function sub_68C7
+ROM:692C
+ROM:692D
+ROM:692D ; =============== S U B R O U T I N E =======================================
+ROM:692D
+ROM:692D
+ROM:692D sub_692D:
+ROM:692D                 ldd     #0              ; Trench calculation
+ROM:6930                 subd    MReg00          ; Math result X
+ROM:6933                 std     MReg00          ; Math result X
+ROM:6936                 ldd     #0
+ROM:6939                 subd    MReg01          ; Math result Y
+ROM:693C                 std     MReg01          ; Math result Y
+ROM:693F                 ldd     #0
+ROM:6942                 subd    MReg02          ; Math result Z
+ROM:6945                 std     MReg02          ; Math result Z
+ROM:6948                 ldd     #$1C0           ; Point BIC to Math RAM $5E00
+ROM:694B                 std     MW1
+ROM:694E                 ldd     word_5DF6
+ROM:6951                 subd    MReg00          ; Math result X
+ROM:6954                 std     DVSRH
+ROM:6957                 lda     #$B0 ; '¦'      ; XT = [BIC,3] - Reg00
+ROM:6957                                         ; BIC++
+ROM:6959                 sta     MW0
+ROM:695C                 ldx     #Object_Size_Table
+ROM:695F                 ldb     <DPbyte_DC      ; Selected object model
+ROM:6961                 lda     b,x
+ROM:6963                 ldb     #$AE ; '«'      ; [BIC,2] = ([BIC,0] - Reg01) x (YT)
+ROM:6963                                         ; [BIC,3] = ([BIC,1] - Reg02) x (YT)
+ROM:6963                                         ; BIC++
+ROM:6963                                         ; XT = (BIC,3) - Reg00
+ROM:6963                                         ; BIC++
+ROM:6965
+ROM:6965 loc_6965:
+ROM:6965                 ldu     MW0
+ROM:6968                 ldx     MReg0C          ; XT
+ROM:696B                 stu     MReg0D          ; YT
+ROM:696E                 stb     MW0             ; Run math program $AE
+ROM:6971                 stx     DVSRH
+ROM:6974                 deca
+ROM:6975                 bgt     loc_6965
+ROM:6977                 rts
+ROM:6977 ; End of function sub_692D
+ROM:6977
+ROM:6978
+ROM:6978 ; =============== S U B R O U T I N E =======================================
+ROM:6978
+ROM:6978
+ROM:6978 sub_6978:
+ROM:6978                 ldd     #0              ; Some trench calculation
+ROM:697B                 subd    MReg00          ; Math result X
+ROM:697E                 std     MReg00          ; Math result X
+ROM:6981                 ldd     #0
+ROM:6984                 subd    MReg01          ; Math result Y
+ROM:6987                 std     MReg01          ; Math result Y
+ROM:698A                 ldd     #0
+ROM:698D                 subd    MReg02          ; Math result Z
+ROM:6990                 std     MReg02          ; Math result Z
+ROM:6993                 ldd     #$1C0           ; Point BIC to Math RAM $5E00
+ROM:6996                 std     MW1
+ROM:6999                 ldd     word_5DF6
+ROM:699C                 subd    MReg00          ; Math result X
+ROM:699F                 std     DVSRH
+ROM:69A2                 lda     #$B0 ; '¦'      ; XT Reg0C = [BIC,3] - Reg00
+ROM:69A4                 sta     MW0
+ROM:69A7                 ldx     #Object_Size_Table
+ROM:69AA                 ldb     <DPbyte_DC      ; Selected object model
+ROM:69AC                 lda     b,x
+ROM:69AE                 ldb     #$AE ; '«'      ; [BIC,2] = ([BIC,0] - Reg01) x (YT)
+ROM:69AE                                         ; [BIC,3] = ([BIC,1] - Reg02) x (YT)
+ROM:69AE                                         ; BIC++
+ROM:69AE                                         ; XT = [BIC,3] - Reg00
+ROM:69AE                                         ; BIC++
+ROM:69B0
+ROM:69B0 loc_69B0:
+ROM:69B0                 ldu     MW0
+ROM:69B3                 cmpu    #$100
+ROM:69B7                 bgt     loc_69BC
+ROM:69B9                 ldu     #$7FFF
+ROM:69BC
+ROM:69BC loc_69BC:                               ; XT
+ROM:69BC                 ldx     MReg0C
+ROM:69BF                 stu     MReg0D          ; YT
+ROM:69C2                 stb     MW0
+ROM:69C5                 stx     DVSRH
+ROM:69C8                 deca
+ROM:69C9                 bgt     loc_69B0
+ROM:69CB                 ldx     #Object_Size_Table
+ROM:69CE                 ldb     <DPbyte_DC      ; Selected object model
+ROM:69D0                 lda     b,x
+ROM:69D2                 ldu     #$5E0C
+ROM:69D5
+ROM:69D5 loc_69D5:
+ROM:69D5                 ldx     ,u
+ROM:69D7                 cmpx    #$216
+ROM:69DA                 ble     loc_69E3
+ROM:69DC                 ldx     #$216
+ROM:69DF                 stx     ,u
+ROM:69E1                 bra     loc_69ED
+ROM:69E3 ; ---------------------------------------------------------------------------
+ROM:69E3
+ROM:69E3 loc_69E3:
+ROM:69E3                 cmpx    #$FDEA
+ROM:69E6                 bge     loc_69ED
+ROM:69E8                 ldx     #$FDEA
+ROM:69EB                 stx     ,u
+ROM:69ED
+ROM:69ED loc_69ED:
+ROM:69ED                 ldx     2,u
+ROM:69EF                 cmpx    #$2D8
+ROM:69F2                 ble     loc_69FB
+ROM:69F4                 ldx     #$2D8
+ROM:69F7                 stx     2,u
+ROM:69F9                 bra     loc_6A05
+ROM:69FB ; ---------------------------------------------------------------------------
+ROM:69FB
+ROM:69FB loc_69FB:
+ROM:69FB                 cmpx    #$FDEC
+ROM:69FE                 bge     loc_6A05
+ROM:6A00                 ldx     #$FDEC
+ROM:6A03                 stx     2,u
+ROM:6A05
+ROM:6A05 loc_6A05:
+ROM:6A05                 leau    $10,u
+ROM:6A08                 deca
+ROM:6A09                 bgt     loc_69D5
+ROM:6A0B                 rts
+ROM:6A0B ; End of function sub_6978
+ROM:6A0B
+ROM:6A0C
+ROM:6A0C ; =============== S U B R O U T I N E =======================================
+ROM:6A0C
+ROM:6A0C
+ROM:6A0C sub_6A0C:
+ROM:6A0C                 ldd     #0
+ROM:6A0F                 subd    MReg00          ; Math result X
+ROM:6A12                 std     MReg00          ; Math result X
+ROM:6A15                 ldd     #0
+ROM:6A18                 subd    MReg01          ; Math result Y
+ROM:6A1B                 std     MReg01          ; Math result Y
+ROM:6A1E                 ldd     #0
+ROM:6A21                 subd    MReg02          ; Math result Z
+ROM:6A24                 std     MReg02          ; Math result Z
+ROM:6A27                 ldd     #$1C0           ; Point BIC to Math RAM $5E00
+ROM:6A2A                 std     MW1
+ROM:6A2D                 ldd     word_5DF6
+ROM:6A30                 subd    MReg00          ; Math result X
+ROM:6A33                 std     DVSRH
+ROM:6A36                 lda     #$B0 ; '¦'      ; Reg0C = [BIC,3] - Reg00
+ROM:6A38                 sta     MW0
+ROM:6A3B                 ldx     #Object_Size_Table
+ROM:6A3E                 ldb     <DPbyte_DC      ; Selected object model
+ROM:6A40                 lda     b,x
+ROM:6A42                 ldb     #$AE ; '«'      ; [BIC,2] = ([BIC,0] - Reg01) x YT
+ROM:6A42                                         ; [BIC,3] = ([BIC,1] - Reg02) x YT
+ROM:6A42                                         ; BIC++
+ROM:6A42                                         ; XT = [BIC,3] - Reg00
+ROM:6A42                                         ; BIC++
+ROM:6A44
+ROM:6A44 loc_6A44:
+ROM:6A44                 ldu     MW0
+ROM:6A47                 cmpu    #$100
+ROM:6A4B                 bgt     loc_6A50
+ROM:6A4D                 ldu     #$7FFF
+ROM:6A50
+ROM:6A50 loc_6A50:                               ; XT
+ROM:6A50                 ldx     MReg0C
+ROM:6A53                 stu     MReg0D          ; YT
+ROM:6A56                 stb     MW0
+ROM:6A59                 stx     DVSRH
+ROM:6A5C                 deca
+ROM:6A5D                 bgt     loc_6A44        ; Loop until all object points done
+ROM:6A5F                 ldx     #Object_Size_Table
+ROM:6A62                 ldb     <DPbyte_DC      ; Selected object model
+ROM:6A64                 lda     b,x
+ROM:6A66                 ldu     #$5E0C
+ROM:6A69
+ROM:6A69 loc_6A69:
+ROM:6A69                 ldx     ,u
+ROM:6A6B                 cmpx    #$3FE
+ROM:6A6E                 ble     loc_6A77
+ROM:6A70                 ldx     #$3FE
+ROM:6A73                 stx     ,u
+ROM:6A75                 bra     loc_6A81
+ROM:6A77 ; ---------------------------------------------------------------------------
+ROM:6A77
+ROM:6A77 loc_6A77:
+ROM:6A77                 cmpx    #$FC02
+ROM:6A7A                 bge     loc_6A81
+ROM:6A7C                 ldx     #$FC02
+ROM:6A7F                 stx     ,u
+ROM:6A81
+ROM:6A81 loc_6A81:
+ROM:6A81                 ldx     2,u
+ROM:6A83                 cmpx    #$4C0
+ROM:6A86                 ble     loc_6A8F
+ROM:6A88                 ldx     #$4C0
+ROM:6A8B                 stx     2,u
+ROM:6A8D                 bra     loc_6A99
+ROM:6A8F ; ---------------------------------------------------------------------------
+ROM:6A8F
+ROM:6A8F loc_6A8F:
+ROM:6A8F                 cmpx    #$FC04
+ROM:6A92                 bge     loc_6A99
+ROM:6A94                 ldx     #$FC04
+ROM:6A97                 stx     2,u
+ROM:6A99
+ROM:6A99 loc_6A99:
+ROM:6A99                 leau    $10,u
+ROM:6A9C                 deca
+ROM:6A9D                 bgt     loc_6A69
+ROM:6A9F                 rts
+ROM:6A9F ; End of function sub_6A0C
+ROM:6A9F
+ROM:6AA0
+ROM:6AA0 ; =============== S U B R O U T I N E =======================================
+ROM:6AA0
+ROM:6AA0
+ROM:6AA0 sub_6AA0:
+ROM:6AA0                 ldx     #JumpTable7610Hi
+ROM:6AA3                 ldb     <DPbyte_DC      ; Get object selected
+ROM:6AA5                 aslb
+ROM:6AA6                 ldu     b,x
+ROM:6AA8                 ldb     ,u+
+ROM:6AAA                 cmpb    #1              ; Check that start of function has illegal $01 instruction byte. Why??
+ROM:6AAC                 beq     loc_6AAF
+ROM:6AAE                 swi
+ROM:6AAF
+ROM:6AAF loc_6AAF:
+ROM:6AAF                 jmp     ,u
+ROM:6AAF ; End of function sub_6AA0
+ROM:6AAF
+ROM:6AAF ; ---------------------------------------------------------------------------
+ROM:6AB1 byte_6AB1:      fcb 0, 5, 8, $C, $10, $14, $18, 4
+ROM:6AB1                 fcb $1C, $20, $24, $28, $2C, $30, $1C, $64
+ROM:6AB1                 fcb $68, $6C, $70, $74, $64, $94, $98, $9C
+ROM:6AB1                 fcb $BC, $9D, $A0, $A4, $C4, $A5, $A8, $AC
+ROM:6AB1                 fcb $B0, $94, $B4, $B8, $BC, $C0, $C4, $C8
+ROM:6AB1                 fcb $CC, $D0, $B4, $7C, $80, $84, $88, $8C
+ROM:6AB1                 fcb $90, $7C, $4C, $50, $54, $58, $5C, $60
+ROM:6AB1                 fcb $4C, $34, $38, $3C, $40, $44, $48, $34
+ROM:6AB1                 fcb $39, $50, $80, $B8, $98, $68, $20, 8
+ROM:6AB1                 fcb $D, $24, $6C, $A0, $C1, $84, $54, $3C
+ROM:6AB1                 fcb $41, $58, $88, $C8, $A8, $70, $28, $10
+ROM:6AB1                 fcb $15, $2C, $74, $AC, $CC, $8C, $5C, $44
+ROM:6AB1                 fcb $49, $60, $90, $D0, $B0, $78, $30, $18
+ROM:6AB1                 fcb $FF
+ROM:6B1A byte_6B1A:      fcb 0, $1D, $20, $24, $28, $2C, $30, $1C
+ROM:6B1A                 fcb $34, $38, $3C, $40, $44, $48, $34, $1D
+ROM:6B1A                 fcb 4, 8, $C, $10, $14, $18, 4, 9
+ROM:6B1A                 fcb $20, $38, $3D, $24, $C, $11, $28, $40
+ROM:6B1A                 fcb $45, $2C, $14, $19, $30, $48, $FF
+ROM:6B41 byte_6B41:      fcb 0, 5, 8, $C, $10, $14, 4, $34
+ROM:6B41                 fcb $38, $3C, $5C, $3D, $40, $44, $64, $45
+ROM:6B41                 fcb $48, $4C, $50, $34, $54, $58, $5C, $60
+ROM:6B41                 fcb $64, $68, $6C, $70, $54, $1C, $20, $24
+ROM:6B41                 fcb $28, $2C, $30, $1C, $21, $58, $38, 8
+ROM:6B41                 fcb $D, $40, $61, $24, $29, $68, $48, $10
+ROM:6B41                 fcb $15, $4C, $6C, $2C, $31, $70, $50, $18
+ROM:6B41                 fcb $FF
+ROM:6B7A byte_6B7A:      fcb 0, $21, 4, 8, $C, $20, $1C, $10
+ROM:6B7A                 fcb $C, $11, $14, $18, $1C, $31, $2C, $28
+ROM:6B7A                 fcb $24, $30, $70, $6D, $2C, $29, $68, $65
+ROM:6B7A                 fcb $24, $95, $90, $8C, $88, $A8, $AC, $B0
+ROM:6B7A                 fcb $B4, $94, $98, $B8, $BC, $C0, $A4, $84
+ROM:6B7A                 fcb $A0, $9C, $98, $9D, $90, $8D, $A0, $85
+ROM:6B7A                 fcb $88, $A9, $A4, $C1, $AC, $B1, $BC, $B9
+ROM:6B7A                 fcb $B4, $7D, $5C, $58, $54, $54, $60, $5C
+ROM:6B7A                 fcb $59, $78, $75, $54, $61, $80, $4D, $48
+ROM:6B7A                 fcb $44, $40, $4C, $50, $3C, $40, $3D, $38
+ROM:6B7A                 fcb $34, $50, $C5, $C8, $CC, $D0, $D4, $D8
+ROM:6B7A                 fcb $DC, $E0, $C4, $D4, $D9, $C8, $CD, $DC
+ROM:6B7A                 fcb $E1, $D0, $FF
+ROM:6BDD byte_6BDD:      fcb 0
+ROM:6BDE                 fcb $FF
+ROM:6BDF byte_6BDF:      fcb 0
+ROM:6BE0                 fcb $FF
+ROM:6BE1 byte_6BE1:      fcb 0, 5, 8, $C, 4, $10, $14, 8
+ROM:6BE1                 fcb $15, $18, $C, $19, $10, $FF
+ROM:6BEF byte_6BEF:      fcb 0, 5, 8, $C, $10, 4, $14, $18
+ROM:6BEF                 fcb 8, $19, $1C, $C, $1D, $20, $10, $21
+ROM:6BEF                 fcb $14, $FF
+ROM:6C01 byte_6C01:      fcb 0, 5, 8, $C, $10, 4, $14, $1C
+ROM:6C01                 fcb 8, $D, $1C, $18, $14, $19, $10, $FF
+ROM:6C11 byte_6C11:      fcb 0, 5, 8, $C, 4, $10, 8, $D
+ROM:6C11                 fcb $10, $FF
+ROM:6C1B byte_6C1B:      fcb 1
+ROM:6C1C
+ROM:6C1C ; =============== S U B R O U T I N E =======================================
+ROM:6C1C
+ROM:6C1C
+ROM:6C1C sub_6C1C:
+ROM:6C1C                 lda     #$5E ; '^'      ; Draws bunkers before exploded
+ROM:6C1E                 tfr     a, dp           ; Change zero page to Math RAM
+ROM:6C20                 ldd     <$0E
+ROM:6C22                 addd    #$FF98
+ROM:6C25                 anda    #$1F
+ROM:6C27                 std     ,y              ; Y points to vector RAM
+ROM:6C29                 ldd     <$0C
+ROM:6C2B                 anda    #$1F
+ROM:6C2D                 std     2,y
+ROM:6C2F                 ldd     <$04
+ROM:6C31                 std     4,y
+ROM:6C33                 ldd     <$00
+ROM:6C35                 std     6,y
+ROM:6C37                 ldd     <$1E
+ROM:6C39                 subd    <$0E
+ROM:6C3B                 anda    #$1F
+ROM:6C3D                 std     8,y
+ROM:6C3F                 ldd     <$1C
+ROM:6C41                 subd    <$0C
+ROM:6C43                 anda    #$1F
+ROM:6C45                 std     $A,y
+ROM:6C47                 ldd     <$2E
+ROM:6C49                 subd    <$1E
+ROM:6C4B                 anda    #$1F
+ROM:6C4D                 std     $C,y
+ROM:6C4F                 ldd     <$2C
+ROM:6C51                 subd    <$1C
+ROM:6C53                 oraa    #$E0 ; 'a'
+ROM:6C55                 std     $E,y
+ROM:6C57                 ldd     <$EE
+ROM:6C59                 subd    <$2E
+ROM:6C5B                 anda    #$1F
+ROM:6C5D                 std     $10,y
+ROM:6C60                 ldd     <$EC
+ROM:6C62                 subd    <$2C
+ROM:6C64                 oraa    #$E0 ; 'a'
+ROM:6C66                 std     $12,y
+ROM:6C69                 ldd     <$DE
+ROM:6C6B                 subd    <$EE
+ROM:6C6D                 anda    #$1F
+ROM:6C6F                 std     $14,y
+ROM:6C72                 ldd     <$DC            ; Selected object model
+ROM:6C74                 subd    <$EC
+ROM:6C76                 oraa    #$E0 ; 'a'
+ROM:6C78                 std     $16,y
+ROM:6C7B                 ldd     <$1E
+ROM:6C7D                 subd    <$DE
+ROM:6C7F                 anda    #$1F
+ROM:6C81                 std     $18,y
+ROM:6C84                 ldd     <$1C
+ROM:6C86                 subd    <$DC            ; Selected object model
+ROM:6C88                 oraa    #$E0 ; 'a'
+ROM:6C8A                 std     $1A,y
+ROM:6C8D                 ldd     <$3E
+ROM:6C8F                 subd    <$1E
+ROM:6C91                 anda    #$1F
+ROM:6C93                 std     $1C,y
+ROM:6C96                 ldd     <$3C
+ROM:6C98                 subd    <$1C
+ROM:6C9A                 oraa    #$E0 ; 'a'
+ROM:6C9C                 std     $1E,y
+ROM:6C9F                 ldd     <$FE
+ROM:6CA1                 subd    <$3E
+ROM:6CA3                 anda    #$1F
+ROM:6CA5                 std     $20,y
+ROM:6CA8                 ldd     <$FC
+ROM:6CAA                 subd    <$3C
+ROM:6CAC                 oraa    #$E0 ; 'a'
+ROM:6CAE                 std     $22,y
+ROM:6CB1                 ldd     <$DE
+ROM:6CB3                 subd    <$FE
+ROM:6CB5                 anda    #$1F
+ROM:6CB7                 std     $24,y
+ROM:6CBA                 ldd     <$DC            ; Selected object model
+ROM:6CBC                 subd    <$FC
+ROM:6CBE                 oraa    #$E0 ; 'a'
+ROM:6CC0                 std     $26,y
+ROM:6CC3                 ldd     <$EE
+ROM:6CC5                 subd    <$DE
+ROM:6CC7                 anda    #$1F
+ROM:6CC9                 std     $28,y
+ROM:6CCC                 ldd     <$EC
+ROM:6CCE                 subd    <$DC            ; Selected object model
+ROM:6CD0                 anda    #$1F
+ROM:6CD2                 std     $2A,y
+ROM:6CD5                 ldd     <$FE
+ROM:6CD7                 subd    <$EE
+ROM:6CD9                 anda    #$1F
+ROM:6CDB                 std     $2C,y
+ROM:6CDE                 ldd     <$FC
+ROM:6CE0                 subd    <$EC
+ROM:6CE2                 oraa    #$E0 ; 'a'
+ROM:6CE4                 std     $2E,y
+ROM:6CE7                 ldd     #$7200          ; Insert Vector SCAL 2,00 instruction
+ROM:6CEA                 std     $30,y
+ROM:6CED                 ldd     #$8040          ; Insert Vector CNTR instruction
+ROM:6CF0                 std     $32,y
+ROM:6CF3                 leay    $34,y           ; Increment vector RAM pointer by 52 bytes for bunker vector data
+ROM:6CF6                 lda     #$48 ; 'H'
+ROM:6CF8                 tfr     a, dp
+ROM:6CFA                 rts
+ROM:6CFA ; End of function sub_6C1C
+ROM:6CFA
+ROM:6CFA ; ---------------------------------------------------------------------------
+ROM:6CFB byte_6CFB:      fcb 1
+ROM:6CFC
+ROM:6CFC ; =============== S U B R O U T I N E =======================================
+ROM:6CFC
+ROM:6CFC
+ROM:6CFC sub_6CFC:
+ROM:6CFC                 lda     #$5E ; '^'      ; Draws towers before top exploded
+ROM:6CFE                 tfr     a, dp
+ROM:6D00                 ldd     <$0E
+ROM:6D02                 addd    #$FF98
+ROM:6D05                 anda    #$1F
+ROM:6D07                 std     ,y
+ROM:6D09                 ldd     <$0C
+ROM:6D0B                 anda    #$1F
+ROM:6D0D                 std     2,y
+ROM:6D0F                 ldd     <$04
+ROM:6D11                 std     4,y
+ROM:6D13                 ldd     <$02
+ROM:6D15                 std     6,y
+ROM:6D17                 ldd     <$1E
+ROM:6D19                 subd    <$0E
+ROM:6D1B                 anda    #$1F
+ROM:6D1D                 std     8,y
+ROM:6D1F                 ldd     <$1C
+ROM:6D21                 subd    <$0C
+ROM:6D23                 anda    #$1F
+ROM:6D25                 std     $A,y
+ROM:6D27                 ldd     <$3E
+ROM:6D29                 subd    <$1E
+ROM:6D2B                 anda    #$1F
+ROM:6D2D                 std     $C,y
+ROM:6D2F                 ldd     <$3C
+ROM:6D31                 subd    <$1C
+ROM:6D33                 oraa    #$E0 ; 'a'
+ROM:6D35                 std     $E,y
+ROM:6D37                 ldd     <$FE
+ROM:6D39                 subd    <$3E
+ROM:6D3B                 anda    #$1F
+ROM:6D3D                 std     $10,y
+ROM:6D40                 ldd     <$FC
+ROM:6D42                 subd    <$3C
+ROM:6D44                 oraa    #$E0 ; 'a'
+ROM:6D46                 std     $12,y
+ROM:6D49                 ldd     <$CE
+ROM:6D4B                 subd    <$FE
+ROM:6D4D                 anda    #$1F
+ROM:6D4F                 std     $14,y
+ROM:6D52                 ldd     <$CC
+ROM:6D54                 subd    <$FC
+ROM:6D56                 oraa    #$E0 ; 'a'
+ROM:6D58                 std     $16,y
+ROM:6D5B                 ldd     <$9E
+ROM:6D5D                 subd    <$CE
+ROM:6D5F                 anda    #$1F
+ROM:6D61                 std     $18,y
+ROM:6D64                 ldd     <$9C
+ROM:6D66                 subd    <$CC
+ROM:6D68                 oraa    #$E0 ; 'a'
+ROM:6D6A                 std     $1A,y
+ROM:6D6D                 ldd     <$00
+ROM:6D6F                 std     $1C,y
+ROM:6D72                 ldd     <$6E
+ROM:6D74                 subd    <$9E
+ROM:6D76                 anda    #$1F
+ROM:6D78                 std     $1E,y
+ROM:6D7B                 ldd     <$6C
+ROM:6D7D                 subd    <$9C
+ROM:6D7F                 oraa    #$E0 ; 'a'
+ROM:6D81                 std     $20,y
+ROM:6D84                 ldd     <$4E
+ROM:6D86                 subd    <$6E
+ROM:6D88                 anda    #$1F
+ROM:6D8A                 std     $22,y
+ROM:6D8D                 ldd     <$4C
+ROM:6D8F                 subd    <$6C
+ROM:6D91                 oraa    #$E0 ; 'a'
+ROM:6D93                 std     $24,y
+ROM:6D96                 ldd     <$7E
+ROM:6D98                 subd    <$4E
+ROM:6D9A                 anda    #$1F
+ROM:6D9C                 std     $26,y
+ROM:6D9F                 ldd     <$7C
+ROM:6DA1                 subd    <$4C
+ROM:6DA3                 oraa    #$E0 ; 'a'
+ROM:6DA5                 std     $28,y
+ROM:6DA8                 ldd     <$02
+ROM:6DAA                 std     $2A,y
+ROM:6DAD                 ldd     <$AE
+ROM:6DAF                 subd    <$7E
+ROM:6DB1                 anda    #$1F
+ROM:6DB3                 std     $2C,y
+ROM:6DB6                 ldd     <$AC
+ROM:6DB8                 subd    <$7C
+ROM:6DBA                 oraa    #$E0 ; 'a'
+ROM:6DBC                 std     $2E,y
+ROM:6DBF                 ldd     <$DE
+ROM:6DC1                 subd    <$AE
+ROM:6DC3                 anda    #$1F
+ROM:6DC5                 std     $30,y
+ROM:6DC8                 ldd     <$DC            ; Selected object model
+ROM:6DCA                 subd    <$AC
+ROM:6DCC                 oraa    #$E0 ; 'a'
+ROM:6DCE                 std     $32,y
+ROM:6DD1                 ldd     <$1E
+ROM:6DD3                 subd    <$DE
+ROM:6DD5                 anda    #$1F
+ROM:6DD7                 std     $34,y
+ROM:6DDA                 ldd     <$1C
+ROM:6DDC                 subd    <$DC            ; Selected object model
+ROM:6DDE                 oraa    #$E0 ; 'a'
+ROM:6DE0                 std     $36,y
+ROM:6DE3                 ldd     <$2E
+ROM:6DE5                 subd    <$1E
+ROM:6DE7                 anda    #$1F
+ROM:6DE9                 std     $38,y
+ROM:6DEC                 ldd     <$2C
+ROM:6DEE                 subd    <$1C
+ROM:6DF0                 oraa    #$E0 ; 'a'
+ROM:6DF2                 std     $3A,y
+ROM:6DF5                 ldd     <$EE
+ROM:6DF7                 subd    <$2E
+ROM:6DF9                 anda    #$1F
+ROM:6DFB                 std     $3C,y
+ROM:6DFE                 ldd     <$EC
+ROM:6E00                 subd    <$2C
+ROM:6E02                 oraa    #$E0 ; 'a'
+ROM:6E04                 std     $3E,y
+ROM:6E07                 ldd     <$BE
+ROM:6E09                 subd    <$EE
+ROM:6E0B                 anda    #$1F
+ROM:6E0D                 std     $40,y
+ROM:6E10                 ldd     <$BC
+ROM:6E12                 subd    <$EC
+ROM:6E14                 oraa    #$E0 ; 'a'
+ROM:6E16                 std     $42,y
+ROM:6E19                 ldd     <$8E
+ROM:6E1B                 subd    <$BE
+ROM:6E1D                 anda    #$1F
+ROM:6E1F                 std     $44,y
+ROM:6E22                 ldd     <$8C
+ROM:6E24                 subd    <$BC
+ROM:6E26                 oraa    #$E0 ; 'a'
+ROM:6E28                 std     $46,y
+ROM:6E2B                 ldd     <$00
+ROM:6E2D                 std     $48,y
+ROM:6E30                 ldd     <$5E
+ROM:6E32                 subd    <$8E
+ROM:6E34                 anda    #$1F
+ROM:6E36                 std     $4A,y
+ROM:6E39                 ldd     <$5C
+ROM:6E3B                 subd    <$8C
+ROM:6E3D                 oraa    #$E0 ; 'a'
+ROM:6E3F                 std     $4C,y
+ROM:6E42                 ldd     <$4E
+ROM:6E44                 subd    <$5E
+ROM:6E46                 anda    #$1F
+ROM:6E48                 std     $4E,y
+ROM:6E4B                 ldd     <$4C
+ROM:6E4D                 subd    <$5C
+ROM:6E4F                 oraa    #$E0 ; 'a'
+ROM:6E51                 std     $50,y
+ROM:6E54                 ldd     <$7E
+ROM:6E56                 subd    <$4E
+ROM:6E58                 anda    #$1F
+ROM:6E5A                 std     $52,y
+ROM:6E5D                 ldd     <$7C
+ROM:6E5F                 subd    <$4C
+ROM:6E61                 anda    #$1F
+ROM:6E63                 std     $54,y
+ROM:6E66                 ldd     <$9E
+ROM:6E68                 subd    <$7E
+ROM:6E6A                 anda    #$1F
+ROM:6E6C                 std     $56,y
+ROM:6E6F                 ldd     <$9C
+ROM:6E71                 subd    <$7C
+ROM:6E73                 oraa    #$E0 ; 'a'
+ROM:6E75                 std     $58,y
+ROM:6E78                 ldd     <$7E
+ROM:6E7A                 subd    <$9E
+ROM:6E7C                 anda    #$1F
+ROM:6E7E                 std     $5A,y
+ROM:6E81                 ldd     <$7C
+ROM:6E83                 subd    <$9C
+ROM:6E85                 anda    #$1F
+ROM:6E87                 std     $5C,y
+ROM:6E8A                 ldd     <$8E
+ROM:6E8C                 subd    <$7E
+ROM:6E8E                 anda    #$1F
+ROM:6E90                 std     $5E,y
+ROM:6E93                 ldd     <$8C
+ROM:6E95                 subd    <$7C
+ROM:6E97                 oraa    #$E0 ; 'a'
+ROM:6E99                 std     $60,y
+ROM:6E9C                 ldd     #$7200          ; Vector SCAL 2,0 instruction
+ROM:6E9F                 std     $62,y
+ROM:6EA2                 ldd     #$8040          ; Insert Vector CNTR instruction
+ROM:6EA5                 std     $64,y
+ROM:6EA8                 leay    $66,y
+ROM:6EAB                 lda     #$48 ; 'H'
+ROM:6EAD                 tfr     a, dp
+ROM:6EAF                 rts
+ROM:6EAF ; End of function sub_6CFC
+ROM:6EAF
+ROM:6EAF ; ---------------------------------------------------------------------------
+ROM:6EB0 byte_6EB0:      fcb 1
+ROM:6EB1
+ROM:6EB1 ; =============== S U B R O U T I N E =======================================
+ROM:6EB1
+ROM:6EB1
+ROM:6EB1 sub_6EB1:
+ROM:6EB1                 lda     #$5E ; '^'      ; Draws tower after top exploded
+ROM:6EB3                 tfr     a, dp
+ROM:6EB5                 ldd     <$0E
+ROM:6EB7                 addd    #$FF98
+ROM:6EBA                 anda    #$1F
+ROM:6EBC                 std     ,y
+ROM:6EBE                 ldd     <$0C
+ROM:6EC0                 anda    #$1F
+ROM:6EC2                 std     2,y
+ROM:6EC4                 ldd     <$04
+ROM:6EC6                 std     4,y
+ROM:6EC8                 ldd     <$02
+ROM:6ECA                 std     6,y
+ROM:6ECC                 ldd     <$1E
+ROM:6ECE                 subd    <$0E
+ROM:6ED0                 anda    #$1F
+ROM:6ED2                 std     8,y
+ROM:6ED4                 ldd     <$1C
+ROM:6ED6                 subd    <$0C
+ROM:6ED8                 anda    #$1F
+ROM:6EDA                 std     $A,y
+ROM:6EDC                 ldd     <$3E
+ROM:6EDE                 subd    <$1E
+ROM:6EE0                 anda    #$1F
+ROM:6EE2                 std     $C,y
+ROM:6EE4                 ldd     <$3C
+ROM:6EE6                 subd    <$1C
+ROM:6EE8                 oraa    #$E0 ; 'a'
+ROM:6EEA                 std     $E,y
+ROM:6EEC                 ldd     <$FE
+ROM:6EEE                 subd    <$3E
+ROM:6EF0                 anda    #$1F
+ROM:6EF2                 std     $10,y
+ROM:6EF5                 ldd     <$FC
+ROM:6EF7                 subd    <$3C
+ROM:6EF9                 oraa    #$E0 ; 'a'
+ROM:6EFB                 std     $12,y
+ROM:6EFE                 ldd     <$CE
+ROM:6F00                 subd    <$FE
+ROM:6F02                 anda    #$1F
+ROM:6F04                 std     $14,y
+ROM:6F07                 ldd     <$CC
+ROM:6F09                 subd    <$FC
+ROM:6F0B                 oraa    #$E0 ; 'a'
+ROM:6F0D                 std     $16,y
+ROM:6F10                 ldd     <$9E
+ROM:6F12                 subd    <$CE
+ROM:6F14                 anda    #$1F
+ROM:6F16                 std     $18,y
+ROM:6F19                 ldd     <$9C
+ROM:6F1B                 subd    <$CC
+ROM:6F1D                 oraa    #$E0 ; 'a'
+ROM:6F1F                 std     $1A,y
+ROM:6F22                 ldd     <$7E
+ROM:6F24                 subd    <$9E
+ROM:6F26                 anda    #$1F
+ROM:6F28                 std     $1C,y
+ROM:6F2B                 ldd     <$7C
+ROM:6F2D                 subd    <$9C
+ROM:6F2F                 oraa    #$E0 ; 'a'
+ROM:6F31                 std     $1E,y
+ROM:6F34                 ldd     <$AE
+ROM:6F36                 subd    <$7E
+ROM:6F38                 anda    #$1F
+ROM:6F3A                 std     $20,y
+ROM:6F3D                 ldd     <$AC
+ROM:6F3F                 subd    <$7C
+ROM:6F41                 oraa    #$E0 ; 'a'
+ROM:6F43                 std     $22,y
+ROM:6F46                 ldd     <$DE
+ROM:6F48                 subd    <$AE
+ROM:6F4A                 anda    #$1F
+ROM:6F4C                 std     $24,y
+ROM:6F4F                 ldd     <$DC            ; Selected object model
+ROM:6F51                 subd    <$AC
+ROM:6F53                 oraa    #$E0 ; 'a'
+ROM:6F55                 std     $26,y
+ROM:6F58                 ldd     <$1E
+ROM:6F5A                 subd    <$DE
+ROM:6F5C                 anda    #$1F
+ROM:6F5E                 std     $28,y
+ROM:6F61                 ldd     <$1C
+ROM:6F63                 subd    <$DC            ; Selected object model
+ROM:6F65                 oraa    #$E0 ; 'a'
+ROM:6F67                 std     $2A,y
+ROM:6F6A                 ldd     <$2E
+ROM:6F6C                 subd    <$1E
+ROM:6F6E                 anda    #$1F
+ROM:6F70                 std     $2C,y
+ROM:6F73                 ldd     <$2C
+ROM:6F75                 subd    <$1C
+ROM:6F77                 oraa    #$E0 ; 'a'
+ROM:6F79                 std     $2E,y
+ROM:6F7C                 ldd     <$EE
+ROM:6F7E                 subd    <$2E
+ROM:6F80                 anda    #$1F
+ROM:6F82                 std     $30,y
+ROM:6F85                 ldd     <$EC
+ROM:6F87                 subd    <$2C
+ROM:6F89                 oraa    #$E0 ; 'a'
+ROM:6F8B                 std     $32,y
+ROM:6F8E                 ldd     <$BE
+ROM:6F90                 subd    <$EE
+ROM:6F92                 anda    #$1F
+ROM:6F94                 std     $34,y
+ROM:6F97                 ldd     <$BC
+ROM:6F99                 subd    <$EC
+ROM:6F9B                 oraa    #$E0 ; 'a'
+ROM:6F9D                 std     $36,y
+ROM:6FA0                 ldd     <$8E
+ROM:6FA2                 subd    <$BE
+ROM:6FA4                 anda    #$1F
+ROM:6FA6                 std     $38,y
+ROM:6FA9                 ldd     <$8C
+ROM:6FAB                 subd    <$BC
+ROM:6FAD                 oraa    #$E0 ; 'a'
+ROM:6FAF                 std     $3A,y
+ROM:6FB2                 ldd     <$7E
+ROM:6FB4                 subd    <$8E
+ROM:6FB6                 anda    #$1F
+ROM:6FB8                 std     $3C,y
+ROM:6FBB                 ldd     <$7C
+ROM:6FBD                 subd    <$8C
+ROM:6FBF                 oraa    #$E0 ; 'a'
+ROM:6FC1                 std     $3E,y
+ROM:6FC4                 ldd     #$7200
+ROM:6FC7                 std     $40,y
+ROM:6FCA                 ldd     #$8040          ; Insert Vector CNTR instruction
+ROM:6FCD                 std     $42,y
+ROM:6FD0                 leay    $44,y
+ROM:6FD3                 lda     #$48 ; 'H'
+ROM:6FD5                 tfr     a, dp
+ROM:6FD7                 rts
+ROM:6FD7 ; End of function sub_6EB1
+ROM:6FD7
+ROM:6FD7 ; ---------------------------------------------------------------------------
+ROM:6FD8 byte_6FD8:      fcb 1
+ROM:6FD9
+ROM:6FD9 ; =============== S U B R O U T I N E =======================================
+ROM:6FD9
+ROM:6FD9
+ROM:6FD9 sub_6FD9:
+ROM:6FD9                 lda     #$5E ; '^'      ; Draws trench turrets
+ROM:6FDB                 tfr     a, dp
+ROM:6FDD                 ldd     <$4E
+ROM:6FDF                 addd    #$FF98
+ROM:6FE2                 anda    #$1F
+ROM:6FE4                 std     ,y
+ROM:6FE6                 ldd     <$4C
+ROM:6FE8                 anda    #$1F
+ROM:6FEA                 std     2,y
+ROM:6FEC                 ldd     #$6480
+ROM:6FEF                 std     4,y
+ROM:6FF1                 ldd     <$3E
+ROM:6FF3                 subd    <$4E
+ROM:6FF5                 anda    #$1F
+ROM:6FF7                 std     6,y
+ROM:6FF9                 ldd     <$3C
+ROM:6FFB                 subd    <$4C
+ROM:6FFD                 oraa    #$E0 ; 'a'
+ROM:6FFF                 std     8,y
+ROM:7001                 ldd     <$2E
+ROM:7003                 subd    <$3E
+ROM:7005                 anda    #$1F
+ROM:7007                 std     $A,y
+ROM:7009                 ldd     <$2C
+ROM:700B                 subd    <$3C
+ROM:700D                 oraa    #$E0 ; 'a'
+ROM:700F                 std     $C,y
+ROM:7011                 ldd     <$1E
+ROM:7013                 subd    <$2E
+ROM:7015                 anda    #$1F
+ROM:7017                 std     $E,y
+ROM:7019                 ldd     <$1C
+ROM:701B                 subd    <$2C
+ROM:701D                 oraa    #$E0 ; 'a'
+ROM:701F                 std     $10,y
+ROM:7022                 ldd     <$4E
+ROM:7024                 subd    <$1E
+ROM:7026                 anda    #$1F
+ROM:7028                 std     $12,y
+ROM:702B                 ldd     <$4C
+ROM:702D                 subd    <$1C
+ROM:702F                 oraa    #$E0 ; 'a'
+ROM:7031                 std     $14,y
+ROM:7034                 ldd     <$9E
+ROM:7036                 subd    <$4E
+ROM:7038                 anda    #$1F
+ROM:703A                 std     $16,y
+ROM:703D                 ldd     <$9C
+ROM:703F                 subd    <$4C
+ROM:7041                 oraa    #$E0 ; 'a'
+ROM:7043                 std     $18,y
+ROM:7046                 ldd     <$AE
+ROM:7048                 subd    <$9E
+ROM:704A                 anda    #$1F
+ROM:704C                 std     $1A,y
+ROM:704F                 ldd     <$AC
+ROM:7051                 subd    <$9C
+ROM:7053                 oraa    #$E0 ; 'a'
+ROM:7055                 std     $1C,y
+ROM:7058                 ldd     <$1E
+ROM:705A                 subd    <$AE
+ROM:705C                 anda    #$1F
+ROM:705E                 std     $1E,y
+ROM:7061                 ldd     <$1C
+ROM:7063                 subd    <$AC
+ROM:7065                 oraa    #$E0 ; 'a'
+ROM:7067                 std     $20,y
+ROM:706A                 ldd     <$AE
+ROM:706C                 subd    <$1E
+ROM:706E                 anda    #$1F
+ROM:7070                 std     $22,y
+ROM:7073                 ldd     <$AC
+ROM:7075                 subd    <$1C
+ROM:7077                 anda    #$1F
+ROM:7079                 std     $24,y
+ROM:707C                 ldd     <$6E
+ROM:707E                 subd    <$AE
+ROM:7080                 anda    #$1F
+ROM:7082                 std     $26,y
+ROM:7085                 ldd     <$6C
+ROM:7087                 subd    <$AC
+ROM:7089                 oraa    #$E0 ; 'a'
+ROM:708B                 std     $28,y
+ROM:708E                 ldd     <$2E
+ROM:7090                 subd    <$6E
+ROM:7092                 anda    #$1F
+ROM:7094                 std     $2A,y
+ROM:7097                 ldd     <$2C
+ROM:7099                 subd    <$6C
+ROM:709B                 oraa    #$E0 ; 'a'
+ROM:709D                 std     $2C,y
+ROM:70A0                 ldd     <$3E
+ROM:70A2                 subd    <$2E
+ROM:70A4                 anda    #$1F
+ROM:70A6                 std     $2E,y
+ROM:70A9                 ldd     <$3C
+ROM:70AB                 subd    <$2C
+ROM:70AD                 anda    #$1F
+ROM:70AF                 std     $30,y
+ROM:70B2                 ldd     <$7E
+ROM:70B4                 subd    <$3E
+ROM:70B6                 anda    #$1F
+ROM:70B8                 std     $32,y
+ROM:70BB                 ldd     <$7C
+ROM:70BD                 subd    <$3C
+ROM:70BF                 oraa    #$E0 ; 'a'
+ROM:70C1                 std     $34,y
+ROM:70C4                 ldd     <$6E
+ROM:70C6                 subd    <$7E
+ROM:70C8                 anda    #$1F
+ROM:70CA                 std     $36,y
+ROM:70CD                 ldd     <$6C
+ROM:70CF                 subd    <$7C
+ROM:70D1                 oraa    #$E0 ; 'a'
+ROM:70D3                 std     $38,y
+ROM:70D6                 ldd     <$5E
+ROM:70D8                 subd    <$6E
+ROM:70DA                 anda    #$1F
+ROM:70DC                 std     $3A,y
+ROM:70DF                 ldd     <$5C
+ROM:70E1                 subd    <$6C
+ROM:70E3                 oraa    #$E0 ; 'a'
+ROM:70E5                 std     $3C,y
+ROM:70E8                 ldd     <$8E
+ROM:70EA                 subd    <$5E
+ROM:70EC                 anda    #$1F
+ROM:70EE                 std     $3E,y
+ROM:70F1                 ldd     <$8C
+ROM:70F3                 subd    <$5C
+ROM:70F5                 oraa    #$E0 ; 'a'
+ROM:70F7                 std     $40,y
+ROM:70FA                 ldd     <$7E
+ROM:70FC                 subd    <$8E
+ROM:70FE                 anda    #$1F
+ROM:7100                 std     $42,y
+ROM:7103                 ldd     <$7C
+ROM:7105                 subd    <$8C
+ROM:7107                 oraa    #$E0 ; 'a'
+ROM:7109                 std     $44,y
+ROM:710C                 ldd     <$9E
+ROM:710E                 subd    <$7E
+ROM:7110                 anda    #$1F
+ROM:7112                 std     $46,y
+ROM:7115                 ldd     <$9C
+ROM:7117                 subd    <$7C
+ROM:7119                 oraa    #$E0 ; 'a'
+ROM:711B                 std     $48,y
+ROM:711E                 ldd     <$8E
+ROM:7120                 subd    <$9E
+ROM:7122                 anda    #$1F
+ROM:7124                 std     $4A,y
+ROM:7127                 ldd     <$8C
+ROM:7129                 subd    <$9C
+ROM:712B                 oraa    #$E0 ; 'a'
+ROM:712D                 std     $4C,y
+ROM:7130                 ldd     <$DE
+ROM:7132                 subd    <$8E
+ROM:7134                 anda    #$1F
+ROM:7136                 std     $4E,y
+ROM:7139                 ldd     <$DC            ; Selected object model
+ROM:713B                 subd    <$8C
+ROM:713D                 oraa    #$E0 ; 'a'
+ROM:713F                 std     $50,y
+ROM:7142                 ldd     <$EE
+ROM:7144                 subd    <$DE
+ROM:7146                 anda    #$1F
+ROM:7148                 std     $52,y
+ROM:714B                 ldd     <$EC
+ROM:714D                 subd    <$DC            ; Selected object model
+ROM:714F                 oraa    #$E0 ; 'a'
+ROM:7151                 std     $54,y
+ROM:7154                 ldd     <$9E
+ROM:7156                 subd    <$EE
+ROM:7158                 anda    #$1F
+ROM:715A                 std     $56,y
+ROM:715D                 ldd     <$9C
+ROM:715F                 subd    <$EC
+ROM:7161                 oraa    #$E0 ; 'a'
+ROM:7163                 std     $58,y
+ROM:7166                 ldd     <$EE
+ROM:7168                 subd    <$9E
+ROM:716A                 anda    #$1F
+ROM:716C                 std     $5A,y
+ROM:716F                 ldd     <$EC
+ROM:7171                 subd    <$9C
+ROM:7173                 anda    #$1F
+ROM:7175                 std     $5C,y
+ROM:7178                 ldd     <$CE
+ROM:717A                 subd    <$EE
+ROM:717C                 anda    #$1F
+ROM:717E                 std     $5E,y
+ROM:7181                 ldd     <$CC
+ROM:7183                 subd    <$EC
+ROM:7185                 oraa    #$E0 ; 'a'
+ROM:7187                 std     $60,y
+ROM:718A                 ldd     <$AE
+ROM:718C                 subd    <$CE
+ROM:718E                 anda    #$1F
+ROM:7190                 std     $62,y
+ROM:7193                 ldd     <$AC
+ROM:7195                 subd    <$CC
+ROM:7197                 oraa    #$E0 ; 'a'
+ROM:7199                 std     $64,y
+ROM:719C                 ldd     <$5E
+ROM:719E                 subd    <$AE
+ROM:71A0                 anda    #$1F
+ROM:71A2                 std     $66,y
+ROM:71A5                 ldd     <$5C
+ROM:71A7                 subd    <$AC
+ROM:71A9                 oraa    #$E0 ; 'a'
+ROM:71AB                 std     $68,y
+ROM:71AE                 ldd     <$BE
+ROM:71B0                 subd    <$5E
+ROM:71B2                 anda    #$1F
+ROM:71B4                 std     $6A,y
+ROM:71B7                 ldd     <$BC
+ROM:71B9                 subd    <$5C
+ROM:71BB                 oraa    #$E0 ; 'a'
+ROM:71BD                 std     $6C,y
+ROM:71C0                 ldd     <$CE
+ROM:71C2                 subd    <$BE
+ROM:71C4                 anda    #$1F
+ROM:71C6                 std     $6E,y
+ROM:71C9                 ldd     <$CC
+ROM:71CB                 subd    <$BC
+ROM:71CD                 oraa    #$E0 ; 'a'
+ROM:71CF                 std     $70,y
+ROM:71D2                 ldd     <$BE
+ROM:71D4                 subd    <$CE
+ROM:71D6                 anda    #$1F
+ROM:71D8                 std     $72,y
+ROM:71DB                 ldd     <$BC
+ROM:71DD                 subd    <$CC
+ROM:71DF                 anda    #$1F
+ROM:71E1                 std     $74,y
+ROM:71E4                 ldd     <$DE
+ROM:71E6                 subd    <$BE
+ROM:71E8                 anda    #$1F
+ROM:71EA                 std     $76,y
+ROM:71ED                 ldd     <$DC            ; Selected object model
+ROM:71EF                 subd    <$BC
+ROM:71F1                 oraa    #$E0 ; 'a'
+ROM:71F3                 std     $78,y
+ROM:71F6                 ldd     #$7200
+ROM:71F9                 std     $7A,y
+ROM:71FC                 ldd     #$8040          ; Insert Vector CNTR instruction
+ROM:71FF                 std     $7C,y
+ROM:7202                 leay    $7E,y
+ROM:7205                 lda     #$48 ; 'H'
+ROM:7207                 tfr     a, dp
+ROM:7209                 rts
+ROM:7209 ; End of function sub_6FD9
+ROM:7209
+ROM:7209 ; ---------------------------------------------------------------------------
+ROM:720A byte_720A:      fcb 1
+ROM:720B
+ROM:720B ; =============== S U B R O U T I N E =======================================
+ROM:720B
+ROM:720B
+ROM:720B sub_720B:
+ROM:720B                 lda     #$5E ; '^'      ; Draws trench green squares
+ROM:720D                 tfr     a, dp
+ROM:720F                 ldd     <$0E
+ROM:7211                 addd    #$FF98          ; Y axis offset for squares
+ROM:7214                 anda    #$1F
+ROM:7216                 std     ,y
+ROM:7218                 ldd     <$0C
+ROM:721A                 anda    #$1F
+ROM:721C                 std     2,y
+ROM:721E                 ldd     #$6280          ; Insert Vector STAT 2,80 instruction (Green)
+ROM:7221                 std     4,y
+ROM:7223                 ldd     <$1E
+ROM:7225                 subd    <$0E
+ROM:7227                 anda    #$1F
+ROM:7229                 std     6,y
+ROM:722B                 ldd     <$1C
+ROM:722D                 subd    <$0C
+ROM:722F                 oraa    #$E0 ; 'a'
+ROM:7231                 std     8,y
+ROM:7233                 ldd     <$2E
+ROM:7235                 subd    <$1E
+ROM:7237                 anda    #$1F
+ROM:7239                 std     $A,y
+ROM:723B                 ldd     <$2C
+ROM:723D                 subd    <$1C
+ROM:723F                 oraa    #$E0 ; 'a'
+ROM:7241                 std     $C,y
+ROM:7243                 ldd     <$3E
+ROM:7245                 subd    <$2E
+ROM:7247                 anda    #$1F
+ROM:7249                 std     $E,y
+ROM:724B                 ldd     <$3C
+ROM:724D                 subd    <$2C
+ROM:724F                 oraa    #$E0 ; 'a'
+ROM:7251                 std     $10,y
+ROM:7254                 ldd     <$0E
+ROM:7256                 subd    <$3E
+ROM:7258                 anda    #$1F
+ROM:725A                 std     $12,y
+ROM:725D                 ldd     <$0C
+ROM:725F                 subd    <$3C
+ROM:7261                 oraa    #$E0 ; 'a'
+ROM:7263                 std     $14,y
+ROM:7266                 ldd     <$4E
+ROM:7268                 subd    <$0E
+ROM:726A                 anda    #$1F
+ROM:726C                 std     $16,y
+ROM:726F                 ldd     <$4C
+ROM:7271                 subd    <$0C
+ROM:7273                 anda    #$1F
+ROM:7275                 std     $18,y
+ROM:7278                 ldd     <$5E
+ROM:727A                 subd    <$4E
+ROM:727C                 anda    #$1F
+ROM:727E                 std     $1A,y
+ROM:7281                 ldd     <$5C
+ROM:7283                 subd    <$4C
+ROM:7285                 oraa    #$E0 ; 'a'
+ROM:7287                 std     $1C,y
+ROM:728A                 ldd     <$6E
+ROM:728C                 subd    <$5E
+ROM:728E                 anda    #$1F
+ROM:7290                 std     $1E,y
+ROM:7293                 ldd     <$6C
+ROM:7295                 subd    <$5C
+ROM:7297                 oraa    #$E0 ; 'a'
+ROM:7299                 std     $20,y
+ROM:729C                 ldd     <$7E
+ROM:729E                 subd    <$6E
+ROM:72A0                 anda    #$1F
+ROM:72A2                 std     $22,y
+ROM:72A5                 ldd     <$7C
+ROM:72A7                 subd    <$6C
+ROM:72A9                 oraa    #$E0 ; 'a'
+ROM:72AB                 std     $24,y
+ROM:72AE                 ldd     <$4E
+ROM:72B0                 subd    <$7E
+ROM:72B2                 anda    #$1F
+ROM:72B4                 std     $26,y
+ROM:72B7                 ldd     <$4C
+ROM:72B9                 subd    <$7C
+ROM:72BB                 oraa    #$E0 ; 'a'
+ROM:72BD                 std     $28,y
+ROM:72C0                 ldd     #$7200
+ROM:72C3                 std     $2A,y
+ROM:72C6                 ldd     #$8040          ; Insert Vector CNTR instruction
+ROM:72C9                 std     $2C,y
+ROM:72CC                 leay    $2E,y
+ROM:72CF                 lda     #$48 ; 'H'
+ROM:72D1                 tfr     a, dp
+ROM:72D3                 rts
+ROM:72D3 ; End of function sub_720B
+ROM:72D3
+ROM:72D3 ; ---------------------------------------------------------------------------
+ROM:72D4 byte_72D4:      fcb 1
+ROM:72D5
+ROM:72D5 ; =============== S U B R O U T I N E =======================================
+ROM:72D5
+ROM:72D5
+ROM:72D5 sub_72D5:
+ROM:72D5                 lda     #$5E ; '^'      ; Draws trench catwalks
+ROM:72D7                 tfr     a, dp
+ROM:72D9                 ldd     <$1E
+ROM:72DB                 addd    #$FF98
+ROM:72DE                 anda    #$1F
+ROM:72E0                 std     ,y
+ROM:72E2                 ldd     <$1C
+ROM:72E4                 anda    #$1F
+ROM:72E6                 std     2,y
+ROM:72E8                 ldd     <$0E
+ROM:72EA                 subd    <$1E
+ROM:72EC                 anda    #$1F
+ROM:72EE                 std     4,y
+ROM:72F0                 ldd     <$0C
+ROM:72F2                 subd    <$1C
+ROM:72F4                 oraa    #$E0 ; 'a'
+ROM:72F6                 std     6,y
+ROM:72F8                 ldd     <$2E
+ROM:72FA                 subd    <$0E
+ROM:72FC                 anda    #$1F
+ROM:72FE                 std     8,y
+ROM:7300                 ldd     <$2C
+ROM:7302                 subd    <$0C
+ROM:7304                 oraa    #$E0 ; 'a'
+ROM:7306                 std     $A,y
+ROM:7308                 ldd     <$3E
+ROM:730A                 subd    <$2E
+ROM:730C                 anda    #$1F
+ROM:730E                 std     $C,y
+ROM:7310                 ldd     <$3C
+ROM:7312                 subd    <$2C
+ROM:7314                 oraa    #$E0 ; 'a'
+ROM:7316                 std     $E,y
+ROM:7318                 ldd     <$1E
+ROM:731A                 subd    <$3E
+ROM:731C                 anda    #$1F
+ROM:731E                 std     $10,y
+ROM:7321                 ldd     <$1C
+ROM:7323                 subd    <$3C
+ROM:7325                 oraa    #$E0 ; 'a'
+ROM:7327                 std     $12,y
+ROM:732A                 ldd     <$5E
+ROM:732C                 subd    <$1E
+ROM:732E                 anda    #$1F
+ROM:7330                 std     $14,y
+ROM:7333                 ldd     <$5C
+ROM:7335                 subd    <$1C
+ROM:7337                 oraa    #$E0 ; 'a'
+ROM:7339                 std     $16,y
+ROM:733C                 ldd     <$4E
+ROM:733E                 subd    <$5E
+ROM:7340                 anda    #$1F
+ROM:7342                 std     $18,y
+ROM:7345                 ldd     <$4C
+ROM:7347                 subd    <$5C
+ROM:7349                 oraa    #$E0 ; 'a'
+ROM:734B                 std     $1A,y
+ROM:734E                 ldd     <$0E
+ROM:7350                 subd    <$4E
+ROM:7352                 anda    #$1F
+ROM:7354                 std     $1C,y
+ROM:7357                 ldd     <$0C
+ROM:7359                 subd    <$4C
+ROM:735B                 oraa    #$E0 ; 'a'
+ROM:735D                 std     $1E,y
+ROM:7360                 ldd     #$7200
+ROM:7363                 std     $20,y
+ROM:7366                 ldd     #$8040          ; Insert Vector CNTR instruction
+ROM:7369                 std     $22,y
+ROM:736C                 leay    $24,y
+ROM:736F                 lda     #$48 ; 'H'
+ROM:7371                 tfr     a, dp
+ROM:7373                 rts
+ROM:7373 ; End of function sub_72D5
+ROM:7373
+ROM:7373 ; ---------------------------------------------------------------------------
+ROM:7374 byte_7374:      fcb 1
+ROM:7375
+ROM:7375 ; =============== S U B R O U T I N E =======================================
+ROM:7375
+ROM:7375
+ROM:7375 sub_7375:
+ROM:7375                 lda     #$5E ; '^'      ; Tower top explode: Copy math points to vector RAM?
+ROM:7377                 tfr     a, dp
+ROM:7379                 ldd     <$1E
+ROM:737B                 addd    #$FF98
+ROM:737E                 anda    #$1F
+ROM:7380                 std     ,y
+ROM:7382                 ldd     <$1C
+ROM:7384                 anda    #$1F
+ROM:7386                 std     2,y
+ROM:7388                 ldd     #$A018          ; Insert Vector JSRL 0018 instruction (STAT for colour fade?)
+ROM:738B                 std     4,y
+ROM:738D                 ldd     <$0E
+ROM:738F                 subd    <$1E
+ROM:7391                 anda    #$1F
+ROM:7393                 std     6,y
+ROM:7395                 ldd     <$0C
+ROM:7397                 subd    <$1C
+ROM:7399                 oraa    #$E0 ; 'a'
+ROM:739B                 std     8,y
+ROM:739D                 ldd     <$2E
+ROM:739F                 subd    <$0E
+ROM:73A1                 anda    #$1F
+ROM:73A3                 std     $A,y
+ROM:73A5                 ldd     <$2C
+ROM:73A7                 subd    <$0C
+ROM:73A9                 oraa    #$E0 ; 'a'
+ROM:73AB                 std     $C,y
+ROM:73AD                 ldd     <$3E
+ROM:73AF                 subd    <$2E
+ROM:73B1                 anda    #$1F
+ROM:73B3                 std     $E,y
+ROM:73B5                 ldd     <$3C
+ROM:73B7                 subd    <$2C
+ROM:73B9                 oraa    #$E0 ; 'a'
+ROM:73BB                 std     $10,y
+ROM:73BE                 ldd     <$1E
+ROM:73C0                 subd    <$3E
+ROM:73C2                 anda    #$1F
+ROM:73C4                 std     $12,y
+ROM:73C7                 ldd     <$1C
+ROM:73C9                 subd    <$3C
+ROM:73CB                 oraa    #$E0 ; 'a'
+ROM:73CD                 std     $14,y
+ROM:73D0                 ldd     <$5E
+ROM:73D2                 subd    <$1E
+ROM:73D4                 anda    #$1F
+ROM:73D6                 std     $16,y
+ROM:73D9                 ldd     <$5C
+ROM:73DB                 subd    <$1C
+ROM:73DD                 oraa    #$E0 ; 'a'
+ROM:73DF                 std     $18,y
+ROM:73E2                 ldd     <$6E
+ROM:73E4                 subd    <$5E
+ROM:73E6                 anda    #$1F
+ROM:73E8                 std     $1A,y
+ROM:73EB                 ldd     <$6C
+ROM:73ED                 subd    <$5C
+ROM:73EF                 oraa    #$E0 ; 'a'
+ROM:73F1                 std     $1C,y
+ROM:73F4                 ldd     <$3E
+ROM:73F6                 subd    <$6E
+ROM:73F8                 anda    #$1F
+ROM:73FA                 std     $1E,y
+ROM:73FD                 ldd     <$3C
+ROM:73FF                 subd    <$6C
+ROM:7401                 oraa    #$E0 ; 'a'
+ROM:7403                 std     $20,y
+ROM:7406                 ldd     <$5E
+ROM:7408                 subd    <$3E
+ROM:740A                 anda    #$1F
+ROM:740C                 std     $22,y
+ROM:740F                 ldd     <$5C
+ROM:7411                 subd    <$3C
+ROM:7413                 anda    #$1F
+ROM:7415                 std     $24,y
+ROM:7418                 ldd     <$4E
+ROM:741A                 subd    <$5E
+ROM:741C                 anda    #$1F
+ROM:741E                 std     $26,y
+ROM:7421                 ldd     <$4C
+ROM:7423                 subd    <$5C
+ROM:7425                 oraa    #$E0 ; 'a'
+ROM:7427                 std     $28,y
+ROM:742A                 ldd     <$0E
+ROM:742C                 subd    <$4E
+ROM:742E                 anda    #$1F
+ROM:7430                 std     $2A,y
+ROM:7433                 ldd     <$0C
+ROM:7435                 subd    <$4C
+ROM:7437                 oraa    #$E0 ; 'a'
+ROM:7439                 std     $2C,y
+ROM:743C                 ldd     #$7200
+ROM:743F                 std     $2E,y
+ROM:7442                 ldd     #$8040          ; Insert Vector CNTR instruction
+ROM:7445                 std     $30,y
+ROM:7448                 leay    $32,y
+ROM:744B                 lda     #$48 ; 'H'
+ROM:744D                 tfr     a, dp
+ROM:744F                 rts
+ROM:744F ; End of function sub_7375
+ROM:744F
+ROM:744F ; ---------------------------------------------------------------------------
+ROM:7450 byte_7450:      fcb 1
+ROM:7451
+ROM:7451 ; =============== S U B R O U T I N E =======================================
+ROM:7451
+ROM:7451
+ROM:7451 sub_7451:
+ROM:7451                 lda     #$5E ; '^'      ; Draws trench exhaust port
+ROM:7453                 tfr     a, dp
+ROM:7455                 ldd     <$5E
+ROM:7457                 addd    #$FF98
+ROM:745A                 anda    #$1F
+ROM:745C                 std     ,y
+ROM:745E                 ldd     <$5C
+ROM:7460                 anda    #$1F
+ROM:7462                 std     2,y
+ROM:7464                 ldd     #$6280          ; Insert Vector STAT 2,80 instruction (Green)
+ROM:7467                 std     4,y
+ROM:7469                 ldd     <$9E
+ROM:746B                 subd    <$5E
+ROM:746D                 anda    #$1F
+ROM:746F                 std     6,y
+ROM:7471                 ldd     <$9C
+ROM:7473                 subd    <$5C
+ROM:7475                 oraa    #$E0 ; 'a'
+ROM:7477                 std     8,y
+ROM:7479                 ldd     <$8E
+ROM:747B                 subd    <$9E
+ROM:747D                 anda    #$1F
+ROM:747F                 std     $A,y
+ROM:7481                 ldd     <$8C
+ROM:7483                 subd    <$9C
+ROM:7485                 oraa    #$E0 ; 'a'
+ROM:7487                 std     $C,y
+ROM:7489                 ldd     <$4E
+ROM:748B                 subd    <$8E
+ROM:748D                 anda    #$1F
+ROM:748F                 std     $E,y
+ROM:7491                 ldd     <$4C
+ROM:7493                 subd    <$8C
+ROM:7495                 oraa    #$E0 ; 'a'
+ROM:7497                 std     $10,y
+ROM:749A                 ldd     <$6E
+ROM:749C                 subd    <$4E
+ROM:749E                 anda    #$1F
+ROM:74A0                 std     $12,y
+ROM:74A3                 ldd     <$6C
+ROM:74A5                 subd    <$4C
+ROM:74A7                 anda    #$1F
+ROM:74A9                 std     $14,y
+ROM:74AC                 ldd     <$AE
+ROM:74AE                 subd    <$6E
+ROM:74B0                 anda    #$1F
+ROM:74B2                 std     $16,y
+ROM:74B5                 ldd     <$AC
+ROM:74B7                 subd    <$6C
+ROM:74B9                 oraa    #$E0 ; 'a'
+ROM:74BB                 std     $18,y
+ROM:74BE                 ldd     <$BE
+ROM:74C0                 subd    <$AE
+ROM:74C2                 anda    #$1F
+ROM:74C4                 std     $1A,y
+ROM:74C7                 ldd     <$BC
+ROM:74C9                 subd    <$AC
+ROM:74CB                 oraa    #$E0 ; 'a'
+ROM:74CD                 std     $1C,y
+ROM:74D0                 ldd     <$7E
+ROM:74D2                 subd    <$BE
+ROM:74D4                 anda    #$1F
+ROM:74D6                 std     $1E,y
+ROM:74D9                 ldd     <$7C
+ROM:74DB                 subd    <$BC
+ROM:74DD                 oraa    #$E0 ; 'a'
+ROM:74DF                 std     $20,y
+ROM:74E2                 ldd     #$6380          ; Insert Vector STAT 3,80 instruction (Red)
+ROM:74E5                 std     $22,y
+ROM:74E8                 ldd     <$6E
+ROM:74EA                 subd    <$7E
+ROM:74EC                 anda    #$1F
+ROM:74EE                 std     $24,y
+ROM:74F1                 ldd     <$6C
+ROM:74F3                 subd    <$7C
+ROM:74F5                 oraa    #$E0 ; 'a'
+ROM:74F7                 std     $26,y
+ROM:74FA                 ldd     <$2E
+ROM:74FC                 subd    <$6E
+ROM:74FE                 anda    #$1F
+ROM:7500                 std     $28,y
+ROM:7503                 ldd     <$2C
+ROM:7505                 subd    <$6C
+ROM:7507                 oraa    #$E0 ; 'a'
+ROM:7509                 std     $2A,y
+ROM:750C                 ldd     <$6E
+ROM:750E                 subd    <$2E
+ROM:7510                 anda    #$1F
+ROM:7512                 std     $2C,y
+ROM:7515                 ldd     <$6C
+ROM:7517                 subd    <$2C
+ROM:7519                 anda    #$1F
+ROM:751B                 std     $2E,y
+ROM:751E                 ldd     <$4E
+ROM:7520                 subd    <$6E
+ROM:7522                 anda    #$1F
+ROM:7524                 std     $30,y
+ROM:7527                 ldd     <$4C
+ROM:7529                 subd    <$6C
+ROM:752B                 oraa    #$E0 ; 'a'
+ROM:752D                 std     $32,y
+ROM:7530                 ldd     <$0E
+ROM:7532                 subd    <$4E
+ROM:7534                 anda    #$1F
+ROM:7536                 std     $34,y
+ROM:7539                 ldd     <$0C
+ROM:753B                 subd    <$4C
+ROM:753D                 oraa    #$E0 ; 'a'
+ROM:753F                 std     $36,y
+ROM:7542                 ldd     <$4E
+ROM:7544                 subd    <$0E
+ROM:7546                 anda    #$1F
+ROM:7548                 std     $38,y
+ROM:754B                 ldd     <$4C
+ROM:754D                 subd    <$0C
+ROM:754F                 anda    #$1F
+ROM:7551                 std     $3A,y
+ROM:7554                 ldd     <$5E
+ROM:7556                 subd    <$4E
+ROM:7558                 anda    #$1F
+ROM:755A                 std     $3C,y
+ROM:755D                 ldd     <$5C
+ROM:755F                 subd    <$4C
+ROM:7561                 oraa    #$E0 ; 'a'
+ROM:7563                 std     $3E,y
+ROM:7566                 ldd     <$1E
+ROM:7568                 subd    <$5E
+ROM:756A                 anda    #$1F
+ROM:756C                 std     $40,y
+ROM:756F                 ldd     <$1C
+ROM:7571                 subd    <$5C
+ROM:7573                 oraa    #$E0 ; 'a'
+ROM:7575                 std     $42,y
+ROM:7578                 ldd     <$5E
+ROM:757A                 subd    <$1E
+ROM:757C                 anda    #$1F
+ROM:757E                 std     $44,y
+ROM:7581                 ldd     <$5C
+ROM:7583                 subd    <$1C
+ROM:7585                 anda    #$1F
+ROM:7587                 std     $46,y
+ROM:758A                 ldd     <$7E
+ROM:758C                 subd    <$5E
+ROM:758E                 anda    #$1F
+ROM:7590                 std     $48,y
+ROM:7593                 ldd     <$7C
+ROM:7595                 subd    <$5C
+ROM:7597                 oraa    #$E0 ; 'a'
+ROM:7599                 std     $4A,y
+ROM:759C                 ldd     <$3E
+ROM:759E                 subd    <$7E
+ROM:75A0                 anda    #$1F
+ROM:75A2                 std     $4C,y
+ROM:75A5                 ldd     <$3C
+ROM:75A7                 subd    <$7C
+ROM:75A9                 oraa    #$E0 ; 'a'
+ROM:75AB                 std     $4E,y
+ROM:75AE                 ldd     #$64FF          ; Insert Vector STAT 4,FF instruction ()
+ROM:75B1                 std     $50,y
+ROM:75B4                 ldd     <$2E
+ROM:75B6                 subd    <$3E
+ROM:75B8                 anda    #$1F
+ROM:75BA                 std     $52,y
+ROM:75BD                 ldd     <$2C
+ROM:75BF                 subd    <$3C
+ROM:75C1                 oraa    #$E0 ; 'a'
+ROM:75C3                 std     $54,y
+ROM:75C6                 ldd     <$0E
+ROM:75C8                 subd    <$2E
+ROM:75CA                 anda    #$1F
+ROM:75CC                 std     $56,y
+ROM:75CF                 ldd     <$0C
+ROM:75D1                 subd    <$2C
+ROM:75D3                 oraa    #$E0 ; 'a'
+ROM:75D5                 std     $58,y
+ROM:75D8                 ldd     <$1E
+ROM:75DA                 subd    <$0E
+ROM:75DC                 anda    #$1F
+ROM:75DE                 std     $5A,y
+ROM:75E1                 ldd     <$1C
+ROM:75E3                 subd    <$0C
+ROM:75E5                 oraa    #$E0 ; 'a'
+ROM:75E7                 std     $5C,y
+ROM:75EA                 ldd     <$3E
+ROM:75EC                 subd    <$1E
+ROM:75EE                 anda    #$1F
+ROM:75F0                 std     $5E,y
+ROM:75F3                 ldd     <$3C
+ROM:75F5                 subd    <$1C
+ROM:75F7                 oraa    #$E0 ; 'a'
+ROM:75F9                 std     $60,y
+ROM:75FC                 ldd     #$7200          ; Insert Vector SCAL 2,00 instruction
+ROM:75FF                 std     $62,y
+ROM:7602                 ldd     #$8040          ; Insert Vector CNTR instruction
+ROM:7605                 std     $64,y
+ROM:7608                 leay    $66,y
+ROM:760B                 lda     #$48 ; 'H'
+ROM:760D                 tfr     a, dp
+ROM:760F                 rts
+ROM:760F ; End of function sub_7451
+ROM:760F
+ROM:760F ; ---------------------------------------------------------------------------
+ROM:7610 JumpTable7610Hi:fdb byte_6AB1
+ROM:7612                 fdb byte_6B1A
+ROM:7614                 fdb byte_6B1A
+ROM:7616                 fdb byte_6B41
+ROM:7618                 fdb byte_6B7A
+ROM:761A                 fdb byte_6BDD
+ROM:761C                 fdb byte_6BDF
+ROM:761E                 fdb byte_6CFB
+ROM:7620                 fdb byte_6CFB
+ROM:7622                 fdb byte_6C1B
+ROM:7624                 fdb byte_6EB0
+ROM:7626                 fdb byte_720A
+ROM:7628                 fdb byte_6FD8
+ROM:762A                 fdb byte_6FD8
+ROM:762C                 fdb byte_72D4
+ROM:762E                 fdb byte_7374
+ROM:7630                 fdb byte_7450
+ROM:7632                 fdb byte_6BE1
+ROM:7634                 fdb byte_6BEF
+ROM:7636                 fdb byte_6BE1
+ROM:7638                 fdb byte_6BE1
+ROM:763A                 fdb byte_6BE1
+ROM:763C                 fdb byte_6BE1
+ROM:763E                 fdb byte_6BE1
+ROM:7640                 fdb byte_6C01
+ROM:7642                 fdb byte_6C11
+ROM:7644 Object_Size_Table:fcb $36, $14, $14, $1E, $3A, 2, 2, $10 ; 1st object 54 points
+ROM:7644                 fcb $10, $10, $10, 8, $10, $10, 6, 6
+ROM:7644                 fcb $C, 8, $A, 8, 8, 8, 8, 8
+ROM:7644                 fcb 8, 6
+ROM:765E Obj_List:       fdb Obj_Tie_Fighter     ; 1st object XYZ data address
+ROM:7660                 fdb Obj_Tie_Wing_Frag_1
+ROM:7662                 fdb Obj_Tie_Wing_Frag_2
+ROM:7664                 fdb Obj_Tie_Wing_Frag_3
+ROM:7666                 fdb Obj_Darth_Tie
+ROM:7668                 fdb Object_6
+ROM:766A                 fdb Object_7
+ROM:766C                 fdb Object_8
+ROM:766E                 fdb Object_8
+ROM:7670                 fdb Object_8
+ROM:7672                 fdb Object_8
+ROM:7674                 fdb Obj_Trench_Squares
+ROM:7676                 fdb Object_10
+ROM:7678                 fdb Object_10
+ROM:767A                 fdb Object_11
+ROM:767C                 fdb Object_11
+ROM:767E                 fdb Object_12
+ROM:7680                 fdb Object_13
+ROM:7682                 fdb Object_14
+ROM:7684                 fdb Object_15
+ROM:7686                 fdb Object_16
+ROM:7688                 fdb Object_17
+ROM:768A                 fdb Object_18
+ROM:768C                 fdb Object_19
+ROM:768E                 fdb Object_20
+ROM:7690                 fdb Object_21
+ROM:7692                 fcb $DE, $EF, $7F, $CD, $CF, $4F, $7D, $7D
+ROM:7692                 fcb $FE, $55, $5D, $ED, $F1, $72, $A4, $F7
+ROM:7692                 fcb $FB, $7F, $AF, $EF, $FD, $7E, $D3, $F7
+ROM:76AA                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:76AA                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:76AA                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:76AA                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:76AA                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:76AA                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:76AA                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:76AA                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:76AA                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:76AA                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:76AA                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:76AA                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:76AA                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:76AA                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:76AA                 fcb $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7720                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7AF8 aCopyright198_0:fcc '                                                               '
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7B37                 fcb $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7CF8                 fcb $FF, $FF, $FF, $FF, $FF, $FF
+ROM:7D86 aCopyright1983Atari:fcc 'COPYRIGHT 1983 ATARI'
+ROM:7D9A
+ROM:7D9A ; =============== S U B R O U T I N E =======================================
+ROM:7D9A
+ROM:7D9A
+ROM:7D9A sub_7D9A:
+ROM:7D9A                 ldd     <Stars_XT       ; Get X 'forward' transform position
+ROM:7D9C                 std     Math_XT2        ; XT2
+ROM:7D9F                 ldd     Stars_YT        ; Get Y 'horizontal' transform
+ROM:7DA2                 std     Math_YT2        ; YT2
+ROM:7DA5                 ldd     Stars_ZT        ; Get Z 'vertical' transform
+ROM:7DA8                 std     Math_ZT2        ; ZT2
+ROM:7DAB                 ldx     #Scratch_RAM_start
+ROM:7DAE                 ldd     #0
+ROM:7DB1
+ROM:7DB1 loc_7DB1:
+ROM:7DB1                 std     ,x++
+ROM:7DB3                 cmpx    #Scratch_RAM_end ; Clear star dots RAM
+ROM:7DB6                 bcs     loc_7DB1
+ROM:7DB8                 sta     <DPbyte_88      ; Clear DPbyte_88
+ROM:7DBA                 lda     #$67 ; 'g'      ; Insert Vector STAT 7 for white stars
+ROM:7DBC                 ldb     <DPbyte_83      ; Star intensity
+ROM:7DBE                 std     ,y++            ; Y points to vector RAM
+ROM:7DC0                 ldd     #$18C           ; Point BIC to Math RAM $5C60
+ROM:7DC3                 std     MW1
+ROM:7DC6                 stb     <DPbyte_82      ; Store $8C to DPbyte_82
+ROM:7DC8                 negb                    ; Negate to $74
+ROM:7DC9                 addb    #$BE ; '+'      ; Add $BE to get $32
+ROM:7DCB                 stb     <DPbyte_81      ; Store $32 in DPbyte_81 (why not just load B with $32 ?)
+ROM:7DCD                 ldu     #Scratch_RAM_end
+ROM:7DD0                 ldx     #Star_Dots_MRAM
+ROM:7DD3
+ROM:7DD3 loc_7DD3:                               ; DPbyte_84 holds running star MRAM pointer
+ROM:7DD3                 stx     <DPbyte_84
+ROM:7DD5                 lda     #$67 ; 'g'
+ROM:7DD7                 jsr     Math_Run_Start
+ROM:7DDA                 ldd     MReg00          ; Math result X
+ROM:7DDD                 cmpd    #$100
+ROM:7DE1                 lble    loc_7E5D
+ROM:7DE5                 cmpd    #$FFF
+ROM:7DE9                 lbhi    loc_7E5D        ; Check perspective division value?
+ROM:7DED                 std     DVSRH           ; Start division
+ROM:7DF0                 ldd     MReg39          ; Reg39 = Reg01 x Reg01
+ROM:7DF3                 subd    MReg38          ; Reg38 = Reg00 x Reg00
+ROM:7DF6                 lbcc    loc_7E5D
+ROM:7DFA                 ldd     MReg3A          ; Reg3A = Reg02 x Reg02
+ROM:7DFD                 subd    MReg38
+ROM:7E00
+ROM:7E00 loc_7E00:
+ROM:7E00                 lbcc    loc_7E5D
+ROM:7E04                 ldd     MW0             ; Get division result
+ROM:7E07                 std     MReg00          ; Math result X
+ROM:7E0A                 lda     #$86 ; 'å'      ; Reg01 = Reg01 x Reg00
+ROM:7E0A                                         ; Reg02 = Reg02 x Reg00
+ROM:7E0C                 jsr     Math_Run_Start
+ROM:7E0F                 clrb
+ROM:7E10                 lda     MReg02          ; Math result Z
+ROM:7E13                 lsra
+ROM:7E14                 rolb
+ROM:7E15                 lsra
+ROM:7E16                 rolb
+ROM:7E17                 lda     MReg01          ; Math result Y
+ROM:7E1A                 lsra
+ROM:7E1B                 rolb
+ROM:7E1C                 lsra
+ROM:7E1D                 rolb
+ROM:7E1E                 lda     #8
+ROM:7E20                 mul
+ROM:7E21                 ldx     #Scratch_RAM_start
+ROM:7E24                 abx
+ROM:7E25                 ldd     2,x
+ROM:7E27                 bne     loc_7E2D
+ROM:7E29                 stu     2,x
+ROM:7E2B                 bra     loc_7E2F
+ROM:7E2D ; ---------------------------------------------------------------------------
+ROM:7E2D
+ROM:7E2D loc_7E2D:
+ROM:7E2D                 stu     [,x]
+ROM:7E2F
+ROM:7E2F loc_7E2F:
+ROM:7E2F                 stu     ,x
+ROM:7E31                 ldd     #0
+ROM:7E34                 std     ,u
+ROM:7E36                 ldd     MReg02          ; Math result Z
+ROM:7E39                 subd    6,x
+ROM:7E3B                 anda    #$1F
+ROM:7E3D                 std     4,u
+ROM:7E3F                 ldd     MReg01          ; Math result Y
+ROM:7E42                 subd    4,x
+ROM:7E44                 anda    #$1F
+ROM:7E46                 cmpu    2,x
+ROM:7E49                 beq     loc_7E4D        ; These 3 lines surely do nothing as ORA #0 does nothing ?
+ROM:7E4B                 oraa    #0
+ROM:7E4D
+ROM:7E4D loc_7E4D:
+ROM:7E4D                 std     2,u
+ROM:7E4F                 ldd     MReg02          ; Math result Z
+ROM:7E52                 std     6,x
+ROM:7E54                 ldd     MReg01          ; Math result Y
+ROM:7E57                 std     4,x
+ROM:7E59                 leau    6,u
+ROM:7E5B                 bra     loc_7E62
+ROM:7E5D ; ---------------------------------------------------------------------------
+ROM:7E5D
+ROM:7E5D loc_7E5D:
+ROM:7E5D                 ldx     <DPbyte_84
+ROM:7E5F                 jsr     sub_7F9A
+ROM:7E62
+ROM:7E62 loc_7E62:
+ROM:7E62                 inc     <DPbyte_82
+ROM:7E64                 ldx     <DPbyte_84
+ROM:7E66                 leax    8,x
+ROM:7E68                 dec     <DPbyte_81
+ROM:7E6A                 lbne    loc_7DD3
+ROM:7E6E                 ldx     #Scratch_RAM_start
+ROM:7E71
+ROM:7E71 loc_7E71:
+ROM:7E71                 ldu     2,x
+ROM:7E73                 beq     loc_7E95
+ROM:7E75                 ldd     #$1F98          ; Starfield Y offset
+ROM:7E78                 std     ,y++
+ROM:7E7A                 ldd     #0
+ROM:7E7D                 std     ,y++
+ROM:7E7F
+ROM:7E7F loc_7E7F:
+ROM:7E7F                 ldd     4,u
+ROM:7E81                 std     ,y++
+ROM:7E83                 ldd     2,u
+ROM:7E85                 std     ,y++
+ROM:7E87                 ldd     word_33DC       ; JSRL to Vector ROM subroutine to draw dot
+ROM:7E8A                 std     ,y++
+ROM:7E8C                 ldu     ,u
+ROM:7E8E                 bne     loc_7E7F
+ROM:7E90                 ldd     #$8040          ; Insert Vector CNTR
+ROM:7E93                 std     ,y++
+ROM:7E95
+ROM:7E95 loc_7E95:
+ROM:7E95                 leax    8,x
+ROM:7E97                 cmpx    #Scratch_RAM_end
+ROM:7E9A                 bcs     loc_7E71
+ROM:7E9C                 ldd     MReg4C
+ROM:7E9F                 std     Math_XT2        ; XT2
+ROM:7EA2                 ldd     MReg4D
+ROM:7EA5                 std     Math_YT2        ; YT2
+ROM:7EA8                 ldd     MReg4E
+ROM:7EAB                 std     Math_ZT2        ; ZT2
+ROM:7EAE                 rts
+ROM:7EAE ; End of function sub_7D9A
+ROM:7EAE
+ROM:7EAF
+ROM:7EAF ; =============== S U B R O U T I N E =======================================
+ROM:7EAF
+ROM:7EAF
+ROM:7EAF sub_7EAF:
+ROM:7EAF                 ldx     #Scratch_RAM_start ; Towers surface dots
+ROM:7EB2                 ldd     #0
+ROM:7EB5
+ROM:7EB5 loc_7EB5:
+ROM:7EB5                 std     ,x++
+ROM:7EB7                 cmpx    #Scratch_RAM_end
+ROM:7EBA                 bcs     loc_7EB5
+ROM:7EBC                 sta     <DPbyte_88
+ROM:7EBE                 ldd     #$6280          ; Insert Vector STAT 2, 80 for green dots
+ROM:7EC1                 std     ,y++
+ROM:7EC3                 ldd     #$18C           ; Point BIC to Math RAM $5C60
+ROM:7EC6                 std     MW1
+ROM:7EC9                 stb     <DPbyte_82
+ROM:7ECB                 negb
+ROM:7ECC                 addb    #$BE ; '+'
+ROM:7ECE                 stb     <DPbyte_81
+ROM:7ED0                 ldu     #Scratch_RAM_end
+ROM:7ED3                 ldx     #Star_Dots_MRAM
+ROM:7ED6
+ROM:7ED6 loc_7ED6:
+ROM:7ED6                 stx     <DPbyte_84
+ROM:7ED8                 lda     #$67 ; 'g'
+ROM:7EDA                 jsr     Math_Run_Start
+ROM:7EDD                 ldd     MReg00          ; Math result X
+ROM:7EE0                 cmpd    #$100
+ROM:7EE4                 lble    loc_7F58
+ROM:7EE8                 std     DVSRH
+ROM:7EEB                 ldd     MReg39
+ROM:7EEE                 subd    MReg38
+ROM:7EF1                 lbcc    loc_7F58
+ROM:7EF5                 ldd     MReg3A
+ROM:7EF8                 subd    MReg38
+ROM:7EFB                 lbcc    loc_7F58
+ROM:7EFF
+ROM:7EFF loc_7EFF:
+ROM:7EFF                 ldd     MW0
+ROM:7F02                 std     MReg00          ; Math result X
+ROM:7F05                 lda     #$86 ; 'å'      ; Reg01 = Reg01 x Reg00
+ROM:7F05                                         ; Reg02 = Reg02 x Reg00
+ROM:7F07                 jsr     Math_Run_Start
+ROM:7F0A                 clrb
+ROM:7F0B                 lda     MReg02          ; Math result Z
+ROM:7F0E                 lsra
+ROM:7F0F                 rolb
+ROM:7F10                 lsra
+ROM:7F11                 rolb
+ROM:7F12                 lda     MReg01          ; Math result Y
+ROM:7F15                 lsra
+ROM:7F16                 rolb
+ROM:7F17                 lsra
+ROM:7F18                 rolb
+ROM:7F19                 lda     #8
+ROM:7F1B                 mul
+ROM:7F1C                 ldx     #Scratch_RAM_start
+ROM:7F1F                 abx
+ROM:7F20                 ldd     2,x
+ROM:7F22                 bne     loc_7F28
+ROM:7F24                 stu     2,x
+ROM:7F26                 bra     loc_7F2A
+ROM:7F28 ; ---------------------------------------------------------------------------
+ROM:7F28
+ROM:7F28 loc_7F28:
+ROM:7F28                 stu     [,x]
+ROM:7F2A
+ROM:7F2A loc_7F2A:
+ROM:7F2A                 stu     ,x
+ROM:7F2C                 ldd     #0
+ROM:7F2F                 std     ,u
+ROM:7F31                 ldd     MReg02          ; Math result Z
+ROM:7F34                 subd    6,x
+ROM:7F36                 anda    #$1F
+ROM:7F38                 std     4,u
+ROM:7F3A                 ldd     MReg01          ; Math result Y
+ROM:7F3D                 subd    4,x
+ROM:7F3F                 anda    #$1F
+ROM:7F41                 cmpu    2,x
+ROM:7F44                 beq     loc_7F48
+ROM:7F46                 oraa    #0
+ROM:7F48
+ROM:7F48 loc_7F48:
+ROM:7F48                 std     2,u
+ROM:7F4A                 ldd     MReg02          ; Math result Z
+ROM:7F4D                 std     6,x
+ROM:7F4F                 ldd     MReg01          ; Math result Y
+ROM:7F52                 std     4,x
+ROM:7F54                 leau    6,u
+ROM:7F56                 bra     loc_7F5D
+ROM:7F58 ; ---------------------------------------------------------------------------
+ROM:7F58
+ROM:7F58 loc_7F58:                               ; Towers surface dots
+ROM:7F58                 ldx     <DPbyte_84
+ROM:7F5A                 jsr     sub_7FDB
+ROM:7F5D
+ROM:7F5D loc_7F5D:
+ROM:7F5D                 inc     <DPbyte_82
+ROM:7F5F                 ldx     <DPbyte_84
+ROM:7F61                 leax    8,x
+ROM:7F63                 dec     <DPbyte_81
+ROM:7F65                 lbne    loc_7ED6
+ROM:7F69                 ldx     #Scratch_RAM_start
+ROM:7F6C
+ROM:7F6C loc_7F6C:
+ROM:7F6C                 ldu     2,x
+ROM:7F6E                 beq     loc_7F92
+ROM:7F70                 ldd     #$FF98
+ROM:7F73                 anda    #$1F
+ROM:7F75                 std     ,y++
+ROM:7F77                 ldd     #0
+ROM:7F7A                 std     ,y++
+ROM:7F7C
+ROM:7F7C loc_7F7C:
+ROM:7F7C                 ldd     4,u
+ROM:7F7E                 std     ,y++
+ROM:7F80                 ldd     2,u
+ROM:7F82                 std     ,y++
+ROM:7F84                 ldd     word_33DC       ; JSRL to Vector ROM subroutine to draw dot
+ROM:7F87                 std     ,y++
+ROM:7F89                 ldu     ,u
+ROM:7F8B                 bne     loc_7F7C
+ROM:7F8D                 ldd     #$8040          ; Insert Vector CNTR
+ROM:7F90                 std     ,y++
+ROM:7F92
+ROM:7F92 loc_7F92:
+ROM:7F92                 leax    8,x
+ROM:7F94                 cmpx    #Scratch_RAM_end
+ROM:7F97                 bcs     loc_7F6C
+ROM:7F99                 rts
+ROM:7F99 ; End of function sub_7EAF
+ROM:7F99
+ROM:7F9A
+ROM:7F9A ; =============== S U B R O U T I N E =======================================
+ROM:7F9A
+ROM:7F9A
+ROM:7F9A sub_7F9A:
+ROM:7F9A                 jsr     Gen_Random
+ROM:7F9D                 lda     <DPbyte_53
+ROM:7F9F                 anda    #$1F
+ROM:7FA1                 ldb     <DPbyte_54
+ROM:7FA3                 std     ,x
+ROM:7FA5                 mul
+ROM:7FA6                 tst     MReg01          ; Math result Y
+ROM:7FA9                 bmi     loc_7FAC
+ROM:7FAB                 nega
+ROM:7FAC
+ROM:7FAC loc_7FAC:
+ROM:7FAC                 std     2,x
+ROM:7FAE                 lda     <DPbyte_53
+ROM:7FB0                 anda    #$1F
+ROM:7FB2                 ldb     <DPbyte_55
+ROM:7FB4                 mul
+ROM:7FB5                 tst     MReg02          ; Math result Z
+ROM:7FB8                 bmi     loc_7FBB
+ROM:7FBA                 nega
+ROM:7FBB
+ROM:7FBB loc_7FBB:
+ROM:7FBB                 std     4,x
+ROM:7FBD                 lda     <DPbyte_82
+ROM:7FBF                 sta     MW2
+ROM:7FC2                 lda     #$60 ; '`'
+ROM:7FC4                 jsr     Math_Run_Start
+ROM:7FC7                 ldd     MReg00          ; Math result X
+ROM:7FCA                 std     ,x
+ROM:7FCC                 ldd     MReg01          ; Math result Y
+ROM:7FCF                 std     2,x
+ROM:7FD1                 ldd     MReg02          ; Math result Z
+ROM:7FD4                 anda    #$FF            ; These 2 lines do nothing ?
+ROM:7FD6                 andb    #$FF
+ROM:7FD8                 std     4,x
+ROM:7FDA                 rts
+ROM:7FDA ; End of function sub_7F9A
+ROM:7FDA
+ROM:7FDB
+ROM:7FDB ; =============== S U B R O U T I N E =======================================
+ROM:7FDB
+ROM:7FDB
+ROM:7FDB sub_7FDB:
+ROM:7FDB                 jsr     $CE45           ; Random number update
+ROM:7FDE                 lda     <DPbyte_53
+ROM:7FE0                 anda    #$7F ; ''
+ROM:7FE2                 oraa    #$70 ; 'p'
+ROM:7FE4                 ldb     <DPbyte_54
+ROM:7FE6                 addd    Math_XT2        ; XT2
+ROM:7FE9                 std     ,x
+ROM:7FEB                 lda     <DPbyte_55
+ROM:7FED                 anda    #$7F ; ''
+ROM:7FEF                 tst     MReg01          ; Math result Y
+ROM:7FF2                 bmi     loc_7FF5
+ROM:7FF4                 nega
+ROM:7FF5
+ROM:7FF5 loc_7FF5:                               ; YT2
+ROM:7FF5                 addd    Math_YT2
+ROM:7FF8                 std     2,x
+ROM:7FFA                 ldd     #0
+ROM:7FFD                 std     4,x
+ROM:7FFF                 rts
+ROM:7FFF ; End of function sub_7FDB
+ROM:7FFF
+ROM:7FFF ; end of 'ROM'
+ROM:7FFF
+ROM:7FFF
+ROM:7FFF                 end

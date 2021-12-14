@@ -5,12 +5,14 @@
 
 #include <sys/time.h> // for __gettimeofday
 
-#include <pitrex/pitrexio-gpio.h>
+#include <baremetal/pitrexio-gpio.h>
 #include "vectrexInterface.h"
 
-static FATFS fat_fs;            /* File system object */
+
+
+
+//static FATFS fat_fs;            /* File system object - this is in pi_support.c now*/
 int fsInit = 0;
-int errno;
 int (*old_fprintf)(FILE *stream, const char *format, ...) = fprintf;
 
 FF_WRAP ff_allFiles[MAX_FILE_OPEN];
@@ -44,56 +46,6 @@ void initFileSystem()
 #endif
     }
     fsInit=1;
-}
-// for file accesss
-char * ff_getErrorText(int errNo)
-{
-  switch (errNo)
-  {
-    case FR_OK:             /* (0) Succeeded */
-      return "OK";
-    case FR_DISK_ERR:           /* (1) A hard error occurred in the low level disk I/O layer */
-      return "FR_DISK_ERR";
-    case FR_INT_ERR:                /* (2) Assertion failed */
-      return "FR_INT_ERR";
-    case FR_NOT_READY:          /* (3) The physical drive cannot work */
-      return "FR_NOT_READY";
-    case FR_NO_FILE:                /* (4) Could not find the file */
-      return "FR_NO_FILE";
-    case FR_NO_PATH:                /* (5) Could not find the path */
-      return "FR_NO_PATH";
-    case FR_INVALID_NAME:       /* (6) The path name format is invalid */
-      return "FR_INVALID_NAME";
-    case FR_DENIED:             /* (7) Access denied due to prohibited access or directory full */
-      return "FR_DENIED";
-    case FR_EXIST:              /* (8) Access denied due to prohibited access */
-      return "FR_EXIST";
-    case FR_INVALID_OBJECT:     /* (9) The file/directory object is invalid */
-      return "FR_INVALID_OBJECT";
-    case FR_WRITE_PROTECTED:        /* (10) The physical drive is write protected */
-      return "FR_WRITE_PROTECTED";
-    case FR_INVALID_DRIVE:      /* (11) The logical drive number is invalid */
-      return "FR_INVALID_DRIVE";
-    case FR_NOT_ENABLED:            /* (12) The volume has no work area */
-      return "FR_NOT_ENABLED";
-    case FR_NO_FILESYSTEM:      /* (13) There is no valid FAT volume */
-      return "FR_NO_FILESYSTEM";
-    case FR_MKFS_ABORTED:       /* (14) The f_mkfs() aborted due to any problem */
-      return "FR_MKFS_ABORTED";
-    case FR_TIMEOUT:                /* (15) Could not get a grant to access the volume within defined period */
-      return "FR_TIMEOUT";
-    case FR_LOCKED:             /* (16) The operation is rejected according to the file sharing policy */
-      return "FR_LOCKED";
-    case FR_NOT_ENOUGH_CORE:        /* (17) LFN working buffer could not be allocated */
-      return "FR_NOT_ENOUGH_CORE";
-    case FR_TOO_MANY_OPEN_FILES:    /* (18) Number of open files > _FS_LOCK */
-      return "FR_TOO_MANY_OPEN_FILES";
-    case FR_INVALID_PARAMETER:  /* (19) Given parameter is invalid */
-      return "FR_INVALID_PARAMETER";
-  }
-  char *t = "UNKOWN ERROR:      \r\n";
-  sprintf(t, "UNKOWN ERROR: %i", errNo);
-  return t;
 }
 
 // -1 on error
@@ -191,7 +143,7 @@ File access mode and open method flags (3rd argument of f_open)
 	return f;
 }
 
-int errno = 0;
+//int errno = 0;
 int changeDirsTo(FF_WRAP *f)
 {
 	int pc = 0;
@@ -259,7 +211,6 @@ void outputCurrentDirectory()
   printf("\r\n");
   f_closedir (&dp);
 }
-char * ff_getErrorText(int errNo);
 FILE *__fopen(const char *filename, const char *mode)
 {
   initFileSystem();
@@ -281,7 +232,7 @@ FILE *__fopen(const char *filename, const char *mode)
 		f->used = 0;
 		errno = E_FILE_NOT_FOUND;
 #ifndef DEBUG_TO_FILE
-		printf("Could not open file %s (%s) \r\n", filename, ff_getErrorText(f->result));
+		printf("Could not open file %s (%s) \r\n", filename, getErrorText(f->result));
 #endif        
 		return 0;
 	}
@@ -379,7 +330,7 @@ size_t __fread(void *ptr, size_t size, size_t nmemb, FILE *_f)
 	if ( f->result!= FR_OK)
 	{
         if ((size != 1) && (nmemb != 1)) // fgetc()
-          printf("fread() of %s fails (len loaded: %i/%i) (Error: %s)\r\n", f->name, lenLoaded,(size*nmemb), ff_getErrorText(f->result));
+          printf("fread() of %s fails (len loaded: %i/%i) (Error: %s)\r\n", f->name, lenLoaded,(size*nmemb), getErrorText(f->result));
 		errno = E_READ_ERROR;
 		return 0;
 	}
@@ -401,7 +352,7 @@ size_t __fwrite(const void *ptr, size_t size, size_t nmemb, FILE *_f)
 	if (( f->result!= FR_OK) || (size*nmemb != lenSaved))
 	{
 #ifndef DEBUG_TO_FILE
-		printf("fwrite() of '%s' fails (len saved: %i/%i) (Error: %s)\r\n", f->name, lenSaved,(size*nmemb), ff_getErrorText(f->result));
+		printf("fwrite() of '%s' fails (len saved: %i/%i) (Error: %s)\r\n", f->name, lenSaved,(size*nmemb), getErrorText(f->result));
 #endif        
 		errno = E_WRITE_ERROR;
 		return 0;
@@ -437,7 +388,7 @@ int __fseek(FILE *_f, long int offset, int whence)
       changeDirsBack(f);
 	  if (f->result != FR_OK)
 	  {
-	      printf ("fseek(): could not open file %s (%s) \r\n", f->name, ff_getErrorText (f->result));
+	      printf ("fseek(): could not open file %s (%s) \r\n", f->name, getErrorText (f->result));
 	      errno = E_SEEK_ERROR;
 	  }
 	  offset = finfo.fsize-offset;
@@ -448,7 +399,7 @@ int __fseek(FILE *_f, long int offset, int whence)
     changeDirsBack(f);
 	if ( f->result!= FR_OK)
 	{
-		printf("Can't seek to %d in %s (error: %s)\r\n", offset, f->name, ff_getErrorText(f->result));
+		printf("Can't seek to %d in %s (error: %s)\r\n", offset, f->name, getErrorText(f->result));
 		errno = E_SEEK_ERROR;
 		return -1;
 	}
@@ -712,45 +663,6 @@ void __libc_fini_array (void) {}
 #endif
 
 
-
-static volatile unsigned s_nCriticalLevel = 0;
-static volatile int s_bWereEnabled;
-
-void EnterCritical (void)
-{
-    uint32_t nFlags;
-    __asm volatile ("mrs %0, cpsr" : "=r" (nFlags));
-
-    DisableInterrupts ();
-
-    if (s_nCriticalLevel++ == 0)
-    {
-        s_bWereEnabled = nFlags & 0x80 ? FALSE : TRUE;
-    }
-
-    DataMemBarrier ();
-}
-
-void LeaveCritical (void)
-{
-    DataMemBarrier ();
-    if (--s_nCriticalLevel == 0)
-    {
-        if (s_bWereEnabled)
-        {
-            EnableInterrupts ();
-        }
-    }
-}
-
-
-
-
-
-
-
-
-
 #define BLOCK_ALIGN 16
 #define ALIGN_MASK  (BLOCK_ALIGN-1)
 
@@ -879,28 +791,6 @@ void __free (void *pBlock)
     }
 }
 
-
-void DelayLoop (unsigned nCount);
-#define m_nMsDelay 350000
-#define m_nusDelay (350000/ 1000)
-void MsDelay (unsigned nMilliSeconds)
-{
-    if (nMilliSeconds > 0)
-    {
-        unsigned nCycles =  m_nMsDelay * nMilliSeconds;
-        DelayLoop (nCycles);
-    }
-}
-
-void usDelay (unsigned nMicroSeconds)
-{
-    if (nMicroSeconds > 0)
-    {
-        unsigned nCycles =  m_nusDelay * nMicroSeconds;
-        DelayLoop (nCycles);
-    }
-}
-
 unsigned int __sleep(unsigned int seconds)
 {
   MsDelay (seconds*1000);
@@ -920,5 +810,4 @@ int __gettimeofday ( struct timeval *tp ,  __attribute__((unused)) struct timezo
   tp->tv_usec = microsSinceStart- (secondsSinceStart*1000*1000);
   return 0;
 }
-
 

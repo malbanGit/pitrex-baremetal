@@ -11,7 +11,7 @@
 // ARM are per default little endian
 // this should work!
 
-#if !defined(__XC32) && !defined(_WIN32) && !defined(RPI0)
+#if !defined(__XC32) && !defined(_WIN32) && !defined(RASPPI)
 #error Short strings only work on little-endian platforms
 #endif
 

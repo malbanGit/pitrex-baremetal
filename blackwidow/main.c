@@ -34,12 +34,6 @@
 #include "../sim/sim6502.h"
 
 #include <vectrex/vectrexInterface.h>
-#ifdef FREESTANDING
-#include <ff.h>
-#else
-#include <errno.h>
-#include <unistd.h>
-#endif
 
 
 char gameMemory[4*65536];

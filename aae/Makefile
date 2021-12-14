@@ -1,24 +1,18 @@
-BUILD_DIR_PURE := build.baremetal
-BUILD_DIR := $(BUILD_DIR_PURE)/
+BUILD_FOR = zero2
+TARGET_BASE = aae
+TARGET	= $(TARGET_BASE).img
 
-CC		= gcc
+include ../Rules.mk
 
-X_CFLAGS	= -I/usr/X11/include
-X_LIBRARIES	= -L/usr/X11R6/lib -lX11
 
-CFLAGS		= -Wall -O1 -g -fstack-check -fstack-protector $(X_CFLAGS) -DNO_PI
-LIBRARIES	= 
-
-# -fstack-protector
-.PHONY: dirCheck
-
-all:	dirCheck aae 
-
-dirCheck:
-	if [ ! -d $(BUILD_DIR_PURE) ]; then mkdir $(BUILD_DIR_PURE); fi
-
-$(BUILD_DIR)x_interface.o: x_interface.c
-	$(CC) $(CFLAGS) -o $(BUILD_DIR)x_interface.o -c x_interface.c
+OBJS :=  $(BUILD_DIR)log.o $(BUILD_DIR)vector.o  $(BUILD_DIR)samples.o  $(BUILD_DIR)pokey.o   $(BUILD_DIR)cpuintrf.o \
+	$(BUILD_DIR)dips.o $(BUILD_DIR)earom.o   $(BUILD_DIR)mathbox.o $(BUILD_DIR)aae_avg.o $(BUILD_DIR)cpu_control.o  \
+	$(BUILD_DIR)input.o $(BUILD_DIR)rand.o $(BUILD_DIR)acommon.o $(BUILD_DIR)cinesnd.o $(BUILD_DIR)cinemat.o $(BUILD_DIR)cinematvid.o \
+	$(BUILD_DIR)loaders.o $(BUILD_DIR)atari_vg.o  $(BUILD_DIR)matari_vg.o \
+	$(BUILD_DIR)5220intf.o $(BUILD_DIR)tms5220.o  $(BUILD_DIR)pokyintf.o $(BUILD_DIR)swavg.o  $(BUILD_DIR)swmathbx.o  \
+	$(BUILD_DIR)m6809_1.o $(BUILD_DIR)m6809_2.o $(BUILD_DIR)m6502.o $(BUILD_DIR)m6502zp.o $(BUILD_DIR)z80.o $(BUILD_DIR)ccpu.o $(BUILD_DIR)m68kcpu.o \
+	$(BUILD_DIR)m68kops.o $(BUILD_DIR)softfloat.o $(BUILD_DIR)tempest.o $(BUILD_DIR)spacduel.o $(BUILD_DIR)bzone.o $(BUILD_DIR)omegrace.o \
+	$(BUILD_DIR)SegaG80.o $(BUILD_DIR)SegaG80snd.o $(BUILD_DIR)mhavoc.o $(BUILD_DIR)starwars.o $(BUILD_DIR)asteroid.o $(BUILD_DIR)quantum.o $(BUILD_DIR)llander.o $(BUILD_DIR)aaemain.o 
 
 $(BUILD_DIR)log.o: log.h log.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)log.o -c log.c
@@ -56,24 +50,47 @@ $(BUILD_DIR)rand.o: rand.h rand.c
 $(BUILD_DIR)acommon.o: acommon.h acommon.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)acommon.o -c acommon.c
 
+$(BUILD_DIR)cinemat.o: cinemat.h cinemat.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)cinemat.o -c cinemat.c
+
+$(BUILD_DIR)cinematvid.o: cinematvid.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)cinematvid.o -c cinematvid.c
+
+$(BUILD_DIR)cinesnd.o: cinesnd.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)cinesnd.o -c cinesnd.c
+
 $(BUILD_DIR)cpu_control.o: cpu_control.h cpu_control.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)cpu_control.o -c cpu_control.c
 
 $(BUILD_DIR)aae_avg.o: aae_avg.h aae_avg.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)aae_avg.o -c aae_avg.c
 
-$(BUILD_DIR)m6809.o: m6809/m6809.h m6809/m6809.c
-	$(CC) $(CFLAGS) -o $(BUILD_DIR)m6809.o -c m6809/m6809.c
-
-$(BUILD_DIR)m6502.o: m6502/m6502.h m6502/m6502.c
-	$(CC) $(CFLAGS) -o $(BUILD_DIR)m6502zp.o -c m6502/m6502zp.c
-	$(CC) $(CFLAGS) -o $(BUILD_DIR)m6502.o -c m6502/m6502.c
-
 $(BUILD_DIR)ccpu.o: ccpu.h ccpu.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)ccpu.o -c ccpu.c
 
-$(BUILD_DIR)mz80.o: mz80/mz80.h mz80/mz80.c
-	$(CC) $(CFLAGS) -o $(BUILD_DIR)mz80.o -c mz80/mz80.c
+$(BUILD_DIR)m6809_1.o: m6809/m6809.h m6809/m6809_1.h m6809/m6809_1.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)m6809_1.o -c m6809/m6809_1.c
+
+$(BUILD_DIR)m6809_2.o: m6809/m6809.h m6809/m6809_2.h m6809/m6809_2.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)m6809_2.o -c m6809/m6809_2.c
+
+$(BUILD_DIR)m6502.o: m6502/m6502.h m6502/m6502.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)m6502.o -c m6502/m6502.c
+
+$(BUILD_DIR)m6502zp.o: m6502/m6502.h m6502/m6502.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)m6502zp.o -c m6502/m6502zp.c
+
+$(BUILD_DIR)z80.o: z80/z80.h z80/z80.c z80/z80daisy.h mz80/mz80.h mz80/mz80.c 
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)z80.o -c z80/z80.c
+
+$(BUILD_DIR)m68kcpu.o: musashi/m68kops.c musashi/m68kcpu.c musashi/m68kcpu.h
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)m68kcpu.o -c musashi/m68kcpu.c
+
+$(BUILD_DIR)m68kops.o: musashi/m68kops.c musashi/m68kops.h
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)m68kops.o -c musashi/m68kops.c
+
+$(BUILD_DIR)softfloat.o: musashi/softfloat/softfloat.c musashi/softfloat/softfloat.h
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)softfloat.o -c musashi/softfloat/softfloat.c
 
 $(BUILD_DIR)swavg.o: vidhrdw/swavg.h vidhrdw/swavg.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)swavg.o -c vidhrdw/swavg.c
@@ -99,54 +116,44 @@ $(BUILD_DIR)tms5220.o: sndhrdw/tms5220.h sndhrdw/tms5220.c
 $(BUILD_DIR)omegrace.o: omegrace.h omegrace.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)omegrace.o -c omegrace.c
 
+$(BUILD_DIR)SegaG80.o: SegaG80.h SegaG80.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)SegaG80.o -c SegaG80.c
+
+$(BUILD_DIR)SegaG80snd.o: SegaG80snd.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)SegaG80snd.o -c SegaG80snd.c
+
+$(BUILD_DIR)tempest.o: tempest.h tempest.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)tempest.o -c tempest.c
+
+$(BUILD_DIR)spacduel.o: spacduel.h spacduel.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)spacduel.o -c spacduel.c
+
+$(BUILD_DIR)bzone.o: bzone.h bzone.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)bzone.o -c bzone.c
+
+$(BUILD_DIR)llander.o: llander.h llander.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)llander.o -c llander.c
+
+$(BUILD_DIR)asteroid.o: asteroid.h asteroid.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)asteroid.o -c asteroid.c
+
 $(BUILD_DIR)mhavoc.o: mhavoc.h mhavoc.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)mhavoc.o -c mhavoc.c
 
-$(BUILD_DIR)starwars.o: starwars.h starwars.c
+$(BUILD_DIR)quantum.o: quantum.h quantum.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)quantum.o -c quantum.c
+
+$(BUILD_DIR)starwars.o: starwars.h starwars.c machine/starwars.c sndhrdw/starwars.c machine/starwars.h sndhrdw/starwars.h
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)starwars.o -c starwars.c
 
 $(BUILD_DIR)aaemain.o: aaemain.h aaemain.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)aaemain.o -c aaemain.c
 
-aae:  $(BUILD_DIR)log.o $(BUILD_DIR)vector.o  $(BUILD_DIR)samples.o  $(BUILD_DIR)pokey.o   $(BUILD_DIR)cpuintrf.o \
-	$(BUILD_DIR)dips.o $(BUILD_DIR)earom.o   $(BUILD_DIR)mathbox.o $(BUILD_DIR)aae_avg.o $(BUILD_DIR)cpu_control.o  \
-	$(BUILD_DIR)input.o $(BUILD_DIR)rand.o $(BUILD_DIR)acommon.o $(BUILD_DIR)loaders.o $(BUILD_DIR)atari_vg.o  $(BUILD_DIR)matari_vg.o \
-	$(BUILD_DIR)5220intf.o $(BUILD_DIR)tms5220.o  $(BUILD_DIR)pokyintf.o $(BUILD_DIR)swavg.o  $(BUILD_DIR)swmathbx.o  \
-	$(BUILD_DIR)m6809.o $(BUILD_DIR)m6502.o $(BUILD_DIR)mz80.o $(BUILD_DIR)x_interface.o \
-	$(BUILD_DIR)omegrace.o $(BUILD_DIR)mhavoc.o $(BUILD_DIR)starwars.o   $(BUILD_DIR)aaemain.o 
-	$(CC) $(CFLAGS) -o aae \
-	$(BUILD_DIR)log.o \
-	$(BUILD_DIR)vector.o \
-	$(BUILD_DIR)pokey.o \
-	$(BUILD_DIR)samples.o \
-	$(BUILD_DIR)cpuintrf.o \
-	$(BUILD_DIR)earom.o \
-	$(BUILD_DIR)dips.o \
-	$(BUILD_DIR)mathbox.o \
-	$(BUILD_DIR)aae_avg.o \
-	$(BUILD_DIR)cpu_control.o \
-	$(BUILD_DIR)input.o \
-	$(BUILD_DIR)rand.o \
-	$(BUILD_DIR)acommon.o \
-	$(BUILD_DIR)loaders.o \
-	$(BUILD_DIR)pokyintf.o \
-	$(BUILD_DIR)5220intf.o \
-	$(BUILD_DIR)tms5220.o \
-	$(BUILD_DIR)matari_vg.o \
-	$(BUILD_DIR)m6502zp.o \
-	$(BUILD_DIR)m6502.o \
-	$(BUILD_DIR)mz80.o \
-	$(BUILD_DIR)m6809.o \
-	$(BUILD_DIR)swmathbx.o \
-	$(BUILD_DIR)swavg.o \
-	$(BUILD_DIR)atari_vg.o \
-	$(BUILD_DIR)omegrace.o \
-	$(BUILD_DIR)mhavoc.o \
-	$(BUILD_DIR)starwars.o \
-	$(BUILD_DIR)x_interface.o \
-	$(BUILD_DIR)aaemain.o \
-	$(X_LIBRARIES) -lm 
-
-clean: dirCheck
-	$(RM) $(BUILD_DIR)*.o
-	$(RM) aae
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(LIBS) 
+	$(RM) $(TARGET)
+	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)
+ifdef MAKE_IMAGE
+	cp $(TARGET) $(COPY_TARGET1)
+	cp $(TARGET) $(COPY_TARGET2)
+endif

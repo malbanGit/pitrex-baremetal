@@ -123,7 +123,7 @@ void DWHCIRegisterSetAll (TDWHCIRegister *pThis)
 	pThis->m_bValid = TRUE;
 }
 
-#ifndef NDEBUG
+#ifdef USPIDEBUG
 
 void DWHCIRegisterDump (TDWHCIRegister *pThis)
 {

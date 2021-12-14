@@ -53,6 +53,83 @@ VBREAK not working
 #include "cpu_control.h"
 #include "aae_avg.h"
 
+ UINT32 dwElapsedTicks;
+ glist gamelist[256];
+
+ GAMEKEYS *MK;
+ GAMEKEYS *GK;
+ GAMEKEYS *FOO;
+
+//RAM Variables
+ unsigned char *membuffer;
+ unsigned char vec_ram[0x1fff];
+ unsigned char *GI[5]; //Global 6502/Z80/6809 GameImage 
+
+ CONTEXTM6502 *c6502[MAX_ACPU];
+ CONTEXTMZ80 cMZ80[MAX_ACPU];
+
+ int art_loaded[6];
+
+//TEMPORARY GRAPHICS GLOBALS
+ int msx,msy,esx,esy; //Main full screen adjustments for debug
+ int b1sx,b1sy,b2sx,b2sy; //bezel full screen adjustments
+ float bezelzoom;
+ int bezelx;
+ int bezely;
+ float overalpha;
+ struct game_rect GameRect;
+
+//GLOBAL AUDIO VARIABLES
+ int gammaticks; //Needed for Pokey Sound for Major Havoc
+ int chip;  //FOR POKEY            
+ int gain;  //FOR POKEY  
+ int BUFFER_SIZE;  //FOR POKEY
+
+//SAMPLE *game_sounds[60]; //Global Samples
+//AUDIOSTREAM *stream; //Global Streaming Sound 1
+//AUDIOSTREAM *stream2; //Global Streaming Sound 2
+//unsigned char  *soundbuffer;
+//signed char *aybuffer;
+
+
+
+
+ int in_gui;
+ int frames; //Global Framecounter
+ int frameavg;
+ int testsw; //testswitch for many games
+
+//Shared variable for GUI
+
+ int gamenum; //Global Gamenumber (really need this one)
+ int have_error; //Global Error handler
+ int showinfo; //Global info handler
+ int done; //End of emulation indicator
+ int paused; //Paused indicator
+ double fps_count; //FPS Counter
+ int showfps;   //ShowFPS Toggle
+ int show_menu; //ShowMenu Toggle
+ int showifo; //No clue what this does
+ int scalef; //SCALING FACOR FOR RASTER GAMES
+ int gamefps; //GAME REQUIRED FPS
+ int num_games; //Total number of games ?? needed?
+ int num_samples; //Total number of samples for selected game
+
+//KEY VARIABLES
+ int mouseb[5];
+ int WATCHDOG;
+ int menulevel;//Top Level
+ int menuitem; //TOP VAL
+ int key_set_flag;
+ int total_length;
+
+ colors vec_colors[1024];
+
+//Video VARS
+ int sx,ex,sy,ey;
+ int testblend;
+ aae_settings config;
+
 
 struct AAEDriver driver[] =
 {
@@ -1080,6 +1157,98 @@ xopen_page(0);
     {
       driver[gamenum].run_game();
     }
+    
+    
+/*    
+    
+    
+    
+    
+  int iii=0;
+  extern int pipelineCounter; // ONE which is currently written to!
+
+while ((((volatile unsigned char)currentButtonState)&0x0f) == (0x01)) 
+{
+  if (pipelineCounter == 0) break;
+printf(".");
+
+  m6502zpexec(10000);
+
+
+
+int plc = pipelineCounter;
+extern VectorPipelineBase *_BPL[];
+extern int basePipeLineWriting;
+extern VectorPipelineBase *  pb;
+
+VectorPipelineBase *  _pb = _BPL[basePipeLineWriting?0:1]; // current base pipeline 
+
+
+  for (int i=0; i<pipelineCounter; i++)
+  {
+    VectorPipelineBase *work = &pb[i];
+    VectorPipelineBase *cpb_N = &_pb[i];
+    
+    cpb_N->yStart =  work->yStart;
+    cpb_N->xStart =  work->xStart;
+    cpb_N->yEnd =  work->yEnd;
+    cpb_N->xEnd =  work->xEnd;
+    cpb_N->y0 =  work->y0;
+    cpb_N->x0 =  work->x0;
+    cpb_N->y1 =  work->y1;
+    cpb_N->x1 =  work->x1;
+    cpb_N->intensity =  work->intensity;
+    cpb_N->pattern =  work->pattern;
+    cpb_N->sms =  work->sms;
+    cpb_N->timingForced =  work->timingForced;
+    cpb_N->force =  work->force;
+    cpb_N->rlines =  work->rlines;
+    if (i==pipelineCounter-1)
+      cpb_N->next =  (VectorPipelineBase *)0;
+    else
+      cpb_N->next = &_pb[i+1]; 
+    if (i==0)
+      cpb_N->previous =  (VectorPipelineBase *)0;
+    else
+      cpb_N->next = &_pb[i-1]; 
+    cpb_N->debug[0] = 0;
+    
+  }
+
+    v_playAllSFX();
+    v_doSound();    // not needed in IRQ Mode
+    v_readButtons(); // not neededin IRQ mode
+    v_readJoystick1Analog(); // not neededin IRQ mode
+    v_WaitRecal();
+pipelineCounter = plc;    
+printf("pl2: %i\n", pipelineCounter);    
+    
+    
+printf(":");
+//  if (pipelineCounter<800) v_directDraw32(1000+iii++, 100+iii++, 20000+iii++, 10000+iii++, 17);
+}
+//printf("While exited\n");    
+*/    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 #ifndef NO_PI
 // with this we can time correctly, "better"is in swavg
     v_playAllSFX();
@@ -1201,7 +1370,8 @@ int main(int argc, char *argv[])
   // special vectrex  interface settings for asteroids
   v_setRefresh(50);
   v_setClientHz(driver[gamenum].fps); // 62.5
-printf("AAE Client Hz: %i\n\r",driver[gamenum].fps);  
+//  v_setClientHz(1000);
+printf("AAE(%i) Client Hz: %i\n\r", gamenum,driver[gamenum].fps);  
   v_setupIRQHandling();
 //  v_enableJoystickDigital(1,1,0,0);
   v_enableJoystickAnalog(1,1,1,1);
@@ -1213,7 +1383,7 @@ printf("AAE Client Hz: %i\n\r",driver[gamenum].fps);
   init_graphics (argc, argv, smallwindow, use_pixmap, line_width, "Starwars");
 #endif    
 
-  
+//  gamenum = MHAVOC;
   if (gamenum == STARWARS)
   {
     // star wars

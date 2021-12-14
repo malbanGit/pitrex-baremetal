@@ -354,9 +354,7 @@ for(f=0;f<strlen(str);f++)
   /* we do this even if go_through_the_motions is set */
   if(strchr(" ",c)!=NULL)
   {
-#ifdef FREESTANDING
  v_addZeroRef();
-#endif    
     a+=s1;
   }
   else if(strchr("ltfijk-.()",c)!=NULL)

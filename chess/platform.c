@@ -8,7 +8,6 @@
 #ifdef PITREX
 // Pitrex includes
 
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
 #include "window.h"
 
@@ -58,21 +57,15 @@ void platform_init(char* name, int width, int height) {
     screen_height = height;
     
     vectrexinit(1);
-#ifndef FREESTANDING
-    v_setName(name);
-#endif    
     v_init();
 	usePipeline = 1;
     v_setRefresh(50);
 	v_setBrightness(DEFAULT_COLOR);
-#ifdef FREESTANDING
   v_setupIRQHandling();
 //  v_enableJoystickDigital(1,1,0,0);
   v_enableJoystickAnalog(1,1,0,0);
 //  v_enableSoundOut(1);
   v_enableButtons(1);
-#else
-#endif
 
     v_window(0, 0, width, height, false);
 }

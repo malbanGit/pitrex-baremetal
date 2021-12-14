@@ -1,4 +1,33 @@
+
+
 extern int pendingReturnToPiTrex;
+
+/*
+extern int currentSwitch;
+extern int currentRead;
+extern int currentWrite;
+extern int currentWait;
+extern int currentStage;
+extern int currentT1;
+extern int currentt1Counter;
+void iCommand(void)
+{
+    printf("SMP debug values\r\n");
+    printf("currentSwitch: %i \r\n", currentSwitch);
+    printf("currentRead: %i \r\n", currentRead);
+    printf("currentWrite: %i \r\n", currentWrite);
+    printf("currentWait: %i \r\n", currentWait);
+    printf("currentStage: %i \r\n", currentStage);
+    printf("currentT1: %08x \r\n", currentT1);
+    printf("currentt1Counter: %i \r\n", currentt1Counter);
+    printf("irqButtons: %i \r\n", irqButtons);
+    printf("irqSound: %i \r\n", irqSound);
+    printf("irqJoyAnalog: %i \r\n", irqJoyAnalog);
+    printf("irqJoyDigital: %i \r\n", irqJoyDigital);
+    printf("currentButtonState: %i \r\n", currentButtonState);
+}
+*/
+
 void resetCommand(void)
 {
 
@@ -32,7 +61,7 @@ void resetCommand(void)
         isb();
         dsb();
         dmb();
-        mmu_disable(); //dcache_disable(); + icache_disable(); + clean_data_cache();
+        mmu_disable(); 
         cache_flush(); // flush I/D-cache 
     // correct start registers and jump to 8000
     __asm__ __volatile__(
@@ -184,17 +213,17 @@ void setCycleEQCommand(void)
   unsigned int c = bm_atoi(getParameter(0),10);
   if (c == -1410065407)
   {
-    printf("SetCycleEQ value: %i \r\n", cycleEquivalent);
+    printf("SetCycleEQ value: %i \r\n", getCycleEquivalent());
     return;
   }
   if ((c<100) || (c>999))
   {
-    printf("SetCycleEQ invalid value: %i (%i)\r\n", c, cycleEquivalent);
+    printf("SetCycleEQ invalid value: %i (%i)\r\n", c, getCycleEquivalent());
     return;
   }
   printf("SetCycleEQ set to: %i\r\n", c);
   
-  cycleEquivalent = c;
+  setCycleEquivalent(c);
 }
 
 
@@ -340,7 +369,8 @@ void setBufferTypeCommand(void)
   
   bufferType = c;
 }
-extern int pendingDisableInterrupts;
+extern volatile int pendingDisableInterrupts;
+extern volatile int pendingEnableInterrupts;
 void irqCommand(void)
 {
   unsigned int c = bm_atoi(getParameter(0),10);
@@ -362,9 +392,49 @@ void irqCommand(void)
   else
   if ((isIRQMode == 0) && (c==1))
   {
-    v_setupIRQHandling();
+#if RASPPI != 1  
+    if (isSMPMode)
+    {
+      pendingDisableMultiCore = 1;
+      pendingEnableInterrupts = 1;
+    }
+    else
+#endif    
+    {
+      v_setupIRQHandling();
+    }
   }
 }
+
+extern volatile int pendingDisableMultiCore;
+extern volatile int pendingEnableMultiCore;
+
+void smpCommand(void)
+{
+  unsigned int c = bm_atoi(getParameter(0),10);
+  if (c == -1410065407)
+  {
+    printf("smp value: %i \r\n", isSMPMode);
+    return;
+  }
+  if ((c<0) || (c>32001))
+  {
+    printf("smp invalid value: %i (%i)\r\n", c, isSMPMode);
+    return;
+  }
+  printf("smp set to: %i\r\n", c);
+  if ((isSMPMode == 1) && (c==0))
+  {
+    pendingDisableMultiCore = 1;
+  }
+  else
+  if ((isSMPMode == 0) && (c==1))
+  {
+    v_setupSMPHandling();
+  }
+}
+
+
 void setZeroDifMaxCommand(void)
 {
   unsigned int c = bm_atoi(getParameter(0),10);
@@ -455,6 +525,8 @@ Command commandList[] =
         {1,"pipelineCount","pc",    "pipelineCount    | pc              -> print length of current pipeline \r\n" ,  getPipelineCount },
         {1,"pipelineAsVList","pas", "pipelineAsVList  | pas             -> save current pipeline as screenshort (db) \r\n" ,  saveScreenshot },
 
+//        {1,"info","i",              "i                | i               -> some SMP debug info \r\n" ,  iCommand },
+        {1,"smp","smp",             "smp              | smp             -> use multicore vector processing \r\n" ,  smpCommand },
         {1,"irqMode","irq",         "irqMode          | irq             -> switch between display modes \r\n" ,  irqCommand },
         {1,"setClientRefresh","scr","setClientRefresh | scr             -> set Refresh of client program (0 = sync) \r\n" ,  setClientRefreshCommand },
         {1,"outputCycles","oc",     "outputCycles     | oc              -> output cycles used for 1 round (only usefull if larger than Hz) \r\n" ,  outputRoundCyclesCommand },

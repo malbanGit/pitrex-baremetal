@@ -1,0 +1,6 @@
+code 0000
+label 0000 Doffset2
+data 0003-03FF
+code 0400
+label 0400 ENTRYPT
+data 0418-0464

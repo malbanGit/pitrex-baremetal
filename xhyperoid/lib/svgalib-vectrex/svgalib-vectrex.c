@@ -11,7 +11,6 @@
 
 #include <unistd.h>
 #include <stdio.h>
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
 #include "../../window.h"
 //extern int bufferType;
@@ -214,9 +213,6 @@ int single_point_of_init(void) {
   printf("Could Not Initialise Vectrex Connection\n");
   return -1;
  }
-#ifndef FREESTANDING
- v_setName(program_invocation_short_name);
-#endif 
  v_init();
  v_set_hardware_orientation(VECTREX_FLIP_Y);
  

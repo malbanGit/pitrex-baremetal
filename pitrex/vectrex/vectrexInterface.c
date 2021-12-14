@@ -1,9 +1,45 @@
+/*
+emulations not working
+
+tailgunner crashing
+
+Atari crashing
+(star wars working???)
+*/
+
+#define SUPPORT_SAMPLES
+#define MULTI_SAMPLES
+
+/*
+int currentSwitch = -1;
+int currentRead=-1;
+int currentWrite=-1;
+int currentWait=-1;
+int currentStage=-1;
+int currentT1 = -1;
+int currentt1Counter = 0;
+*/
+
+void __attribute__ ((noreturn)) __attribute__ ((naked)) parkCore1();
+int handleVectrexOutputSMP();
+void startCore1(unsigned int coreStart);
+void v_removeMultiCore();
+void handleClient_SMP_WR();
+
+volatile int pendingDisableMultiCore = 0;
+volatile int pendingEnableMultiCore = 0;
+volatile unsigned int isSMPMode = 0;
+volatile int printSemaphore=0;
+
+volatile int pendingDisableInterrupts=0;
+volatile int pendingEnableInterrupts=0;
+int pendingReturnToPiTrex = 0;
+
+
 // todo ADD to Pipeline
 // 8 bit for now
 //void v_printBitmapUni(unsigned char *bitmapBlob, int width, int height, int sizeX, int x, int y)
 
-#define SUPPORT_SAMPLES
-#define MULTI_SAMPLES
 //#define ENABLE_SAMPLE_MIXER // sounds shitty - but works!
 
 // if defined ALL debug features, incls terminal mode are off!
@@ -196,24 +232,14 @@ int myDebug;
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <stddef.h> // these are fresstanding includes!
-#include <stdint.h> // also "available":  <float.h>, <iso646.h>, <limits.h>, <stdarg.h>
 #include <ctype.h>
 
-#include <pitrex/pitrexio-gpio.h>
-#include <pitrex/bcm2835.h>
 #include "vectrexInterface.h"
-
 
 // ff used for state saving
 // state are saved in two 1024 byte blobs
 // one for vectrexInterface, one for the "user"
 // the blobs can be cast after loading/saving to anything one wants...
-//#include <baremetal/rpi-base.h>
-#include <baremetal/rpi-aux.h>
-#include <baremetal/rpi-gpio.h>
-
-#include "interrupt.i"
 
 unsigned int iCounter =0;
 uint32_t releaseIRQTime = 0;
@@ -231,6 +257,8 @@ int clearPipelineIssued = 0;
   
 
 
+  VectorPipeline *wpl = 0;
+  VectorPipeline *rpl = 0;
 
 
 /***********************************************************************/
@@ -420,15 +448,31 @@ int customClipyMax;
 int customClippingEnabled;
 
 
-
-/* should be called once on startup / reset
- */
-GlobalMemSettings *settings;
+int pipelineCleanup = 0;
+void v_enablePipelineCleanup(int e)
+{
+  pipelineCleanup = e;
+}
 
 #include "vectorFont.i" // includes font definition and string printing routines
 #include "rasterFont.i" // includes font definition and string printing routines
 
 #include "ini.c"
+void setCycleEquivalent(unsigned int i)
+{
+  cycleEquivalent = i;
+#if RASPPI != 1
+    cycleEquivalent += RASPPI3_CYCLE_OFFSET;
+#endif  
+}
+unsigned int getCycleEquivalent()
+{
+#if RASPPI != 1
+    return cycleEquivalent - RASPPI3_CYCLE_OFFSET;
+#else    
+  return cycleEquivalent;
+#endif  
+}
 
 // for now INI setting just stupidly overwrite other saved settings!
 int iniHandler(void* user, const char* section, const char* name, const char* value)
@@ -446,7 +490,7 @@ int iniHandler(void* user, const char* section, const char* name, const char* va
     if (MATCH_NAME("MAX_USED_STRENGTH")) {MAX_USED_STRENGTH = atoi(value);} else 
     if (MATCH_NAME("RESET_TO_ZERO_DIF_MAX")) resetToZeroDifMax = atoi(value); else 
     if (MATCH_NAME("CRANKY_FLAG")) crankyFlag = atoi(value); else 
-    if (MATCH_NAME("CYCLE_EQUIVALENT")) cycleEquivalent = atoi(value); else 
+    if (MATCH_NAME("CYCLE_EQUIVALENT")) setCycleEquivalent(atoi(value)); else 
     if (MATCH_NAME("ORIENTATION")) orientation = atoi(value); else 
     if (MATCH_NAME("CALIBRATION_VALUE")) calibrationValue = atoi(value); else 
     if (MATCH_NAME("USE_PIPELINE")) usePipeline = atoi(value); else 
@@ -499,6 +543,7 @@ int irqButtons;
 int irqJoyDigital;
 int irqJoyAnalog;
 
+
 void v_init()
 { 
   inCalibration = 0;
@@ -506,11 +551,11 @@ void v_init()
   setWaitMin = 0;
   logOutput=0;
   GlobalMemSettings **settingsPointer;
-  settingsPointer = (GlobalMemSettings **)0x0000008c;
+  settingsPointer = (GlobalMemSettings **)SETTING_STORE;
   settings = *settingsPointer; 
  
-  unsigned char *buffer;
-  buffer = malloc(200000);
+//  unsigned char *buffer;
+//  buffer = malloc(200000);
 
   setbuf(stdin, NULL);
   setbuf(stdout, NULL);
@@ -520,7 +565,6 @@ void v_init()
   PMNC(CYCLE_COUNTER_ENABLE|CYCLE_COUNTER_RESET|COUNTER_ZERO);
 
   printf("\r\nSettingPointer: %08x, settings: %0x08\r\n", settingsPointer, settings);
-  printf("v_init()\r\n");
 /*
   uint32_t timerValue_start;
   uint32_t timerValue_end;
@@ -630,7 +674,7 @@ void v_init()
 
   crankyFlag=0x14;//CRANKY_NULLING_CALIBRATE | CRANKY_BETWEEN_VIA_B+6; // for is the normal cranky delay after switching port b to MUX_y (or Z)
 
-  cycleEquivalent = 666;
+  setCycleEquivalent(666);
   beamOffBetweenConsecutiveDraws = 1;
 
   clipActive = 0;
@@ -710,9 +754,8 @@ void v_init()
         printf("vectrexInterface.ini not loaded!\n\r");
   }
   printf("vectrexInterface.ini-Parser returned: %i\n\r", pv);
-
-  
 }
+
 void resetPipeline()
 {
   usePipeline = 1;
@@ -744,6 +787,10 @@ void v_setBrightness(uint8_t brightness)
 {
   commonIntensity = brightness;
   if (isIRQMode) 
+  {
+    return; // or add to pipeline?
+  }
+  if (isSMPMode) 
   {
     return; // or add to pipeline?
   }
@@ -1266,7 +1313,26 @@ void v_WaitRecal()
     handleClient_WR();
     return;
   }
-  
+#if RASPPI != 1 
+  if (isSMPMode)
+  {
+    handleClient_SMP_WR();
+    return;
+  }
+  else
+  {
+    if (pendingEnableInterrupts)
+    {
+      pendingEnableInterrupts = 0;
+      v_setupIRQHandling();
+      if (isIRQMode)
+      {
+	handleClient_WR();
+	return;
+      }
+    }
+  }
+#endif  
   
   #ifdef PITREX_DEBUG
   while (browseMode)
@@ -1276,6 +1342,7 @@ void v_WaitRecal()
 //printf("B");
 
     handleUARTInterface();
+    if (isSMPMode == 1) return;
     // wait for Via T2 to expire
     while ((GET(VIA_int_flags) & 0x20) == 0)
     {;}
@@ -1316,6 +1383,9 @@ void returnToPiTrex()
 {
   if (allowReturnToLoader)
   {
+#if RASPPI != 1 
+    v_removeMultiCore();
+#endif    
     v_removeIRQHandling();
     printf("Restarting kernel...%08x %08x\r\n",(int)settings->loader, (int)*settings->loader);
     settings->loader();
@@ -1416,6 +1486,13 @@ void v_WaitRecal_buffered(int buildBuffer)
     
   }
   handleUARTInterface();
+  if (isSMPMode) 
+  {
+    // switching to IRQ mode via command line
+    // reset T2 VIA timer to 50Hz
+    resetPipeline();
+    return;
+  }
   if (isIRQMode) 
   {
     // switching to IRQ mode via command line
@@ -1429,11 +1506,11 @@ void v_WaitRecal_buffered(int buildBuffer)
 
 
   v_resetDetection();
-  if (currentButtonState ==0xf) // button 1+ 2 + 3+4 -> go menu
+  if ((currentButtonState&0xf) == 0xf) // button 1+ 2 + 3+4 -> go menu
   {
     returnToPiTrex();
   }
-  if ((currentButtonState&0xff)== 0x20) // button 2 -> joypad 2
+  if ((currentButtonState&0x20)== 0x20) // button 2 -> joypad 2
   {
     if (inGameSettingsAllowed)
     {
@@ -1555,6 +1632,9 @@ uint8_t v_directReadButtons()
 uint8_t v_readButtons()
 {
   if (isIRQMode) return currentButtonState;
+#if RASPPI != 1 
+  if (isSMPMode) return currentButtonState;
+#endif  
   if (ioDone & V_BUTTONS_READ) return currentButtonState;
 
   ioDone |= V_BUTTONS_READ;
@@ -1603,6 +1683,9 @@ uint8_t v_readButtons()
 void v_readJoystick1Digital()
 {
   if (isIRQMode) return;
+#if RASPPI != 1 
+  if (isSMPMode) return;
+#endif
   if (ioDone & V_JOY_DIGITAL_READ) return;
   ioDone |= V_JOY_DIGITAL_READ;
 
@@ -1743,6 +1826,9 @@ void v_readJoystick1Digital()
 void v_readJoystick1Analog()
 {
   if (isIRQMode) return;
+#if RASPPI != 1 
+  if (isSMPMode) return;
+#endif  
   if (ioDone & V_JOY_ANALOG_READ) return;
   ioDone |= V_JOY_ANALOG_READ;
 
@@ -2180,6 +2266,9 @@ void v_playDirectSampleAll(char *ymBufferLoad, int fsize, int rate);
 void v_playDirectSampleAll(char *ymBufferLoad, int fsize, int rate)
 {
   if (isIRQMode) return;
+#if RASPPI != 1 
+  if (isSMPMode) return;
+#endif  
   int counter = 0;
   int microsToWait = (1000*1000) / rate;
 
@@ -2209,6 +2298,9 @@ void v_noSound()
   v_writePSG_double_buffered(7,0x3f); // all channel off
   
   if (isIRQMode) return;
+#if RASPPI != 1 
+  if (isSMPMode) return;
+#endif  
   v_writePSG_buffered(8,0); // volume 0
   v_writePSG_buffered(9,0);
   v_writePSG_buffered(10,0);
@@ -2247,6 +2339,10 @@ void v_noSound_channel(int c)
 void v_doSound()
 {
   if (isIRQMode) return;
+#if RASPPI != 1 
+  if (isSMPMode) return;
+#endif  
+ 
   v_PSG_writeDoubleBuffer();
 }
 
@@ -2292,6 +2388,9 @@ void v_writePSG_double_buffered(uint8_t reg, uint8_t data)
 void v_PSG_writeDoubleBuffer()
 {
   if (isIRQMode) return;
+#if RASPPI != 1 
+  if (isSMPMode) return;
+#endif  
   for (int i=0;i<15;i++)
   {
     uint8_t data = psgDoubleBuffer[i];
@@ -2312,6 +2411,9 @@ void v_PSG_writeDoubleBuffer()
 void v_writePSG_buffered(uint8_t reg, uint8_t data)
 {
   if (isIRQMode) return;
+#if RASPPI != 1 
+  if (isSMPMode) return;
+#endif  
   if (psgShadow[reg] == data) return;
   psgShadow[reg] = data;
 
@@ -2332,6 +2434,9 @@ uint8_t v_readPSG_buffered(uint8_t reg)
 void v_writePSG(uint8_t reg, uint8_t data)
 {
   if (isIRQMode) return;
+#if RASPPI != 1 
+  if (isSMPMode) return;
+#endif  
   I_SET(VIA_port_a, reg); // prepare access of psg port A (0x0e) by writing the register value to VIA port A
   I_SET(VIA_port_b, 0x99); // set VIA port B to settings: sound BDIR on, BC1 on, mux off
   I_SET(VIA_port_b, 0x81); // set VIA Port B = 81, mux disabled, RAMP disabled, BC1/BDIR = 00 (PSG inactive)
@@ -2347,6 +2452,9 @@ void v_writePSG(uint8_t reg, uint8_t data)
 uint8_t v_readPSG(uint8_t reg)
 {
   if (isIRQMode) return 0;
+#if RASPPI != 1 
+  if (isSMPMode) return 0;
+#endif  
   I_SET(VIA_port_a, reg); // prepare access of psg port A (0x0e) by writing the register value to VIA port A
   I_SET(VIA_port_b, 0x99); // set VIA port B to settings: sound BDIR on, BC1 on, mux off
   I_SET(VIA_port_b, 0x81); // set VIA Port B = 81, mux disabled, RAMP disabled, BC1/BDIR = 00 (PSG inactive)
@@ -2366,7 +2474,6 @@ void v_initYM(uint8_t *b, uint16_t length, int l)
   ymloop = l;
   ymLength = length;
   ymPos = 0;
-printf("YM file init to vectrex interface - 2\n\r");
 }
 
 void v_setymPos(int i)
@@ -3279,11 +3386,11 @@ void setInverseClipping(int enabled, int x0, int y0, int x1, int y1)
 }
 */
 // this can be called from normal space!
-
 // return 1 if a new vectorpipeline was created
 // returns 0 is not
 void handlePipeline()
 {
+  
   // build a list of all items
   // and put "dots" last
   // and stables first (hint)
@@ -3296,7 +3403,6 @@ void handlePipeline()
   {
     return;
   }
-    
   // the array is converted to a double linked list
   // that way we can later easily manipulate the "array"
   VectorPipelineBase *head=(VectorPipelineBase *)0;
@@ -3321,6 +3427,9 @@ void handlePipeline()
   // this way "reverse" clipping can more easily
   // add new vectors to the end, since
   // we still are in "addition" mode of the pipeline
+  
+  
+  
   if (clipActive)
   {
     if (isIRQMode)
@@ -3331,6 +3440,16 @@ void handlePipeline()
       ADD_PIPELINE(clipmaxX, clipmaxY, clipmaxX, clipminY, 90);
       ADD_PIPELINE(clipmaxX, clipminY, clipminX, clipminY, 90);
     }
+#if RASPPI != 1 
+    else if (isSMPMode) 
+    {
+      // add a "window"
+      ADD_PIPELINE(clipminX, clipminY, clipminX, clipmaxY, 90);
+      ADD_PIPELINE(clipminX, clipmaxY, clipmaxX, clipmaxY, 90);
+      ADD_PIPELINE(clipmaxX, clipmaxY, clipmaxX, clipminY, 90);
+      ADD_PIPELINE(clipmaxX, clipminY, clipminX, clipminY, 90);
+    }
+#endif  
     else
     {
       //v_directDraw32(clipminX, clipminY, clipminX, clipmaxY, 90);
@@ -3370,6 +3489,16 @@ void handlePipeline()
       }
     }
   }
+  if (pipelineCleanup)
+  {
+    // remove double vectors
+    // remove inverse double vectors
+    // remove dots that sit on start/end points
+    // todo
+    
+  }
+
+
 
   // now we build the linked list
   //
@@ -3510,7 +3639,9 @@ void handlePipeline()
   // that is used to currently output
   // to the vectrex (that is the vectorPipeLineReading one)
   
-  VectorPipeline *pl = _VPL[vectorPipeLineWriting];        // vectorpipeline we write to NOW
+  
+  VectorPipeline *pl;        // vectorpipeline we write to NOW
+  pl = _VPL[vectorPipeLineWriting];        // vectorpipeline we write to NOW
   
   // (since we allways reuse the same array elements, we must ensure they are clean from start)
   int fpc = 0; // final pipeline counter
@@ -3527,6 +3658,7 @@ void handlePipeline()
 #endif  
   while (cpb != (VectorPipelineBase *)0)
   {
+// if (vectorPipeLineWriting == vectorPipeLineIsRead) printf("DANGER!!!!!!!!!\n");
     int cv = 0;
     if (checkExternal != 0)
     {
@@ -4149,18 +4281,25 @@ void handlePipeline()
   // to next use the newly written pipeline
   // to output data with
   
-//  !!!!
-  if (isIRQMode) _disable_interrupts();
 
-
-
-
+  if (isIRQMode) DisableInterrupts();
+#if RASPPI != 1 
+  if (isSMPMode)
+  {
+    getLock();
+  }
+#endif
   vectorPipeLineNextRead = vectorPipeLineWriting;
   vectorPipeLineWriting = (vectorPipeLineWriting +1)%3;
   if (vectorPipeLineWriting == vectorPipeLineIsRead)
   {
     vectorPipeLineWriting = (vectorPipeLineWriting +1)%3;
   }
+#if RASPPI != 1 
+  if (isSMPMode) releaseLock();
+#endif
+  
+  //currentWrite = vectorPipeLineWriting;
 
 #ifdef USE_PERSISTENT_VECTORS  
 
@@ -4207,12 +4346,7 @@ void handlePipeline()
   }
   clearNextPipeline = 0;
 #endif  
-  
-  
-  
-  
-  
-  if (isIRQMode) _enable_interrupts();
+  if (isIRQMode) EnableInterrupts();
 }
 
 
@@ -4234,7 +4368,7 @@ do {\
     USE_TIME( (t1OffMark+((waiter)*ONE_WAIT_UNIT) ) -value);\
   } while (value < (t1OffMark+((waiter)*ONE_WAIT_UNIT) ) );\
 } while (0)
-
+//printf("Display BASIC pipeline!!!\n");
   vectorPipeLineIsRead = vectorPipeLineNextRead;
   VectorPipeline *dpl = _VPL[vectorPipeLineIsRead];
   int delayedBeamOff=0;
@@ -5110,9 +5244,9 @@ void v_immediateDraw32Patterned(int8_t xEnd, int8_t yEnd, uint8_t pattern)
 
   
   
-  waitUntil(666);
+  waitUntil(cycleEquivalent);
   SET_YSH_IMMEDIATE_8(yEnd);
-  waitUntil(666);
+  waitUntil(cycleEquivalent);
 
   SET_XSH_IMMEDIATE_8(xEnd);
 
@@ -5121,7 +5255,13 @@ void v_immediateDraw32Patterned(int8_t xEnd, int8_t yEnd, uint8_t pattern)
   {
       SET_SHIFT_REG(pattern);
       PMNC(CYCLE_COUNTER_ENABLE|CYCLE_COUNTER_RESET);
+      
+//#if RASPPI != 1
+//      waitUntil(15*(640+RASPPI3_CYCLE_OFFSET)+500);
+//#else
       waitUntil(15*640+500);
+//#endif      
+      
   }
   SET_SHIFT_REG(0x00);
   #ifdef BEAM_LIGHT_BY_CNTL
@@ -5266,11 +5406,6 @@ int v_immediateWidgetSlider(CalibrationItems *item, int x, int y, int active)
   else if(item->type == CAL_TYPE_FLOAT)
     pos = ((float)width)/((float) (max-min) ) * ((float)((*item->fvalue) - min));
 
-
-
-
-  
-  
   if (active)
   {
     v_setBrightness(0x5f);
@@ -5419,12 +5554,6 @@ int v_immediateWidgetSlider(CalibrationItems *item, int x, int y, int active)
   v_drawToImmediate8(0, -10);
   ZERO_AND_WAIT();
 }
-
-
-
-
-
-
 
 const signed char vectrexExactExample[]=
 {   (signed char) 0xFF, +0x00, +0x0C,  // pattern, y, x
@@ -6310,6 +6439,13 @@ void v_SettingsGUI(int ownWaitRecal)
   vecHz = 1500000 / (((Vec_Rfrsh&0xff)*256) + ((Vec_Rfrsh>>8)&0xff));
   appHz = clientHz;
   
+  
+#if RASPPI != 1
+    cycleEquivalent -= RASPPI3_CYCLE_OFFSET;
+#endif  
+  
+  
+  
   if (ownWaitRecal)
   {
     if (wasIRQMode == 255)
@@ -6478,6 +6614,9 @@ void v_SettingsGUI(int ownWaitRecal)
       v_setupIRQHandling();  
     wasIRQMode = 255;
   }
+#if RASPPI != 1
+    cycleEquivalent += RASPPI3_CYCLE_OFFSET;
+#endif  
 
   commonHints = oldCommenHints;
 }
@@ -6557,7 +6696,7 @@ void v_saveIni(char *filename)
 
   fprintf(iniOut,"; CYCLE_EQUIVALENT: \n"); 
   fprintf(iniOut,"; how many Pi cycles represent one vectrex cycle. 666 nanoseconds should be pretty close\n"); 
-  fprintf(iniOut,"CYCLE_EQUIVALENT = %i;\n", cycleEquivalent); 
+  fprintf(iniOut,"CYCLE_EQUIVALENT = %i;\n", getCycleEquivalent());
   fprintf(iniOut,"\n"); 
 
   fprintf(iniOut,"; BEAM_OFF_BETWEEN_CONSECUTIVE_DRAWS:\n"); 
@@ -6792,6 +6931,8 @@ static inline void v_playOneSample_ignoreA()
   if ((!v_sampleEnabled) && (!v_sample2Enabled)) return;
   if (v_nextSampleAt > rpiSystemTimer->counter_lo) return;
 
+//printf("Play sample!\n");  
+  
   v_samplePosition++;
   if (v_samplePosition>=v_sampleSize) 
   {
@@ -7039,6 +7180,16 @@ void v_addIRQMultiSample(char *buf, int size, int mode)
       }
   }
 }
+#else
+void initMultiSamples(int rate)
+{
+}
+void deinitMultiSamples()
+{
+}
+void v_addIRQMultiSample(char *buf, int size, int mode)
+{
+}
 #endif
 
 
@@ -7074,8 +7225,6 @@ void v_addIRQMultiSample(char *buf, int size, int mode)
 */ 
 
     
-int pendingDisableInterrupts = 0;
-int pendingReturnToPiTrex = 0;
 int handleVectrexOutput()
 {
     if (ptr != 0)
@@ -7452,7 +7601,7 @@ int handleVectrexOutput()
         ////////////////////////////////////////////////////////////
       }
 
-      if ((currentButtonState&0xff)== 0x20) // button 2 -> joypad 2
+      if ((currentButtonState&0x20)== 0x20) // button 2 -> joypad 2
       {
         if (inGameSettingsAllowed)
         {
@@ -7464,7 +7613,7 @@ int handleVectrexOutput()
           }
         }
       }
-      if (currentButtonState ==0xf) // button 1+ 2 + 3+4 -> go menu
+      if ((currentButtonState&0xf) == 0xf) // button 1+ 2 + 3+4 -> go menu
       {
         pendingReturnToPiTrex = 1;
 //    allowReturnToLoader = 1;
@@ -7482,17 +7631,17 @@ int handleVectrexOutput()
       // Round is done
       //printf("hy:set up synchronization\r\n");  
       synqSignalIRQ = synqSignalIRQ | SYNC_DISPLAY_FINISHED; // only needed when in sync mode
-
       //******************************************************************
       if (v_sampleEnabled)
       {
         while ((GET(VIA_int_flags) & 0x20) == 0)
         {
           // the default entry is a WaitRecal
-          int lo = GET(VIA_t1_cnt_lo); // reading lo, resets the T2 interrupt flag!
+          int lo = GET(VIA_t2_cnt_lo); // reading lo, resets the T2 interrupt flag!
           int hi = GET(VIA_t2_cnt_hi);
+	  if ((hi & 0xff) == 0xff) goto timeOut;
           int t2 = hi*256+lo;
-          
+
           if (t2 < (((Vec_Rfrsh&0xff)*256) + ((Vec_Rfrsh>>8)&0xff)))
           {
             if (t2 > v_sampleInterval) t2 = v_sampleInterval;
@@ -7525,8 +7674,9 @@ int handleVectrexOutput()
         if ((GET(VIA_int_flags) & 0x20) == 0)
         {
           // the default entry is a WaitRecal
-          int lo = GET(VIA_t1_cnt_lo); // reading lo, resets the T2 interrupt flag!
+          int lo = GET(VIA_t2_cnt_lo); // reading lo, resets the T2 interrupt flag!
           int hi = GET(VIA_t2_cnt_hi);
+	  if ((hi & 0xff) == 0xff) goto timeOut;
           int t2 = hi*256+lo;
           if (t2 < (((Vec_Rfrsh&0xff)*256) + ((Vec_Rfrsh>>8)&0xff)))
           {
@@ -7551,7 +7701,7 @@ int handleVectrexOutput()
         // wait for Via T2 to expire -> 50Hz
         while ((GET(VIA_int_flags) & 0x20) == 0) ;
       }
-    
+timeOut:    
       //******************************************************************
       
       // reset T2 VIA timer to 50Hz
@@ -7560,7 +7710,7 @@ int handleVectrexOutput()
         // at the start of each "round" 
       // reset pi counter 1
       PMNC(CYCLE_COUNTER_ENABLE|COUNTER_ZERO);
-
+      
 ////////////////////////////////////////////////////////////      
 //v_deflok();
 
@@ -7794,9 +7944,11 @@ void __attribute__((interrupt("IRQ"))) v_interrupt_vector(void)
       uint32_t interval = ((releaseIRQTime-1) * 666) / 1000; // * 1000 = cycles
       rpiSystemTimer->control_status = 2; // acknoledge interrupt see: https://www.raspberrypi.org/forums/viewtopic.php?t=23969
                                           // BCM2837-ARM-Peripherals.-.Revised.-.V2-1-1.pdf page 172/173
-      rpiSystemTimer->compare1 = counter+interval;
+      rpiSystemTimer->compare1 = counter+interval /*+ _10 _ */;
+      
   inIRQ_MODE = 0;
-      return;
+//printf("ret: %i\n", (counter+interval) - counter);
+  return;
     }
     else
     {
@@ -7810,17 +7962,22 @@ void __attribute__((interrupt("IRQ"))) v_interrupt_vector(void)
 }
 void v_removeIRQHandling()
 {
+
   if (isIRQMode==0) return;
   isIRQMode = 0;
-  _disable_interrupts(); // function defined in out baremetal.S
+  DisableInterrupts(); // function defined in out baremetal.S
   resetPipeline();
-  printf("no:IRQ is removed\r\n");  
+  printf("IRQ is removed\r\n");  
+  if (pendingEnableMultiCore)
+  {
+    v_setupSMPHandling();
+  }
 }
 
 
 void DisconnectUSBInterrupt()
 {
-  _disable_interrupts(); // function defined in out baremetal.S
+  DisableInterrupts(); // function defined in out baremetal.S
   // reset everything interrupt
   rpiIRQController->FIQ_control = 0; // clear FIQ
   rpiIRQController->Disable_IRQs_1 = (uint32_t) -1; // clear all 1 interrupts
@@ -7831,6 +7988,34 @@ void DisconnectUSBInterrupt()
   rpiIRQController->IRQ_pending_1 = rpiIRQController->IRQ_pending_1; // acknoldedge all interrupts
   rpiIRQController->IRQ_pending_2 = rpiIRQController->IRQ_pending_2; // acknoldedge all interrupts
 }
+
+
+#if RASPPI >= 2
+
+#if RASPPI <= 3
+#define ARM_LOCAL_BASE			0x40000000
+#else
+#define ARM_LOCAL_BASE			0xFF800000
+#endif
+#endif
+    
+#define ARM_LOCAL_CONTROL		(ARM_LOCAL_BASE + 0x000)
+#define ARM_LOCAL_PRESCALER		(ARM_LOCAL_BASE + 0x008)
+#define ARM_LOCAL_GPU_INT_ROUTING	(ARM_LOCAL_BASE + 0x00C)
+#define ARM_LOCAL_PM_ROUTING_SET	(ARM_LOCAL_BASE + 0x010)
+#define ARM_LOCAL_PM_ROUTING_CLR	(ARM_LOCAL_BASE + 0x014)
+#define ARM_LOCAL_TIMER_LS		(ARM_LOCAL_BASE + 0x01C)
+#define ARM_LOCAL_TIMER_MS		(ARM_LOCAL_BASE + 0x020)
+#define ARM_LOCAL_INT_ROUTING		(ARM_LOCAL_BASE + 0x024)
+#define ARM_LOCAL_AXI_COUNT		(ARM_LOCAL_BASE + 0x02C)
+#define ARM_LOCAL_AXI_IRQ		(ARM_LOCAL_BASE + 0x030)
+#define ARM_LOCAL_TIMER_CONTROL		(ARM_LOCAL_BASE + 0x034)
+#define ARM_LOCAL_TIMER_WRITE		(ARM_LOCAL_BASE + 0x038)
+
+#define ARM_LOCAL_TIMER_INT_CONTROL0	(ARM_LOCAL_BASE + 0x040)
+#define ARM_LOCAL_TIMER_INT_CONTROL1	(ARM_LOCAL_BASE + 0x044)
+#define ARM_LOCAL_TIMER_INT_CONTROL2	(ARM_LOCAL_BASE + 0x048)
+#define ARM_LOCAL_TIMER_INT_CONTROL3	(ARM_LOCAL_BASE + 0x04C)
 
 void ConnectInterrupt (unsigned nIRQ, TInterruptHandler *pHandler, void *pParam)
 {
@@ -7855,9 +8040,15 @@ typedef struct {
     volatile uint32_t Disable_IRQs_2;
     volatile uint32_t Disable_Basic_IRQs;
     } rpi_irq_controller_t;
+    
+    
+    
+    
 */
-  
-  
+
+#if RASPPI >= 2
+  write32 (ARM_LOCAL_TIMER_INT_CONTROL0, 0);
+#endif
   
   // reset everything interrupt
   rpiIRQController->FIQ_control = 0; // clear FIQ
@@ -7869,17 +8060,17 @@ typedef struct {
   rpiIRQController->IRQ_pending_1 = rpiIRQController->IRQ_pending_1; // acknoldedge all interrupts
   rpiIRQController->IRQ_pending_2 = rpiIRQController->IRQ_pending_2; // acknoldedge all interrupts
   
-  
-  
-  
-  
+
+
+
+
   // enable USB interrupt
   rpiIRQController->Enable_IRQs_1 = 1 << nIRQ; // USB = 9
 
   
   // enable interrupts in geenral
   /* Enable interrupts! */
-  _enable_interrupts(); // function defined in out baremetal.S
+  EnableInterrupts(); // function defined in out baremetal.S
 }
  
 // in order to connect the usb keyboard
@@ -7902,14 +8093,16 @@ int v_initKeyboard()
   usbKeyboardAvailable = 0;
   useUSB = 0;
   // Initialize USB system we will want keyboard and mouse 
-  if (!USPiInitialize ())
+
+  if (!USPiInitialize())
   {
     printf("USBV failed to initialize!\n\r");
     DisconnectUSBInterrupt();
     if (oldIRQMode) v_setupIRQHandling();
     return 0;
   }
-  if (!USPiKeyboardAvailable ())
+
+  if (!USPiKeyboardAvailable())
   {
     printf("Keyboard not found\n\r");
     DisconnectUSBInterrupt();
@@ -7917,6 +8110,7 @@ int v_initKeyboard()
     return 0;
   }
 //    USPiKeyboardRegisterKeyPressedHandler (KeyPressedHandler);
+
   DisconnectUSBInterrupt();
   usbKeyboardAvailable = 1;
   useUSB = 1;
@@ -7939,9 +8133,12 @@ it is a 1Mhz timer
 void v_setupIRQHandling()
 {
   if (isIRQMode==1) return;
-  _disable_interrupts(); // function defined in out baremetal.S
+  DisableInterrupts(); // function defined in out baremetal.S
   
   
+#if RASPPI >= 2
+  write32 (ARM_LOCAL_TIMER_INT_CONTROL0, 0);
+#endif
   
   // reset everything interrupt
   rpiIRQController->FIQ_control = 0; // clear FIQ
@@ -7956,7 +8153,7 @@ void v_setupIRQHandling()
   
   
   
-  
+  // get "vector table" from address 0
   pi_vectors *pv ;
   asm("ldr %[result],= 0\n\t" : [result]"=r" (pv) :: "cc");  // circumvent gcc UDF
   pv->_irq_pointer = (unsigned int)v_interrupt_vector;
@@ -7977,7 +8174,7 @@ void v_setupIRQHandling()
   isIRQMode = 1;
 
   /* Enable interrupts! */
-  _enable_interrupts(); // function defined in out baremetal.S
+  EnableInterrupts(); // function defined in out baremetal.S
 }
 
 void v_doInputMapping(InputMapping inputMapping[])
@@ -8341,7 +8538,7 @@ int v_loadRAW(const char *filename, unsigned char *largeEnoughBuffer)
   fileRead = fopen(filename, "rb");
   if (fileRead == 0)
   {
-    printf("File (%s) could not be opened: %s!\r\n",filename, ff_getErrorText(errno));
+    printf("File (%s) could not be opened: %s!\r\n",filename, getErrorText(errno));
     return -1;
   }
   int len = __filelength(fileRead);
@@ -8800,5 +8997,688 @@ void itemListDisplay()
 
 #include "ymStuff.i"
 
+#if RASPPI != 1 
+extern int _is_smp;
 
+void v_removeMultiCore()
+{
+  if (isSMPMode==0) return;
+  if (thisCore() != 1)
+  {
+    pendingDisableMultiCore=1;
+    while (isSMPMode==1);
+    return;
+  }
+  // capture cores and put them in loader wait state
+  pendingDisableMultiCore = 0;
+  pendingEnableMultiCore = 0;
+  resetPipeline();
+  isSMPMode = 0;
+_is_smp = 0;
+  parkCore1();
+}
+int enableCoreCheck = 0;;
+
+void smpPipelineStart();
+void v_setupSMPHandling()
+{
+  if (isSMPMode == 1) return;
+  if (isIRQMode == 1)
+  {
+    printf("start removing IRQ\n");
+    pendingDisableInterrupts = 1;
+    pendingEnableMultiCore = 1;
+    return;
+  }
+  pendingEnableMultiCore = 0;
+  printf("About to start Core 1\n");
+  releaseLock(); // for safety
+  startCore1((unsigned int) (&smpPipelineStart));
+  PMNC(CYCLE_COUNTER_ENABLE|COUNTER_ZERO|CYCLE_COUNTER_RESET);
+}
+
+void smpPipelineStart()
+{
+ releaseLock(); // for safety
+_is_smp = 1;
+  isSMPMode = 1;
+  while (1)
+  {
+    if (pendingDisableMultiCore)
+    {
+      v_removeMultiCore();
+    }
+    handleVectrexOutputSMP();
+  }
+}
+
+
+// called from "user" (emulator) core (core 0)
+// this ONLY handles the client frame rate in multicore
+// also the pipeline generation
+// on multi core to park - this might be the sync point
+
+unsigned int leave=0;
+unsigned int enter=0;
+unsigned int all=0;
+void handleClient_SMP_WR()
+{
+  if (pendingDisableMultiCore)
+  {
+    // wait for core to actually switch off
+    while (isSMPMode);
+printf("SMP switched off\n");
+    if (pendingReturnToPiTrex)
+    {
+      returnToPiTrex();
+    }
+    if (pendingEnableInterrupts)
+    {
+      pendingEnableInterrupts = 0;
+      v_setupIRQHandling();
+printf("IRQ switched on\n");
+    }
+    return;
+  }
+  #ifdef PITREX_DEBUG
+;      handleUARTInterface();
+  #endif      
+
+  if (pendingReturnToPiTrex)
+  {
+    pendingDisableMultiCore = 1;
+    while (isSMPMode) ;
+    returnToPiTrex();
+  }
+  if (useUSB == 1)
+    if (usbIRQHandler != 0)
+      usbIRQHandler (usbIRQParam);
+  
+  // handle the pipeline
+  handlePipeline();
+
+/*
+  enter=rpiSystemTimer->counter_lo;
+
+  // code to wait for client HZ
+  while (rpiSystemTimer->counter_lo < waitClientHzWait) ;
+
+  unsigned int workTime = (enter - leave)*1.5;
+  unsigned int idleTime = (waitClientHzWait - enter)*1.5;
+  
+//printf("Core0 work: %i, idle: %i (all: %i)\n", workTime, idleTime, (unsigned int ) (((1*1000*1000)/clientHz)*1.5));  
+  
+  clientRate = (1*1000*1000) / (((1*1000*1000)/clientHz) + (rpiSystemTimer->counter_lo - waitClientHzWait));
+  uint32_t counter = rpiSystemTimer->counter_lo;
+  waitClientHzWait = counter + ((1*1000*1000)/clientHz);
+  leave = rpiSystemTimer->counter_lo;
+*/
+  // Hz in cycle counter
+  // 1 second in nano = 1000*1000*1000
+  unsigned int nanoClientHz = (1000*1000*1000)/clientHz;
+  unsigned int nanoCounter = 0;
+
+  // code to wait for client HZ
+  do
+  {
+      CCNT0(nanoCounter);
+  } while (nanoCounter < nanoClientHz);
+
+
+  // reset core 0 cycle counting
+  PMNC(CYCLE_COUNTER_ENABLE|COUNTER_ZERO|CYCLE_COUNTER_RESET);
+}
+
+// todo enable game configuarion while in multicore mode
+
+// todo time of VIA is only used in IRQ pipeline, no in e.g.  sound function or prelude!
+// since as of now the USE_TIME is empty "normally"
+// and get redefined just within "pipeline.i"
+
+// todo 
+// normal must ensure not to have a USE_TIME active
+
+
+
+#undef USE_TIME
+
+#define USE_TIME(a) do{;} while(0)
+
+
+#undef LINE_DEBUG_OUT
+#undef waitCounter1MarkLocal
+
+#ifdef NO_DEBUG
+#else
+#define LINE_DEBUG_OUT(...) 
+#endif
+
+#undef waitT1OffMark
+#define waitT1OffMark(waiter) \
+do {\
+  unsigned int value1;\
+  do\
+  {\
+    CCNT0(value1);\
+  } while (value1 < (t1OffMark+((waiter)*ONE_WAIT_UNIT) ) );\
+} while (0)
+
+
+#define waitCounter1MarkLocal(waiter) \
+do {\
+  static unsigned int value;\
+  /* Read CCNT Register */ \
+  do\
+  {\
+    CCNT0(value);\
+  } while (value < (piCounterMark+((waiter)*ONE_WAIT_UNIT) ) );\
+} while (0)
+
+
+
+// irq sound == smp sound
+int handleVectrexOutputSMP()
+{
+      // TDOD IRQ enable those!
+      PLAY_SAMPLE_IGNORE_A();
+      if (irqSound) 
+      {
+        if (extendedIRQSound)
+        {
+	  // perhaps add a sample in between?
+          v_playYM();
+          v_playAllSFX();
+        }
+        
+        
+        // v_doSound();
+        static int i;
+//printf("---\n\r");          
+
+        for (i=0;i<15;i++)
+        {
+          static uint8_t data;
+          data = psgDoubleBuffer[i];
+          if (psgShadow[i] == data) continue;
+          psgShadow[i] = data;
+
+          I_SET(VIA_port_a, i); // prepare access of psg port A (0x0e) by writing the register value to VIA port A
+          I_SET(VIA_port_b, 0x99); // set VIA port B to settings: sound BDIR on, BC1 on, mux off
+          I_SET(VIA_port_b, 0x81); // set VIA Port B = 81, mux disabled, RAMP disabled, BC1/BDIR = 00 (PSG inactive)
+
+          I_SET(VIA_port_a, data); // write data to port a of via -> and than to psg
+          I_SET(VIA_port_b, 0x91); // set VIA port B to settings: sound BDIR on, BC1 on, mux off, write to PSG
+          I_SET(VIA_port_b, 0x81); // set VIA Port B = 81, mux disabled, RAMP disabled, BC1/BDIR = 00 (PSG inactive)
+        }
+//        currentPortA = 0x100; // undefined
+      }
+      PLAY_SAMPLE_IGNORE_A();
+      if (irqButtons) 
+      {
+        //v_readButtons();
+        ioDone |= V_BUTTONS_READ;
+        // read of buttons goes thru the PSG sound chip, PSG port A
+        //
+        I_SET(VIA_port_a, 0x0e); // prepare access of psg port A (0x0e) by writing the register value to VIA port A
+        ADD_DELAY_CYCLES(4);
+        I_SET(VIA_port_b, 0x99); // set VIA port B to settings: sound BDIR on, BC1 on, mux off
+        ADD_DELAY_CYCLES(4);
+        I_SET(VIA_port_b, 0x81); // set VIA Port B = 81, mux disabled, RAMP disabled, BC1/BDIR = 00 (PSG inactive)
+        ADD_DELAY_CYCLES(4);
+
+        SET(VIA_DDR_a, 0x00); // set VIA DDR A to input
+        ADD_DELAY_CYCLES(4);
+        I_SET(VIA_port_b, 0x89); // set VIA port B to settings: sound BDIR on, BC1 on, mux off
+        ADD_DELAY_CYCLES(6);
+        currentButtonState = ~I_GET(VIA_port_a); // Read buttons
+        I_SET(VIA_port_b, 0x81); // set VIA Port B = 81, mux disabled, RAMP disabled, BC1/BDIR = 00 (PSG inactive)
+        ADD_DELAY_CYCLES(4);
+        SET(VIA_DDR_a, 0xff); // set VIA DDR A to output
+        ADD_DELAY_CYCLES(4);
+     //  currentPortA = 0x100;
+
+        internalButtonState = currentButtonState;
+        if (inCalibration)
+        {
+          currentButtonState = 0;
+        }
+      }
+      PLAY_SAMPLE_IGNORE_A();
+      if (irqJoyAnalog) 
+      {
+        // v_readJoystick1Analog();
+        ioDone |= V_JOY_ANALOG_READ;
+        static int difx;
+        static int dify;
+        static uint8_t compareBit;
+        static int8_t thisInternalJoy1Y;
+        static int8_t thisInternalJoy1X;
+
+        if (irqJoyAnalog && (1<<1) )
+        {
+          I_SET(VIA_port_a, 0x00); // clear VIA port A
+          ADD_DELAY_CYCLES(4);
+          I_SET(VIA_port_b, 0x82); // set VIA port B mux enabled, mux sel = 01 (vertical pot port 0)
+          // wait for joystick comparators to "settle"
+          ADD_DELAY_CYCLES(60); // must be tested! can probably be less?
+
+          currentJoy1Y = 0; // default centered
+          I_SET(VIA_port_b, 0x83); // set VIA port B mux disabled
+          DELAY_PORT_B_BEFORE_PORT_A();
+          compareBit = 0x80;
+          thisInternalJoy1Y = 0;
+
+          do
+          {
+            I_SET(VIA_port_a, thisInternalJoy1Y); // load a with test value (positive y), test value to DAC
+            ADD_DELAY_CYCLES(4);
+            if ((I_GET(VIA_port_b) & 0x20) == 0)
+            {
+              thisInternalJoy1Y = thisInternalJoy1Y ^ compareBit;
+            }
+            ADD_DELAY_CYCLES(4);
+            compareBit = compareBit>>1;
+            thisInternalJoy1Y = thisInternalJoy1Y | compareBit;
+          } while (compareBit!=0);
+        }
+        
+        
+        if (irqJoyAnalog && (1) )
+        {
+          I_SET(VIA_port_a, 0x00); // clear VIA port A
+          ADD_DELAY_CYCLES(4);
+          I_SET(VIA_port_b, 0x80); // set VIA port B mux enabled, mux sel = 01 (horizontal pot port 0)
+          // wait for joystick comparators to "settle"
+          ADD_DELAY_CYCLES(60); // must be tested! can probably be less?
+
+          currentJoy1X = 0; // default centered
+          I_SET(VIA_port_b, 0x81); // set VIA port B mux disabled
+          DELAY_PORT_B_BEFORE_PORT_A();
+          compareBit = 0x80;
+
+          thisInternalJoy1X = 0;
+          do
+          {
+            I_SET(VIA_port_a, thisInternalJoy1X); // load a with test value (positive y), test value to DAC
+            ADD_DELAY_CYCLES(4);
+            if ((I_GET(VIA_port_b) & 0x20) == 0)
+            {
+              thisInternalJoy1X = thisInternalJoy1X ^ compareBit;
+            }
+            ADD_DELAY_CYCLES(4);
+            compareBit = compareBit>>1;
+            thisInternalJoy1X = thisInternalJoy1X | compareBit;
+          } while (compareBit!=0);
+        }
+
+        // if joysticks disabled
+        // the values might contain nonsense!
+        difx = thisInternalJoy1X - internalJoy1X;
+        dify = thisInternalJoy1Y - internalJoy1Y;
+
+        internalJoy1X = internalJoy1X+(difx>>1);
+        internalJoy1Y = internalJoy1Y+(dify>>1);
+
+        if (!inCalibration)
+        {
+          currentJoy1X = internalJoy1X;
+          currentJoy1Y = internalJoy1Y;
+        }
+
+        // if joyport 2  needed....
+        if (irqJoyAnalog && +(1<<3) )
+        {
+          I_SET(VIA_port_a, 0x00); // clear VIA port A
+          ADD_DELAY_CYCLES(4);
+          I_SET(VIA_port_b, 0x82+0x04); // set VIA port B mux enabled, mux sel = 03 (vertical pot port 1)
+          // wait for joystick comparators to "settle"
+          ADD_DELAY_CYCLES(60); // must be tested! can probably be less?
+
+          currentJoy2Y = 0; // default centered
+          I_SET(VIA_port_b, 0x83); // set VIA port B mux disabled
+          DELAY_PORT_B_BEFORE_PORT_A();
+          compareBit = 0x80;
+
+          do
+          {
+            I_SET(VIA_port_a, currentJoy2Y); // load a with test value (positive y), test value to DAC
+            ADD_DELAY_CYCLES(4);
+            if ((I_GET(VIA_port_b) & 0x20) == 0)
+            {
+              currentJoy2Y = currentJoy2Y ^ compareBit;
+            }
+            ADD_DELAY_CYCLES(4);
+            compareBit = compareBit>>1;
+            currentJoy2Y = currentJoy2Y | compareBit;
+          } while (compareBit!=0);
+        }
+
+        if (irqJoyAnalog && +(1<<2) )
+        {
+          I_SET(VIA_port_a, 0x00); // clear VIA port A
+          ADD_DELAY_CYCLES(4);
+          I_SET(VIA_port_b, 0x84); // set VIA port B mux enabled, mux sel = 2 (horizontal pot port 1)
+          // wait for joystick comparators to "settle"
+          ADD_DELAY_CYCLES(60); // must be tested! can probably be less?
+
+          currentJoy2X = 0; // default centered
+          I_SET(VIA_port_b, 0x81); // set VIA port B mux disabled
+          DELAY_PORT_B_BEFORE_PORT_A();
+          compareBit = 0x80;
+
+          do
+          {
+            I_SET(VIA_port_a, currentJoy2X); // load a with test value (positive y), test value to DAC
+            ADD_DELAY_CYCLES(4);
+            if ((I_GET(VIA_port_b) & 0x20) == 0)
+            {
+              currentJoy2X = currentJoy2X ^ compareBit;
+            }
+            ADD_DELAY_CYCLES(4);
+            compareBit = compareBit>>1;
+            currentJoy2X = currentJoy2X | compareBit;
+          } while (compareBit!=0);
+        }
+        // set port A reference value to unkown
+  //      currentYSH = currentPortA=0x100; // reset saved current values to unkown state
+        
+        ////////////////////////////////////////////////////////////
+        // v_resetIntegratorOffsets0();
+        I_SET (VIA_port_b, 0x81);
+        DELAY_PORT_B_BEFORE_PORT_A();
+        I_SET (VIA_port_a, 0x00);
+        ADD_DELAY_CYCLES(4);
+        I_SET (VIA_port_b, 0x80);
+        ADD_DELAY_CYCLES(6);
+        // reset integrators
+        I_SET (VIA_port_b, 0x82);    // mux=1, enable mux - integrator offset = 0
+        ADD_DELAY_CYCLES(6);
+        I_SET (VIA_port_b, 0x81);    // disable mux
+        ADD_DELAY_CYCLES(4);
+    //    currentPortA=0x100;// non regular value!
+        ////////////////////////////////////////////////////////////
+      }
+      else if (irqJoyDigital) 
+      {
+        //v_readJoystick1Digital();
+        ioDone |= V_JOY_DIGITAL_READ;
+
+        if (irqJoyDigital && (1<<1) )
+        {
+          // Y ANALOG
+          I_SET(VIA_port_a, 0x00); // clear VIA port A
+          ADD_DELAY_CYCLES(4);
+          I_SET(VIA_port_b, 0x82); // set VIA port B mux enabled, mux sel = 01 (vertical pot port 0)
+
+          // wait for joystick comparators to "settle"
+          ADD_DELAY_CYCLES(60); // must be tested! can probably be less?
+
+          currentJoy1Y = -1; // default down
+          I_SET(VIA_port_b, 0x83); // set VIA port B mux
+          DELAY_PORT_B_BEFORE_PORT_A();
+          I_SET(VIA_port_a, 0x40); // load a with test value (positive y), test value to DAC
+          ADD_DELAY_CYCLES(4);
+          if ((I_GET(VIA_port_b) & 0x20) == 0x20)
+          {
+            currentJoy1Y = 1; //up
+          }
+          else
+          {
+            I_SET(VIA_port_a, -0x40); // load a with test value (negative y), test value to DAC
+            ADD_DELAY_CYCLES(4);
+            if ((I_GET(VIA_port_b) & 0x20) == 0x20)
+            {
+              currentJoy1Y = 0; // no direction
+            }
+          }
+        }
+
+        if (irqJoyDigital && (1) )
+        {
+          // X ANALOG
+          I_SET(VIA_port_a, 0x00); // clear VIA port A
+          ADD_DELAY_CYCLES(4);
+          I_SET(VIA_port_b, 0x80); // set VIA port B mux enabled, mux sel = 00 (horizontal pot port 0)
+          // wait for joystick comparators to "settle"int no_back = 0;
+
+          ADD_DELAY_CYCLES(60); // must be tested! can probably be less?
+
+          currentJoy1X = -1; // default left
+          I_SET(VIA_port_b, 0x83); // set VIA port B mux
+          DELAY_PORT_B_BEFORE_PORT_A();
+          I_SET(VIA_port_a, 0x40); // load a with test value (positive y), test value to DAC
+          ADD_DELAY_CYCLES(2);
+          if ((I_GET(VIA_port_b) & 0x20) == 0x20)
+          {
+            currentJoy1X = 1; //right
+          }
+          else
+          {
+            ADD_DELAY_CYCLES(4);
+            I_SET(VIA_port_a, -0x40); // load a with test value (negative y), test value to DAC
+            ADD_DELAY_CYCLES(4);
+            if ((I_GET(VIA_port_b) & 0x20) == 0x20)
+            {
+              currentJoy1X = 0; // no direction
+            }
+            ADD_DELAY_CYCLES(4);
+          }
+        }
+
+        // if joyport 2  needed....
+        if (irqJoyDigital && (1<<3) )
+        {
+          // Y ANALOG
+          I_SET(VIA_port_a, 0x00); // clear VIA port A
+          ADD_DELAY_CYCLES(4);
+          I_SET(VIA_port_b, 0x82+0x04); // set VIA port B mux enabled, mux sel = 03 (vertical pot port 1)
+
+          // wait for joystick comparators to "settle"
+          ADD_DELAY_CYCLES(60); // must be tested! can probably be less?
+
+          currentJoy2Y = -1; // default down
+          I_SET(VIA_port_b, 0x83); // set VIA port B mux
+          DELAY_PORT_B_BEFORE_PORT_A();
+          I_SET(VIA_port_a, 0x40); // load a with test value (positive y), test value to DAC
+          ADD_DELAY_CYCLES(4);
+          if ((I_GET(VIA_port_b) & 0x20) == 0x20)
+          {
+            currentJoy2Y = 1; //up
+          }
+          else
+          {
+            I_SET(VIA_port_a, -0x40); // load a with test value (negative y), test value to DAC
+            ADD_DELAY_CYCLES(4);
+            if ((I_GET(VIA_port_b) & 0x20) == 0x20)
+            {
+              currentJoy2Y = 0; // no direction
+            }
+          }
+        }
+
+        if (irqJoyDigital && (1<<2) )
+        {
+          // X ANALOG
+          I_SET(VIA_port_a, 0x00); // clear VIA port A
+          ADD_DELAY_CYCLES(4);
+          I_SET(VIA_port_b, 0x84); // set VIA port B mux enabled, mux sel = 2 (horizontal pot port 1)
+          // wait for joystick comparators to "settle"
+          ADD_DELAY_CYCLES(60); // must be tested! can probably be less?
+
+          currentJoy2X = -1; // default left
+          I_SET(VIA_port_b, 0x83); // set VIA port B mux
+          DELAY_PORT_B_BEFORE_PORT_A();
+          I_SET(VIA_port_a, 0x40); // load a with test value (positive y), test value to DAC
+          ADD_DELAY_CYCLES(2);
+          if ((I_GET(VIA_port_b) & 0x20) == 0x20)
+          {
+            currentJoy2X = 1; //right
+          }
+          else
+          {
+            ADD_DELAY_CYCLES(4);
+            I_SET(VIA_port_a, -0x40); // load a with test value (negative y), test value to DAC
+            ADD_DELAY_CYCLES(4);
+            if ((I_GET(VIA_port_b) & 0x20) == 0x20)
+            {
+              currentJoy2X = 0; // no direction
+            }
+            ADD_DELAY_CYCLES(4);
+          }
+        }
+      }
+      // todo add in game settings mode
+/*
+      if ((currentButtonState&0x20)== 0x20) // button 2 -> joypad 2
+      {
+        if (inGameSettingsAllowed)
+        {
+          if (wasIRQMode == 255)
+          {
+            inCalibration = 1;
+            wasIRQMode = isIRQMode;
+            pendingDisableInterrupts = 1;
+          }
+        }
+      }
+*/
+      if ((currentButtonState&0xf) == 0xf) // button 1+ 2 + 3+4 -> go menu
+      {
+        pendingReturnToPiTrex = 1;
+	v_removeMultiCore();
+      }
+      PLAY_SAMPLE_IGNORE_A();
+//  #ifdef PITREX_DEBUG
+//      handleUARTInterface();
+//      PLAY_SAMPLE_IGNORE_A();
+//  #endif      
+
+      //******************************************************************
+      if (v_sampleEnabled)
+      {
+        ioDone = 0;
+        SWITCH_BEAM_OFF();
+        CCNT0(roundCycles);
+unsigned int drawTime = roundCycles/666;
+//printf("s Core1 draw: %i\n", drawTime);
+
+        // wait for Via T2 to expire -> 50Hz
+        while ((GET(VIA_int_flags) & 0x20) == 0) 
+          PLAY_SAMPLE_IGNORE_A();
+      }
+      else
+      {
+        ioDone = 0;
+        SWITCH_BEAM_OFF();
+        CCNT0(roundCycles);
+unsigned int drawTime = roundCycles/666;
+//printf("ns Core1 draw: %i\n", drawTime);
+	
+        // wait for Via T2 to expire -> 50Hz
+        while ((GET(VIA_int_flags) & 0x20) == 0) ;
+      }
+    
+      //******************************************************************
+      
+      // reset T2 VIA timer to 50Hz
+      SETW (VIA_t2, Vec_Rfrsh);
+
+        // at the start of each "round" 
+      // reset pi counter 1
+      PMNC(CYCLE_COUNTER_ENABLE|COUNTER_ZERO);
+
+  #ifdef PITREX_DEBUG
+      handleUARTInterface();
+      PLAY_SAMPLE_IGNORE_A();
+  #endif      
+      
+      
+      ////////////////////////////////////////////////////////////      
+////////////////////////////////////////////////////////////      
+//v_deflok();
+
+
+//  ZERO_AND_WAIT();
+    ZERO_AND_CONTINUE(); 
+    waitCounter1MarkLocal(DELAY_ZERO_VALUE);
+    PLAY_SAMPLE_IGNORE_A();
+
+    UNZERO();
+//    v_setScale(255);
+//  SET_YSH_IMMEDIATE_8(127);
+//  SET_XSH_IMMEDIATE_8(127);
+    I_SET(VIA_port_b, 0x80); 
+    DELAY_PORT_B_BEFORE_PORT_A(); 
+    I_SET_A(((uint8_t)(127))); 
+    DELAY_YSH();
+
+    I_SET(VIA_port_b, 0x81); 
+    DELAY_XSH();
+  
+//  START_WAIT_T1();
+//    START_T1_TIMER();
+
+    SETW_inverse(VIA_t1, 255); setCounter1Mark(); 
+
+    waitCounter1MarkLocal(255+DELAY_AFTER_T1_END_VALUE);
+    PLAY_SAMPLE_IGNORE_A();
+
+//  ZERO_AND_WAIT();
+    ZERO_AND_CONTINUE(); 
+    waitCounter1MarkLocal(DELAY_ZERO_VALUE);
+    PLAY_SAMPLE_IGNORE_A();
+
+    UNZERO();
+//  SET_YSH_IMMEDIATE_8(-127);
+//  SET_XSH_IMMEDIATE_8(-127);
+    I_SET(VIA_port_b, 0x80); 
+    DELAY_PORT_B_BEFORE_PORT_A(); 
+    I_SET_A(((uint8_t)(-127))); 
+    DELAY_YSH();
+    I_SET(VIA_port_b, 0x81); 
+    DELAY_XSH();
+  
+//  START_WAIT_T1();
+//    START_T1_TIMER();
+    SET(VIA_t1_cnt_hi, 0); setCounter1Mark(); 
+    waitCounter1MarkLocal(255+DELAY_AFTER_T1_END_VALUE);
+    PLAY_SAMPLE_IGNORE_A();
+
+//  ZERO_AND_WAIT();
+    ZERO_AND_CONTINUE(); 
+    waitCounter1MarkLocal(DELAY_ZERO_VALUE);
+    PLAY_SAMPLE_IGNORE_A();
+////////////////////////////////////////////////////////////      
+      // perhaps add a sample in between?
+
+////////////////////////////////////////////////////////////
+// v_resetIntegratorOffsets0();
+  LINE_DEBUG_OUT("PL DEFLOK CALIB \r\n");
+  I_SET (VIA_port_b, 0x81);
+  DELAY_PORT_B_BEFORE_PORT_A();
+  I_SET_A(0x00);
+  ADD_DELAY_CYCLES(4);
+  I_SET (VIA_port_b, 0x80);
+  ADD_DELAY_CYCLES(6);
+  // reset integrators
+  I_SET (VIA_port_b, 0x82);    // mux=1, enable mux - integrator offset = 0
+  ADD_DELAY_CYCLES(6);
+  I_SET (VIA_port_b, 0x81);    // disable mux
+  ADD_DELAY_CYCLES(4);
+//  currentPortA=0x100;// non regular value!
+  PLAY_SAMPLE_IGNORE_A();
+////////////////////////////////////////////////////////////
+      
+      
+      
+      
+      // perhaps add a sample in between?
+      consecutiveDraws = 0; 
+      
+      #include "pipelineSMP.i"
+}
+#else
+void v_setupSMPHandling() {}
+void v_removeMultiCore() {}
+#endif // #if RASPPI != 1 
 

@@ -87,7 +87,7 @@ int mrh_nop(int address)
 struct MemoryReadAddress *mra;
 int mrh_readmem(int address)
 {
-    mra = memoryread;
+    mra = (struct MemoryReadAddress *)memoryread;
     while (mra->start != -1)
     {
         if (address >= mra->start && address <= mra->end)
@@ -127,7 +127,7 @@ void mwh_nop(int address,int data)
 struct MemoryWriteAddress *mwa;
 void mwh_writemem(int address,int data)
 {
-    mwa = memorywrite;
+    mwa = (struct MemoryWriteAddress *)memorywrite;
     while (mwa->start != -1)
     {
         if (address >= mwa->start && address <= mwa->end)

@@ -21,7 +21,7 @@ void MemoryUsage(size_t *used, size_t *free, size_t *largestFreeBlock)
 
 #else
 
-#ifdef RPI0
+#ifdef RASPPI
 void MemoryUsage(size_t *used, size_t *free, size_t *largestFreeBlock)
 {
     *used = 0;

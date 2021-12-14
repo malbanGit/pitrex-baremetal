@@ -13278,6 +13278,9 @@ int open_high_score_file_and_lose_permissions()
         return -1;
 
     sprintf(filename, "%s/.wordwarvi/.highscores", homedir);
+    
+    /* TODO implement Highscore saving!
+    
     fd = open(filename, O_CREAT | O_RDWR | O_BINARY, 0644);
     if (fd < 0)
         return -1;
@@ -13298,6 +13301,7 @@ int open_high_score_file_and_lose_permissions()
         highscore[i].name[3] = '\0';
         highscore[i].score = bigendian_score; //ntohl(bigendian_score);
     }
+    */
     return fd;
 }
 
@@ -13726,6 +13730,9 @@ static int setup_openlase(void)
     return 0;
 }
 
+void v_addIRQMultiSample(char *buf, int size, int mode);
+void initMultiSamples(int rate);
+
 typedef struct {
     char *name;
     int size;
@@ -13821,7 +13828,6 @@ void loadAllSamples()
   for (int i=0;i<NCLIPS;i++)
     loadOneSamples(&wwviSamples[i]);
 }
-
 
 int wwviaudio_add_sound(int which_sound)
 {

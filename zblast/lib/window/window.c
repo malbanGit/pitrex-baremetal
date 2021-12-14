@@ -1,19 +1,13 @@
 #include <stdio.h>
 #include <string.h> // for strrchr
-#include <pitrex/pitrexio-gpio.h>
 #include <vectrex/vectrexInterface.h>
 #include "window.h"
 extern void v_setCustomClipping(int enabled, int x0, int y0, int x1, int y1); // should be in vectrexInterface.h
 
-#ifndef TRUE
-#define TRUE (0==0)
-#define FALSE (!TRUE)
-#endif
-
 #define CLIP TRUE
 #define NO_CLIP FALSE
 
-typedef int bool;
+//typedef int bool;
 
 #define VECTREX_DEFAULT 0
 // rotate 90 degrees anticlockwise for each step:

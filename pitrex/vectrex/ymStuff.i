@@ -408,7 +408,7 @@ int v_loadYM(unsigned char *FILE_NAME, int len ,char *dest, char *loadbuf)
 int length = 0;
     if (rc_rd != FR_OK)
     {
-      printf("Could not open file %s (%s: %i) \r\n", FILE_NAME, ff_getErrorText(rc_rd), rc_rd);
+      printf("Could not open file %s (%s: %i) \r\n", FILE_NAME, getErrorText(rc_rd), rc_rd);
       return 0;
     }
     else

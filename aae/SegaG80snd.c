@@ -24,6 +24,7 @@
 
 static int queue[MAX_SPEECH];
 static int queuePtr = 0;
+static int roarPlaying;	/* Is the ship roar noise playing? */
 
 
 int sega_sh_start (void) {

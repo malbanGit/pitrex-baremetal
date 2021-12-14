@@ -101,8 +101,7 @@ void LogWrite (const char *pSource, unsigned Severity, const char *pMessage, ...
 	va_end (var);
 }
 
-#ifndef NDEBUG
-
+#ifdef USPIDEBUG
 void uspi_assertion_failed (const char *pExpr, const char *pFile, unsigned nLine)
 {
 	assertion_failed (pExpr, pFile, nLine);

@@ -417,6 +417,7 @@ WRITE_HANDLER( mhavoc_gamma_irq_ack_w )
 
 READ_HANDLER(mh_quad_pokey_read)
 {
+  return 0;
   static int rng=0;
   int pokey_reg[4];
 
@@ -443,6 +444,7 @@ READ_HANDLER(mh_quad_pokey_read)
 
 WRITE_HANDLER(mh_quad_pokey_write )
 {
+  return;
   int pokey_reg[4];
   int offset= address-0x2000;
   int pokey_num = (offset >> 3) & ~0x04;
@@ -471,6 +473,7 @@ WRITE_HANDLER(mh_quad_pokey_write )
 
 READ_HANDLER( dual_pokey_r )
 {
+  return 0;
   int offset= address-0x1020;
   int pokey_num = (offset >> 3) & 0x01;
   int control = (offset & 0x10) >> 1;
@@ -490,6 +493,7 @@ READ_HANDLER( dual_pokey_r )
 
 WRITE_HANDLER( dual_pokey_w )
 {
+  return;
   int offset= address-0x1020;
   int pokey_reg[4];
   int pokey_num = (offset >> 3) & 0x01;
@@ -520,8 +524,8 @@ void mhavoc_sh_stop(void)
 
 void mhavoc_sh_update()
 {
-    pokey_sh_update ();
-   // tms5220_sh_update();
+//    pokey_sh_update ();
+	    // tms5220_sh_update();
 }
 static void MH_generate_vector_list (void);
 
@@ -1345,6 +1349,9 @@ void run_mhavoc()
   ticktest=0;
 
   if (KeyCheck(config.kreset))  {run_reset();}
+  
+
+  
       
 //  log_it("------------FRAME START --------------");   
   for (x=0; x < passes; x++) 
@@ -1428,9 +1435,11 @@ active_CPU = 1;
       ticktest+=cyclesgamma;
       m6502zpGetContext (c6502[1]); // Get CPU #2's state info
     }
+    
+if ((((volatile unsigned char)currentButtonState)&0x0f) != (0x01)) 
     mhavoc_interrupt();                       
   }
-  pokey_do_update();
+// ----- enable  pokey_do_update();
     
 // position_mouse(SCREEN_W/2, SCREEN_H/2); 
   if (gamenum == MHAVOCRV){tms5220_sh_update();}

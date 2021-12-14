@@ -87,11 +87,7 @@ int /*fp14*/ sine[] =
 
 FILE *debugf = NULL;
 
-#ifdef FREESTANDING
 #define DEBUG_OUT(...)
-#else
-#define DEBUG_OUT(...) do { if (!debugf) debugf = fopen("debug-cinema.log", "w"); if (debugf) { fprintf(debugf,__VA_ARGS__); fflush(debugf); } } while(0)
-#endif
 
 #ifndef FALSE
 #define FALSE (0!=0)

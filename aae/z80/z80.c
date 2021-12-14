@@ -99,14 +99,9 @@
 #include "z80.h"
 #include "z80daisy.h"
 
-#ifdef FREESTANDING
- #include <vectrex/osWrapper.h> 
+#include <vectrex/osWrapper.h> 
 void v_error(char *message); // halts the program and displays an the message on the vectrex!
 #define fatalerror v_error
-#else
-#include <stdlib.h>
-#define fatalerror exit
-#endif
 
 
 #ifndef INLINE

@@ -23,9 +23,6 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/wait.h>
-#ifndef FREESTANDING
-#include <sys/ioctl.h>
-#endif
 #include <fcntl.h>
 #include <signal.h>
 #ifdef linux
@@ -41,7 +38,6 @@
 #else
 #include "lib/svgalib-vectrex/svgalib-vectrex.h"
 #include "lib/svgalib-vectrex/vectrextokeyboard.h"
-#include "pitrex/pitrexio-gpio.h"
 #include "vectrex/vectrexInterface.h"
 #endif
 
@@ -431,10 +427,8 @@ int main(int argc,char *argv[])
 {
 int quit=0;
 
-#ifdef FREESTANDING
  argc = 0;
  argv = 0;
-#endif
 initialise(argc,argv);
 //  v_loadSettings("zblast", settingsBlob, SETTINGS_SIZE);
 
@@ -465,7 +459,7 @@ while(!quit && !fullquit)
   }
 
 queuesam(KILL_SNDSERV,0);
-wait(NULL);
+//wait(NULL);
 
 uninitialise();
 exit(0);
@@ -2177,15 +2171,9 @@ if(depth>4)
 #else /* !USE_X */
 
 /* svgalib init */
-#ifndef FREESTANDING
-int oldgid=getegid();
-#endif
 
 vga_disabledriverreport();
 vga_init();
-#ifndef FREESTANDING
-setegid(oldgid);	/* make sure we can write scores file! */
-#endif
 scrnmode=(bigwindow?G640x480x256:G320x200x256);
 vga_setmode(scrnmode);
 gl_setcontextvga(scrnmode);
@@ -2234,10 +2222,8 @@ for(f=1;f<argc;f++)
     }
   }
 
-#ifdef FREESTANDING
 doublebuf=0;
 sound=music=0;
-#endif
   
   
 #ifndef USE_X
@@ -2277,15 +2263,10 @@ for(f=0;f<STARNUM;f++)
   
 for(f=0;f<NUM_SAMPLES;f++) sample[f].data=NULL;
 
-#ifndef FREESTANDING
-pipe(sndpipe);
-fcntl(sndpipe[0],F_SETFL,O_NONBLOCK);
-fcntl(sndpipe[1],F_SETFL,O_NONBLOCK);
-#endif
-parentpid=getpid();
+// parentpid=getpid(); // MALBAN NEW OUT
 
 
-if(fork())
+//if(fork()) // MALBAN NEW OUT
   {
   /* parent - game */
 #ifdef MUSIC_SUPPORT
@@ -2304,11 +2285,6 @@ if(fork())
 
 /* child - sound player */
 
-#ifndef USE_X	/* no need for non-setuid X version */
-#ifndef FREESTANDING
-setuid(getuid()); setgid(getgid());
-#endif
-#endif
 
 sound_bufsiz=BASE_SOUND_BUFSIZ;
 #ifndef SNDCTL_DSP_SETFRAGMENT
@@ -2710,12 +2686,6 @@ switch(which)   /* he's a poet and he doesn't know it */
 /* setup a new sample to be played on a given channel. */
 void queuesam(int chan,int sam)
 {
-#ifndef FREESTANDING
-  unsigned char buf[2];
-buf[0]=chan;
-buf[1]=sam;
-write(sndpipe[1],buf,2);
-#endif
 }
 
 

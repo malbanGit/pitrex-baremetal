@@ -1,0 +1,1790 @@
+                      *
+                      *  MC6809 CPU Emulation Validation
+                      *
+                      * Tested on an SGS Thomson EF6809P Processor
+                      *
+                      * W. Schwotzer                     20.07.2003
+                      *
+                      
+                      
+CD03                  WARMS  EQU   $CD03
+CD24                  PCRLF  EQU   $CD24
+CD18                  PUTCHR EQU   $CD18
+CD1E                  PSTRNG EQU   $CD1E
+CD39                  OUTDEC EQU   $CD39
+8000                  EXTREG EQU   $8000
+0080                  DIRPAG EQU   $80
+0000                  DPREG  EQU   $00
+0004                  EOT    EQU   $4
+                      
+8100                         ORG   $8100
+                      
+8100  2003            BEGIN  BRA   START
+8102  01              VERSIO FCB   1
+8103  0000            REG161 FDB   0
+                      
+8105  7F9394          START  CLR   ERRFLG ; Clear Error flag
+                      
+                      * Failed Test:
+                      * CLR
+                      * Failed Test:
+                      * LSL
+                      * Failed Test:
+                      * ROL
+                      
+8108  BD8379                 JSR   TDAA
+                      *
+                      * Test Addressing modes
+                           * JMP WARMS
+810B  BD8E88                 JSR  TAD1
+810E  BD8EDC                 JSR  TAD2
+8111  BD8EFB                 JSR  TAD3
+8114  BD8F25                 JSR  TAD4
+8117  BD8F45                 JSR  TAD5
+811A  BD8F6F                 JSR  TAD6
+811D  BD8F9A                 JSR  TAD7
+8120  BD8FC6                 JSR  TAD8
+8123  BD8FFC                 JSR  TAD9
+8126  BD902F                 JSR  TADA
+8129  BD9056                 JSR  TADB
+812C  BD9084                 JSR  TADI1
+812F  BD90EE                 JSR  TADI3
+8132  BD9118                 JSR  TADI5
+8135  BD9142                 JSR  TADI6
+8138  BD9173                 JSR  TADI7
+813B  BD91A4                 JSR  TADI8
+813E  BD91DA                 JSR  TADI9
+8141  BD920E                 JSR  TADIA
+8144  BD923C                 JSR  TADIB
+8147  BD926A                 JSR  TADIC
+                      * Test Instructions
+814A  BD84E6                 JSR   TNEG
+814D  BD8523                 JSR   TCOM
+8150  BD8766                 JSR   TDEC
+8153  BD879E                 JSR   TINC
+8156  BD87D6                 JSR   TCLR
+8159  BD8894                 JSR   TADD
+815C  BD880A                 JSR   TADDD
+815F  BD88F4                 JSR   TADC
+8162  BD81AA                 JSR   TMUL
+8165  BD8209                 JSR   TSEX
+8168  BD89F4                 JSR   TSUB
+816B  BD8BE4                 JSR   TSUBD
+816E  BD8A80                 JSR   TSBC
+8171  BD8379                 JSR   TDAA
+8174  BD89D4                 JSR   TCMP
+8177  BD8CC2                 JSR   TCMPD
+817A  BD8245                 JSR   TTST
+817D  BD833B                 JSR   TBIT
+8180  BD8564                 JSR   TLSR
+8183  BD85C0                 JSR   TLSL
+8186  BD8618                 JSR   TASR
+8189  BD86EF                 JSR   TROL
+818C  BD8674                 JSR   TROR
+818F  BD8274                 JSR   TLD
+8192  BD8291                 JSR   TST
+8195  BD82B1                 JSR   TLDD
+8198  BD82E7                 JSR   TSTD
+819B  BD8308                 JSR   TLEA
+819E  BD8CE5                 JSR   TTFR
+81A1  BD8D8B                 JSR   TEXG
+                      *
+81A4  BD9386                 JSR   OUTSUC
+81A7  7ECD03                 JMP   WARMS
+                      
+                      **************************************************
+                      * Test MUL
+                      **************************************************
+81AA  CE8205          TMUL   LDU   #LMUL
+81AD  8E81CE                 LDX   #TBMUL
+81B0  EC81            TMUL1  LDD   ,X++
+81B2  3D                     MUL
+81B3  1FAB                   TFR   CC,DP
+81B5  10A381                 CMPD  ,X++
+81B8  102611B9               LBNE  OUTERR
+81BC  1FB9                   TFR   DP,B
+81BE  C405                   ANDB  #$05   ; Only check Bits ZC
+81C0  E180                   CMPB  ,X+
+81C2  102611AF               LBNE  OUTERR
+81C6  8C8205                 CMPX  #LMUL
+81C9  1026FFE3               LBNE  TMUL1
+81CD  39                     RTS
+                      
+81CE  00000000        TBMUL  FDB   $0000,$0000
+81D2  04                     FCB   $04
+81D3  80804000               FDB   $8080,$4000
+81D7  00                     FCB   $00
+81D8  01FF00FF               FDB   $01FF,$00FF
+81DC  01                     FCB   $01
+81DD  FF0100FF               FDB   $FF01,$00FF
+81E1  01                     FCB   $01
+81E2  7F813FFF               FDB   $7F81,$3FFF
+81E6  01                     FCB   $01
+81E7  817F3FFF               FDB   $817F,$3FFF
+81EB  01                     FCB   $01
+81EC  C0403000               FDB   $C040,$3000
+81F0  00                     FCB   $00
+81F1  40C03000               FDB   $40C0,$3000
+81F5  00                     FCB   $00
+81F6  FFFFFE01               FDB   $FFFF,$FE01
+81FA  00                     FCB   $00
+81FB  7F7F3F01               FDB   $7F7F,$3F01
+81FF  00                     FCB   $00
+8200  01010001               FDB   $0101,$0001
+8204  00                     FCB   $00
+8205  4D554C04        LMUL   FCC   "MUL",EOT
+                      
+                      **************************************************
+                      * Test SEX
+                      **************************************************
+8209  CE8241          TSEX   LDU   #LSEX
+820C  8E822D                 LDX   #TBSEX
+820F  E680            TSEX1  LDB   ,X+
+8211  1D                     SEX
+8212  1FAB                   TFR   CC,DP
+8214  10A381                 CMPD  ,X++
+8217  1026115A               LBNE  OUTERR
+821B  1FB9                   TFR   DP,B
+821D  C40C                   ANDB  #$0C   ; Only check Bits NZ
+821F  E180                   CMPB  ,X+
+8221  10261150               LBNE  OUTERR
+8225  8C8241                 CMPX  #LSEX
+8228  1026FFE3               LBNE  TSEX1
+822C  39                     RTS
+                      
+                      
+822D  00              TBSEX  FCB   $00
+822E  0000                   FDB   $0000
+8230  04                     FCB   $04
+8231  01                     FCB   $01
+8232  0001                   FDB   $0001
+8234  00                     FCB   $00
+8235  7F                     FCB   $7F
+8236  007F                   FDB   $007F
+8238  00                     FCB   $00
+8239  80                     FCB   $80
+823A  FF80                   FDB   $FF80
+823C  08                     FCB   $08
+823D  FF                     FCB   $FF
+823E  FFFF                   FDB   $FFFF
+8240  08                     FCB   $08
+8241  53455804        LSEX   FCC   "SEX",EOT
+                      
+                      **************************************************
+                      * Test TST
+                      **************************************************
+8245  CE8270          TTST   LDU   #LTST
+8248  8E8260                 LDX   #TBTST
+824B  A680            TTST1  LDA   ,X+
+824D  4D                     TSTA
+824E  1FA9                   TFR   CC,B
+8250  C40E                   ANDB  #$0E   ; Only check Bits NZV
+8252  E180                   CMPB  ,X+
+8254  1026111D               LBNE  OUTERR
+8258  8C8270                 CMPX  #LTST
+825B  1026FFEC               LBNE  TTST1
+825F  39                     RTS
+                      
+8260  0004            TBTST  FCB   $00,$04
+8262  8008                   FCB   $80,$08
+8264  0100                   FCB   $01,$00
+8266  FF08                   FCB   $FF,$08
+8268  7F00                   FCB   $7F,$00
+826A  8108                   FCB   $81,$08
+826C  C008                   FCB   $C0,$08
+826E  4000                   FCB   $40,$00
+8270  54535404        LTST   FCC   "TST",EOT
+                      
+                      **************************************************
+                      * Test LD
+                      **************************************************
+8274  CE828E          TLD    LDU   #LLD
+8277  8E8260                 LDX   #TBTST
+827A  A680            TLD1   LDA   ,X+
+827C  1FA9                   TFR   CC,B
+827E  C40E                   ANDB  #$0E   ; Only check Bits NZV
+8280  E180                   CMPB  ,X+
+8282  102610EF               LBNE  OUTERR
+8286  8C8270                 CMPX  #LTST
+8289  1026FFED               LBNE  TLD1
+828D  39                     RTS
+828E  4C4404          LLD    FCC   "LD",EOT
+                      
+                      **************************************************
+                      * Test ST
+                      **************************************************
+8291  CE82AE          TST    LDU   #LST
+8294  8E8260                 LDX   #TBTST
+8297  A680            TST1   LDA   ,X+
+8299  B78000                 STA   EXTREG
+829C  1FA9                   TFR   CC,B
+829E  C40E                   ANDB  #$0E   ; Only check Bits NZV
+82A0  E180                   CMPB  ,X+
+82A2  102610CF               LBNE  OUTERR
+82A6  8C8270                 CMPX  #LTST
+82A9  1026FFEA               LBNE  TST1
+82AD  39                     RTS
+82AE  535404          LST    FCC   "ST",EOT
+                      
+                      **************************************************
+                      * Test LDD
+                      **************************************************
+82B1  CE82E3          TLDD   LDU   #LLDD
+82B4  8E82CB                 LDX   #TBLDD
+82B7  EC81            TLDD1  LDD   ,X++
+82B9  1FA9                   TFR   CC,B
+82BB  C40E                   ANDB  #$0E   ; Only check Bits NZV
+82BD  E180                   CMPB  ,X+
+82BF  102610B2               LBNE  OUTERR
+82C3  8C82E3                 CMPX  #LLDD
+82C6  1026FFED               LBNE  TLDD1
+82CA  39                     RTS
+82CB  0000            TBLDD  FDB   $0000
+82CD  04                     FCB   $04
+82CE  8000                   FDB   $8000
+82D0  08                     FCB   $08
+82D1  0001                   FDB   $0001
+82D3  00                     FCB   $00
+82D4  FFFF                   FDB   $FFFF
+82D6  08                     FCB   $08
+82D7  7FFF                   FDB   $7FFF
+82D9  00                     FCB   $00
+82DA  8001                   FDB   $8001
+82DC  08                     FCB   $08
+82DD  C000                   FDB   $C000
+82DF  08                     FCB   $08
+82E0  4000                   FDB   $4000
+82E2  00                     FCB   $00
+82E3  4C444404        LLDD   FCC   "LDD",EOT
+                      
+                      **************************************************
+                      * Test STD
+                      **************************************************
+82E7  CE8304          TSTD   LDU   #LSTD
+82EA  8E82CB                 LDX   #TBLDD
+82ED  EC81            TSTD1  LDD   ,X++
+82EF  FD8000                 STD   EXTREG
+82F2  1FA9                   TFR   CC,B
+82F4  C40E                   ANDB  #$0E   ; Only check Bits NZV
+82F6  E180                   CMPB  ,X+
+82F8  10261079               LBNE  OUTERR
+82FC  8C82E3                 CMPX  #LLDD
+82FF  1026FFEA               LBNE  TSTD1
+8303  39                     RTS
+8304  53544404        LSTD   FCC   "STD",EOT
+                      
+                      **************************************************
+                      * Test LEA
+                      **************************************************
+8308  CE8337          TLEA   LDU   #LLEA
+830B  8E8325                 LDX   #TBLEA
+830E  10AE81          TLEA1  LDY   ,X++
+8311  31A4                   LEAY  ,Y
+8313  1FA9                   TFR   CC,B
+8315  C404                   ANDB  #$04   ; Only check Bit Z
+8317  E180                   CMPB  ,X+
+8319  10261058               LBNE  OUTERR
+831D  8C8337                 CMPX  #LLEA
+8320  1026FFEA               LBNE  TLEA1
+8324  39                     RTS
+                      
+8325  0000            TBLEA  FDB   $0000
+8327  04                     FCB   $04
+8328  0001                   FDB   $0001
+832A  00                     FCB   $00
+832B  FFFF                   FDB   $FFFF
+832D  00                     FCB   $00
+832E  7FFF                   FDB   $7FFF
+8330  00                     FCB   $00
+8331  8000                   FDB   $8000
+8333  00                     FCB   $00
+8334  8001                   FDB   $8001
+8336  00                     FCB   $00
+8337  4C454104        LLEA   FCC   "LEA",EOT
+                      
+                      **************************************************
+                      * Test BIT
+                      **************************************************
+833B  CE8375          TBIT   LDU   #LBIT
+833E  8E8357                 LDX   #TBBIT
+8341  A680            TBIT1  LDA   ,X+
+8343  A580                   BITA  ,X+
+8345  1FA9                   TFR   CC,B
+8347  C40E                   ANDB  #$0E   ; Only check Bits NZV
+8349  E180                   CMPB  ,X+
+834B  10261026               LBNE  OUTERR
+834F  8C8375                 CMPX  #LBIT
+8352  1026FFEB               LBNE  TBIT1
+8356  39                     RTS
+                      
+8357  000004          TBBIT  FCB   $00,$00,$04
+835A  AA5504                 FCB   $AA,$55,$04
+835D  AAAA08                 FCB   $AA,$AA,$08
+8360  555500                 FCB   $55,$55,$00
+8363  FFFF08                 FCB   $FF,$FF,$08
+8366  FF8008                 FCB   $FF,$80,$08
+8369  818008                 FCB   $81,$80,$08
+836C  FF7F00                 FCB   $FF,$7F,$00
+836F  FF0100                 FCB   $FF,$01,$00
+8372  F00F04                 FCB   $F0,$0F,$04
+8375  42495404        LBIT   FCC   "BIT",EOT
+                      
+                      **************************************************
+                      * Test DAA
+                      **************************************************
+8379  CE84E2          TDAA   LDU   #LDAA
+837C  8E83A2                 LDX   #TBDAA
+837F  A680            TDAA1  LDA   ,X+
+8381  1FA9                   TFR   CC,B
+8383  E480                   ANDB  ,X+
+8385  EA80                   ORB   ,X+
+8387  1F9A                   TFR   B,CC
+8389  19                     DAA
+838A  1FA9                   TFR   CC,B
+838C  A180                   CMPA  ,X+
+838E  10260FE3               LBNE  OUTERR
+8392  C40D                   ANDB  #$0D   ; Only check Bits NZC
+8394  E180                   CMPB  ,X+
+8396  10260FDB               LBNE  OUTERR
+839A  8C84E2                 CMPX  #LDAA
+839D  1026FFDE               LBNE  TDAA1
+83A1  39                     RTS
+                      
+83A2                  TBDAA
+                      * Carry: 0, Halfcarry: 0
+83A2  00DE000004             FCB   $00,$DE,$00,$00,$04
+83A7  01DE000100             FCB   $01,$DE,$00,$01,$00
+83AC  09DE000900             FCB   $09,$DE,$00,$09,$00
+83B1  0ADE001000             FCB   $0A,$DE,$00,$10,$00
+83B6  0FDE001500             FCB   $0F,$DE,$00,$15,$00
+83BB  10DE001000             FCB   $10,$DE,$00,$10,$00
+83C0  4ADE005000             FCB   $4A,$DE,$00,$50,$00
+83C5  79DE007900             FCB   $79,$DE,$00,$79,$00
+83CA  7ADE008008             FCB   $7A,$DE,$00,$80,$08
+83CF  7FDE008508             FCB   $7F,$DE,$00,$85,$08
+83D4  81DE008108             FCB   $81,$DE,$00,$81,$08
+83D9  99DE009908             FCB   $99,$DE,$00,$99,$08
+83DE  A0DE000005             FCB   $A0,$DE,$00,$00,$05
+83E3  BFDE002501             FCB   $BF,$DE,$00,$25,$01
+83E8  F0DE005001             FCB   $F0,$DE,$00,$50,$01
+83ED  FFDE006501             FCB   $FF,$DE,$00,$65,$01
+                      * Carry: 1, Halfcarry: 0
+83F2  00DF016001             FCB   $00,$DF,$01,$60,$01
+83F7  01DF016101             FCB   $01,$DF,$01,$61,$01
+83FC  09DF016901             FCB   $09,$DF,$01,$69,$01
+8401  0ADF017001             FCB   $0A,$DF,$01,$70,$01
+8406  0FDF017501             FCB   $0F,$DF,$01,$75,$01
+840B  10DF017001             FCB   $10,$DF,$01,$70,$01
+8410  4ADF01B009             FCB   $4A,$DF,$01,$B0,$09
+8415  79DF01D909             FCB   $79,$DF,$01,$D9,$09
+841A  7ADF01E009             FCB   $7A,$DF,$01,$E0,$09
+841F  7FDF01E509             FCB   $7F,$DF,$01,$e5,$09
+8424  81DF01E109             FCB   $81,$DF,$01,$E1,$09
+8429  99DF01F909             FCB   $99,$DF,$01,$F9,$09
+842E  A0DF010005             FCB   $A0,$DF,$01,$00,$05
+8433  BFDF012501             FCB   $BF,$DF,$01,$25,$01
+8438  F0DF015001             FCB   $F0,$DF,$01,$50,$01
+843D  FFDF016501             FCB   $FF,$DF,$01,$65,$01
+                      * Carry: 0, Halfcarry: 1
+8442  00FE200600             FCB   $00,$FE,$20,$06,$00
+8447  01FE200700             FCB   $01,$FE,$20,$07,$00
+844C  09FE200F00             FCB   $09,$FE,$20,$0F,$00
+8451  0AFE201000             FCB   $0A,$FE,$20,$10,$00
+8456  0FFE201500             FCB   $0F,$FE,$20,$15,$00
+845B  10FE201600             FCB   $10,$FE,$20,$16,$00
+8460  4AFE205000             FCB   $4A,$FE,$20,$50,$00
+8465  79FE207F00             FCB   $79,$FE,$20,$7F,$00
+846A  7AFE208008             FCB   $7A,$FE,$20,$80,$08
+846F  7FFE208508             FCB   $7F,$FE,$20,$85,$08
+8474  81FE208708             FCB   $81,$FE,$20,$87,$08
+8479  99FE209F08             FCB   $99,$FE,$20,$9F,$08
+847E  A0FE200601             FCB   $A0,$FE,$20,$06,$01
+8483  BFFE202501             FCB   $BF,$FE,$20,$25,$01
+8488  F0FE205601             FCB   $F0,$FE,$20,$56,$01
+848D  FFFE206501             FCB   $FF,$FE,$20,$65,$01
+                      * Carry: 1, Halfcarry: 1
+8492  00FF216601             FCB   $00,$FF,$21,$66,$01
+8497  01FF216701             FCB   $01,$FF,$21,$67,$01
+849C  09FF216F01             FCB   $09,$FF,$21,$6F,$01
+84A1  0AFF217001             FCB   $0A,$FF,$21,$70,$01
+84A6  0FFF217501             FCB   $0F,$FF,$21,$75,$01
+84AB  10FF217601             FCB   $10,$FF,$21,$76,$01
+84B0  4AFF21B009             FCB   $4A,$FF,$21,$B0,$09
+84B5  79FF21DF09             FCB   $79,$FF,$21,$DF,$09
+84BA  7AFF21E009             FCB   $7A,$FF,$21,$E0,$09
+84BF  7FFF21E509             FCB   $7F,$FF,$21,$E5,$09
+84C4  81FF21E709             FCB   $81,$FF,$21,$E7,$09
+84C9  99FF21FF09             FCB   $99,$FF,$21,$FF,$09
+84CE  A0FF210601             FCB   $A0,$FF,$21,$06,$01
+84D3  BFFF212501             FCB   $BF,$FF,$21,$25,$01
+84D8  F0FF215601             FCB   $F0,$FF,$21,$56,$01
+84DD  FFFF216501             FCB   $FF,$FF,$21,$65,$01
+84E2  44414104        LDAA   FCC   "DAA",EOT
+                      
+                      **************************************************
+                      * Test NEG
+                      **************************************************
+84E6  CE851F          TNEG   LDU   #LNEG
+84E9  8E8507                 LDX   #TBNEG
+84EC  A680            TNEG1  LDA   ,X+
+84EE  40                     NEGA
+84EF  1FA9                   TFR   CC,B
+84F1  A180                   CMPA  ,X+
+84F3  10260E7E               LBNE  OUTERR
+84F7  C40F                   ANDB  #$0F   ; Only check Bits NZVC
+84F9  E180                   CMPB  ,X+
+84FB  10260E76               LBNE  OUTERR
+84FF  8C851F                 CMPX  #LNEG
+8502  1026FFE6               LBNE  TNEG1
+8506  39                     RTS
+                      
+8507  000004          TBNEG  FCB   $00,$00,$04
+850A  80800B                 FCB   $80,$80,$0B
+850D  01FF09                 FCB   $01,$FF,$09
+8510  FF0101                 FCB   $FF,$01,$01
+8513  7F8109                 FCB   $7F,$81,$09
+8516  817F01                 FCB   $81,$7F,$01
+8519  C04001                 FCB   $C0,$40,$01
+851C  40C009                 FCB   $40,$C0,$09
+851F  4E454704        LNEG   FCC   "NEG",EOT
+                      
+                      **************************************************
+                      * Test COM
+                      **************************************************
+8523  CE8560          TCOM   LDU   #LCOM
+8526  8E8542                 LDX   #TBCOM
+8529  A680            TCOM1  LDA   ,X+
+852B  43                     COMA
+852C  1FA9                   TFR   CC,B
+852E  A180                   CMPA  ,X+
+8530  10260E41               LBNE  OUTERR
+8534  C40F                   ANDB  #$0F   ; Only check Bits NZVC
+8536  E180                   CMPB  ,X+
+8538  10260E39               LBNE  OUTERR
+853C  8C8560                 CMPX  #LCOM
+853F  26E8                   BNE   TCOM1
+8541  39                     RTS
+                      
+                      
+8542  00FF09          TBCOM  FCB   $00,$FF,$09
+8545  FF0005                 FCB   $FF,$00,$05
+8548  F00F01                 FCB   $F0,$0F,$01
+854B  0FF009                 FCB   $0F,$F0,$09
+854E  55AA09                 FCB   $55,$AA,$09
+8551  AA5501                 FCB   $AA,$55,$01
+8554  01FE09                 FCB   $01,$FE,$09
+8557  FE0101                 FCB   $FE,$01,$01
+855A  807F01                 FCB   $80,$7F,$01
+855D  7F8009                 FCB   $7F,$80,$09
+8560  434F4D04        LCOM   FCC   "COM",EOT
+                      
+                      **************************************************
+                      * Test LSR
+                      **************************************************
+8564  CE85BC          TLSR   LDU   #LLSR
+8567  8E8583                 LDX   #TBLSR
+856A  A680            TLSR1  LDA   ,X+
+856C  44                     LSRA
+856D  1FA9                   TFR   CC,B
+856F  A180                   CMPA  ,X+
+8571  10260E00               LBNE  OUTERR
+8575  C40F                   ANDB  #$0F   ; Only check Bits NZVC
+8577  E180                   CMPB  ,X+
+8579  10260DF8               LBNE  OUTERR
+857D  8C85BC                 CMPX  #LLSR
+8580  26E8                   BNE   TLSR1
+8582  39                     RTS
+                      
+                      
+8583  000004          TBLSR  FCB   $00,$00,$04
+8586  FF7F01                 FCB   $FF,$7F,$01
+8589  7F3F01                 FCB   $7F,$3F,$01
+858C  3F1F01                 FCB   $3F,$1F,$01
+858F  1F0F01                 FCB   $1F,$0F,$01
+8592  0F0701                 FCB   $0F,$07,$01
+8595  070301                 FCB   $07,$03,$01
+8598  030101                 FCB   $03,$01,$01
+859B  010005                 FCB   $01,$00,$05
+859E  552A01                 FCB   $55,$2A,$01
+85A1  AA5500                 FCB   $AA,$55,$00
+85A4  804000                 FCB   $80,$40,$00
+85A7  100800                 FCB   $10,$08,$00
+85AA  C06000                 FCB   $C0,$60,$00
+85AD  E07000                 FCB   $E0,$70,$00
+85B0  F07800                 FCB   $F0,$78,$00
+85B3  F87C00                 FCB   $F8,$7C,$00
+85B6  FC7E00                 FCB   $FC,$7E,$00
+85B9  FE7F00                 FCB   $FE,$7F,$00
+85BC  4C535204        LLSR   FCC   "LSR",EOT
+                      
+                      **************************************************
+                      * Test LSL
+                      **************************************************
+85C0  CE8614          TLSL   LDU   #LLSL
+85C3  8E85DB                 LDX   #TBLSL
+85C6  A680            TLSL1  LDA   ,X+
+85C8  48                     LSLA
+85C9  1FA9                   TFR   CC,B
+85CB  A180                   CMPA  ,X+
+85CD  10260DA4               LBNE  OUTERR
+85D1  C40F                   ANDB  #$0F   ; Only check Bits NZVC
+85D3  E180                   CMPB  ,X+
+                      *       LBNE  OUTERR
+85D5  8C8614                 CMPX  #LLSL
+85D8  26EC                   BNE   TLSL1
+85DA  39                     RTS
+                      
+                      
+85DB  000004          TBLSL  FCB   $00,$00,$04
+85DE  FFFE01                 FCB   $FF,$FE,$01
+85E1  7FFE01                 FCB   $7F,$FE,$01
+85E4  3F7E01                 FCB   $3F,$7E,$01
+85E7  1F3E00                 FCB   $1F,$3E,$00
+85EA  0F1E00                 FCB   $0F,$1E,$00
+85ED  070E00                 FCB   $07,$0E,$00
+85F0  030600                 FCB   $03,$06,$00
+85F3  010200                 FCB   $01,$02,$00
+85F6  55AA00                 FCB   $55,$AA,$00
+85F9  AA5400                 FCB   $AA,$54,$00
+85FC  800001                 FCB   $80,$00,$01
+85FF  102001                 FCB   $10,$20,$01
+8602  C08001                 FCB   $C0,$80,$01
+8605  E0C001                 FCB   $E0,$C0,$01
+8608  F0E001                 FCB   $F0,$E0,$01
+860B  F8F001                 FCB   $F8,$F0,$01
+860E  FCF801                 FCB   $FC,$F8,$01
+8611  FEFC01                 FCB   $FE,$FC,$01
+8614  4C534C04        LLSL   FCC   "LSL",EOT
+                      
+                      **************************************************
+                      * Test ASR
+                      **************************************************
+8618  CE8670          TASR   LDU   #LASR
+861B  8E8637                 LDX   #TBASR
+861E  A680            TASR1  LDA   ,X+
+8620  47                     ASRA
+8621  1FA9                   TFR   CC,B
+8623  A180                   CMPA  ,X+
+8625  10260D4C               LBNE  OUTERR
+8629  C40D                   ANDB  #$0D   ; Only check Bits NZC
+862B  E180                   CMPB  ,X+
+862D  10260D44               LBNE  OUTERR
+8631  8C8670                 CMPX  #LASR
+8634  26E8                   BNE   TASR1
+8636  39                     RTS
+                      
+                      
+8637  000004          TBASR  FCB   $00,$00,$04
+863A  FFFF09                 FCB   $FF,$FF,$09
+863D  7F3F01                 FCB   $7F,$3F,$01
+8640  3F1F01                 FCB   $3F,$1F,$01
+8643  1F0F01                 FCB   $1F,$0F,$01
+8646  0F0701                 FCB   $0F,$07,$01
+8649  070301                 FCB   $07,$03,$01
+864C  030101                 FCB   $03,$01,$01
+864F  010005                 FCB   $01,$00,$05
+8652  552A01                 FCB   $55,$2A,$01
+8655  AAD508                 FCB   $AA,$D5,$08
+8658  80C008                 FCB   $80,$C0,$08
+865B  100800                 FCB   $10,$08,$00
+865E  C0E008                 FCB   $C0,$E0,$08
+8661  E0F008                 FCB   $E0,$F0,$08
+8664  F0F808                 FCB   $F0,$F8,$08
+8667  F8FC08                 FCB   $F8,$FC,$08
+866A  FCFE08                 FCB   $FC,$FE,$08
+866D  FEFF08                 FCB   $FE,$FF,$08
+8670  41535204        LASR   FCC   "ASR",EOT
+                      
+                      **************************************************
+                      * Test ROR
+                      **************************************************
+8674  CE86EB          TROR   LDU   #LROR
+8677  8E869B                 LDX   #TBROR
+867A  A680            TROR1  LDA   ,X+
+867C  1FA9                   TFR   CC,B
+867E  E480                   ANDB  ,X+
+8680  EA80                   ORB   ,X+
+8682  1F9A                   TFR   B,CC
+8684  46                     RORA
+8685  1FA9                   TFR   CC,B
+8687  A180                   CMPA  ,X+
+8689  10260CE8               LBNE  OUTERR
+868D  C40D                   ANDB  #$0D   ; Only check Bits NZC
+868F  E180                   CMPB  ,X+
+8691  10260CE0               LBNE  OUTERR
+8695  8C86EB                 CMPX  #LROR
+8698  26E0                   BNE   TROR1
+869A  39                     RTS
+                      
+869B  00FE000004      TBROR  FCB   $00,$FE,$00,$00,$04
+86A0  01FE000005             FCB   $01,$FE,$00,$00,$05
+86A5  0FFE000701             FCB   $0F,$FE,$00,$07,$01
+86AA  10FE000800             FCB   $10,$FE,$00,$08,$00
+86AF  7FFE003F01             FCB   $7F,$FE,$00,$3F,$01
+86B4  80FE004000             FCB   $80,$FE,$00,$40,$00
+86B9  FEFE007F00             FCB   $FE,$FE,$00,$7F,$00
+86BE  FFFE007F01             FCB   $FF,$FE,$00,$7F,$01
+86C3  00FF018008             FCB   $00,$FF,$01,$80,$08
+86C8  01FF018009             FCB   $01,$FF,$01,$80,$09
+86CD  0FFF018709             FCB   $0F,$FF,$01,$87,$09
+86D2  10FF018808             FCB   $10,$FF,$01,$88,$08
+86D7  7FFF01BF09             FCB   $7F,$FF,$01,$BF,$09
+86DC  80FF01C008             FCB   $80,$FF,$01,$C0,$08
+86E1  FEFF01FF08             FCB   $FE,$FF,$01,$FF,$08
+86E6  FFFF01FF09             FCB   $FF,$FF,$01,$FF,$09
+86EB  524F5204        LROR   FCC   "ROR",EOT
+                      
+                      **************************************************
+                      * Test ROL
+                      **************************************************
+86EF  CE8762          TROL   LDU   #LROL
+86F2  8E8712                 LDX   #TBROL
+86F5  A680            TROL1  LDA   ,X+
+86F7  1FA9                   TFR   CC,B
+86F9  E480                   ANDB  ,X+
+86FB  EA80                   ORB   ,X+
+86FD  1F9A                   TFR   B,CC
+86FF  49                     ROLA
+8700  1FA9                   TFR   CC,B
+8702  A180                   CMPA  ,X+
+8704  10260C6D               LBNE  OUTERR
+8708  C40D                   ANDB  #$0D   ; Only check Bits NZC
+870A  E180                   CMPB  ,X+
+                      *       LBNE  OUTERR
+870C  8C8762                 CMPX  #LROL
+870F  26E4                   BNE   TROL1
+8711  39                     RTS
+                      
+8712  00FE000004      TBROL  FCB   $00,$FE,$00,$00,$04
+8717  01FE000200             FCB   $01,$FE,$00,$02,$00
+871C  0FFE001E00             FCB   $0F,$FE,$00,$1E,$00
+8721  08FE001000             FCB   $08,$FE,$00,$10,$00
+8726  7FFE00FE08             FCB   $7F,$FE,$00,$FE,$08
+872B  80FE000005             FCB   $80,$FE,$00,$00,$05
+8730  FEFE00FC09             FCB   $FE,$FE,$00,$FC,$09
+8735  FFFE00FE09             FCB   $FF,$FE,$00,$FE,$09
+873A  00FF010100             FCB   $00,$FF,$01,$01,$00
+873F  01FF010300             FCB   $01,$FF,$01,$03,$00
+8744  0FFF011F00             FCB   $0F,$FF,$01,$1F,$00
+8749  08FF011100             FCB   $08,$FF,$01,$11,$00
+874E  7FFF01FF08             FCB   $7F,$FF,$01,$FF,$08
+8753  80FF010101             FCB   $80,$FF,$01,$01,$01
+8758  FEFF01FD09             FCB   $FE,$FF,$01,$FD,$09
+875D  FFFF01FF09             FCB   $FF,$FF,$01,$FF,$09
+8762  524F4C04        LROL   FCC   "ROL",EOT
+                      
+                      **************************************************
+                      * Test DEC
+                      **************************************************
+8766  CE879A          TDEC   LDU   #LDEC
+8769  8E8785                 LDX   #TBDEC
+876C  A680            TDEC1  LDA   ,X+
+876E  4A                     DECA
+876F  1FA9                   TFR   CC,B
+8771  A180                   CMPA  ,X+
+8773  10260BFE               LBNE  OUTERR
+8777  C40E                   ANDB  #$0E   ; Only check Bits NZV
+8779  E180                   CMPB  ,X+
+877B  10260BF6               LBNE  OUTERR
+877F  8C879A                 CMPX  #LDEC
+8782  26E8                   BNE   TDEC1
+8784  39                     RTS
+                      
+8785  010004          TBDEC  FCB   $01,$00,$04
+8788  00FF08                 FCB   $00,$FF,$08
+878B  FFFE08                 FCB   $FF,$FE,$08
+878E  807F02                 FCB   $80,$7F,$02
+8791  7F7E00                 FCB   $7F,$7E,$00
+8794  100F00                 FCB   $10,$0F,$00
+8797  0F0E00                 FCB   $0F,$0E,$00
+879A  44454304        LDEC   FCC   "DEC",EOT
+                      
+                      **************************************************
+                      * Test INC
+                      **************************************************
+879E  CE87D2          TINC   LDU   #LINC
+87A1  8E87BD                 LDX   #TBINC
+87A4  A680            TINC1  LDA   ,X+
+87A6  4C                     INCA
+87A7  1FA9                   TFR   CC,B
+87A9  A180                   CMPA  ,X+
+87AB  10260BC6               LBNE  OUTERR
+87AF  C40E                   ANDB  #$0E   ; Only check Bits NZV
+87B1  E180                   CMPB  ,X+
+87B3  10260BBE               LBNE  OUTERR
+87B7  8C87D2                 CMPX  #LINC
+87BA  26E8                   BNE   TINC1
+87BC  39                     RTS
+                      
+87BD  000100          TBINC  FCB   $00,$01,$00
+87C0  FEFF08                 FCB   $FE,$FF,$08
+87C3  FF0004                 FCB   $FF,$00,$04
+87C6  7F800A                 FCB   $7F,$80,$0A
+87C9  808108                 FCB   $80,$81,$08
+87CC  0F1000                 FCB   $0F,$10,$00
+87CF  101100                 FCB   $10,$11,$00
+87D2  494E4304        LINC   FCC   "INC",EOT
+                      
+                      **************************************************
+                      * Test CLR
+                      **************************************************
+87D6  CE8806          TCLR   LDU   #LCLR
+87D9  8E87F1                 LDX   #TBCLR
+87DC  A680            TCLR1  LDA   ,X+
+87DE  4F                     CLRA
+87DF  1FA9                   TFR   CC,B
+87E1  A180                   CMPA  ,X+
+                          *  LBNE  OUTERR
+87E3  C40F                   ANDB  #$0F   ; Only check Bits NZVC
+87E5  E180                   CMPB  ,X+
+87E7  10260B8A               LBNE  OUTERR
+87EB  8C8806                 CMPX  #LCLR
+87EE  26EC                   BNE   TCLR1
+87F0  39                     RTS
+                      
+87F1  010004          TBCLR  FCB   $01,$00,$04
+87F4  000004                 FCB   $00,$00,$04
+87F7  FF0004                 FCB   $FF,$00,$04
+87FA  800004                 FCB   $80,$00,$04
+87FD  7F0004                 FCB   $7F,$00,$04
+8800  100004                 FCB   $10,$00,$04
+8803  0F0004                 FCB   $0F,$00,$04
+8806  434C5204        LCLR   FCC   "CLR",EOT
+                      
+                      **************************************************
+                      * Test ADDD
+                      **************************************************
+880A  CE888F          TADDD  LDU   #LADDD
+880D  8E882D                 LDX   #TBADDD
+8810  EC81            TADDD1 LDD   ,X++
+8812  E381                   ADDD  ,X++
+8814  1FAB                   TFR   CC,DP
+8816  10A381                 CMPD  ,X++
+8819  10260B58               LBNE  OUTERR
+881D  1FB8                   TFR   DP,A
+881F  840F                   ANDA  #$0F   ; Only check Bits NZVC
+8821  A180                   CMPA  ,X+
+8823  10260B4E               LBNE  OUTERR
+8827  8C888F                 CMPX  #LADDD
+882A  26E4                   BNE   TADDD1
+882C  39                     RTS
+                      
+882D  000000000000    TBADDD FDB   $0000,$0000,$0000
+8833  04                     FCB   $04
+8834  000000010001           FDB   $0000,$0001,$0001
+883A  00                     FCB   $00
+883B  400040008000           FDB   $4000,$4000,$8000
+8841  0A                     FCB   $0A
+8842  000080008000           FDB   $0000,$8000,$8000
+8848  08                     FCB   $08
+8849  800080000000           FDB   $8000,$8000,$0000
+884F  07                     FCB   $07
+8850  40008000C000           FDB   $4000,$8000,$C000
+8856  08                     FCB   $08
+8857  7FFF7FFFFFFE           FDB   $7FFF,$7FFF,$FFFE
+885D  0A                     FCB   $0A
+885E  7FFF8000FFFF           FDB   $7FFF,$8000,$FFFF
+8864  08                     FCB   $08
+8865  7FFF00018000           FDB   $7FFF,$0001,$8000
+886B  0A                     FCB   $0A
+886C  800000018001           FDB   $8000,$0001,$8001
+8872  08                     FCB   $08
+8873  4000C0000000           FDB   $4000,$C000,$0000
+8879  05                     FCB   $05
+887A  4000C0010001           FDB   $4000,$C001,$0001
+8880  01                     FCB   $01
+8881  FFFFFFFFFFFE           FDB   $FFFF,$FFFF,$FFFE
+8887  09                     FCB   $09
+8888  800180000001           FDB   $8001,$8000,$0001
+888E  03                     FCB   $03
+888F  4144444404      LADDD  FCC   "ADDD",EOT
+                      
+                      **************************************************
+                      * Test ADD
+                      **************************************************
+8894  CE88F0          TADD   LDU   #LADD
+8897  8E88B4                 LDX   #TBADD
+889A  E680            TADD1  LDB   ,X+
+889C  EB80                   ADDB  ,X+
+889E  1FA8                   TFR   CC,A
+88A0  E180                   CMPB  ,X+
+88A2  10260ACF               LBNE  OUTERR
+88A6  842F                   ANDA  #$2F   ; Only check Bits HNZVC
+88A8  A180                   CMPA  ,X+
+88AA  10260AC7               LBNE  OUTERR
+88AE  8C88F0                 CMPX  #LADD
+88B1  26E7                   BNE   TADD1
+88B3  39                     RTS
+                      
+88B4  00000004        TBADD  FCB   $00,$00,$00,$04
+88B8  00010100               FCB   $00,$01,$01,$00
+88BC  4040800A               FCB   $40,$40,$80,$0A
+88C0  00808008               FCB   $00,$80,$80,$08
+88C4  80800007               FCB   $80,$80,$00,$07
+88C8  4080C008               FCB   $40,$80,$C0,$08
+88CC  7F7FFE2A               FCB   $7F,$7F,$FE,$2A
+88D0  7F80FF08               FCB   $7F,$80,$FF,$08
+88D4  807FFF08               FCB   $80,$7F,$FF,$08
+88D8  7F01802A               FCB   $7F,$01,$80,$2A
+88DC  80018108               FCB   $80,$01,$81,$08
+88E0  40C00005               FCB   $40,$C0,$00,$05
+88E4  40C10101               FCB   $40,$C1,$01,$01
+88E8  FFFFFE29               FCB   $FF,$FF,$FE,$29
+88EC  81800103               FCB   $81,$80,$01,$03
+88F0  41444404        LADD   FCC   "ADD",EOT
+                      
+                      **************************************************
+                      * Test ADC
+                      **************************************************
+88F4  CE89D0          TADC   LDU   #LADC
+88F7  8E891C                 LDX   #TBADC
+88FA  A680            TADC1  LDA   ,X+
+88FC  1FA9                   TFR   CC,B
+88FE  E480                   ANDB  ,X+
+8900  EA80                   ORB   ,X+
+8902  1F9A                   TFR   B,CC
+8904  A980                   ADCA  ,X+
+8906  1FA9                   TFR   CC,B
+8908  A180                   CMPA  ,X+
+890A  10260A67               LBNE  OUTERR
+890E  C42F                   ANDB  #$2F   ; Only check Bits HNZVC
+8910  E180                   CMPB  ,X+
+8912  10260A5F               LBNE  OUTERR
+8916  8C89D0                 CMPX  #LADC
+8919  26DF                   BNE   TADC1
+891B  39                     RTS
+                      
+891C  00FE00000004    TBADC  FCB   $00,$FE,$00,$00,$00,$04
+8922  00FE00010100           FCB   $00,$FE,$00,$01,$01,$00
+8928  40FE0040800A           FCB   $40,$FE,$00,$40,$80,$0A
+892E  00FE00808008           FCB   $00,$FE,$00,$80,$80,$08
+8934  80FE00800007           FCB   $80,$FE,$00,$80,$00,$07
+893A  40FE0080C008           FCB   $40,$FE,$00,$80,$C0,$08
+8940  7FFE007FFE2A           FCB   $7F,$FE,$00,$7F,$FE,$2A
+8946  7FFE0080FF08           FCB   $7F,$FE,$00,$80,$FF,$08
+894C  80FE007FFF08           FCB   $80,$FE,$00,$7F,$FF,$08
+8952  7FFE0001802A           FCB   $7F,$FE,$00,$01,$80,$2A
+8958  80FE00018108           FCB   $80,$FE,$00,$01,$81,$08
+895E  40FE00C00005           FCB   $40,$FE,$00,$C0,$00,$05
+8964  40FE00C10101           FCB   $40,$FE,$00,$C1,$01,$01
+896A  FFFE00FFFE29           FCB   $FF,$FE,$00,$FF,$FE,$29
+8970  81FE00800103           FCB   $81,$FE,$00,$80,$01,$03
+8976  00FF01000100           FCB   $00,$FF,$01,$00,$01,$00
+897C  00FF01010200           FCB   $00,$FF,$01,$01,$02,$00
+8982  40FF0140810A           FCB   $40,$FF,$01,$40,$81,$0A
+8988  00FF01808108           FCB   $00,$FF,$01,$80,$81,$08
+898E  80FF01800103           FCB   $80,$FF,$01,$80,$01,$03
+8994  40FF0180C108           FCB   $40,$FF,$01,$80,$C1,$08
+899A  7FFF017FFF2A           FCB   $7F,$FF,$01,$7F,$FF,$2A
+89A0  7FFF01800025           FCB   $7F,$FF,$01,$80,$00,$25
+89A6  80FF017F0025           FCB   $80,$FF,$01,$7F,$00,$25
+89AC  7FFF0101812A           FCB   $7F,$FF,$01,$01,$81,$2A
+89B2  80FF01018208           FCB   $80,$FF,$01,$01,$82,$08
+89B8  40FF01C00101           FCB   $40,$FF,$01,$C0,$01,$01
+89BE  40FF01C10201           FCB   $40,$FF,$01,$C1,$02,$01
+89C4  FFFF01FFFF29           FCB   $FF,$FF,$01,$FF,$FF,$29
+89CA  81FF01800203           FCB   $81,$FF,$01,$80,$02,$03
+89D0  41444304        LADC   FCC   "ADC",EOT
+                      
+                      **************************************************
+                      * Test CMP
+                      **************************************************
+89D4  CE89F0          TCMP   LDU   #LCMP
+89D7  8E8A14                 LDX   #TBSUB
+89DA  E680            TCMP1  LDB   ,X+
+89DC  E180                   CMPB  ,X+
+89DE  1FA8                   TFR   CC,A
+89E0  3001                   LEAX  1,X    ; Skip result Byte
+89E2  840F                   ANDA  #$0F   ; Only check Bits NZVC
+89E4  A180                   CMPA  ,X+
+89E6  1026098B               LBNE  OUTERR
+89EA  8C8A7C                 CMPX  #LSUB
+89ED  26EB                   BNE   TCMP1
+89EF  39                     RTS
+                      
+89F0  434D5004        LCMP   FCC   "CMP",EOT
+                      
+                      **************************************************
+                      * Test SUB
+                      **************************************************
+89F4  CE8A7C          TSUB   LDU   #LSUB
+89F7  8E8A14                 LDX   #TBSUB
+89FA  E680            TSUB1  LDB   ,X+
+89FC  E080                   SUBB  ,X+
+89FE  1FA8                   TFR   CC,A
+8A00  E180                   CMPB  ,X+
+8A02  1026096F               LBNE  OUTERR
+8A06  840F                   ANDA  #$0F   ; Only check Bits NZVC
+8A08  A180                   CMPA  ,X+
+8A0A  10260967               LBNE  OUTERR
+8A0E  8C8A7C                 CMPX  #LSUB
+8A11  26E7                   BNE   TSUB1
+8A13  39                     RTS
+                      
+8A14  00000004        TBSUB  FCB   $00,$00,$00,$04
+8A18  0001FF09               FCB   $00,$01,$FF,$09
+8A1C  007F8109               FCB   $00,$7F,$81,$09
+8A20  0080800B               FCB   $00,$80,$80,$0B
+8A24  00FF0101               FCB   $00,$FF,$01,$01
+8A28  01000100               FCB   $01,$00,$01,$00
+8A2C  017F8209               FCB   $01,$7F,$82,$09
+8A30  4041FF09               FCB   $40,$41,$FF,$09
+8A34  4080C00B               FCB   $40,$80,$C0,$0B
+8A38  40C0800B               FCB   $40,$C0,$80,$0B
+8A3C  40C17F01               FCB   $40,$C1,$7F,$01
+8A40  7F007F00               FCB   $7F,$00,$7F,$00
+8A44  7F017E00               FCB   $7F,$01,$7E,$00
+8A48  7F7E0100               FCB   $7F,$7E,$01,$00
+8A4C  7F7F0004               FCB   $7F,$7F,$00,$04
+8A50  7F80FF0B               FCB   $7F,$80,$FF,$0B
+8A54  7FFF800B               FCB   $7F,$FF,$80,$0B
+8A58  80017F02               FCB   $80,$01,$7F,$02
+8A5C  80404002               FCB   $80,$40,$40,$02
+8A60  807F0102               FCB   $80,$7F,$01,$02
+8A64  80800004               FCB   $80,$80,$00,$04
+8A68  8081FF09               FCB   $80,$81,$FF,$09
+8A6C  81800100               FCB   $81,$80,$01,$00
+8A70  FFFF0004               FCB   $FF,$FF,$00,$04
+8A74  FFFE0100               FCB   $FF,$FE,$01,$00
+8A78  FF00FF08               FCB   $FF,$00,$FF,$08
+8A7C  53554204        LSUB   FCC   "SUB",EOT
+                      
+                      **************************************************
+                      * Test SBC
+                      **************************************************
+8A80  CE8BE0          TSBC   LDU   #LSBC
+8A83  8E8AA8                 LDX   #TBSBC
+8A86  A680            TSBC1  LDA   ,X+
+8A88  1FA9                   TFR   CC,B
+8A8A  E480                   ANDB  ,X+
+8A8C  EA80                   ORB   ,X+
+8A8E  1F9A                   TFR   B,CC
+8A90  A280                   SBCA  ,X+
+8A92  1FA9                   TFR   CC,B
+8A94  A180                   CMPA  ,X+
+8A96  102608DB               LBNE  OUTERR
+8A9A  C40F                   ANDB  #$0F   ; Only check Bits NZVC
+8A9C  E180                   CMPB  ,X+
+8A9E  102608D3               LBNE  OUTERR
+8AA2  8C8BE0                 CMPX  #LSBC
+8AA5  26DF                   BNE   TSBC1
+8AA7  39                     RTS
+                      
+8AA8  00FE00000004    TBSBC  FCB   $00,$FE,$00,$00,$00,$04
+8AAE  00FE0001FF09           FCB   $00,$FE,$00,$01,$FF,$09
+8AB4  00FE007F8109           FCB   $00,$FE,$00,$7F,$81,$09
+8ABA  00FE0080800B           FCB   $00,$FE,$00,$80,$80,$0B
+8AC0  00FE00FF0101           FCB   $00,$FE,$00,$FF,$01,$01
+8AC6  01FE00000100           FCB   $01,$FE,$00,$00,$01,$00
+8ACC  01FE007F8209           FCB   $01,$FE,$00,$7F,$82,$09
+8AD2  40FE0041FF09           FCB   $40,$FE,$00,$41,$FF,$09
+8AD8  40FE0080C00B           FCB   $40,$FE,$00,$80,$C0,$0B
+8ADE  40FE00C0800B           FCB   $40,$FE,$00,$C0,$80,$0B
+8AE4  40FE00C17F01           FCB   $40,$FE,$00,$C1,$7F,$01
+8AEA  7FFE00007F00           FCB   $7F,$FE,$00,$00,$7F,$00
+8AF0  7FFE00017E00           FCB   $7F,$FE,$00,$01,$7E,$00
+8AF6  7FFE007E0100           FCB   $7F,$FE,$00,$7E,$01,$00
+8AFC  7FFE007F0004           FCB   $7F,$FE,$00,$7F,$00,$04
+8B02  7FFE0080FF0B           FCB   $7F,$FE,$00,$80,$FF,$0B
+8B08  7FFE00FF800B           FCB   $7F,$FE,$00,$FF,$80,$0B
+8B0E  80FE00017F02           FCB   $80,$FE,$00,$01,$7F,$02
+8B14  80FE00404002           FCB   $80,$FE,$00,$40,$40,$02
+8B1A  80FE007F0102           FCB   $80,$FE,$00,$7F,$01,$02
+8B20  80FE00800004           FCB   $80,$FE,$00,$80,$00,$04
+8B26  80FE0081FF09           FCB   $80,$FE,$00,$81,$FF,$09
+8B2C  81FE00800100           FCB   $81,$FE,$00,$80,$01,$00
+8B32  FFFE00FF0004           FCB   $FF,$FE,$00,$FF,$00,$04
+8B38  FFFE00FE0100           FCB   $FF,$FE,$00,$FE,$01,$00
+8B3E  FFFE0000FF08           FCB   $FF,$FE,$00,$00,$FF,$08
+8B44  00FF0100FF09           FCB   $00,$FF,$01,$00,$FF,$09
+8B4A  00FF0101FE09           FCB   $00,$FF,$01,$01,$FE,$09
+8B50  00FF017F8009           FCB   $00,$FF,$01,$7F,$80,$09
+8B56  00FF01807F01           FCB   $00,$FF,$01,$80,$7F,$01
+8B5C  00FF01FF0005           FCB   $00,$FF,$01,$FF,$00,$05
+8B62  01FF01000004           FCB   $01,$FF,$01,$00,$00,$04
+8B68  01FF017F8109           FCB   $01,$FF,$01,$7F,$81,$09
+8B6E  40FF0141FE09           FCB   $40,$FF,$01,$41,$FE,$09
+8B74  40FF0180BF0B           FCB   $40,$FF,$01,$80,$BF,$0B
+8B7A  40FF01C07F01           FCB   $40,$FF,$01,$C0,$7F,$01
+8B80  40FF01C17E01           FCB   $40,$FF,$01,$C1,$7E,$01
+8B86  7FFF01007E00           FCB   $7F,$FF,$01,$00,$7E,$00
+8B8C  7FFF01017D00           FCB   $7F,$FF,$01,$01,$7D,$00
+8B92  7FFF017E0004           FCB   $7F,$FF,$01,$7E,$00,$04
+8B98  7FFF017FFF09           FCB   $7F,$FF,$01,$7F,$FF,$09
+8B9E  7FFF0180FE0B           FCB   $7F,$FF,$01,$80,$FE,$0B
+8BA4  7FFF01FF7F01           FCB   $7F,$FF,$01,$FF,$7F,$01
+8BAA  80FF01017E02           FCB   $80,$FF,$01,$01,$7E,$02
+8BB0  80FF01403F02           FCB   $80,$FF,$01,$40,$3F,$02
+8BB6  80FF017F0006           FCB   $80,$FF,$01,$7F,$00,$06
+8BBC  80FF0180FF09           FCB   $80,$FF,$01,$80,$FF,$09
+8BC2  80FF0181FE09           FCB   $80,$FF,$01,$81,$FE,$09
+8BC8  81FF01800004           FCB   $81,$FF,$01,$80,$00,$04
+8BCE  FFFF01FFFF09           FCB   $FF,$FF,$01,$FF,$FF,$09
+8BD4  FFFF01FE0004           FCB   $FF,$FF,$01,$FE,$00,$04
+8BDA  FFFF0100FE08           FCB   $FF,$FF,$01,$00,$FE,$08
+8BE0  53424304        LSBC   FCC   "SBC",EOT
+                      
+                      **************************************************
+                      * Test SUBD
+                      **************************************************
+8BE4  CE8CBD          TSUBD  LDU   #LSUBD
+8BE7  8E8C07                 LDX   #TBSUBD
+8BEA  EC81            TSUBD1 LDD   ,X++
+8BEC  A381                   SUBD  ,X++
+8BEE  1FAB                   TFR   CC,DP
+8BF0  10A381                 CMPD  ,X++
+8BF3  1026077E               LBNE  OUTERR
+8BF7  1FB8                   TFR   DP,A
+8BF9  840F                   ANDA  #$0F   ; Only check Bits NZVC
+8BFB  A180                   CMPA  ,X+
+8BFD  10260774               LBNE  OUTERR
+8C01  8C8CBD                 CMPX  #LSUBD
+8C04  26E4                   BNE   TSUBD1
+8C06  39                     RTS
+                      
+8C07  000000000000    TBSUBD FDB   $0000,$0000,$0000
+8C0D  04                     FCB   $04
+8C0E  00000001FFFF           FDB   $0000,$0001,$FFFF
+8C14  09                     FCB   $09
+8C15  00007FFF8001           FDB   $0000,$7FFF,$8001
+8C1B  09                     FCB   $09
+8C1C  000080008000           FDB   $0000,$8000,$8000
+8C22  0B                     FCB   $0B
+8C23  0000FFFF0001           FDB   $0000,$FFFF,$0001
+8C29  01                     FCB   $01
+8C2A  000100000001           FDB   $0001,$0000,$0001
+8C30  00                     FCB   $00
+8C31  00017FFF8002           FDB   $0001,$7FFF,$8002
+8C37  09                     FCB   $09
+8C38  40004001FFFF           FDB   $4000,$4001,$FFFF
+8C3E  09                     FCB   $09
+8C3F  40008000C000           FDB   $4000,$8000,$C000
+8C45  0B                     FCB   $0B
+8C46  4000C0008000           FDB   $4000,$C000,$8000
+8C4C  0B                     FCB   $0B
+8C4D  4000C0017FFF           FDB   $4000,$C001,$7FFF
+8C53  01                     FCB   $01
+8C54  7FFF00007FFF           FDB   $7FFF,$0000,$7FFF
+8C5A  00                     FCB   $00
+8C5B  7FFF00017FFE           FDB   $7FFF,$0001,$7FFE
+8C61  00                     FCB   $00
+8C62  7FFF7FFE0001           FDB   $7FFF,$7FFE,$0001
+8C68  00                     FCB   $00
+8C69  7FFF7FFF0000           FDB   $7FFF,$7FFF,$0000
+8C6F  04                     FCB   $04
+8C70  7FFF8000FFFF           FDB   $7FFF,$8000,$FFFF
+8C76  0B                     FCB   $0B
+8C77  7FFFFFFF8000           FDB   $7FFF,$FFFF,$8000
+8C7D  0B                     FCB   $0B
+8C7E  800000017FFF           FDB   $8000,$0001,$7FFF
+8C84  02                     FCB   $02
+8C85  800040004000           FDB   $8000,$4000,$4000
+8C8B  02                     FCB   $02
+8C8C  80007FFF0001           FDB   $8000,$7FFF,$0001
+8C92  02                     FCB   $02
+8C93  800080000000           FDB   $8000,$8000,$0000
+8C99  04                     FCB   $04
+8C9A  80008001FFFF           FDB   $8000,$8001,$FFFF
+8CA0  09                     FCB   $09
+8CA1  800180000001           FDB   $8001,$8000,$0001
+8CA7  00                     FCB   $00
+8CA8  FFFFFFFF0000           FDB   $FFFF,$FFFF,$0000
+8CAE  04                     FCB   $04
+8CAF  FFFFFFFE0001           FDB   $FFFF,$FFFE,$0001
+8CB5  00                     FCB   $00
+8CB6  FFFF0000FFFF           FDB   $FFFF,$0000,$FFFF
+8CBC  08                     FCB   $08
+8CBD  5355424404      LSUBD  FCC   "SUBD",EOT
+                      
+                      **************************************************
+                      * Test CMPD
+                      **************************************************
+8CC2  CE8CE0          TCMPD  LDU   #LCMPD
+8CC5  8E8C07                 LDX   #TBSUBD
+8CC8  EC81            TCMPD1 LDD   ,X++
+8CCA  A381                   SUBD  ,X++
+8CCC  1FAB                   TFR   CC,DP
+8CCE  3002                   LEAX  2,X    ; Skip result Word
+8CD0  1FB8                   TFR   DP,A
+8CD2  840F                   ANDA  #$0F   ; Only check Bits NZVC
+8CD4  A180                   CMPA  ,X+
+8CD6  1026069B               LBNE  OUTERR
+8CDA  8C8CBD                 CMPX  #LSUBD
+8CDD  26E9                   BNE   TCMPD1
+8CDF  39                     RTS
+                      
+8CE0  434D504404      LCMPD  FCC   "CMPD",EOT
+                      
+                      **************************************************
+                      * Test TFR
+                      **************************************************
+8CE5  8E8D77          TTFR   LDX   #TBTFR
+8CE8  3410            TTFR1  PSHS  X
+8CEA  10AE84                 LDY   ,X
+8CED  ADA4                   JSR   ,Y
+8CEF  3510                   PULS  X
+8CF1  2608                   BNE   FTFR
+8CF3  3002                   LEAX  2,X
+8CF5  8C8D87                 CMPX  #LTFR
+8CF8  26EE                   BNE   TTFR1
+8CFA  39                     RTS
+8CFB  CE8D87          FTFR   LDU   #LTFR
+8CFE  160674                 LBRA  OUTERR
+                      
+8D01  4F              CLRREG CLRA
+8D02  5F                     CLRB
+8D03  8E0000                 LDX   #0
+8D06  108E0000               LDY   #0
+8D0A  CE0000                 LDU   #0
+8D0D  1F8B                   TFR   A,DP
+8D0F  1F8A                   TFR   A,CC
+8D11  39                     RTS
+8D12  8DED            TBTFR1 BSR   CLRREG
+8D14  CC5678                 LDD   #$5678
+8D17  1F01                   TFR   D,X
+8D19  8C5678                 CMPX  #$5678  
+8D1C  39                     RTS
+8D1D  8DE2            TBTFR2 BSR   CLRREG
+8D1F  8E1234                 LDX   #$1234
+8D22  1F12                   TFR   X,Y
+8D24  108C1234               CMPY  #$1234  
+8D28  39                     RTS
+8D29  8DD6            TBTFR3 BSR   CLRREG
+8D2B  108E5500               LDY   #$5500
+8D2F  1F23                   TFR   Y,U
+8D31  11835500               CMPU  #$5500  
+8D35  39                     RTS
+8D36  8DC9            TBTFR4 BSR   CLRREG
+8D38  CEFEFF                 LDU   #$FEFF
+8D3B  1F30                   TFR   U,D
+8D3D  1083FEFF               CMPD  #$FEFF  
+8D41  39                     RTS
+8D42  8DBD            TBTFR5 BSR   CLRREG
+8D44  8655                   LDA   #$55
+8D46  1F89                   TFR   A,B
+8D48  C155                   CMPB  #$55  
+8D4A  39                     RTS
+8D4B  8DB4            TBTFR6 BSR   CLRREG
+8D4D  C6AA                   LDB   #$AA
+8D4F  1F9B                   TFR   B,DP
+8D51  3408                   PSHS  DP
+8D53  3502                   PULS  A
+8D55  81AA                   CMPA  #$AA
+8D57  39                     RTS
+8D58  8DA7            TBTFR7 BSR   CLRREG
+8D5A  8603                   LDA   #$03
+8D5C  3402                   PSHS  A
+8D5E  4F                     CLRA
+8D5F  3508                   PULS  DP
+8D61  1FBA                   TFR   DP,CC
+8D63  3401                   PSHS  CC
+8D65  3502                   PULS  A
+8D67  8103                   CMPA  #$03
+8D69  39                     RTS
+8D6A  8D95            TBTFR8 BSR   CLRREG
+8D6C  8601                   LDA   #$01
+8D6E  3402                   PSHS  A
+8D70  3501                   PULS  CC
+8D72  1FA8                   TFR   CC,A
+8D74  8101                   CMPA  #$01
+8D76  39                     RTS
+                      
+8D77  8D12            TBTFR  FDB   TBTFR1
+8D79  8D1D                   FDB   TBTFR2
+8D7B  8D29                   FDB   TBTFR3
+8D7D  8D36                   FDB   TBTFR4
+8D7F  8D42                   FDB   TBTFR5
+8D81  8D4B                   FDB   TBTFR6
+8D83  8D58                   FDB   TBTFR7
+8D85  8D6A                   FDB   TBTFR8
+8D87  54465204        LTFR   FCC   "TFR",EOT
+                      
+                      **************************************************
+                      * Test EXG
+                      **************************************************
+8D8B  8E8E67          TEXG   LDX   #TBEXG
+8D8E  3410            TEXG1  PSHS  X
+8D90  10AE84                 LDY   ,X
+8D93  ADA4                   JSR   ,Y
+8D95  3510                   PULS  X
+8D97  2608                   BNE   FEXG
+8D99  3002                   LEAX  2,X
+8D9B  8C8E77                 CMPX  #LEXG
+8D9E  26EE                   BNE   TEXG1
+8DA0  39                     RTS
+8DA1  CE8E77          FEXG   LDU   #LEXG
+8DA4  1605CE                 LBRA  OUTERR
+                      
+8DA7  17FF57          TBEXG1 LBSR  CLRREG
+8DAA  CC5678                 LDD   #$5678
+8DAD  8EA55A                 LDX   #$A55A
+8DB0  1E01                   EXG   D,X
+8DB2  8C5678                 CMPX  #$5678
+8DB5  2604                   BNE   TBEXGE
+8DB7  1083A55A               CMPD  #$A55A  
+8DBB  39              TBEXGE RTS
+8DBC  17FF42          TBEXG2 LBSR  CLRREG
+8DBF  8E1234                 LDX   #$1234
+8DC2  108E0815               LDY   #$0815
+8DC6  1E12                   EXG   X,Y
+8DC8  108C1234               CMPY  #$1234
+8DCC  26ED                   BNE   TBEXGE
+8DCE  8C0815                 CMPX  #$0815
+8DD1  39                     RTS
+8DD2  17FF2C          TBEXG3 LBSR  CLRREG
+8DD5  108E5500               LDY   #$5500
+8DD9  CE4711                 LDU   #$4711
+8DDC  1E23                   EXG   Y,U
+8DDE  11835500               CMPU  #$5500 
+8DE2  26D7                   BNE   TBEXGE 
+8DE4  108C4711               CMPY  #$4711  
+8DE8  39                     RTS
+8DE9  17FF15          TBEXG4 LBSR  CLRREG
+8DEC  CEFEFF                 LDU   #$FEFF
+8DEF  CC9999                 LDD   #$9999
+8DF2  1E30                   EXG   U,D
+8DF4  1083FEFF               CMPD  #$FEFF
+8DF8  26C1                   BNE   TBEXGE
+8DFA  11839999               CMPU  #$9999  
+8DFE  39                     RTS
+8DFF  17FEFF          TBEXG5 LBSR  CLRREG
+8E02  8655                   LDA   #$55
+8E04  C6AA                   LDB   #$AA
+8E06  1E89                   EXG   A,B
+8E08  C155                   CMPB  #$55  
+8E0A  26AF                   BNE   TBEXGE
+8E0C  81AA                   CMPA  #$AA
+8E0E  39                     RTS
+8E0F  17FEEF          TBEXG6 LBSR  CLRREG
+8E12  C6AA                   LDB   #$AA
+8E14  8644                   LDA   #$44
+8E16  3402                   PSHS  A
+8E18  4F                     CLRA
+8E19  3508                   PULS  DP
+8E1B  1E9B                   EXG   B,DP
+8E1D  3408                   PSHS  DP
+8E1F  3502                   PULS  A
+8E21  81AA                   CMPA  #$AA
+8E23  2696                   BNE   TBEXGE
+8E25  C144                   CMPB  #$44
+8E27  39                     RTS
+8E28  17FED6          TBEXG7 LBSR  CLRREG
+8E2B  8603                   LDA   #$03
+8E2D  3402                   PSHS  A
+8E2F  4F                     CLRA
+8E30  3508                   PULS  DP
+8E32  8630                   LDA   #$30
+8E34  3402                   PSHS  A
+8E36  4F                     CLRA
+8E37  3501                   PULS  CC
+8E39  1EBA                   EXG   DP,CC
+8E3B  3401                   PSHS  CC
+8E3D  3502                   PULS  A
+8E3F  3408                   PSHS  DP
+8E41  3504                   PULS  B
+8E43  8103                   CMPA  #$03
+8E45  1026FF72               LBNE  TBEXGE
+8E49  C130                   CMPB  #$30
+8E4B  39                     RTS
+8E4C  17FEB2          TBEXG8 LBSR  CLRREG
+8E4F  8611                   LDA   #$11
+8E51  C699                   LDB   #$99
+8E53  3404                   PSHS  B
+8E55  5F                     CLRB
+8E56  3501                   PULS  CC
+8E58  1EA8                   EXG   CC,A
+8E5A  3401                   PSHS  CC
+8E5C  3504                   PULS  B
+8E5E  8199                   CMPA  #$99
+8E60  1026FF57               LBNE  TBEXGE
+8E64  C111                   CMPB  #$11
+8E66  39                     RTS
+                      
+8E67  8DA7            TBEXG  FDB   TBEXG1
+8E69  8DBC                   FDB   TBEXG2
+8E6B  8DD2                   FDB   TBEXG3
+8E6D  8DE9                   FDB   TBEXG4
+8E6F  8DFF                   FDB   TBEXG5
+8E71  8E0F                   FDB   TBEXG6
+8E73  8E28                   FDB   TBEXG7
+8E75  8E4C                   FDB   TBEXG8
+8E77  45584704        LEXG   FCC   "EXG",EOT
+                      
+                      
+                      **************************************************
+                      * Test Index Addressing modes
+                      **************************************************
+8E7B  3410            CLRMEM PSHS  X
+8E7D  8E7F80                 LDX   #EXTREG-128
+8E80  4F                     CLRA
+8E81  6F80            CLRM1  CLR   ,X+
+8E83  4C                     INCA
+8E84  26FB                   BNE   CLRM1
+8E86  3590                   PULS  X,PC
+                      
+8E88  CE9298          TAD1   LDU   #LAD1
+8E8B  8E8000                 LDX   #EXTREG
+                      * LDA ,X
+8E8E  8DEB                   BSR   CLRMEM
+8E90  8655                   LDA   #$55
+8E92  B78000                 STA   EXTREG
+8E95  A684                   LDA   ,X
+8E97  8155                   CMPA  #$55
+8E99  102604D8               LBNE  OUTERR
+                      * LDA 1,X
+8E9D  8DDC                   BSR   CLRMEM
+8E9F  8612                   LDA   #$12
+8EA1  B78001                 STA   EXTREG+1
+8EA4  A601                   LDA   1,X
+8EA6  8112                   CMPA  #$12
+8EA8  102604C9               LBNE  OUTERR
+                      * LDA 127,X
+8EAC  8DCD                   BSR   CLRMEM
+8EAE  8644                   LDA   #$44
+8EB0  B7807F                 STA   EXTREG+127
+8EB3  A6887F                 LDA   127,X
+8EB6  8144                   CMPA  #$44
+8EB8  102604B9               LBNE  OUTERR
+                      * LDA -1,X
+8EBC  8DBD                   BSR   CLRMEM
+8EBE  8634                   LDA   #$34
+8EC0  B77FFF                 STA   EXTREG-1
+8EC3  A61F                   LDA   -1,X
+8EC5  8134                   CMPA  #$34
+8EC7  102604AA               LBNE  OUTERR
+                      * LDA -128,X
+8ECB  8DAE                   BSR   CLRMEM
+8ECD  86AA                   LDA   #$AA
+8ECF  B77F80                 STA   EXTREG-128
+8ED2  A68880                 LDA   -128,X
+8ED5  81AA                   CMPA  #$AA
+8ED7  1026049A               LBNE  OUTERR
+8EDB  39                     RTS
+                      
+                      * LDA ,X+
+8EDC  8E8000          TAD2   LDX   #EXTREG
+8EDF  CE92A1                 LDU   #LAD2
+8EE2  8D97                   BSR   CLRMEM
+8EE4  CCA55A                 LDD   #$A55A
+8EE7  FD8000                 STD   EXTREG
+8EEA  A680                   LDA   ,X+
+8EEC  81A5                   CMPA  #$A5
+8EEE  10260483               LBNE  OUTERR
+8EF2  A680                   LDA   ,X+
+8EF4  815A                   CMPA  #$5A
+8EF6  1026047B               LBNE  OUTERR
+8EFA  39                     RTS
+                      
+                      * LDD ,X++
+8EFB  8E8000          TAD3   LDX   #EXTREG
+8EFE  CE92A9                 LDU   #LAD3
+8F01  17FF77                 LBSR  CLRMEM
+8F04  CCA55A                 LDD   #$A55A
+8F07  FD8000                 STD   EXTREG
+8F0A  CC789A                 LDD   #$789A
+8F0D  FD8002                 STD   EXTREG+2
+8F10  EC81                   LDD   ,X++
+8F12  1083A55A               CMPD  #$A55A
+8F16  1026045B               LBNE  OUTERR
+8F1A  EC81                   LDD   ,X++
+8F1C  1083789A               CMPD  #$789A
+8F20  10260451               LBNE  OUTERR
+8F24  39                     RTS
+                      
+                      * LDA ,-X
+8F25  8E8000          TAD4   LDX   #EXTREG
+8F28  CE92B2                 LDU   #LAD4
+8F2B  17FF4D                 LBSR  CLRMEM
+8F2E  CCA55A                 LDD   #$A55A
+8F31  FD7FFE                 STD   EXTREG-2
+8F34  A682                   LDA   ,-X
+8F36  815A                   CMPA  #$5A
+8F38  10260439               LBNE  OUTERR
+8F3C  A682                   LDA   ,-X
+8F3E  81A5                   CMPA  #$A5
+8F40  10260431               LBNE  OUTERR
+8F44  39                     RTS
+                      
+                      * LDD ,--X
+8F45  8E8000          TAD5   LDX   #EXTREG
+8F48  CE92BA                 LDU   #LAD5
+8F4B  17FF2D                 LBSR  CLRMEM
+8F4E  CCA55A                 LDD   #$A55A
+8F51  FD7FFE                 STD   EXTREG-2
+8F54  CC789A                 LDD   #$789A
+8F57  FD7FFC                 STD   EXTREG-4
+8F5A  EC83                   LDD   ,--X
+8F5C  1083A55A               CMPD  #$A55A
+8F60  10260411               LBNE  OUTERR
+8F64  EC83                   LDD   ,--X
+8F66  1083789A               CMPD  #$789A
+8F6A  10260407               LBNE  OUTERR
+8F6E  39                     RTS
+                      
+                      * LDA A,X
+8F6F  CE92C3          TAD6   LDU   #LAD6
+8F72  8E8000                 LDX   #EXTREG
+8F75  17FF03                 LBSR  CLRMEM
+8F78  8612                   LDA   #$12
+8F7A  B78001                 STA   EXTREG+1
+8F7D  8601                   LDA   #1
+8F7F  A686                   LDA   A,X
+8F81  8112                   CMPA  #$12
+8F83  102603EE               LBNE  OUTERR
+8F87  17FEF1                 LBSR  CLRMEM
+8F8A  8644                   LDA   #$44
+8F8C  B7807F                 STA   EXTREG+127
+8F8F  867F                   LDA   #127
+8F91  A686                   LDA   A,X
+8F93  8144                   CMPA  #$44
+8F95  102603DC               LBNE  OUTERR
+8F99  39                     RTS
+                      
+                      * LDA B,Y
+8F9A  CE92CB          TAD7   LDU   #LAD7
+8F9D  108E8000               LDY   #EXTREG
+8FA1  17FED7                 LBSR  CLRMEM
+8FA4  8634                   LDA   #$34
+8FA6  B77FFF                 STA   EXTREG-1
+8FA9  C6FF                   LDB   #-1
+8FAB  A6A5                   LDA   B,Y
+8FAD  8134                   CMPA  #$34
+8FAF  102603C2               LBNE  OUTERR
+8FB3  17FEC5                 LBSR  CLRMEM
+8FB6  86AA                   LDA   #$AA
+8FB8  B77F80                 STA   EXTREG-128
+8FBB  C680                   LDB   #-128
+8FBD  A6A5                   LDA   B,Y
+8FBF  81AA                   CMPA  #$AA
+8FC1  102603B0               LBNE  OUTERR
+8FC5  39                     RTS
+                      
+                      * LDD D,X
+8FC6  CE92D3          TAD8   LDU   #LAD8
+8FC9  8E0000                 LDX   #0
+8FCC  17FEAC                 LBSR  CLRMEM
+8FCF  CC1289                 LDD   #$1289
+8FD2  FD8000                 STD   EXTREG
+8FD5  CC8000                 LDD   #EXTREG
+8FD8  EC8B                   LDD   D,X
+8FDA  10831289               CMPD  #$1289
+8FDE  10260393               LBNE  OUTERR
+8FE2  8E8000                 LDX   #$8000
+8FE5  17FE93                 LBSR  CLRMEM
+8FE8  CC2299                 LDD   #$2299
+8FEB  FD8000                 STD   EXTREG
+8FEE  CC0000                 LDD   #EXTREG-$8000
+8FF1  EC8B                   LDD   D,X
+8FF3  10832299               CMPD  #$2299
+8FF7  1026037A               LBNE  OUTERR
+8FFB  39                     RTS
+                      
+                      * LDD n16,X
+8FFC  CE92DB          TAD9   LDU   #LAD9
+8FFF  8E0000                 LDX   #0
+9002  17FE76                 LBSR  CLRMEM
+9005  CC1289                 LDD   #$1289
+9008  FD8000                 STD   EXTREG
+900B  EC898000               LDD   EXTREG,X
+900F  10831289               CMPD  #$1289
+9013  1026035E               LBNE  OUTERR
+9017  8E8000                 LDX   #$8000
+901A  17FE5E                 LBSR  CLRMEM
+901D  CC2299                 LDD   #$2299
+9020  FD8000                 STD   EXTREG
+9023  EC84                   LDD   EXTREG-$8000,X
+9025  10832299               CMPD  #$2299
+9029  10260348               LBNE  OUTERR
+902D  39                     RTS
+                      
+                      * LDA n8,PC
+902E  00              REG81  FCB   0
+902F  CE92E5          TADA   LDU   #LADA
+9032  17FE46                 LBSR  CLRMEM
+9035  8613                   LDA   #$13
+9037  B7902E                 STA   REG81
+903A  A68CF1                 LDA   <REG81,PCR
+903D  8113                   CMPA  #$13
+903F  10260332               LBNE  OUTERR
+9043  17FE35                 LBSR  CLRMEM
+9046  8623                   LDA   #$23
+9048  B79055                 STA   REG82
+904B  A68C07                 LDA   <REG82,PCR
+904E  8123                   CMPA  #$23
+9050  10260321               LBNE  OUTERR
+9054  39                     RTS
+9055  00              REG82  FCB   0
+                      
+                      * LDA n16,PC
+9056  CE92EF          TADB   LDU   #LADB
+9059  17FE1F                 LBSR  CLRMEM
+905C  CC9876                 LDD   #$9876
+905F  FD8103                 STD   REG161
+9062  EC8DF09D               LDD   >REG161,PCR
+9066  10839876               CMPD  #$9876
+906A  10260307               LBNE  OUTERR
+906E  17FE0A                 LBSR  CLRMEM
+9071  CC5432                 LDD   #$5432
+9074  FD9392                 STD   REG162
+9077  EC8D0317               LDD   >REG162,PCR
+907B  10835432               CMPD  #$5432
+907F  102602F2               LBNE  OUTERR
+9083  39                     RTS
+                      
+9084  CE92FA          TADI1  LDU   #LADI1
+9087  8E8000                 LDX   #EXTREG
+                      * LEAY [,X]
+908A  17FDEE                 LBSR  CLRMEM
+908D  CC5522                 LDD   #$5522
+9090  FD8000                 STD   EXTREG
+9093  3194                   LEAY  [,X]
+9095  108C5522               CMPY  #$5522
+9099  102602D8               LBNE  OUTERR
+                      * LEAY [1,X]
+909D  17FDDB                 LBSR  CLRMEM
+90A0  CC1234                 LDD   #$1234
+90A3  FD8001                 STD   EXTREG+1
+90A6  319801                 LEAY  [1,X]
+90A9  108C1234               CMPY  #$1234
+90AD  102602C4               LBNE  OUTERR
+                      * LEAY [127,X]
+90B1  17FDC7                 LBSR  CLRMEM
+90B4  CC4444                 LDD   #$4444
+90B7  FD807F                 STD   EXTREG+127
+90BA  31987F                 LEAY  [127,X]
+90BD  108C4444               CMPY  #$4444
+90C1  102602B0               LBNE  OUTERR
+                      * LEAY [-1,X]
+90C5  17FDB3                 LBSR  CLRMEM
+90C8  CC3456                 LDD   #$3456
+90CB  FD7FFF                 STD   EXTREG-1
+90CE  3198FF                 LEAY  [-1,X]
+90D1  108C3456               CMPY  #$3456
+90D5  1026029C               LBNE  OUTERR
+                      * LEAY [-128,X]
+90D9  17FD9F                 LBSR  CLRMEM
+90DC  CCAAAA                 LDD   #$AAAA
+90DF  FD7F80                 STD   EXTREG-128
+90E2  319880                 LEAY  [-128,X]
+90E5  108CAAAA               CMPY  #$AAAA
+90E9  10260288               LBNE  OUTERR
+90ED  39                     RTS
+                      
+                      * LEAY [,X++]
+90EE  8E8000          TADI3  LDX   #EXTREG
+90F1  CE9306                 LDU   #LADI3
+90F4  17FD84                 LBSR  CLRMEM
+90F7  CCA55A                 LDD   #$A55A
+90FA  FD8000                 STD   EXTREG
+90FD  CC5AA5                 LDD   #$5AA5
+9100  FD8002                 STD   EXTREG+2
+9103  3191                   LEAY  [,X++]
+9105  108CA55A               CMPY  #$A55A
+9109  10260268               LBNE  OUTERR
+910D  3191                   LEAY  [,X++]
+910F  108C5AA5               CMPY  #$5AA5
+9113  1026025E               LBNE  OUTERR
+9117  39                     RTS
+                      
+                      * LEAY [,--X]
+9118  8E8000          TADI5  LDX   #EXTREG
+911B  CE9312                 LDU   #LADI5
+911E  17FD5A                 LBSR  CLRMEM
+9121  CCA55A                 LDD   #$A55A
+9124  FD7FFE                 STD   EXTREG-2
+9127  CC789A                 LDD   #$789A
+912A  FD7FFC                 STD   EXTREG-4
+912D  3193                   LEAY  [,--X]
+912F  108CA55A               CMPY  #$A55A
+9133  1026023E               LBNE  OUTERR
+9137  3193                   LEAY  [,--X]
+9139  108C789A               CMPY  #$789A
+913D  10260234               LBNE  OUTERR
+9141  39                     RTS
+                      
+                      * LEAY [A,X]
+9142  CE931E          TADI6  LDU   #LADI6
+9145  8E8000                 LDX   #EXTREG
+9148  17FD30                 LBSR  CLRMEM
+914B  CC1234                 LDD   #$1234
+914E  FD8001                 STD   EXTREG+1
+9151  8601                   LDA   #1
+9153  3196                   LEAY  [A,X]
+9155  108C1234               CMPY  #$1234
+9159  10260218               LBNE  OUTERR
+915D  17FD1B                 LBSR  CLRMEM
+9160  CC4444                 LDD   #$4444
+9163  FD807F                 STD   EXTREG+127
+9166  867F                   LDA   #127
+9168  3196                   LEAY  [A,X]
+916A  108C4444               CMPY  #$4444
+916E  10260203               LBNE  OUTERR
+9172  39                     RTS
+                      
+                      * LEAY [B,X]
+9173  CE9329          TADI7  LDU   #LADI7
+9176  8E8000                 LDX   #EXTREG
+9179  17FCFF                 LBSR  CLRMEM
+917C  CC3456                 LDD   #$3456
+917F  FD7FFF                 STD   EXTREG-1
+9182  C6FF                   LDB   #-1
+9184  3195                   LEAY  [B,X]
+9186  108C3456               CMPY  #$3456
+918A  102601E7               LBNE  OUTERR
+918E  17FCEA                 LBSR  CLRMEM
+9191  CCAAAA                 LDD   #$AAAA
+9194  FD7F80                 STD   EXTREG-128
+9197  C680                   LDB   #-128
+9199  3195                   LEAY  [B,X]
+919B  108CAAAA               CMPY  #$AAAA
+919F  102601D2               LBNE  OUTERR
+91A3  39                     RTS
+                      
+                      * LEAY [D,X]
+91A4  CE9334          TADI8  LDU   #LADI8
+91A7  8E0000                 LDX   #0
+91AA  17FCCE                 LBSR  CLRMEM
+91AD  CC1289                 LDD   #$1289
+91B0  FD8000                 STD   EXTREG
+91B3  CC8000                 LDD   #EXTREG
+91B6  319B                   LEAY  [D,X]
+91B8  108C1289               CMPY  #$1289
+91BC  102601B5               LBNE  OUTERR
+91C0  8E8000                 LDX   #$8000
+91C3  17FCB5                 LBSR  CLRMEM
+91C6  CC2299                 LDD   #$2299
+91C9  FD8000                 STD   EXTREG
+91CC  CC0000                 LDD   #EXTREG-$8000
+91CF  319B                   LEAY  [D,X]
+91D1  108C2299               CMPY  #$2299
+91D5  1026019C               LBNE  OUTERR
+91D9  39                     RTS
+                      
+                      * LEAY [n16,X]
+91DA  CE933F          TADI9  LDU   #LADI9
+91DD  8E0000                 LDX   #0
+91E0  17FC98                 LBSR  CLRMEM
+91E3  CC1289                 LDD   #$1289
+91E6  FD8000                 STD   EXTREG
+91E9  31998000               LEAY  [EXTREG,X]
+91ED  108C1289               CMPY  #$1289
+91F1  10260180               LBNE  OUTERR
+91F5  8E8000                 LDX   #$8000
+91F8  17FC80                 LBSR  CLRMEM
+91FB  CC2299                 LDD   #$2299
+91FE  FD8000                 STD   EXTREG
+9201  3194                   LEAY  [EXTREG-$8000,X]
+9203  108C2299               CMPY  #$2299
+9207  1026016A               LBNE  OUTERR
+920B  39                     RTS
+                      
+                      * LEAY [n8,PCR]
+920C  0000            REGI81 FDB   0
+920E  CE934C          TADIA  LDU   #LADIA
+9211  17FC67                 LBSR  CLRMEM
+9214  CC1357                 LDD   #$1357
+9217  FD920C                 STD   REGI81
+921A  319CEF                 LEAY  [REGI81,PCR]
+921D  108C1357               CMPY  #$1357
+9221  10260150               LBNE  OUTERR
+9225  17FC53                 LBSR  CLRMEM
+9228  CC2345                 LDD   #$2345
+922B  FD923A                 STD   REGI82
+922E  319C09                 LEAY  [REGI82,PCR]
+9231  108C2345               CMPY  #$2345
+9235  1026013C               LBNE  OUTERR
+9239  39                     RTS
+923A  0000            REGI82 FDB   0
+                      
+                      * LEAY [n16,PC]
+923C  CE935A          TADIB  LDU   #LADIB
+923F  17FC39                 LBSR  CLRMEM
+9242  CC9876                 LDD   #$9876
+9245  FD8103                 STD   REG161
+9248  319DEEB7               LEAY  [REG161,PCR]
+924C  108C9876               CMPY  #$9876
+9250  10260121               LBNE  OUTERR
+9254  17FC24                 LBSR  CLRMEM
+9257  CC5432                 LDD   #$5432
+925A  FD9392                 STD   REG162
+925D  319D0131               LEAY  [REG162,PCR]
+9261  108C5432               CMPY  #$5432
+9265  1026010C               LBNE  OUTERR
+9269  39                     RTS
+                      
+                      * LEAY [addr]
+926A  CE9369          TADIC  LDU   #LADIC
+926D  17FC0B                 LBSR  CLRMEM
+9270  CC9876                 LDD   #$9876
+9273  FD8103                 STD   REG161
+9276  319F8103               LEAY  [REG161]
+927A  108C9876               CMPY  #$9876
+927E  102600F3               LBNE  OUTERR
+9282  17FBF6                 LBSR  CLRMEM
+9285  CC5432                 LDD   #$5432
+9288  FD9392                 STD   REG162
+928B  319F9392               LEAY  [REG162]
+928F  108C5432               CMPY  #$5432
+9293  102600DE               LBNE  OUTERR
+9297  39                     RTS
+                      
+9298  4C4441206E382C5804 LAD1   FCC   "LDA n8,X",EOT
+92A1  4C4441202C582B04 LAD2   FCC   "LDA ,X+",EOT
+92A9  4C4444202C582B2B04 LAD3   FCC   "LDD ,X++",EOT
+92B2  4C4441202C2D5804 LAD4   FCC   "LDA ,-X",EOT
+92BA  4C4444202C2D2D5804 LAD5   FCC   "LDD ,--X",EOT
+92C3  4C444120412C5804 LAD6   FCC   "LDA A,X",EOT
+92CB  4C444120422C5904 LAD7   FCC   "LDA B,Y",EOT
+92D3  4C444420442C5804 LAD8   FCC   "LDD D,X",EOT
+92DB  4C4444206E31362C5804 LAD9   FCC   "LDD n16,X",EOT
+92E5  4C4441206E382C504304 LADA   FCC   "LDA n8,PC",EOT
+92EF  4C4444206E31362C504304 LADB   FCC   "LDD n16,PC",EOT
+92FA  4C454158205B6E382C585D04 LADI1  FCC   "LEAX [n8,X]",EOT
+9306  4C454158205B2C582B2B5D04 LADI3  FCC   "LEAX [,X++]",EOT
+9312  4C454158205B2C2D2D585D04 LADI5  FCC   "LEAX [,--X]",EOT
+931E  4C454158205B412C585D04 LADI6  FCC   "LEAX [A,X]",EOT
+9329  4C454158205B422C595D04 LADI7  FCC   "LEAX [B,Y]",EOT
+9334  4C454158205B442C585D04 LADI8  FCC   "LEAX [D,X]",EOT
+933F  4C454158205B6E31362C585D04 LADI9  FCC   "LEAX [n16,X]",EOT
+934C  4C454158205B6E382C5043525D04 LADIA  FCC   "LEAX [n8,PCR]",EOT
+935A  4C454158205B6E31362C5043525D04 LADIB  FCC   "LEAX [n16,PCR]",EOT
+9369  4C454158205B616464725D04 LADIC  FCC   "LEAX [addr]",EOT
+                      
+                      **************************************************
+                      * Print error message for a failed Test
+                      * Parameters:
+                      * U: Pointer to Mnemonic
+                      **************************************************
+9375  8601            OUTERR LDA   #1
+9377  B79394                 STA   ERRFLG
+937A  8E9395                 LDX   #ERRM1
+937D  BDCD1E                 JSR   PSTRNG
+9380  1F31                   TFR   U,X
+9382  BDCD1E                 JSR   PSTRNG
+9385  39                     RTS
+                      
+                      **************************************************
+                      * Print a success message if all test have
+                      * been successfull
+                      **************************************************
+9386  B69394          OUTSUC LDA   ERRFLG
+9389  2606                   BNE   OUTS9
+938B  8E93A3                 LDX   #SUCCES
+938E  BDCD1E                 JSR   PSTRNG
+9391  39              OUTS9  RTS
+                      
+                      **************************************************
+                      * Misc data:
+                      **************************************************
+                      
+9392  0000            REG162 FDB   0
+9394  00              ERRFLG FCB   0
+                      
+9395  4661696C656420546573743A2004 ERRM1  FCC   "Failed Test: ",EOT
+93A3  416C6C20546573747320737563636564656404 SUCCES FCC   "All Tests succeded",EOT
+                      
+                             IF    *>$BFFF
+                             ERR   PROGRAM TOO LONG
+                             ENDIF
+                      
+93B6                         END   BEGIN
