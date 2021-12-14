@@ -143,7 +143,7 @@ $(TARGET): $(OBJS)
 	$(CPP) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(LIBSGCC)	
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)
-	arm-none-eabi-objdump -l -drwCS -D $(BUILD_DIR)$(APP_NAME).elf.img > $(BUILD_DIR)$(APP_NAME).elf.img.s
+	arm-none-eabi-objdump -l -drwCS -D $(BUILD_DIR)$(TARGET_BASE).elf.img > $(BUILD_DIR)$(TARGET_BASE).elf.img.s
 ifdef MAKE_IMAGE
 	cp $(TARGET) $(COPY_TARGET1)
 	cp $(TARGET) $(COPY_TARGET2)

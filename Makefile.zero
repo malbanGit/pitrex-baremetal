@@ -179,4 +179,9 @@ clean::
 	cd ..
 	cd battlezone2; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
 	cd ..
+	cd pitrex/loader; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ../..
+	cd pitrex/baremetal; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ../..
+
 	

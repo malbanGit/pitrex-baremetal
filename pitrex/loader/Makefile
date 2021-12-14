@@ -60,3 +60,4 @@ endif
 clean-all:: dirCheck
 	$(MAKE) -C $(BAREMETAL_DIR) clean-all BUILD_FOR=$(BUILD_FOR)
 	$(MAKE) -C $(VECTREX_DIR) clean-all BUILD_FOR=$(BUILD_FOR)
+	
