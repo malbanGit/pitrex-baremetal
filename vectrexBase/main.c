@@ -465,6 +465,7 @@ void loadVectrexBin(char *selectedName, uint8_t *loadMem)
           loadMem[r+32768*4] = loadMem[r];
           loadMem[r+32768*6] = loadMem[r];
         }
+       
     }
     
     // test for T1 (at the moment SPIKE

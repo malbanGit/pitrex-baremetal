@@ -177,13 +177,13 @@ static uint8_t vx_read8(uint16_t address)
 	}
 	else if ((address & 0xe000) == 0xc000)
 	{
-		if (address & 0x800)
-		{
-			/* ram */
-			data = ram[address & 0x3ff];
-		}
-		else if (address & 0x1000)
-		{
+	  if (address & 0x800)
+	  {
+		  /* ram */
+		  data = ram[address & 0x3ff];
+	  }
+	  else if (address & 0x1000)
+	  {
 			/* io */
             if (directEmulation)
             {
@@ -203,31 +203,30 @@ static uint8_t vx_read8(uint16_t address)
               }
 #ifdef DIRECT_EMULATION
 #ifndef WAIT_EMULATION
-// a T1 "end" 
-// must wait even, when not "wait emulation"
-// otherwise lines will be TOO short!!!
- if ((address &0xf) == (VIA_int_flags&0xf))              
- {
-   // reading the Interrupt flags
-   if ((data & 0x40) == 0x40) // if interrupt is set
-   {
-     // and either rega or reg b might be used to compare it with
-     if ((CPU.reg_a == 0x40) ||(CPU.reg_b == 0x40) )
-     {
-//        ADD_DELAY_CYCLES(DELAY_AFTER_T1_END_VALUE_DIRECT-2);
-setCounter1Mark();
-waitCounter1Mark((DELAY_AFTER_T1_END_VALUE_DIRECT-2));
+	      // a T1 "end" 
+	      // must wait even, when not "wait emulation"
+	      // otherwise lines will be TOO short!!!
+	      if ((address &0xf) == (VIA_int_flags&0xf))              
+	      {
+		// reading the Interrupt flags
+		if ((data & 0x40) == 0x40) // if interrupt is set
+		{
+		  // and either rega or reg b might be used to compare it with
+		  if ((CPU.reg_a == 0x40) ||(CPU.reg_b == 0x40) )
+		  {
+	      //        ADD_DELAY_CYCLES(DELAY_AFTER_T1_END_VALUE_DIRECT-2);
+	      setCounter1Mark();
+	      waitCounter1Mark((DELAY_AFTER_T1_END_VALUE_DIRECT-2));
 
 
 
-        
-    }
-   }
- }
-   
+		      
+		  }
+		}
+	      }
+    
 #endif
 #endif              
-              
 #ifdef DIRECT_EMULATION
               if (VIA.ddra == 0)
               {
@@ -245,15 +244,20 @@ waitCounter1Mark((DELAY_AFTER_T1_END_VALUE_DIRECT-2));
               
             else
               data = via_read(address);
-		}
+	  }
 	}
-    else if (address < 0xc000)
-    {
-        /* cartridge */
-        data = cart[address+currentBank*32768*2];
-    }
+	else if (address < 0xc000)
+	{
+	    /* cartridge */
+	    data = cart[address+currentBank*32768];
+	}
 	return data;
 }
+
+
+
+
+
 #ifdef FILE_PLAYER
 int pos = 0;
 void writeExtreme(int addr, unsigned char data)
