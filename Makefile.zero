@@ -131,9 +131,9 @@ bz2Make:
 	cd ..
 	
 clean::
-	cd rebel; $(MAKE) clean-all BUILD_FOR=$(BUILD_FOR)
+	cd rebel; $(MAKE) clean BUILD_FOR=$(BUILD_FOR); $(MAKE) clean-all BUILD_FOR=$(BUILD_FOR)
 	cd ..
-	cd lunar; $(MAKE) clean-all BUILD_FOR=$(BUILD_FOR)
+	cd lunar; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
 	cd ..
 	cd redbaron; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
 	cd ..
