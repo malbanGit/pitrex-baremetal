@@ -19,7 +19,7 @@
 extern unsigned char *alternate_raster5[];
 extern unsigned char *alternate_rasterlines[];
 
-extern uint8_t cart[32768*2*4]; // Vectorblade
+extern uint8_t cart[32768*9]; // Vectorblade
 extern uint8_t ram[1024];
 extern uint8_t rom[8192];
 extern unsigned char flashHS[4096];

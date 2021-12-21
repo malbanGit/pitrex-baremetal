@@ -143,7 +143,6 @@ int reduceLinesDisplayTo = 0; // 0 = all, textlines in attract screens
 int reduceDeathStarExplosion = 0;
 int savetyNet = 1;
 
-
 // internals
 int gameRunning = 0; // only if countOfStarsIngame!=0
 int starWarsZoom = 0; // used internally, is one, when we zoom in on death star

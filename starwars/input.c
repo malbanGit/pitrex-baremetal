@@ -72,7 +72,11 @@ static void do_analogjoy_read(int *analog_x, int *analog_y)
 {
     *analog_x = *analog_y = 0;
     *analog_x = INPUT_ANALOG_P1_SIGNED_8BIT_HORIZONTAL;
-    *analog_y = INPUT_ANALOG_P1_SIGNED_8BIT_VERTICAL;
+    
+    *analog_y = (INPUT_ANALOG_P1_SIGNED_8BIT_VERTICAL);
+    
+    
+    
     
     *analog_x += aOffsetx;
     *analog_y += aOffsety;
@@ -443,7 +447,7 @@ static void update_analog_port(int port) //actually input number not port really
 	//Get the type of port
 	type=GK[port].Default;
       
-    switch (type)
+	switch (type)
 	{
 		//case IPT_PADDLE:
 		//	axis = X_AXIS; is_stick = 1; check_bounds = 1; break;
@@ -470,7 +474,7 @@ static void update_analog_port(int port) //actually input number not port really
 	}
 
 
-    sensitivity = GK[port].Mask;
+	sensitivity = GK[port].Mask;
 	min = GK[port].Current;
 	max = GK[port].Joystick;
 	
@@ -484,9 +488,9 @@ static void update_analog_port(int port) //actually input number not port really
 		input_analog_current_value[port] = default_value * 100 / sensitivity;//input_analog_current_value[port] = 0;
 
 	if ( GK[port].Type & INF_PORTRESET) 
-      current = 0;
+	  current = 0;
 	else 
-      current = input_analog_current_value[p];
+	  current = input_analog_current_value[p];
 
     //Delta starts at zero
 	delta = 0;
@@ -497,30 +501,32 @@ static void update_analog_port(int port) //actually input number not port really
     // extremes can be either signed or unsigned
 	if (min > max)
 	{
-      if (GK[port].Amask > 0xff) min = min - 0x10000; 
-      else 
-        min = min - 0x100;
+	    if (GK[port].Amask > 0xff)
+	      min = min - 0x10000; 
+	    else 
+	      min = min - 0x100;
 	}
 
 	if (axis == X_AXIS)	
-    {
-      delta = mouse_delta_X; 
-      
-    }//[player];
+	{
+	  delta = mouse_delta_X; 
+	  
+	}//[player];
 	else 
-    {
-      delta = mouse_delta_Y; 
+	{
+	  delta = mouse_delta_Y; 
+	  
+	}//[player];
       
-    }//[player];
-    
-    //If the user is using Keys, Override the delta with the key delta
+	//If the user is using Keys, Override the delta with the key delta
 	if (PORT[GK[port-1].Port]) 
-      delta -=keydelta;
+	  delta -=keydelta;
 	if (PORT[GK[port+1].Port]) 
-      delta +=keydelta;
+	  delta +=keydelta;
 	
 	//If its a reverse port, reverse it. This needs to be addressed with config changed later
-    if (GK[port].Type  & INF_REVERSE) delta = -delta;
+	if (GK[port].Type  & INF_REVERSE) 
+	  delta = -delta;
 	
 	//Is it an analog joystick? Then do the routine below.
  	if (is_stick)
@@ -531,11 +537,11 @@ static void update_analog_port(int port) //actually input number not port really
 		/* center stick */
 		if ((delta == 0) && (GK[port].Type & INF_CENTER))
 		{                   
-	     // printf("CENTERED STICK!!!");
-          if (current > default_value)
-            delta = -100 / sensitivity;
-          if (current < default_value)
-            delta = 100 / sensitivity;
+		    // printf("CENTERED STICK!!!");
+		  if (current > default_value)
+		    delta = -100 / sensitivity;
+		  if (current < default_value)
+		    delta = 100 / sensitivity;
 		}
 
 		/* An analog joystick which is not at zero position (or has just */
@@ -615,7 +621,7 @@ static void scale_analog_port(int port)
 {
 	int delta,current,sensitivity;
 	int p=GK[port].Port;
-    int type=driver[gamenum].cpu_type[0];
+	int type=driver[gamenum].cpu_type[0];
 
 	sensitivity = GK[port].Mask;
  	// printf("SCALING analogport Number %d with sensitivity %d",p, sensitivity);
@@ -643,14 +649,14 @@ static void scale_analog_port(int port)
 	//printf("delta POST scaling is %d",delta);
 	current = input_analog_previous_value[p] + delta;
 
-		if (current >= 0)
-			current = (current * sensitivity + 50) / 100;
-		else
-			current = (-current * sensitivity + 50) / -100;
+	if (current >= 0)
+		current = (current * sensitivity + 50) / 100;
+	else
+		current = (-current * sensitivity + 50) / -100;
 
 	input_port_value[p] &= ~GK[port].Amask; 
 	input_port_value[p] |= current & GK[port].Amask; 
-    PORT[p]= input_port_value[p];
+	PORT[p]= input_port_value[p];
 }
 
 
@@ -672,54 +678,54 @@ int getport(int port)
 
 void update_input()
 {
-	int i;
-	int c=0;
+    int i;
+    int c=0;
     
     check_joystick(); //Update digital joystick settings.
 	
     proc_input(0);
     proc_input(1);
     c=0;
-	while (GK[c].Port > -1 )
+    while (GK[c].Port > -1 )
     {
 	 //printf("ROUND 4 -----Key Number %d : Setting Key %x Setting Joy %x",c,GK[c].Current,GK[c].Joystick);
 	 c++;
     }
 
-	/* update the analog devices */
-	for (i = 0;i < OSD_MAX_JOY_ANALOG;i++)
-	{
-		/* update the analog joystick position */
-		analog_previous_x[i] = analog_current_x[i];
-		analog_previous_y[i] = analog_current_y[i];
-		do_analogjoy_read ( &(analog_current_x[i]), &(analog_current_y[i]));
-	}
-    
-	/* update mouse/trackball position */
+    /* update the analog devices */
+    for (i = 0;i < OSD_MAX_JOY_ANALOG;i++)
+    {
+	    /* update the analog joystick position */
+	    analog_previous_x[i] = analog_current_x[i];
+	    analog_previous_y[i] = analog_current_y[i];
+	    do_analogjoy_read ( &(analog_current_x[i]), &(analog_current_y[i]));
+    }
+
+    /* update mouse/trackball position */
 //	aae_mouse ( &mouse_delta_X, &mouse_delta_Y);
-	
-	i=0;
-	while (GK[i].Port > -1 )
-	{
-		//if (input_analog[i])
-		if((GK[i].Type & 0xff) == IN_ANALOG)
-		{
-			update_analog_port(i);
-			/*
-				           printf("PORT NUMBER %d",GK[i].Port);
-						   printf("PORT NUMBER %d",GK[i].Mask);
-			               printf("PORT HEADING %s",GK[i].Heading);
-						   printf("PORT NUMBER %d",GK[i].Default);
-						   printf("PORT NUMBER %d",GK[i].Current);
-						   printf("PORT NUMBER %d",GK[i].Joystick);
-						   printf("PORT NUMBER %d",GK[i].Type);
-						   printf("PORT NUMBER %d",GK[i].Arg1);
-						   printf("PORT NUMBER %d",GK[i].Arg2);
-			
-			         */
-		}
-		i++;
-	}
+    
+    i=0;
+    while (GK[i].Port > -1 )
+    {
+	    //if (input_analog[i])
+	    if((GK[i].Type & 0xff) == IN_ANALOG)
+	    {
+		    update_analog_port(i);
+		    /*
+					printf("PORT NUMBER %d",GK[i].Port);
+						printf("PORT NUMBER %d",GK[i].Mask);
+				    printf("PORT HEADING %s",GK[i].Heading);
+						printf("PORT NUMBER %d",GK[i].Default);
+						printf("PORT NUMBER %d",GK[i].Current);
+						printf("PORT NUMBER %d",GK[i].Joystick);
+						printf("PORT NUMBER %d",GK[i].Type);
+						printf("PORT NUMBER %d",GK[i].Arg1);
+						printf("PORT NUMBER %d",GK[i].Arg2);
+		    
+			      */
+	    }
+	    i++;
+    }
 }
 
 
@@ -756,21 +762,21 @@ void set_default_keys()
   int i=0;
   
   while (GK[i].Port > -1 && (i < MAX_KEY))
-    {
-		if (GK[i].Type != IN_DEFAULT)
-		{
-			if((GK[i].Type & ~INF_MASK) != IN_ANALOG)
-			 {   
-			  GK[i].Current= GK[i].Default & ~INF_MASK;
-			  GK[i].Joystick = (GK[i].Default >> 8) & 0xff;
-			  GK[i].mouseb = GK[i].Default >> 24;
-			  //walk_keyset(i);
-			  //printf("Setting Joy %x",GK[i].Joystick);
-			   printf("SETTING DEFAULT KEY Number %d : Setting Key %x Setting Joy %x\r\n",i,GK[i].Current,GK[i].Joystick);
-			 }
+  {
+      if (GK[i].Type != IN_DEFAULT)
+      {
+	      if((GK[i].Type & ~INF_MASK) != IN_ANALOG)
+		{   
+		GK[i].Current= GK[i].Default & ~INF_MASK;
+		GK[i].Joystick = (GK[i].Default >> 8) & 0xff;
+		GK[i].mouseb = GK[i].Default >> 24;
+		//walk_keyset(i);
+		//printf("Setting Joy %x",GK[i].Joystick);
+		  printf("SETTING DEFAULT KEY Number %d : Setting Key %x Setting Joy %x\r\n",i,GK[i].Current,GK[i].Joystick);
 		}
-	     i++;
-	}
+      }
+      i++;
+  }
 
 }
 

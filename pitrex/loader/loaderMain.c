@@ -515,8 +515,8 @@ int main(int argc, char *argv[])
     if (ymloaded) v_playYM();      
   }
 
-//  v_enableJoystickAnalog(1,1,0,0);
-  v_enableJoystickDigital(1,1,0,0);
+  v_enableJoystickAnalog(1,1,0,0);
+//  v_enableJoystickDigital(1,1,0,0);
   
 //  v_setupIRQHandling();  
   v_enableSoundOut(1);
@@ -531,8 +531,8 @@ int main(int argc, char *argv[])
     v_WaitRecal();
     v_doSound(); // not needed with IRQ Mode
     v_readButtons(); // not needed with IRQ Mode
-//    v_readJoystick1Analog();// not needed with IRQ Mode
-    v_readJoystick1Digital();// not needed with IRQ Mode
+    v_readJoystick1Analog();// not needed with IRQ Mode
+//    v_readJoystick1Digital();// not needed with IRQ Mode
     
     b=b+bDir;
     if (b==70) bDir = -1;
@@ -867,6 +867,7 @@ MenuItemNew wwviMenu =
   0,    // scrolltext
   "","","","","A GAME BY STEPHEN M. CAMERON", 0   // no text
 };
+MenuItemNew voomMenu;
 MenuItemNew bz2Menu =
 {
   305,    // ID
@@ -880,9 +881,63 @@ MenuItemNew bz2Menu =
   &computerMenu,    // has no parent
   0,    // ! firstChild must be set
   &wwviMenu,    // ! left must be set
-  0,    // ! right must be set
+  &voomMenu,    // ! right must be set
   0,    // scrolltext
   "","","","","A GAME BY PETER HIRSCHBERG","","(NO SOUND)", 0   // no text
+};
+MenuItemNew testMenu;
+MenuItemNew rebelMenu;
+MenuItemNew voomMenu =
+{
+  306,    // ID
+  "VOOM (DEMO)",    // no name
+  0,    // no start directory
+  IMG_FILE_PREFIX "voom.img",    // no start image
+  0,    // no parameter
+  0,    // no parameter
+  DoomIcon, // icon
+  0, // smallicon
+  &computerMenu,    // has no parent
+  0,    // ! firstChild must be set
+  &bz2Menu,    // ! left must be set
+  &rebelMenu,    // ! right must be set
+  0,    // scrolltext
+  "","","","","SPRITESMOD!","","", 0   // no text
+};
+
+MenuItemNew rebelMenu =
+{
+  308,    // ID
+  "REBEL DEFENDER",    // no name
+  0,    // no start directory
+  IMG_FILE_PREFIX "rebel.img",    // no start image
+  0,    // no parameter
+  0,    // no parameter
+  RebelIcon, // icon
+  0, // smallicon
+  &computerMenu,    // has no parent
+  0,    // ! firstChild must be set
+  &voomMenu,    // ! left must be set
+  &testMenu,    // ! right must be set
+  0,    // scrolltext
+  "","","","","VINCENT PORTET 2015","(NO SOUND)","", 0   // no text
+};
+MenuItemNew testMenu =
+{
+  309,    // ID
+  "TEST (DEMO)",    // no name
+  0,    // no start directory
+  IMG_FILE_PREFIX "test.img",    // no start image
+  0,    // no parameter
+  0,    // no parameter
+  0, // icon
+  0, // smallicon
+  &computerMenu,    // has no parent
+  0,    // ! firstChild must be set
+  &rebelMenu,    // ! left must be set
+  0,    // ! right must be set
+  0,    // scrolltext
+  "","","","","TEST!","","", 0   // no text
 };
 
 
@@ -1258,9 +1313,10 @@ MenuItemNew demo3Menu =
   0,    // scrolltext
   {"NUANCE AND METALVOTZE", 0},    // no text
 };
+MenuItemNew demo5Menu;
 MenuItemNew demo4Menu =
 {
-  1082,    // ID
+  1083,    // ID
   "WHATPG",    // no name
   0,    // directory
   IMG_FILE_PREFIX "vectrexexact.img",    // no start image
@@ -1271,9 +1327,26 @@ MenuItemNew demo4Menu =
   &demoMenu,    // has parent
   0,    // ! firstChild must be set
   &demo3Menu,    // ! left must be set
-  0,    // ! right must be set
+  &demo5Menu,    // ! right must be set
   0,    // scrolltext
   {"WHERE HAVE ALL", "THE PIXELS GONE", "CMCC", 0},    // no text
+};
+MenuItemNew demo5Menu =
+{
+  1084,    // ID
+  "LINEART",    // no name
+  0,    // directory
+  IMG_FILE_PREFIX "vectrexlineart.img",    // no start image
+  "demos/lineart8banks.bin",    // no parameter
+  0,    // no parameter
+  linArtIcon, // icon
+  0, // smallicon
+  &demoMenu,    // has parent
+  0,    // ! firstChild must be set
+  &demo3Menu,    // ! left must be set
+  0,    // ! right must be set
+  0,    // scrolltext
+  {"","","","LINEART VOZ 2011", "VECFLASH 4 BANK DEMO", 0},    // no text
 };
 
 
@@ -2590,31 +2663,6 @@ int loadFileNames()
     return 0;
 }
 
-
-
-void displayMenu()
-{
-  displayMenuItem(currentMenuItem);
-  if (currentMenuItem->id == 9999)
-  {
-    int yPos = 0;
-    int itemDisplayStart = currentSelectedItem-2;
-
-    if ((itemDisplayStart>=0) && (filesInDir[itemDisplayStart+0][0] != 0))
-      v_printString(-40, yPos -0*18, (char *) &(filesInDir[itemDisplayStart][0]), 5, 0x18);
-
-    if ((itemDisplayStart+1>=0) && (filesInDir[itemDisplayStart+1][0] != 0))
-      v_printString(-40, yPos-1*18, (char *) &(filesInDir[itemDisplayStart+1][0]), 5, 0x28);
-
-    if (filesInDir[itemDisplayStart+2][0] != 0)
-      v_printString(-40, yPos-2*18, (char *) &(filesInDir[itemDisplayStart+2][0]), 5, 0x4f);
-    
-    if (filesInDir[itemDisplayStart+3][0] != 0)
-      v_printString(-40, yPos-3*18, (char *) &(filesInDir[itemDisplayStart+3][0]), 5, 0x28);
-    
-    if (filesInDir[itemDisplayStart+4][0] != 0)
-      v_printString(-40, yPos-4*18, (char *) &(filesInDir[itemDisplayStart+4][0]), 5, 0x18);
-  }
   static char *aaeList[]=
   {
 //Lunar Lander Hardware
@@ -2706,7 +2754,39 @@ void displayMenu()
     0,
   };
 
-  // aae
+#define TIMING_MAX 25
+int timingAnalog=TIMING_MAX;
+  
+void displayMenu()
+{
+  displayMenuItem(currentMenuItem);
+  
+  
+  // vectrex exact menu select
+  if (currentMenuItem->id == 9999)
+  {
+    int yPos = 0;
+    int itemDisplayStart = currentSelectedItem-2;
+
+    if ((itemDisplayStart>=0) && (filesInDir[itemDisplayStart+0][0] != 0))
+      v_printString(-40, yPos -0*18, (char *) &(filesInDir[itemDisplayStart][0]), 5, 0x18);
+
+    if ((itemDisplayStart+1>=0) && (filesInDir[itemDisplayStart+1][0] != 0))
+      v_printString(-40, yPos-1*18, (char *) &(filesInDir[itemDisplayStart+1][0]), 5, 0x28);
+
+    if (filesInDir[itemDisplayStart+2][0] != 0)
+      v_printString(-40, yPos-2*18, (char *) &(filesInDir[itemDisplayStart+2][0]), 5, 0x4f);
+    
+    if (filesInDir[itemDisplayStart+3][0] != 0)
+      v_printString(-40, yPos-3*18, (char *) &(filesInDir[itemDisplayStart+3][0]), 5, 0x28);
+    
+    if (filesInDir[itemDisplayStart+4][0] != 0)
+      v_printString(-40, yPos-4*18, (char *) &(filesInDir[itemDisplayStart+4][0]), 5, 0x18);
+  }
+
+  // aae menu select
+  // not used atm
+/*  
   if (currentMenuItem->id == 6000)
   {
     int yPos = 0;
@@ -2727,13 +2807,64 @@ void displayMenu()
     if (aaeList[itemDisplayStart+4] != 0)
       v_printString(-40, yPos-4*18, (char *) (aaeList[itemDisplayStart+4]), 5, 0x18);
   }
-  
+*/  
   
   // navigate
   // navigate with joystick
   // select/start with a button
+
+  int analogYChange = (abs(currentJoy1Y)/10); // 0-128
+  timingAnalog -=analogYChange;
+  
+  
+  
+  if ((currentJoy1Y<-20) && (timingAnalog<0))
+  {
+    if (currentMenuItem->id == 9999)
+    {
+      if (filesInDir[currentSelectedItem+1][0] != 0)
+      {
+        currentSelectedItem++;
+      }
+    }    
+//    if (currentMenuItem->id == 6000)
+//    {
+//      if (aaeList[currentSelectedItem2+1] != 0)
+//        currentSelectedItem2++;
+//    }    
+    timingAnalog=TIMING_MAX;
+  }
+  if ((currentJoy1Y>20) && (timingAnalog<0))
+  {
+    if (currentMenuItem->id == 9999)
+    {
+      if (currentSelectedItem > 0)
+      {
+        currentSelectedItem--;
+      }
+    }    
+//    if (currentMenuItem->id == 6000)
+//    {
+//      if (currentSelectedItem2 > 0)
+//        currentSelectedItem2--;
+//    }    
+    timingAnalog=TIMING_MAX;
+  }
+  
+  // joypos to "digital"
+  if (currentJoy1X > 50) currentJoy1X = 1;
+  else if (currentJoy1X < -50) currentJoy1X = -1;
+  else currentJoy1X = 0;
+  if (currentJoy1Y > 50) currentJoy1Y = 1;
+  else if (currentJoy1Y < -50) currentJoy1Y = -1;
+  else currentJoy1Y = 0;
+  
+  
+  
+  
   
 
+  // only "main" menu follows  
   if ((currentJoy1X==1) && (selectionMade==0))
   {
     if (currentMenuItem->right != 0)
@@ -2753,6 +2884,8 @@ void displayMenu()
     }
     selectionMade = 1;
   }
+
+  
   if ((currentJoy1Y==-1) && (selectionMade==0))
   {
     if (currentMenuItem->child != 0)
@@ -2760,17 +2893,6 @@ void displayMenu()
       currentMenuItem = currentMenuItem->child;
       scrollReset = 1;
     }
-
-    if (currentMenuItem->id == 9999)
-    {
-      if (filesInDir[currentSelectedItem+1][0] != 0)
-        currentSelectedItem++;
-    }    
-    if (currentMenuItem->id == 6000)
-    {
-      if (aaeList[currentSelectedItem2+1] != 0)
-        currentSelectedItem2++;
-    }    
     selectionMade = 1;
   }
   if ((currentJoy1Y==1) && (selectionMade==0))
@@ -2780,16 +2902,6 @@ void displayMenu()
       currentMenuItem = currentMenuItem->parent;
       scrollReset = 1;
     }
-    if (currentMenuItem->id == 9999)
-    {
-      if (currentSelectedItem > 0)
-        currentSelectedItem--;
-    }    
-    if (currentMenuItem->id == 6000)
-    {
-      if (currentSelectedItem2 > 0)
-        currentSelectedItem2--;
-    }    
     selectionMade = 1;
   }
 

@@ -537,16 +537,4 @@ void set_default_keys();
 #define INPUT_ANALOG_P2_SIGNED_8BIT_HORIZONTAL (currentJoy2X)
 #define INPUT_ANALOG_P2_SIGNED_8BIT_VERTICAL (currentJoy2Y)
 
-
-
-
-
-
-
-
-
-
-
-
-
 #endif 

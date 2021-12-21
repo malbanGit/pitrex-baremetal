@@ -34,6 +34,7 @@ volatile int printSemaphore=0;
 volatile int pendingDisableInterrupts=0;
 volatile int pendingEnableInterrupts=0;
 int pendingReturnToPiTrex = 0;
+int invertYAxis = 0;
 
 
 // todo ADD to Pipeline
@@ -511,7 +512,7 @@ int iniHandler(void* user, const char* section, const char* name, const char* va
     if (MATCH_NAME("RASTER_RETURN_DELAY_RIGHT")) biRasterReturnDelayRight = atoi(value); else  
     if (MATCH_NAME("RASTER_DOWN_BASE")) base_biRasterDown = atoi(value); else  
     if (MATCH_NAME("RASTER_DOWN_MODIFIER")) biRasterDownDriftModifier = atof(value); else  
-      
+    if (MATCH_NAME("INVERT_Y_AXIS")) invertYAxis = atoi(value);
     if (MATCH_NAME("IN_GAME_SETTINGS")) inGameSettingsAllowed = atoi(value); else  
     {
         // since we use this with "cascades"
@@ -1801,6 +1802,12 @@ void v_readJoystick1Digital()
     ADD_DELAY_CYCLES(4);
   }
 
+  if (invertYAxis) 
+  {
+    currentJoy1Y = ((currentJoy1Y==-128)?127:-currentJoy1Y);
+    currentJoy2Y = ((currentJoy2Y==-128)?127:-currentJoy2Y);
+  }
+    
   // set port A reference value to unkown
   currentYSH = currentPortA=0x100; // reset saved current values to unkown state
   v_resetIntegratorOffsets0();
@@ -1945,6 +1952,11 @@ void v_readJoystick1Analog()
     compareBit = compareBit>>1;
     currentJoy2X = currentJoy2X | compareBit;
   } while (compareBit!=0);
+  if (invertYAxis) 
+  {
+    currentJoy1Y = ((currentJoy1Y==-128)?127:-currentJoy1Y);
+    currentJoy2Y = ((currentJoy2Y==-128)?127:-currentJoy2Y);
+  }
 
 
   // set port A reference value to unkown
@@ -6373,6 +6385,10 @@ CalibrationItems calItems[] =
   {0,0,&base_biRasterDown,0,0                   ,0,20,6, "RASTER DOWN BASE", CAL_TYPE_UINT, cycleEquiHelp },
   {0,0,0,0,&biRasterDownDriftModifier           ,-2,2,0, "RASTER DOWN MODIFIER", CAL_TYPE_FLOAT, ySizeHelp },
 
+// not included here!  
+//  fprintf(iniOut,"INVERT_Y_AXIS = %i\n", invertYAxis); 
+  
+  
   {0,0,0,0,0,0,0,0,0,CAL_TYPE_NONE}
 };
 
@@ -6798,6 +6814,10 @@ void v_saveIni(char *filename)
   fprintf(iniOut,"RASTER_DOWN_MODIFIER = %f\n", biRasterDownDriftModifier); 
   fprintf(iniOut,"\n"); 
   
+  fprintf(iniOut,"; INVERT_Y_AXIS: \n"); 
+  fprintf(iniOut,"INVERT_Y_AXIS = %i\n", invertYAxis); 
+  fprintf(iniOut,"\n"); 
+  fprintf(iniOut,"\n"); 
   
    // as of now this is non optional!
    // {&wasIRQMode,0,0,0,0                          ,0,1,1, "IRQ MODE", CAL_TYPE_BOOL, irqModeHelp },
@@ -7434,6 +7454,14 @@ int handleVectrexOutput()
             currentJoy2X = currentJoy2X | compareBit;
           } while (compareBit!=0);
         }
+        
+  if (invertYAxis) 
+  {
+    currentJoy1Y = ((currentJoy1Y==-128)?127:-currentJoy1Y);
+    currentJoy2Y = ((currentJoy2Y==-128)?127:-currentJoy2Y);
+  }
+        
+        
         // set port A reference value to unkown
   //      currentYSH = currentPortA=0x100; // reset saved current values to unkown state
         
@@ -7581,6 +7609,11 @@ int handleVectrexOutput()
             ADD_DELAY_CYCLES(4);
           }
         }
+  if (invertYAxis) 
+  {
+    currentJoy1Y = ((currentJoy1Y==-128)?127:-currentJoy1Y);
+    currentJoy2Y = ((currentJoy2Y==-128)?127:-currentJoy2Y);
+  }
 
         // set port A reference value to unkown
         currentYSH = currentPortA=0x100; // reset saved current values to unkown state
@@ -9382,6 +9415,11 @@ int handleVectrexOutputSMP()
         // set port A reference value to unkown
   //      currentYSH = currentPortA=0x100; // reset saved current values to unkown state
         
+  if (invertYAxis) 
+  {
+    currentJoy1Y = ((currentJoy1Y==-128)?127:-currentJoy1Y);
+    currentJoy2Y = ((currentJoy2Y==-128)?127:-currentJoy2Y);
+  }
         ////////////////////////////////////////////////////////////
         // v_resetIntegratorOffsets0();
         I_SET (VIA_port_b, 0x81);
@@ -9526,6 +9564,11 @@ int handleVectrexOutputSMP()
             ADD_DELAY_CYCLES(4);
           }
         }
+  if (invertYAxis) 
+  {
+    currentJoy1Y = ((currentJoy1Y==-128)?127:-currentJoy1Y);
+    currentJoy2Y = ((currentJoy2Y==-128)?127:-currentJoy2Y);
+  }
       }
       // todo add in game settings mode
 /*

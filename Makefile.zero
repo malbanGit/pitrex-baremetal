@@ -6,10 +6,18 @@ BASE_DIR = .
 include ./Rules.mk
 
 
-all:	redbaronMake hyperoidMake vecxMake1 vecxMake2 vecxMake3 vecxMake4 vecxMake5 gyrocksMake battlezoneMake \
+all:	redbaronMake hyperoidMake vecxMake1 vecxMake2 vecxMake3 vecxMake4 vecxMake5 vecxMake6 gyrocksMake battlezoneMake \
 	gravitarMake spaceduelMake tempestMake blackwidowMake deluxeMake astMake lunarMake CineMake zblastMake \
-	helloWorldMake aaeMake asteroidsMake tailgunnerMake eliteMake basicMake wwviMake swMake bz2Make
+	helloWorldMake aaeMake asteroidsMake tailgunnerMake eliteMake basicMake wwviMake swMake bz2Make rebelMake voomMake
 	
+voomMake: 
+	cd voom; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+rebelMake: 
+	cd rebel; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
 redbaronMake: 
 	cd redbaron; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
 	cd ..
@@ -52,6 +60,10 @@ vecxMake4:
 
 vecxMake5: 
 	cd vecx.videoplayer; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
+	cd ..
+
+vecxMake6: 
+	cd vecx.lineart; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
 	cd ..
 
 asteroidsMake: 
@@ -117,10 +129,10 @@ swMake:
 bz2Make:
 	cd battlezone2; $(MAKE) all BUILD_FOR=$(BUILD_FOR)
 	cd ..
-
-	
 	
 clean::
+	cd rebel; $(MAKE) clean-all BUILD_FOR=$(BUILD_FOR)
+	cd ..
 	cd lunar; $(MAKE) clean-all BUILD_FOR=$(BUILD_FOR)
 	cd ..
 	cd redbaron; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
@@ -144,6 +156,8 @@ clean::
 	cd vecx.vectorblade; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
 	cd ..
 	cd vecx.videoplayer; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd vecx.lineart; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
 	cd ..
 	cd asteroids_sbt; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
 	cd ..
@@ -178,6 +192,8 @@ clean::
 	cd starwars; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
 	cd ..
 	cd battlezone2; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
+	cd ..
+	cd voom; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
 	cd ..
 	cd pitrex/loader; $(MAKE) clean BUILD_FOR=$(BUILD_FOR)
 	cd ../..

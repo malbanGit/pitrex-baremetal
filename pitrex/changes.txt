@@ -1,7 +1,85 @@
+Baremetal PiTrex
+
 Changelog:
+21th of December 2021
+- some days ago, fixed bankswitching in vectrex emulator for 64k 
+- added options to invert joystick y-direction (common ini)
+  (each individual ini file can now have the option (INVERT_Y_AXIS = 1/0)
+- added "analog" scroll for vectrex exact selection of files
+- added VOOM
+- added lineArt demo!
+- added Rebel Defender (no sound)
+- thought about adding: icbm3d, xinv3d, xlander
+  but these are not my kind of games, I don't like them, unless someone "begs" to add them
+  I leave them be, sources can be found under "new.not_done"
+
+
+14th of December 2021
+    added support for PiZero2
+	changed menu system to only display "machines" not different emulators
+	added quite a few icons
+	added Star Wars SBT version, with also added performance tuning and first sounds
+	added BattleZone 2 (beta) (Peter Hirschberg) not optimized yet and without sound, this is another c++ program easily ported to baremetal!
+	added WW Vi (beta), sounds are only played via samples, using for the first time the vectrex library's mixing feature. Sound terrible!
+	added for Warrior and Armor Attack virtual overlays
+	source code started restructuring - the bare metal part, to get rid of the different GPIO/BCM access functions
+	due to support for PiZero2 all images are now TWICE on the SD card - in subdirectories PiZero1 and PiZero2
+	booting should work out of the box with both Pi's (copy the COMPLETE files, you need the newest "start.elf, fixup.dat and bootcode.bin"
+	
+
+15th of June 2021
+As many changes as I remember…
+    z80 emulation is now working in AAE
+    68000 emulation is now working in AAE
+    except (I think) two games all of the original AAE games are now working, loadable and sometimes playable
+    sound and beautifying was NOT done
+    “general” input methods were implemented (input.c) – if the emulators support these, than they can be played, in general:
+    START 1 = joystick 1 button 1+2 at the same time
+    START 2 = joystick 2 button 1+2 at the same time
+    COIN 1 = joystick 1 button 3+4 at the same time
+    COIN 2 = joystick 2 button 3+4 at the same time
+    player 1 buttons 1-4 = joystick 1 button 1-4
+    player 2 buttons 1-4 = joystick 2 button 1-4
+    player 1 digital UP/DOWN/LEFT RIGHT = joystick 1
+    player 2 digital UP/DOWN/LEFT RIGHT = joystick 2
+    player 1 analog UP/DOWN/LEFT RIGHT = joystick 1
+    player 2 analog UP/DOWN/LEFT RIGHT = joystick 2
+    Asteroids (SBT) two player mode fixed (the emulation did not support the RAMSWP flag), also the explosions now differ slightly
+    Elite (a new kind) is in beta state.
+    It should be completely playable (except bugs). To play one NEEDS a keyboard attached to the PiTrex.
+    The game is fully controllable via keyboard, but steering/shooting can also be done via joystick 1.
+    The keyboard layout is as described in “elite_readme.txt”.
+    I have not tested the complete game, as it contains MANY faccets – feedback/reports welcome.
+    The game could use some overlay, since not all screen elements are self explanatory in the vectrex version.
+
+    Left side:
+    FS: Front shield
+    AS: Aft shield
+    FU: Fuel
+    CT: Cabin temperature
+    LT: Laser Temperature
+    AL: Altitude
+    Missiles (up to 4), green, yellow, red
+
+    Right side:
+    SP: Speed
+    RL: Roll
+    DC: Climb
+    1: Energy banks 1
+    2: Energy banks 2
+    3: Energy banks 3
+    4: Energy banks 4
+    E – ECM active
+    S – Station (is in range)
+
+    Internal changes/additions to the vectrexInterface.
+    – a new “widget” Itemlist, Elite now uses this quite a lot (inspired by Thomas…)
+    It seems to be a “bad” idea to configure USB keyboard twice in the same program, therefore keyboard support in the “loader” has been disabled.
+    I started supporting bi-directional strings, this is theoretically working, but I do not use them, and would like to keep it that way, 
+	they always seem to “fork” near the edges – and I can’t get rid of it. There are 4 new configuration items in the settings, 
+	but since I don’t use this – these are also useless :-).
 
 7th of May 2021
-
     added GS BASIC (https://vectrex32.com/)
     BASIC starts in the directory “/basic” – since no directory changes can be done from BASIC, this is the BASIC “home”
     gsbasic.ini for some “option”, more information in the file:
@@ -14,23 +92,29 @@ Changelog:
     in s slightly modified version
     added support of USB keyboards (see source code distribution: usb_readme.txt)
     I started the USB keyboard thing, because I wanted to control “Elite a new Kind” via keyboard, rather than invent tricky button double/tripple usages.
-    Elite a new Kind is as of now only included as a “demo” version (start screen), since GS BASIC came along an stole my time 🙂 – actually the whole game is compiled, but I haven’t configured the keyboard in, and didn’t look at/fix any of the non vector gfx yet
-    I started porting the MAME z80 processor emulation to be used in AAE, it compiles now without flaws, but I have as yet not changed the API to fit AAE. Once I have done, almost all SEGA games should work.
-    I am also thinking about (as a quick hack) to add USB keyboard to AAE, than the default keyboard
-    settings should work for all games out of the box, and they would be playable via keyboard – not optimal, but better than “waiting” to manually configuring each and every game to the vectrex controls
+    “Elite a new Kind” is as of now only included as a “demo” version (start screen), since GS BASIC came along an stole my time 🙂 – 
+	actually the whole game is compiled, but I haven’t configured the keyboard in, and didn’t look at/fix any of the non vector gfx yet
+    I started porting the MAME z80 processor emulation to be used in AAE, it compiles now without flaws, but I have as yet not changed 
+	the API to fit AAE. Once I have done, almost all SEGA games should work.
+    I am also thinking about (as a quick hack) to add USB keyboard to AAE, than the default key mapping
+    settings should work for all games out of the box, and they would be playable via keyboard – not optimal, but better than “waiting” 
+	to manually configuring each and every game to the vectrex controls
     Asteroids (sbt) can now in the ini file be configured to use/not use samples
     during the above changes… some bugs were discovered and fixed in the vectrexInterface, can’t remember them all
-    osWrapper.c is “wrappier” than before 🙂 e.g. if keyboard is configured you can use fgetc() to “wait” for keyboard input
+    osWrapper.c is “wrappier” than before 🙂 e.g. if keyboard is configured you can use fgetc() to “wait” for keyboard input, 
+	also added a “good”malloc() implementation, but as of now I am not using it. I rely on the stdlib, after implementing a rudimentary sbrk(). 
+	C++ new() and delete() should that way work also ok.
     vectrexInterface can be configured to use two sample channels, these will be mixed. Default this is “off” – but it DOES work!
     started looking at bitmaps again, one of the next things will be to add bitmap output to the IRQMode (as of now, this os not yet supported)
-    changed the “structure” of the baremetal directories, vectrexInterface (and others) are now build as libraries, not several object files. All Makefiles were changed (slightly)
-    I like it, when include files are kept WITH their respective sources, so I did not create a dedicated include directory, the "INC_DIR" must be set in the makefiles to the correct locations
-    GS BASIC is written in c++, thus c++ is now supported to be built.
-    As an example look at GS BASIC. For now, the global/static constructors must be called “manually” in the main() function (6 lines of code), if you intend to program c++, these lines must be copied!
+    changed the “structure” of the baremetal directories, vectrexInterface (and others) are now build as libraries, not several object files. 
+	All Makefiles were changed (slightly) GS BASIC is written in c++, thus c++ is now supported to be built.
+    As an example look at GS BASIC. For now, the global/static constructors must be called “manually” in the main() function (6 lines of code), 
+	if you intend to program c++, these lines must be copied!
+    also implemented the afore mentioned “persitent vectors”, but as of now they are configured “out”. With GS BASIC I could not use them afterall. 
+	These are not completely debugged, so I am not sure that they work under all circumstances.
     added emulation of the TMS5220 to sample out (Star Wars), although since star wars is to slow, the output is rather choppy
 
 12th of April 2021
-
     added the possibilty to play samples alongside vectordisplay
     (digitized sound will be barely audiable on noBuzz vectrex – there is nothing I can do about it!)
     added for asteroids 2 samples (explosions)
@@ -49,7 +133,6 @@ Changelog:
     many tweaks to the vectrexInterface…
 
 26th of March 2021
-
     default calibration is back to zero, on the todo list -> calibration for noBuzz vectrex
     added configuration (ini file) for input settings, as of now asteroids only, look at the ini file
     added dipswitch settings (ini file), as of now asteroids only, look at ini file, in game these can be called with button 1+4 on joypad 1
@@ -60,23 +143,8 @@ Changelog:
     vectrex save state, if enabled (ini setting HANDLE_STATES), it asks you whether to save or not, also shows a “SAVING…”.
     Saving seems to take sometimes up to 18 seconds (with my SD cart, less than a second…)
 
-I have to further evaluate the “speed”.
-I have measured the piZero speed, and as far as I can measure:
-1 Mhz timer is pretty exact
-Cycle timer is pretty exact
-Vectrex T2 timer is pretty exact
-The reason I mention this… although “programmatically” and reports during game support this… the games are running all at the correct speed.
-However …
-
-    if I compare the games with MAME or the VecFever – it seems they are to slow
-    Kevin mentioned ZBlast as being to slow
-    the sample tests… seem output of the samples are to slow
-
-I am at a loss what may cause that. As said timing measurements are correct – somehow I must be doing something wrong here… 
-but measuring speed with several timers, is not really THAT complicated, that one would easily mess it up…
 
 24th of March 2021
-
     IRQ mode implemented, vectrex output about 20% faster
     if you are a PiTrex baremetal programmer, contact me, to get notified of changes you have to be aware of!
     game update frequency is disjunct from the vectrex display frequency
@@ -85,7 +153,6 @@ but measuring speed with several timers, is not really THAT complicated, that on
     XSH delay is now correctly implemented, that should “correct” the last seen screen garbles on some vectrex
 
 15th of March 2021
-
     removed all settings files
     removed all “old” ini files
     the “main” ini file is now vectrexInterface.ini
@@ -115,10 +182,7 @@ but measuring speed with several timers, is not really THAT complicated, that on
     added clipping to some emulators
     changed the intro + “bouncing PiTrex”
 
-Settings explained here: https://www.youtube.com/watch?v=buAxW5p1g9c
-
 11th of March 2021
-
     added additional logging on save state of vectrex – pls test that again and send me the output
     additionally on vectrex Joypad 2- button 1 saves the state, Button 4 loads the state.
     Does this also crash? – Pls report back!
@@ -133,7 +197,6 @@ Settings explained here: https://www.youtube.com/watch?v=buAxW5p1g9c
     added several “icons” to the menu.
 
 02nd of March 2021
-
     I have completed the dumb/stupid/boring task, to change ALL needed arcade emulation roms to MAME compatible roms (I tested loading with MAME roms 201 and 229, so “everything” newer than 2 years old should work)
     also supported are ZIP files, thus – just copying MAME roms to the “roms” folder is enough to get started with arcade emulations
     This means to run arcade emulation, you MUST provide new zip/rom files!
@@ -146,3 +209,8 @@ Settings explained here: https://www.youtube.com/watch?v=buAxW5p1g9c
     I added a new option to the ini file “LOG_OUTPUT=1; if different than 0 – than log all “printf” outputs also to SD”, once you can test the new version and the
     screen still goes black upon returning – I hope the captured output can help me identify the problem 
     for the “atari”/sim emulators I added “sensible” ini files
+
+
+----
+
+

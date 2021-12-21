@@ -1,0 +1,7 @@
+Makefile
+Makefile.bak
+xlander
+xlander._man
+*.o
+*.swp
+*~

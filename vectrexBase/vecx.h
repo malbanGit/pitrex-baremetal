@@ -41,7 +41,7 @@ typedef struct vector_type
 extern void(*vecx_render) (void);
 
 extern uint8_t rom[8192];
-extern uint8_t cart[32768*2*4]; // Vectorblade
+extern uint8_t cart[32768*9]; // lineart
 extern uint8_t ram[1024];
 #ifdef FILE_PLAYER
 extern uint8_t movieRom[1024*1024*20]; // maximum movie size 20 MB

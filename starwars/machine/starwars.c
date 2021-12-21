@@ -264,9 +264,9 @@ void nstore(int offset, int data)
 /********************************************************/
 /********************************************************/
 
-void adcstart0(int offset, int data) /* PITCH control */
+void adcstart0(int offset, int data) /* PITCH control */ 
 {
-//      static int PITCH=167;//A7
+//      static int PITCH=167;//A7 
 
       //int delta=0;
      // #define KEYMOVE 2
@@ -287,7 +287,7 @@ void adcstart0(int offset, int data) /* PITCH control */
        // if( ((PITCH-delta)>=0) & ((PITCH-delta)<=255)) PITCH -= delta;
 
 ADC_VAL=getport(3);//PITCH;
-ADC_VAL = currentJoy1Y+128;
+ADC_VAL = INPUT_ANALOG_P1_SIGNED_8BIT_VERTICAL+128;
 }
 
 /********************************************************/

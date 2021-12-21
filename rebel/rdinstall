@@ -1,0 +1,6 @@
+#!/bin/sh
+mv rdefender /usr/games/rdefender
+md /usr/share/games/defender
+mv snd1.wav /usr/share/games/defender/snd1.wav
+mv snd2.wav /usr/share/games/defender/snd2.wav
+mv snd3.wav /usr/share/games/defender/snd3.wav

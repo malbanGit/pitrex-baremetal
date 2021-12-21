@@ -23,7 +23,10 @@ void(*vecx_render) (void);
 
 //uint8_t cartBig[32768*2*4]; // Vectorblade
 //uint8_t cart[32768];
-uint8_t cart[32768*2*4];
+
+uint8_t cart[32768*9]; // lineart
+
+
 int is64kBankSwitch = 0;
 int currentBank =3;
 uint8_t ram[1024];
@@ -380,6 +383,11 @@ void vecx_reset(void)
     vectrexButtonState = 0x1ff;
     currentBank =3;
 #endif    
+#ifdef LINEART
+    currentBank = 5;
+#endif
+    
+    
 	dac_reset();
 
 	vector_draw_cnt = 0;
@@ -899,6 +907,17 @@ void vecx_direct(int32_t cycles)
 // each round DISABLES Port A of the PSG chip
 // that is why joystick reading return always 0 == all buttons pressed!
 // joystick button reading does not work here! /unless changing reg 7 of PSG, which I will not do)
+
+#ifdef LINEART
+// not implemented is a "real" vecFlash bankswitch
+// but I know the cart :-)
+        if (CPU.reg_pc == 0xc889) // lineart bankswitch
+	{
+	  currentBank = ram[0x81];
+          CPU.reg_pc = 0x002f; // flash start
+	  mustWork = 1;
+	}
+#endif
 
         if (CPU.reg_pc == 0xf192) //0xF192) // WaitRecal
         {

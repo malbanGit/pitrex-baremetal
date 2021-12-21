@@ -21,7 +21,7 @@
 #include "../vectrexBase/e6809.h"
 #include "../vectrexBase/edac.h"
 
-extern uint8_t cart[32768*2*4]; 
+extern uint8_t cart[32768*9]; 
 void loadVectrexBin(char *selectedName, uint8_t *loadMem);
 
 // if 1 is returned, the normal vecx init is also run!

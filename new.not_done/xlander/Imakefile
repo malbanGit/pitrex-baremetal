@@ -1,0 +1,26 @@
+        DEPLIBS = $(DEPXLIB)
+LOCAL_LIBRARIES = $(XLIB)
+  SYS_LIBRARIES = -lm
+	   SRCS = xlander.c globals.c initialize.c functions.c \
+		  instrument.c game.c resource.c
+	   OBJS = xlander.o globals.o initialize.o functions.o \
+		  instrument.o game.o resource.o
+
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S),Linux)
+        SYS_LIBRARIES += -lasound -pthread
+        SRCS += audio-liunx.c
+        OBJS += audio-linux.o
+/*
+ * Next OS edit this else ifeq section and remove this comment.
+ */
+else ifeq ($(UNAME_S),MyOS)
+        SRCS += audio-myos.c
+        OBJS += audio-myos.o
+else
+        SRCS += audio-null.c
+        OBJS += audio-null.o
+endif
+
+ComplexProgramTarget(xlander)

@@ -19,7 +19,7 @@
 enum
 {
     EMU_TIMER = 20, /* the emulators heart beats at 20 milliseconds */
-
+// 
     DEFAULT_WIDTH = 495,
     DEFAULT_HEIGHT = 615
 };

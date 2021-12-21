@@ -1,5 +1,5 @@
 
-BUILD_FOR ?= zero1
+BUILD_FOR ?= zero2
 BASE_DIR = ..
 TARGET_BASE = tailgunner
 TARGET	= $(TARGET_BASE).img
