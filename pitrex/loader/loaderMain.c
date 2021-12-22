@@ -1,29 +1,5 @@
-/* "ini Order" ...
-
-default.setting
-vectrexInterface.ini
-  -> vectrex.setting
-  -> vectrex.ini
-
-  -> sim.setting
-  ->sim.ini
-     -> each game.ini
-
-  -> cine.setting
-   ->cine.ini
-     -> each game.ini
-*/
-
-
-
-// settings for arcade emulators with ini file!
-// scan for todo... in source files to get more ideas
-// check all arcade roms in menu
-
-// add a custom clipping to config!
-
 #include <stdio.h>
-#include <stdlib.h> // atoi
+#include <stdlib.h> 
 #include <string.h>
 
 #include <vectrex/vectrexInterface.h>
@@ -241,15 +217,22 @@ printf("Parameter 1 Dec Value = %i\n", (unsigned char) *parameter);
           dmb();
           cleanup_before_linux();
 	  // correct start registers and jump to 8000
-	  __asm__ __volatile__(
-	      "mov r5, #0x0080   \n\t"
-	      "ldr r0, [r5]      \n\t"
-	      "mov r5, #0x0084   \n\t"
-	      "ldr r1, [r5]      \n\t"
-	      "mov r5, #0x0088   \n\t"
-	      "ldr r2, [r5]      \n\t"
-	      "ldr pc, = 0x8000  \n\t"
-		);
+	  
+	__asm__ __volatile__(
+	    "mov r5, #0x4000000   \n\t"
+	    "sub r5, r5, #100 \n\t"
+	    "ldr r0, [r5]      \n\t"
+
+	    "add r5, r5, #4 \n\t"
+	    "ldr r1, [r5]      \n\t"
+
+	    "add r5, r5, #4 \n\t"
+	    "ldr r2, [r5]      \n\t"
+
+	    "ldr pc, = 0x8000  \n\t"
+	  );
+	  
+	  
       }
     }
 }

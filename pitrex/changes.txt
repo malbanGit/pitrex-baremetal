@@ -1,6 +1,11 @@
 Baremetal PiTrex
 
 Changelog:
+22th of December 2021
+- small changed / bugfixes
+  Vectorblade did not start anymore
+  Vecmania had "problems" with joystick access
+
 21th of December 2021
 - some days ago, fixed bankswitching in vectrex emulator for 64k 
 - added options to invert joystick y-direction (common ini)
