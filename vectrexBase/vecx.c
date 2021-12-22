@@ -15,6 +15,11 @@
 // since we use the cycle counter "differently" - we define our
 // own DIRECT setter and getter
 
+#ifdef BANKS_48
+#define BANKSIZE 2
+#else
+#define BANKSIZE 1 
+#endif
 
 
 
@@ -101,17 +106,20 @@ static void snd_update(void)
 
 		if (snd_select != 14)
 		{
-            if (!directEmulation) return;
-            v_writePSG(snd_select, VIA.ora);
-			e8910_write(snd_select, VIA.ora);
+		  if (!directEmulation) return;
+
+// dunno if that is correct
+// 22.12.2021 IMHO that line should be gone		  
+		  v_writePSG(snd_select, VIA.ora);
+		  e8910_write(snd_select, VIA.ora);
 		}
 		break;
 	case 0x18:
 		/* the sound chip is latching an address */
 		if ((VIA.ora & 0xf0) == 0x00)
-        {
-            snd_select = VIA.ora & 0x0f;
-        }
+		{
+		    snd_select = VIA.ora & 0x0f;
+		}
 		break;
 	}
 }
@@ -156,7 +164,7 @@ void write8_port_a(uint8_t data)
 	/* output of port a feeds directly into the dac which then
 	* feeds the x axis sample and hold.
 	*/
-    snd_update();
+	snd_update();
 	DAC.xsh = data ^ 0x80;
 	dac_update();
 }
@@ -165,7 +173,7 @@ void write8_port_a(uint8_t data)
 void write8_port_b(uint8_t data)
 {
 	(void)data;
-    snd_update();
+	snd_update();
 	dac_update();
 }
 
@@ -217,13 +225,9 @@ static uint8_t vx_read8(uint16_t address)
 		  // and either rega or reg b might be used to compare it with
 		  if ((CPU.reg_a == 0x40) ||(CPU.reg_b == 0x40) )
 		  {
-	      //        ADD_DELAY_CYCLES(DELAY_AFTER_T1_END_VALUE_DIRECT-2);
-	      setCounter1Mark();
-	      waitCounter1Mark((DELAY_AFTER_T1_END_VALUE_DIRECT-2));
-
-
-
-		      
+		    //        ADD_DELAY_CYCLES(DELAY_AFTER_T1_END_VALUE_DIRECT-2);
+		    setCounter1Mark();
+		    waitCounter1Mark((DELAY_AFTER_T1_END_VALUE_DIRECT-2));
 		  }
 		}
 	      }
@@ -252,12 +256,12 @@ static uint8_t vx_read8(uint16_t address)
 	else if (address < 0xc000)
 	{
 	    /* cartridge */
-	    data = cart[address+currentBank*32768];
+	    data = cart[address+currentBank*32768*BANKSIZE];
 	}
 	return data;
 }
 
-
+ 
 
 
 
@@ -284,7 +288,7 @@ void writeExtreme(int addr, unsigned char data)
                 if (movieLength<pos+1024+512) pos = 0;
                 for (int ii=0; ii< 1024+512;ii++)
                 {
-                    cart[(0x4000+ii)+currentBank*32768*2] = movieRom[pos];
+                    cart[(0x4000+ii)+currentBank*32768*BANKSIZE] = movieRom[pos];
 //System.out.println("Extreme bank switch");                    
                     pos++;
                 }
@@ -331,7 +335,7 @@ static void vx_write8(uint16_t address, uint8_t data)
           
           
 #ifdef ALLOW_ROM_WRITE          
-        cart[address+currentBank*32768*2] = data;
+        cart[address+currentBank*32768*BANKSIZE] = data;
 #endif
 	}
 }
@@ -928,9 +932,24 @@ void vecx_direct(int32_t cycles)
               vectrexButtonState = ~v_directReadButtons();
 //              {
 //                printf("%04x: (!)vectrexButtonState = = $%02x\n\r", CPU.reg_pc, vectrexButtonState);
-//              }
+//              } 
             }
         }
+//F1F5    Joy_Analog                                              ;
+//F1F8    Joy_Digital           
+	extern int isVecMania;
+	if (isVecMania)
+	{ 
+	  if (CPU.reg_pc == 0xF1F8) // Joy_Digital
+	  {
+	      void v_readJoystick1Digital1();
+	      v_readJoystick1Digital1();
+	      ram[0xC81B&0x3ff] = currentJoy1X*60;
+	      ram[0xC81C&0x3ff] = currentJoy1Y*60;
+	      ram[0xC823&0x3ff] = 0;
+	      CPU.reg_pc = 0xF36B; // reset 0 int
+	  }
+	}
 
 #ifdef EMULATE_KNOWN_PRINTSTR 
 
@@ -1028,7 +1047,6 @@ lastScale = currentScale = VIA.t1ll; // just start the timer
 
 	}
         
-        
 
         else if (CPU.reg_pc == 0xF434) // pattern draw_a
         {
@@ -1047,8 +1065,8 @@ lastScale = currentScale = VIA.t1ll; // just start the timer
           {
             if (listStartAdr<0xc000)
             {
-              y1 = ((signed char)cart[(listStartAdr++)+currentBank]);
-              x1 = ((signed char)cart[(listStartAdr++)+currentBank]);
+              y1 = ((signed char)cart[(listStartAdr++)+currentBank*32768]);
+              x1 = ((signed char)cart[(listStartAdr++)+currentBank*32768]);
             }
             else
             {

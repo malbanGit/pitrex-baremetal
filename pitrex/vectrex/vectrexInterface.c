@@ -512,7 +512,7 @@ int iniHandler(void* user, const char* section, const char* name, const char* va
     if (MATCH_NAME("RASTER_RETURN_DELAY_RIGHT")) biRasterReturnDelayRight = atoi(value); else  
     if (MATCH_NAME("RASTER_DOWN_BASE")) base_biRasterDown = atoi(value); else  
     if (MATCH_NAME("RASTER_DOWN_MODIFIER")) biRasterDownDriftModifier = atof(value); else  
-    if (MATCH_NAME("INVERT_Y_AXIS")) invertYAxis = atoi(value);
+    if (MATCH_NAME("INVERT_Y_AXIS")) invertYAxis = atoi(value); else 
     if (MATCH_NAME("IN_GAME_SETTINGS")) inGameSettingsAllowed = atoi(value); else  
     {
         // since we use this with "cascades"
@@ -1811,6 +1811,68 @@ void v_readJoystick1Digital()
   // set port A reference value to unkown
   currentYSH = currentPortA=0x100; // reset saved current values to unkown state
   v_resetIntegratorOffsets0();
+}
+
+// called from Vecx Only!!!
+void v_readJoystick1Digital1()
+{
+  // Y ANALOG
+  I_SET(VIA_port_a, 0x00); // clear VIA port A
+  ADD_DELAY_CYCLES(4);
+  I_SET(VIA_port_b, 0x82); // set VIA port B mux enabled, mux sel = 01 (vertical pot port 0)
+
+  // wait for joystick comparators to "settle"
+  ADD_DELAY_CYCLES(60); // must be tested! can probably be less?
+
+  currentJoy1Y = -1; // default down
+  I_SET(VIA_port_b, 0x83); // set VIA port B mux
+  DELAY_PORT_B_BEFORE_PORT_A();
+  I_SET(VIA_port_a, 0x40); // load a with test value (positive y), test value to DAC
+  ADD_DELAY_CYCLES(4);
+  if ((I_GET(VIA_port_b) & 0x20) == 0x20)
+  {
+    currentJoy1Y = 1; //up
+  }
+  else
+  {
+    I_SET(VIA_port_a, -0x40); // load a with test value (negative y), test value to DAC
+    ADD_DELAY_CYCLES(4);
+    if ((I_GET(VIA_port_b) & 0x20) == 0x20)
+    {
+      currentJoy1Y = 0; // no direction
+    }
+  }
+
+  // X ANALOG
+  I_SET(VIA_port_a, 0x00); // clear VIA port A
+  ADD_DELAY_CYCLES(4);
+  I_SET(VIA_port_b, 0x80); // set VIA port B mux enabled, mux sel = 00 (horizontal pot port 0)
+  // wait for joystick comparators to "settle"
+  ADD_DELAY_CYCLES(60); // must be tested! can probably be less?
+
+  currentJoy1X = -1; // default left
+  I_SET(VIA_port_b, 0x83); // set VIA port B mux
+  DELAY_PORT_B_BEFORE_PORT_A();
+  I_SET(VIA_port_a, 0x40); // load a with test value (positive y), test value to DAC
+  ADD_DELAY_CYCLES(2);
+  if ((I_GET(VIA_port_b) & 0x20) == 0x20)
+  {
+    currentJoy1X = 1; //right
+  }
+  else
+  {
+    ADD_DELAY_CYCLES(4);
+    I_SET(VIA_port_a, -0x40); // load a with test value (negative y), test value to DAC
+    ADD_DELAY_CYCLES(4);
+    if ((I_GET(VIA_port_b) & 0x20) == 0x20)
+    {
+      currentJoy1X = 0; // no direction
+    }
+    ADD_DELAY_CYCLES(4);
+  }
+    
+  // set port A reference value to unkown
+  currentYSH = currentPortA=0x100; // reset saved current values to unkown state
 }
 
 /***********************************************************************/

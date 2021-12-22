@@ -20,7 +20,7 @@ void(*via_write8_port_b) (uint8_t data);
 /* update IRQ and bit-7 of the ifr register after making an adjustment to
  * ifr.
  */
-
+ 
 inline void int_update(void)
 {
     if ((VIA.ifr & 0x7f) & (VIA.ier & 0x7f))

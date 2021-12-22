@@ -7,7 +7,7 @@
 #define EXACT_WAIT_EMULATION
 //#define DO_NOT_WATCH_VIA_FOR_BUTTONS
 //#define EMULATE_KNOWN_PRINTSTR
-
+#define BANKS_48
 
 #include <vectrex/osWrapper.h>
 #include <vectrex/vectrexInterface.h>

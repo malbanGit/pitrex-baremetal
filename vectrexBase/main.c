@@ -26,6 +26,8 @@ enum
 
 static int32_t scl_factor;
 
+int isVecMania = 0;
+
 void loadSelected(int selected);
 void initEmulator();
 
@@ -125,7 +127,14 @@ int c=0;
             if (vectrexButtonState != 0x1ff)
             {
 //              if ((vectrexButtonState & 0xff) == 0xf0) // only 4 button of joy 1 (Vecmania does something strange and presses all 8! buttons!
-              if ((vectrexButtonState & 0x0f) == 0x00) // only 4 button of joy 1 (Vecmania does something strange and presses all 8! buttons!
+	      
+	     int pressed = 0;
+	     if (isVecMania) pressed = ((vectrexButtonState & 0xff) == 0xf0);
+	     else pressed = ((vectrexButtonState & 0x0f) == 0x00);
+	     
+	     
+	     
+              if (pressed) 
               {
 //printf("Vectrex 1 button press detected $%02x!\r\n", vectrexButtonState);
 
@@ -146,14 +155,28 @@ int c=0;
               {
                   if (doStates==1)
                   {
-                    if ((vectrexButtonState & 0x80) == 0x00) // button 4 joy 2
-                    {
-                      vecx_load(stateName);
-                    }
-                    if ((vectrexButtonState & 0x10) == 0x00) // button 1 joy 2
-                    {
-                      vecx_save(stateName);
-                    }
+		    if (isVecMania)
+		    {
+		      if ((vectrexButtonState & 0xff) == 0xff-0x80) // JUST ONLY button 4 joy 2
+		      {
+			vecx_load(stateName);
+		      }
+		      if ((vectrexButtonState & 0x10) == 0xff-0x10) // JUST ONLY button 1 joy 2
+		      {
+			vecx_save(stateName);
+		      }
+		    }
+		    else
+		    {
+		      if ((vectrexButtonState & 0x80) == 0x00) // button 4 joy 2
+		      {
+			vecx_load(stateName);
+		      }
+		      if ((vectrexButtonState & 0x10) == 0x00) // button 1 joy 2
+		      {
+			vecx_save(stateName);
+		      }
+		    }
                   }
                   vectrexResetCount = 0;
               }
@@ -431,9 +454,20 @@ void loadVectrexBin(char *selectedName, uint8_t *loadMem)
     {
       is64kBankSwitch = 1; // assuming
       printf("64k rom loaded, assuming PB6 bankswitching\r\n");
+/*
+      for (int r=0;r<32768*2;r++)
+      {
+	loadMem[r+32768*2] = loadMem[r];
+	loadMem[r+32768*4] = loadMem[r];
+	loadMem[r+32768*6] = loadMem[r];
+      }
+*/      
     }
-
-    
+#ifdef BANKS_48
+printf("48k (64) Banks!\n");
+#else
+printf("32k Banks!\n");
+#endif
     
     int sizeRead = fread(loadMem, 1,fsize , f);
     fclose(f);
@@ -468,6 +502,10 @@ void loadVectrexBin(char *selectedName, uint8_t *loadMem)
        
     }
     
+    
+ 
+    
+    
     // test for T1 (at the moment SPIKE
     t1EmulationNeeded = 1;
     unsigned char test1[]={0x64,0x20,0x47,0x43,0x45,0x20,0x31,0x39,0x38,0x33,0x80,0x0f,0x43,0xf8,0x48,0x20,0xe0,0x53,0x50,0x49,0x45,0x80,0,0xbd};
@@ -481,6 +519,19 @@ void loadVectrexBin(char *selectedName, uint8_t *loadMem)
       }
       i++;
     }
+    isVecMania = 1;
+    unsigned char test2[]={0x90,0x49,0x54,0x20,0x57,0x41,0x53,0x20,0x57,0x4f,0x52,0x54,0x48,0x20,0x54,0x48,0x45};
+    i=0x10;
+    while (test2[i] != 0x45)
+    {
+      if (loadMem[i] != test2[i-0x10])
+      {
+        isVecMania = 0;
+        break;
+      }
+      i++;
+    }
+    printf("Vecmania: %i\n",isVecMania );
   }
 }
 
@@ -615,7 +666,6 @@ void loadFile()
         printf("File loaded... %i\r\n", sizeRead);
     }
   }
-  
 }
 #endif
 

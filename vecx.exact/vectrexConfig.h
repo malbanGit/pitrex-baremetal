@@ -9,7 +9,7 @@
 #define BEDLAM_T2_HANDLING
 
 #define ALLOW_ROM_WRITE
-
+//#define BANKS_48
 
 //#define FILE_PLAYER
 
