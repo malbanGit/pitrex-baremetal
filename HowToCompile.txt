@@ -1,5 +1,5 @@
 If you want to compile everything, for both PiZero and PiZero 2:
-(in the directory "software")
+(in the directory "pitrex-baremetal")
   make clean
   make
 
