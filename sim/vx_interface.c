@@ -45,6 +45,7 @@
 
 int smallwindow;
 int window_width, window_height;
+int stramash_config = 0;
 int yates_config = 0;
 int onlyOnejoystick = 1;
 char *ProgName = "NameUnset";
@@ -76,6 +77,7 @@ static int simIniHandler(void* user, const char* section, const char* name, cons
   #define MATCH_NAME(n) strcmp(name, n) == 0
   
   if (MATCH("BATTLE_ZONE", "YATES_INPUT")) yates_config = atoi(value); 
+  if (MATCH("BATTLE_ZONE", "STRAMASH_INPUT")) stramash_config = atoi(value); 
   
   
 /*
@@ -194,8 +196,16 @@ void handle_input (void) // call once per frame
 
   if (game == BATTLEZONE)
     {
-      
-      if (yates_config)
+      if (stramash_config)
+      {
+        switches [0].leftfwd = (currentJoy1Y>JOYSTICK_CENTER_MARGIN) || (currentJoy1X>JOYSTICK_CENTER_MARGIN);
+        switches [0].leftrev = (currentJoy1Y<-JOYSTICK_CENTER_MARGIN) || (currentJoy1X<-JOYSTICK_CENTER_MARGIN);
+        switches [0].rightfwd = (currentButtonState & 0x01)?1:0; // button 1 port 1
+        switches [0].rightrev = (currentButtonState & 0x02)?1:0; // button 2 port 1
+        switches [0].fire = (currentButtonState & 0x04)?1:0; // button 3 port 1
+        switches [0].fire = (currentButtonState & 0x08)?1:0; // button 4 port 1
+      }
+      else if (yates_config)
       {
         switches [0].leftfwd = (currentButtonState & 0x10)?1:0; // button 1 port 2
         switches [0].leftrev = (currentButtonState & 0x20)?1:0; // button 2 port 2
