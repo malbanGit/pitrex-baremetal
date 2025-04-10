@@ -155,6 +155,7 @@ extern void v_setCustomClipping(int enabled, int x0, int y0, int x1, int y1);
 
 
 // in vx_interface.c
+extern int stramash_config;
 extern int yates_config;
 extern int onlyOnejoystick;
 
@@ -1224,7 +1225,17 @@ void bzInputHandler()
   if ((currentButtonState & 0x01) && (currentButtonState & 0x08))
     enterDip = 1;
   
-  if (yates_config)
+  if (stramash_config)
+  {
+	switches [0].leftfwd = (currentJoy1Y>JOYSTICK_CENTER_MARGIN) || (currentJoy1X>JOYSTICK_CENTER_MARGIN);
+	switches [0].leftrev = (currentJoy1Y<-JOYSTICK_CENTER_MARGIN) || (currentJoy1X<-JOYSTICK_CENTER_MARGIN);
+	switches [0].rightfwd = (currentButtonState & 0x01)?1:0; // button 1 port 1
+	switches [0].rightrev = (currentButtonState & 0x02)?1:0; // button 2 port 1
+	switches [0].fire = (currentButtonState & 0x04)?1:0; // button 3 port 1
+	switches [0].fire = (currentButtonState & 0x08)?1:0; // button 4 port 1
+  }
+
+  else if (yates_config)
   {
     switches [0].leftfwd = (currentButtonState & 0x10)?1:0; // button 1 port 2
     switches [0].leftrev = (currentButtonState & 0x20)?1:0; // button 2 port 2
