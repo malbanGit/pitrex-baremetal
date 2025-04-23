@@ -78,6 +78,7 @@ static int simIniHandler(void* user, const char* section, const char* name, cons
   
   if (MATCH("BATTLE_ZONE", "YATES_INPUT")) yates_config = atoi(value); 
   if (MATCH("BATTLE_ZONE", "STRAMASH_INPUT")) stramash_config = atoi(value); 
+  if (MATCH("BATTLE_ZONE", "ONLY_ONE_JOYSTICK")) onlyOnejoystick = atoi(value); 
   
   
 /*
