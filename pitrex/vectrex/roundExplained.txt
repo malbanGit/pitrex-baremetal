@@ -1,0 +1,166 @@
+TODO 1:
+Build Macros for
+- samples
+- sound
+- buttons
+- joystick
+- integrator reset
+...
+and handle NONE/SMP/IRQ with one pipeline
+
+TODO 2:
+Build a pipeline version 2 which draws with different compensations
+
+TODO 3:
+Build a pipeline version 2 which draws with different line drawings
+
+
+vectrexInterface.c
+
+Defines
+#######
+
+	SUPPORT_SAMPLES
+	if defined, sample playing is supported. Otherwise sample playing is just "ignored".
+
+	MULTI_SAMPLES
+	Up to five samples are mixed together and played at the same time.
+
+Interrupt Handling
+##################
+
+In IRQ mode, all vectrex output is done in:
+int handleVectrexOutput()
+round definition:
+	- sound handling (YM/SFX)
+	- sample handling
+	- joystick handling
+	- button handling
+	- usb handling if enabled
+	- wait recal handling
+	
+	include "pipeline.i"
+	
+
+handleVectrexOutput()
+---------------------
+	Above function "handleVectrexOutput()" is called from the ARM interrupt handler: 
+		void __attribute__((interrupt("IRQ"))) v_interrupt_vector(void)
+
+	The interrupt handler to ARM-interrupts is installed in the function v_setupIRQHandling().
+	The interrupt is called when RPI system timer reaches zero.
+	The "time" of the interrupt is set upon each "return" of the interrupt.
+
+	Sensible values for a return to main (least runtime of main) is 3 vectrex cycles.
+	To have "clean" timing intervalls.
+	
+	Within the interrupt - all vectrex VIA communication is done (mainly vector output, sound and joystick).
+	This MUST be done in very precise timing and must not be interrupted.
+	This is the reason why it is done in an uninterruptable way (within interrupt handling).
+	
+	All other "normal" Pi-programs run in normal code space (not interrupted).
+	
+
+
+
+v_interrupt_vector()
+####################
+This is little more than an endless loop of "handleVectrexOutput()".
+Whenever the vectrex output has time left (more then 3 vectrex cycles) (drawing long vectors, zeroing...) the 
+execution is returned to the main Pi-program space with the macro MAIN_TAKEOVER().
+The macro remembers the curren position within the interrupthandler in a pointer called "ptr".
+When the next interrupt is called (when the timer reaches zero and the vectrex via needs new data) - the handleVectrexOutput() internally jumps to that address and continues.
+
+
+pipeline.i
+##########
+Is one code block, enabling jumping to adresses to "pick up" where left from IRQ returns.
+
+Macro "MAIN_TAKEOVER(vtime)" 
+is used to "return" from the IRQ code to "main()" code for a specific time.
+Execution of the IRQ-code is ressumed at the place the "left".
+This is done by remembering the adress of the return.
+
+"vtime" is in vectrex cycles.
+
+
+Another macro that is a direct call to "MAIN_TAKEOVER" is the Macro:
+USE_TIME(atime) 
+It does exactly the same (it actually usess the above macro) - but timing is in ARM cycles.
+
+
+
+
+For this to work all of the IRQ code must be programmed to NOT use the stack - as this would be corrupted!
+(Or: enhancement -> the stack should point to another memory region - todo?)
+
+#####################
+#####################
+#####################
+
+
+SMP
+###
+
+void v_setupSMPHandling()
+------------------------
+SMP handling is setup with this function.
+It starts an additional PiZero core (core1) and sets its execution program counter to: 
+
+void smpPipelineStart();
+This function basically is an endless loop - handling all VIA communication in the extra core.
+With the variable isSMPMode (==1) all other VIA access is blocked in core 0.
+The function called in the endless loop is a "twin" to the IRQ mode function... and called:
+
+
+int handleVectrexOutputSMP()
+----------------------------
+
+In SMP mode, all vectrex output is done in:
+int handleVectrexOutputSMP()
+round definition:
+	- sound handling (YM/SFX)
+	- sample handling
+	- button handling
+	- joystick handling
+	- handleUARTInterface
+	- wait recal handling
+	
+	include "pipelineSMP.i"
+	
+
+
+
+NON IRQ, NON SMP
+################
+
+void handlePipeline()
+---------------------
+Is only called when NOT in IRQ or SMP mode (settings).
+
+
+
+
+ATTENTION!!!
+############
+
+
+void v_WaitRecal()
+------------------
+Note!
+Even in IRQ mode or SMP modethe function to "end" one "round" should be called.
+There are still functionalities that rely on being called once in a while.
+(like pipeline generation and USB handling)
+
+Internally upon a "v_WaitRecal()" the functions
+
+in IRQ: handleClient_WR();
+in SMP: handleClient_SMP_WR();
+
+are called - which handle:
+- USB polling when used
+- handlePipeline() [Builing the "raw" pipeline queue]
+- synchronization
+
+
+
