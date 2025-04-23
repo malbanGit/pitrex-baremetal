@@ -172,6 +172,7 @@ static int bzIniHandler(void* user, const char* section, const char* name, const
   
   if (MATCH("BATTLE_ZONE", "YATES_INPUT")) yates_config = atoi(value); 
   if (MATCH("BATTLE_ZONE", "ONLY_ONE_JOYSTICK")) onlyOnejoystick = atoi(value); 
+  if (MATCH("BATTLE_ZONE", "STRAMASH_INPUT")) stramash_config = atoi(value); 
 
   return 1;
 }
