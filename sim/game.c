@@ -23,13 +23,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include <vectrex/vectrexInterface.h>
-#include <vectrex/osWrapper.h>
-
+#ifndef TRANSLATE_ONLY
+  #include <vectrex/vectrexInterface.h>
+  #include <vectrex/osWrapper.h>
+#endif
 #include "display.h"
 #include "memory.h"
 #include "game.h"
+
+#ifdef TRANSLATE_ONLY
+#define v_message
+#endif
+
 
 int use_nmi;
 int game = 0;
@@ -420,6 +425,19 @@ rom_info lunar_lander_roms [] =
   { NULL,        0,      0,      0 }
 };
 */
+rom_info lunar_lander_roms3 [] =
+{
+  { "roms/lunar/034572-02.f1", 0x6000, 0x0800, 0},
+  { "roms/lunar/034571-02.de1", 0x6800, 0x0800, 0},
+  { "roms/lunar/034570-01.c1", 0x7000, 0x0800, 0},
+  { "roms/lunar/034569-02.b1", 0x7800, 0x0800, 0},
+  { "roms/lunar/034599-01.r3", 0x4800, 0x0800, 0},
+  { "roms/lunar/034598-01.np3", 0x5000, 0x0800, 0},
+  { "roms/lunar/034597-01.m3", 0x5800, 0x0800, 0}, // newer MAME rom differs in two bytes!
+
+  { NULL,        0,      0,      0 }
+};
+
 rom_info2 lunar_lander_roms2 [] =
 {
   { "roms/llander.zip", "034572-02.f1", 0x6000, 0x0800, 0, 0xEB23BAFE },
@@ -609,11 +627,15 @@ void setup_game (void)
   {
     case BLACK_WIDOW:
     {
+#ifndef TRANSLATE_ONLY
       int error = setup_roms_and_tags2 (black_widow_roms2, black_widow_tags);
       if (error != 0)
       {
         v_message("TROUBLE WITH BLACK WIDOW ROMS!");
       }
+#else
+      setup_roms_and_tags (black_widow_roms2, black_widow_tags);
+#endif      
       /* copy_rom (0xe000, 0xf000, 0x1000); */
       copy_rom (0xeffa, 0xfffa, 6);
 
@@ -700,12 +722,17 @@ void setup_game (void)
     case GRAVITAR:
     {
 //      setup_roms_and_tags (gravitar_roms, gravitar_tags);
+#ifndef TRANSLATE_ONLY
       int error = setup_roms_and_tags2 (gravitar_roms2, gravitar_tags);
       if (error != 0)
       {
         v_message("TROUBLE WITH GRAVITAR ROMS!");
       }
-
+#else
+      setup_roms_and_tags (gravitar_roms2, gravitar_tags);
+#endif      
+      
+      
       /* copy_rom (0xe000, 0xf000, 0x1000); */
       copy_rom (0xeffa, 0xfffa, 6);
 
@@ -725,11 +752,15 @@ void setup_game (void)
     case SPACE_DUEL:
     {
 //      setup_roms_and_tags (space_duel_roms, space_duel_tags);
+#ifndef TRANSLATE_ONLY
       int error = setup_roms_and_tags2 (space_duel_roms2, space_duel_tags);
       if (error != 0)
       {
         v_message("TROUBLE WITH SPACE DUEL ROMS!");
       }
+#else
+      setup_roms_and_tags (space_duel_roms2, space_duel_tags);
+#endif      
 
       /*
       copy_rom (0x8000, 0x9000, 0x1000);
@@ -826,16 +857,17 @@ void setup_game (void)
 
     case TEMPEST:
     {
-      init_earom();
 //      setup_roms_and_tags (tempest_roms, tempest_tags);
-
-      
-//      setup_roms_and_tags (space_duel_roms, space_duel_tags);
+#ifndef TRANSLATE_ONLY
+      init_earom();
       int error = setup_roms_and_tags2 (tempest_roms2, tempest_tags);
       if (error != 0)
       {
         v_message("TROUBLE WITH TEMPEST ROMS!");
       }
+#else
+      setup_roms_and_tags (tempest_roms2, tempest_tags);
+#endif      
       
       
       
@@ -854,8 +886,9 @@ void setup_game (void)
       
       
       
+#ifndef TRANSLATE_ONLY
 	  read_rom_image_zip_to("roms/tempest.zip","136002-125.d7", 0, 256, 0, avg_prom);
-
+#endif
 
       vector_mem_offset = 0x2000;
 	  avg_init(vector_mem_offset, 0x800);
@@ -944,11 +977,15 @@ void setup_game (void)
     case BATTLEZONE:
     {
 //      setup_roms_and_tags (battlezone_roms, battlezone_tags);
+#ifndef TRANSLATE_ONLY
       int error = setup_roms_and_tags2 (battlezone_roms2, battlezone_tags);
       if (error != 0)
       {
         v_message("TROUBLE WITH BATTLE ZONE ROMS!");
       }
+#else
+      setup_roms_and_tags (battlezone_roms2, battlezone_tags);
+#endif      
       copy_rom (0x7ffa, 0xfffa, 6);
 
       vector_mem_offset = 0x2000;
@@ -968,11 +1005,15 @@ void setup_game (void)
     {
 
 //      setup_roms_and_tags (red_baron_roms, red_baron_tags);
+#ifndef TRANSLATE_ONLY
       int error = setup_roms_and_tags2 (red_baron_roms2, red_baron_tags);
       if (error != 0)
       {
         v_message("TROUBLE WITH RED BARON ROMS!");
       }
+#else
+      setup_roms_and_tags (red_baron_roms2, red_baron_tags);
+#endif      
       
       
 
@@ -1078,12 +1119,16 @@ void setup_game (void)
     {
 //      setup_roms_and_tags (lunar_lander_roms, lunar_lander_tags);
       
-      
+#ifndef TRANSLATE_ONLY
       int error = setup_roms_and_tags2 (lunar_lander_roms2, lunar_lander_tags);
       if (error != 0)
       {
         v_message("TROUBLE WITH LUNAR LANDER ROMS!");
       }
+#else
+      setup_roms_and_tags (lunar_lander_roms3, lunar_lander_tags);
+#endif      
+      
       
       
       copy_rom (0x7ffa, 0xfffa, 6);
@@ -1099,59 +1144,7 @@ void setup_game (void)
 #ifdef MAGIC_PC
       mem [0x652d].magic = 1;
 #endif
-
-      optionreg [0] = 0xff-12;
-/*
- * 
-    Lunar Lander settings:
-
-    0 = OFF  1 = ON  x = Don't Care  $ = Atari suggests
-
-
-    8 SWITCH DIP (P8) with -01 ROMs on PCB
-    87654321
-    --------
-    11xxxxxx   450 fuel units per coin
-    10xxxxxx   600 fuel units per coin
-    01xxxxxx   750 fuel units per coin  $
-    00xxxxxx   900 fuel units per coin
-    xxx0xxxx   Free play
-    xxx1xxxx   Coined play as determined by toggles 7 & 8  $
-    xxxx00xx   German instructions
-    xxxx01xx   Spanish instructions
-    xxxx10xx   French instructions
-    xxxx11xx   English instructions  $
-    xxxxxx11   Right coin == 1 credit/coin  $
-    xxxxxx10   Right coin == 4 credit/coin
-    xxxxxx01   Right coin == 5 credit/coin
-    xxxxxx00   Right coin == 6 credit/coin
-               (Left coin always registers 1 credit/coin)
-
-
-    8 SWITCH DIP (P8) with -02 ROMs on PCB
-    87654321
-    --------
-    11x1xxxx   450 fuel units per coin
-    10x1xxxx   600 fuel units per coin
-    01x1xxxx   750 fuel units per coin  $
-    00x1xxxx   900 fuel units per coin
-    11x0xxxx   1100 fuel units per coin
-    10x0xxxx   1300 fuel units per coin
-    01x0xxxx   1550 fuel units per coin
-    00x0xxxx   1800 fuel units per coin
-    xx0xxxxx   Free play
-    xx1xxxxx   Coined play as determined by toggles 5, 7, & 8  $
-    xxxx00xx   German instructions
-    xxxx01xx   Spanish instructions
-    xxxx10xx   French instructions
-    xxxx11xx   English instructions  $
-    xxxxxx11   Right coin == 1 credit/coin  $
-    xxxxxx10   Right coin == 4 credit/coin
-    xxxxxx01   Right coin == 5 credit/coin
-    xxxxxx00   Right coin == 6 credit/coin
-               (Left coin always registers 1 credit/coin)
-
- */
+      optionreg [0] = 0xd0;
       dvg = 1;
       use_nmi = 1;
     }
@@ -1160,12 +1153,19 @@ void setup_game (void)
     case ASTEROIDS:
     {
 //      setup_roms_and_tags (asteroids_roms, asteroids_tags);
+#ifndef TRANSLATE_ONLY
       int error = setup_roms_and_tags2 (asteroids_roms2, asteroids_tags);
       if (error) error = setup_roms_and_tags2 (asteroids_roms3, asteroids_tags);
       if (error != 0)
       {
         v_message("TROUBLE WITH ASTEROIDS ROMS!");
       }
+#else
+      setup_roms_and_tags (asteroids_roms2, asteroids_tags);
+//      if (error) error = setup_roms_and_tags (asteroids_roms3, asteroids_tags);
+#endif      
+
+
       
       
       copy_rom (0x7ffa, 0xfffa, 6);
@@ -1186,11 +1186,15 @@ void setup_game (void)
     case ASTEROIDS_DX:
     {
 //      setup_roms_and_tags (asteroidsdx_roms, asteroidsdx_tags);
+#ifndef TRANSLATE_ONLY
       int error = setup_roms_and_tags2 (asteroidsdx_roms2, asteroidsdx_tags);
       if (error != 0)
       {
         v_message("TROUBLE WITH ASTEROIDS DELUXE ROMS!");
       }
+#else
+      setup_roms_and_tags (asteroidsdx_roms2, asteroidsdx_tags);
+#endif      
 
       copy_rom (0x7ffa, 0xfffa, 6);
 

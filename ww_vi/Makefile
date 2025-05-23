@@ -20,7 +20,7 @@ $(BUILD_DIR)wwviaudio.o: wwviaudio.h wwviaudio.c compat.h
 $(BUILD_DIR)wordwarvi.o: wordwarvi.c compat.h
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)wordwarvi.o -c wordwarvi.c
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(LIBS) 
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)

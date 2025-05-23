@@ -10,7 +10,7 @@
 #define BEDLAM_T2_HANDLING
 
 
-//#define WAIT_EMULATION
+#define WAIT_EMULATION // without this - speedy vectrex sprites "jitter"
 //#define FILE_PLAYER
 
 

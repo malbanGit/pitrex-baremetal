@@ -7,6 +7,13 @@
 #define V_SET(address, val) vectrexwrite(address, val)
 #define V_GET(address) vectrexread(address)
 
+#ifdef BANKS_48
+#define BANKSIZE 2
+#else
+#define BANKSIZE 1 
+#endif
+
+
 enum
 {
     VECTREX_MHZ = 1500000, /* speed of the vectrex being emulated */
@@ -38,8 +45,16 @@ typedef struct vector_type
     uint8_t color;
 } vector_t;
 
-extern void(*vecx_render) (void);
+extern char bootUpName[128];
+extern int is48kRom;
+extern int is256kRom;
 
+extern int isForcedinternalStringDisplay;
+extern int isTerminalAccessAllowed;
+
+extern int _used_bank_size;
+
+extern void(*vecx_render) (void);
 extern uint8_t rom[8192];
 extern uint8_t cart[32768*9]; // lineart
 extern uint8_t ram[1024];

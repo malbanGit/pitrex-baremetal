@@ -30,6 +30,7 @@ extern int32_t PrintStr(int32_t cycles);
 extern int32_t PrintStr_d(int32_t cycles, int width, int height, unsigned char *rlines[]);
 
 extern int currentBank;
+extern int is256kRom;
 extern int mustWork;
 #define PC_TESTS \
 do \
@@ -294,7 +295,8 @@ static inline int32_t vectorbladePCTests(int32_t cycles)
       CPU.reg_pc = 0x9d16; // in save game
       mustWork = 0;
     }    
-    
+  }    
+/*    
 #ifdef EMULATE_KNOWN_PRINTSTR    
     else if (CPU.reg_pc == 0x0750) // 8 bit font
     {
@@ -433,12 +435,16 @@ static inline int32_t vectorbladePCTests(int32_t cycles)
     case 0x02d4: {if (currentBank==2){currentBank =3; CB} break;}
   } 
  }
+ */
  return cycles;
 }
 
 // if 1 is returned, the normal vecx init is also run!
 static inline int customInit()
 {
+printf("Vectorblade custom init.\n");
+
+  is256kRom = 1;
   loadVectrexBin("VECTORBLADE.NIB", cart);
   loadFlashHS();
   loadFlashGS();

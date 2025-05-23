@@ -10,12 +10,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+
 #include "pi_support.h"
 
 #include "ff.h"
-FATFS fat_fs;		/* File system object */
+FATFS fat_fs;       /* File system object */
 
-GlobalMemSettings *settings; /* should be called once on startup / reset */
 
 //static volatile __attribute__ ((aligned (0x4000))) uint32_t memmi[4096];
 
@@ -83,9 +83,22 @@ void/*__attribute__ ((noinline)) */poke(unsigned int address, unsigned int value
 {
      *((unsigned int *)address) = value;
 }
-extern GlobalMemSettings *settings;
+
+GlobalMemSettings *settings = 0; /* should be called once on startup / reset */
+//extern GlobalMemSettings *settings;
 char *getLoadParameter(int i)
 {
+  
+  if (settings == 0) 
+  {
+    settings = (GlobalMemSettings *)SETTING_STORE;
+  }
+ 
+  // setting should be a little over LOADER_START
+  if ( ((long) settings > LOADER_START) && ((long) settings < LOADER_START + 1500000)) // assuming loader always < 1500kb
+    ;//printf("c) settings: %08x\n", settings->loader);
+  else
+    return 0; // no loader, no parameters present
   switch (i)
   {
     case 0: return settings->parameter1;
@@ -178,7 +191,7 @@ void RPI_SetGpioPinFunction( rpi_gpio_pin_t gpio, rpi_gpio_alt_function_t func )
  * Old file "rpi-aux.c.h"
  * 
  ******/
-
+ 
 
 static aux_t* auxillary = (aux_t*)AUX_BASE;
 
@@ -191,7 +204,7 @@ aux_t* RPI_GetAux( void )
 void RPI_AuxMiniUartInit( int baud, int bits , int mhz)
 {
     volatile int i;
-
+// baud = 115200 ;
     /* As this is a mini uart the configuration is complete! Now just
        enable the uart. Note from the documentation in section 2.1.1 of
        the ARM peripherals manual:
@@ -240,7 +253,6 @@ void RPI_AuxMiniUartInit( int baud, int bits , int mhz)
     /* Disable flow control,enable transmitter and receiver! */
     auxillary->MU_CNTL = AUX_MUCNTL_TX_ENABLE | AUX_MUCNTL_RX_ENABLE;
 }
-
 void RPI_AuxMiniUartWrite( char c )
 {
     /* Wait until the UART has an empty space in the FIFO */
@@ -249,8 +261,8 @@ void RPI_AuxMiniUartWrite( char c )
     /* Write the character to the FIFO for transmission */
     auxillary->MU_IO = c;
 }
-// blocking till char read
 
+// blocking till char read
 char RPI_AuxMiniUartRead()
 {
     while (1 == 1) 
@@ -258,7 +270,7 @@ char RPI_AuxMiniUartRead()
 	    if (auxillary->MU_LSR & AUX_MULSR_DATA_READY)
 		    break;
     }
-    return (char) auxillary->MU_IO;
+    return auxillary->MU_IO;
 }
 
 // 0 not pending
@@ -511,6 +523,16 @@ void RPI_EnableARMTimerInterrupt(void)
     RPI_GetIrqController()->Enable_Basic_IRQs = RPI_BASIC_ARM_TIMER_IRQ;
 }
 
+unsigned long long getOtherTimer()
+{
+  unsigned long long v;
+  v = BCM2835_ST->CHI;
+  v = v<<32;
+  v = v+BCM2835_ST->CLO;
+  return v;
+}
+
+
 void udelay(uint32_t d) 
 {
 	const uint32_t clo = BCM2835_ST->CLO;
@@ -634,8 +656,6 @@ inline static int32_t lib_bcm2835_vc_get(uint32_t tag_id, uint32_t dev_id)
 	vc_msg->tag.val = 0;
 	vc_msg->end_tag = 0;
 
-
-//	(void) lib_bcm2835_mailbox_write_read(BCM2835_MAILBOX_PROP_CHANNEL, GPU_MEM_BASE + (uint32_t) vc_msg);
 	(void) lib_bcm2835_mailbox_write_read(BCM2835_MAILBOX_PROP_CHANNEL, (uint32_t) vc_msg);
 
 	if (vc_msg->request_code != BCM2835_MAILBOX_SUCCESS) {
@@ -650,7 +670,8 @@ inline static int32_t lib_bcm2835_vc_get(uint32_t tag_id, uint32_t dev_id)
 
 }
 
-inline static int32_t lib_bcm2835_vc_set(uint32_t tag_id, uint32_t dev_id, uint32_t val) {
+inline static int32_t lib_bcm2835_vc_set(uint32_t tag_id, uint32_t dev_id, uint32_t val) 
+{
 	struct vc_msg_uint32 *vc_msg = (struct vc_msg_uint32 *)MEM_COHERENT_REGION;
 
 	vc_msg->msg_size = sizeof(struct vc_msg_uint32);
@@ -1253,13 +1274,23 @@ void mmu_enable_only()
 //    str r0, [r11]
   
 }
+#define CORES 4
+unsigned thisCore (void)            // returns number of current core (0..CORES-1)
+{
+    unsigned int nMPIDR;
+    asm volatile ("mrc p15, 0, %0, c0, c0, 5" : "=r" (nMPIDR));
+    return nMPIDR & (CORES-1);
+}
 
 extern unsigned int multicore_start;
 void mmu_enable(void) 
 {
     pageSetup();
     mmu_enable_only();
-    
+
+//    printf("mmu_enable() called with core: %i\n", thisCore());
+
+
     // setup some more multi core stuff
     // Route IRQ and FIQ to core 0
     
@@ -1272,61 +1303,58 @@ void mmu_enable(void)
     write32 (ARM_LOCAL_MAILBOX_INT_CONTROL0, 1);		// enable IPI on core 0
     
     // wake up core 1
-    
     for (unsigned nCore = 1; nCore < 2; nCore++)
     {
       if (nCore == 1)
-	if (*((unsigned int *)CORE1_STATE) != CORE_UNKOWN) continue;
+      {
+//        printf("Core %u state: %i\n", nCore, *((unsigned int *)CORE1_STATE));
+        if (*((unsigned int *)CORE1_STATE) != CORE_UNKOWN) continue;
+      }
       if (nCore == 2)
-	if (*((unsigned int *)CORE2_STATE) != CORE_UNKOWN) continue;
+      {
+//        printf("Core %u state: %i\n", nCore, *((unsigned int *)CORE2_STATE));
+        if (*((unsigned int *)CORE2_STATE) != CORE_UNKOWN) continue;
+      }
       if (nCore == 3)
-	if (*((unsigned int *)CORE3_STATE) != CORE_UNKOWN) continue;
+      {
+//        printf("Core %u state: %i\n", nCore, *((unsigned int *)CORE3_STATE));
+        if (*((unsigned int *)CORE3_STATE) != CORE_UNKOWN) continue;
+      }
+
+      unsigned int nMailBoxClear = ARM_LOCAL_MAILBOX3_CLR0 + 0x10 * nCore;
+
+	  DataSyncBarrier ();
+
+      unsigned nTimeout = 100;
+      while (read32 (nMailBoxClear) != 0)
+      {
+          if (--nTimeout == 0)
+          {
+              printf("CPU core %u does not respond\n", nCore);
+              return;
+          }
+          MsDelay (1);
+      }
+      printf("CPU core %u responded\n", nCore);
       
-      
-      
-	unsigned int nMailBoxClear = ARM_LOCAL_MAILBOX3_CLR0 + 0x10 * nCore;
+      write32 (ARM_LOCAL_MAILBOX3_SET0 + 0x10 * nCore, (unsigned int) &multicore_start);
+      nTimeout = 500;
+      do
+      {
+          asm volatile ("sev");
 
-	DataSyncBarrier ();
+          if (--nTimeout == 0)
+          {
+              printf("CPU core %u did not start\n", nCore);
+              return;
+          }
 
-	unsigned nTimeout = 100;
-	while (read32 (nMailBoxClear) != 0)
-	{
-	    if (--nTimeout == 0)
-	    {
-		    printf("CPU core %u does not respond\n", nCore);
-		    return;
-	    }
-
-	    MsDelay (1);
-	}
-	printf("CPU core %u responded\n", nCore);
-
-	write32 (ARM_LOCAL_MAILBOX3_SET0 + 0x10 * nCore, (unsigned int) &multicore_start);
-
-	nTimeout = 500;
-	do
-	{
-	    asm volatile ("sev");
-
-	    if (--nTimeout == 0)
-	    {
-		    printf("CPU core %u did not start\n", nCore);
-		    return;
-	    }
-
-	    MsDelay (1);
-	    DataMemBarrier ();
-	}
-	while (read32 (nMailBoxClear) != 0);
-	printf("CPU core %u started\n", nCore);
+          MsDelay (1);
+          DataMemBarrier ();
+      }
+      while (read32 (nMailBoxClear) != 0);
+      printf("CPU core %u started\n", nCore);
     }
-}
-#define CORES 4
-unsigned thisCore (void)			// returns number of current core (0..CORES-1)
-{
-	unsigned int nMPIDR;
-	asm volatile ("mrc p15, 0, %0, c0, c0, 5" : "=r" (nMPIDR));
-	return nMPIDR & (CORES-1);
 }
 
 void recognizeCore()
@@ -1390,7 +1418,7 @@ void startCore1(unsigned int coreStart)
 	while (read32 (nMailBoxClear) != 0);
 	printf("CPU core %u started\n", nCore);
   
-}
+} 
 
 void __attribute__ ((noreturn)) __attribute__ ((naked)) parkCore1() 
 {
@@ -1414,7 +1442,8 @@ void firstInit()
     lib_bcm2835_vc_set_clock_rate(BCM2835_VC_CLOCK_ID_ARM, 1000000000);
     int32_t arm_clock = lib_bcm2835_vc_get_clock_rate(BCM2835_VC_CLOCK_ID_ARM);
     int32_t core_clock = lib_bcm2835_vc_get_clock_rate(BCM2835_VC_CLOCK_ID_CORE);
-    RPI_AuxMiniUartInit( 115200, 8, core_clock);
+//    RPI_AuxMiniUartInit( 115200, 8, core_clock);
+    RPI_AuxMiniUartInit( 921600, 8, core_clock);
     /* Print to the UART using the standard libc functions */
     printf("PiTrex starting...\r\n" );
     printf("Speed arm: %i, core: %i\r\n", arm_clock, core_clock);

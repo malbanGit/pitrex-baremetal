@@ -21,7 +21,10 @@ VECTREX_OBJECTS := $(BUILD_DIR)vectrexInterface.o $(BUILD_DIR)osWrapper.o $(BUIL
 $(BUILD_DIR)mathSupport.o: mathSupport.c mathSupport.h vectrexInterface.h 
 	$(CC) $(CFLAGS) -c mathSupport.c -o $(BUILD_DIR)mathSupport.o
 
-$(BUILD_DIR)vectrexInterface.o: vectrexInterface.c vectrexInterface.h commands.i rasterFont.i vectorFont.i ini.c ini.h osWrapper.c osWrapper.h pipeline.i
+
+$(BUILD_DIR)vectrexInterface.o: vectrexInterface.c vectrexInterface.h commands.c rasterFont.i vectorFont.i ini.c ini.h osWrapper.c osWrapper.h pipeline.i displayPipeline.c \
+				vectrexInterface_bitmap.c vectrexInterface_settings.c vectrexInterface_gadgets.c vectrexInterface_smp.c vectrexInterface_VIAPipeline.c vectrexInterface_pipeline.c \
+				handleDefs.i v_basicDefines.h pipeline.i pipelineSwitch.i samples.c psgSound.c inputDevice.c
 	$(CC) $(CFLAGS) -c vectrexInterface.c -o $(BUILD_DIR)vectrexInterface.o
 
 $(BUILD_DIR)osWrapper.o: osWrapper.c osWrapper.h  vectrexInterface.h junzip.c junzip.h puff.c puff.h

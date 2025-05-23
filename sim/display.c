@@ -30,8 +30,10 @@ void avg_halt(int dummy);
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <vectrex/osWrapper.h>
-#include <vectrex/vectrexInterface.h>
+#ifndef TRANSLATE_ONLY
+  #include <vectrex/osWrapper.h>
+  #include <vectrex/vectrexInterface.h>
+#endif
 
 #include "game.h"
 #include "memory.h"
@@ -264,19 +266,6 @@ DEBUG_OUT( "      vg_done at: %i (+ loop)\r\n", vg_done_cyc);
     vg_done_cyc += cycles/8;
 //---------
   DEBUG_OUT("long cycles: %i\n",cycles);
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
       
 	  draw_line (oldx, oldy, currentx, currenty, 7, z);
 	  break;
@@ -853,10 +842,10 @@ extern void draw_line2(int FromX, int FromY, int ToX, int ToY, int Colour15, int
 
 void vg_add_point_buf(int x, int y, int color, int intensity)
 {
-#define SHIFT_T 10
-// printf("draw_line: %i,%i,%i,%i,%i,%i\n", (old_x>>SHIFT_T), -(old_y>>SHIFT_T), (x>>SHIFT_T), -(y>>SHIFT_T), color, intensity>>4);
-//  draw_line2 ((old_x>>SHIFT_T), -(old_y>>SHIFT_T), (x>>SHIFT_T), -(y>>SHIFT_T), color, intensity>>4);
+  #define SHIFT_T 10
+#ifndef TRANSLATE_ONLY
   draw_line2 ((old_y>>SHIFT_T), -(old_x>>SHIFT_T), (y>>SHIFT_T), -(x>>SHIFT_T), color, intensity>>4);
+#endif
 	old_x = x;
 	old_y = y;
 }

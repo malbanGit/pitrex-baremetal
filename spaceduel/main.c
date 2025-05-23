@@ -52,6 +52,10 @@ char gameMemory[4*65536];
 void setDimensions(int offsetx, int offsety, int mulx, int muly);
 int main(int argc, char *argv[])
 {
+  vectrexinit(1);
+  v_init();
+  v_noSound();
+
   ProgName = "spaceduel"; // defined in display.h
   int smallwindow = 1;
   int use_pixmap = 1;

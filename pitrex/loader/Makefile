@@ -22,7 +22,7 @@ $(BUILD_DIR)loaderMain.o: loaderMain.c
 $(BUILD_DIR)bootStrapMain.o: bootStrapMain.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)bootStrapMain.o -c bootStrapMain.c
 
-pitrex.img: $(BUILD_DIR)bootStrapMain.o
+pitrex.img: $(BUILD_DIR)bootStrapMain.o $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)pitrex.elf.img \
 	$(BUILD_DIR)bootStrapMain.o -lc -lbaremetal
 	$(RM) pitrex.img
@@ -31,9 +31,13 @@ pitrex.img: $(BUILD_DIR)bootStrapMain.o
 ifdef MAKE_IMAGE
 	cp pitrex.img /media/sf_ubuntu
 	cp pitrex.img /media/sf_E_DRIVE
+else
+ifdef SERIAL_TRANSFER
+	sudo ../../PiTrexSerial/piserial -d $(SERIAL_PORT_NAME) -o pitrex.img -i pitrex.img -a 1
+endif
 endif
 
-pitrex7.img: $(BUILD_DIR)bootStrapMain.o
+pitrex7.img: $(BUILD_DIR)bootStrapMain.o $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)pitrex7.elf.img \
 	$(BUILD_DIR)bootStrapMain.o -lc -lbaremetal
 	$(RM) pitrex7.img
@@ -42,9 +46,13 @@ pitrex7.img: $(BUILD_DIR)bootStrapMain.o
 ifdef MAKE_IMAGE
 	cp pitrex7.img /media/sf_ubuntu
 	cp pitrex7.img /media/sf_E_DRIVE
+else
+ifdef SERIAL_TRANSFER
+	sudo ../../PiTrexSerial/piserial -d $(SERIAL_PORT_NAME) -o pitrex7.img -i pitrex7.img -a 1
+endif
 endif
 
-loader.pit: loaderObjects 
+loader.pit: loaderObjects  $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)loader.elf.img \
 	$(BUILD_DIR)loaderEntry.o $(BUILD_DIR)loaderMain.o $(LIBS)
 	$(RM) loader.pit
@@ -55,6 +63,10 @@ loader.pit: loaderObjects
 ifdef MAKE_IMAGE
 	cp loader.pit /media/sf_ubuntu
 	cp loader.pit /media/sf_E_DRIVE/$(IMG_DIR)
+else
+ifdef SERIAL_TRANSFER
+	sudo ../../PiTrexSerial/piserial -d $(SERIAL_PORT_NAME) -o $(IMG_DIR)/loader.pit -i loader.pit -a 1 -b -t
+endif
 endif
 
 clean-all:: dirCheck

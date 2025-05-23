@@ -23,8 +23,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <vectrex/osWrapper.h>
-#include <vectrex/vectrexInterface.h>
+#ifndef TRANSLATE_ONLY
+  #include <vectrex/vectrexInterface.h>
+  #include <vectrex/osWrapper.h>
+#endif
 
 #include "memory.h"
 #include "display.h"
@@ -124,21 +126,6 @@ void earom_write(unsigned char offset, unsigned char data)
     m_data = data;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 byte optionreg [MAX_OPT_REG] = { 0xff, 0xff, 0xff };
 
 
@@ -164,6 +151,14 @@ joystick_rec joystick = { 0x80, 0x80 };
  * they would automatically release.  This has been changed to increment
  * it if less than zero, so switches set by the debugger will release, but
  * to leave it alone if it is greater than zero, for keyboard handling.
+
+      // it is IMPORTANT ->  lunar lander!
+      // to hit and relase after a time
+      // since Lunar Lander "samples" the button state for five rounds
+      // only if button is pressed long enough
+      // the coin counter will accept it
+ 
+ 
  */
 int check_switch_decr (int *sw)
 {
@@ -183,7 +178,9 @@ byte MEMRD(unsigned addr, int PC, unsigned long cyc)
   register byte tag,result=0;
 
   if(!(tag=mem[addr].tagr)) 
+  {
     return(mem[addr].cell);
+  }
   
   if(tag & BREAKTAG)
     {
@@ -304,6 +301,7 @@ byte MEMRD(unsigned addr, int PC, unsigned long cyc)
       result = mem [addr & 0xff].cell;
       break;
     case LUNAR_SW1:
+// Vector generator access...     
 #ifdef ORIGINAL_VERSION
       result = 0x80 | /* DIAG STEP */
         ((cyc >> 2) & 0x40) | /* 3 KHz */
@@ -322,7 +320,22 @@ byte MEMRD(unsigned addr, int PC, unsigned long cyc)
     case LUNAR_SW2:
       switch (addr & 0x07)
 	{
-	case 0:
+/*      
+    map(0x2400, 0x2407).r(FUNC(asteroid_state::asteroid_IN1_r));    // IN1
+    PORT_START("IN1")
+    PORT_BIT( 0x01, IP_ACTIVE_HIGH, IPT_START1 )
+    PORT_BIT( 0x02, IP_ACTIVE_LOW,  IPT_COIN1 )
+    PORT_BIT( 0x04, IP_ACTIVE_HIGH, IPT_COIN2 )
+    PORT_BIT( 0x08, IP_ACTIVE_LOW,  IPT_COIN3 )
+    PORT_BIT( 0x10, IP_ACTIVE_HIGH, IPT_START2 )  PORT_NAME("Select Game")
+    PORT_BIT( 0x20, IP_ACTIVE_HIGH, IPT_BUTTON3 ) PORT_NAME("Abort")
+    PORT_BIT( 0x40, IP_ACTIVE_HIGH, IPT_BUTTON2 ) PORT_CODE(KEYCODE_RIGHT) PORT_CODE(JOYCODE_X_RIGHT_SWITCH)    // Right
+    PORT_BIT( 0x80, IP_ACTIVE_HIGH, IPT_BUTTON1 ) PORT_CODE(KEYCODE_LEFT) PORT_CODE(JOYCODE_X_LEFT_SWITCH)      // Left
+
+*/
+         
+        
+    case 0:
 	  result = check_switch_decr (& start1) << 7;
 	  break;
 	case 1:
@@ -335,15 +348,24 @@ byte MEMRD(unsigned addr, int PC, unsigned long cyc)
 	  result = (! check_switch_decr (& cslot_right)) << 7;
 	  break;
 	case 4: /* game select */
+      if (start2!=0) {start2=0;return 0x80;} else return 0;
 	  result = (! check_switch_decr (& start2)) << 7;
 	  break;
 	case 5:
+      if (switches [0].abort !=0) 
+      {
+//        switches [0].abort =0;
+        return 0x80;
+      } 
+      else return 0;
 	  result = switches [0].abort << 7;
 	  break;
 	case 6:
+      if (switches [0].right !=0) {switches [0].right =0;return 0x80;} else return 0;
 	  result = switches [0].right << 7;
 	  break;
 	case 7:
+      if (switches [0].left !=0) {switches [0].left =0;return 0x80;} else return 0;
 	  result = switches [0].left << 7;
 	  break;
 	}
@@ -543,7 +565,12 @@ void MEMWR(unsigned addr, int val, int PC, unsigned long cyc)
 	case LUNAR_OUT:
 	  break;
 	case LUNAR_SND:
+      mem [addr].cell = val;
+      if (gameCallback != 0) gameCallback(1);
+      break;
 	case LUNAR_SND_RST:
+      mem [addr].cell = val;
+      if (gameCallback != 0) gameCallback(2);
 	  break;
 	case ASTEROIDS_OUT:
 	  newbank = (val >> 2) & 1;
@@ -750,32 +777,6 @@ int setup_roms_and_tags2 (rom_info2 *rom_list, tag_info *tag_list)
     
     return r;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void copy_rom (unsigned source, unsigned dest, unsigned len)
 {

@@ -50,7 +50,7 @@ $(BUILD_DIR)grokfile.o: grokfile.c grokfile.h
 $(BUILD_DIR)joy.o: joy.c joy.h
 	$(CC) $(CFLAGS) -c joy.c -o $(BUILD_DIR)joy.o
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(LIBS) 
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)

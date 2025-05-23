@@ -85,7 +85,7 @@ $(BUILD_DIR)tms5220.o: sndhrdw/tms5220.h sndhrdw/tms5220.c
 $(BUILD_DIR)starwars.o: starwars.c machine/starwars.c sndhrdw/starwars.c machine/starwars.h sndhrdw/starwars.h
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)starwars.o -c starwars.c
 
-$(TARGET): sbt $(OBJS)
+$(TARGET): sbt $(OBJS) $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(LIBS) 
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)
@@ -93,7 +93,12 @@ $(TARGET): sbt $(OBJS)
 ifdef MAKE_IMAGE
 	cp $(TARGET) $(COPY_TARGET1)
 	cp $(TARGET) $(COPY_TARGET2)
+else
+ifdef SERIAL_TRANSFER
+	sudo ../PiTrexSerial/piserial -d $(SERIAL_PORT_NAME) -o $(IMG_DIR)/$(TARGET) -i $(TARGET) -a 1 -r
 endif
+endif
+
 
 clean-all::
 	$(MAKE) -C translate BUILD_FOR=$(BUILD_FOR) clean

@@ -1,5 +1,22 @@
 #define BLOW_UP 15
 
+signed char Folder[]=
+{	(signed char) 0xFF, +0x08*BLOW_UP, +0x00*BLOW_UP,  // pattern, y, x
+	(signed char) 0xFF, +0x00*BLOW_UP, +0x04*BLOW_UP,  // pattern, y, x
+	(signed char) 0xFF, -0x04*BLOW_UP, +0x00*BLOW_UP,  // pattern, y, x
+	(signed char) 0x00, +0x00*BLOW_UP, -0x01*BLOW_UP,  // pattern, y, x
+	(signed char) 0xFF, -0x04*BLOW_UP, +0x00*BLOW_UP,  // pattern, y, x
+	(signed char) 0x00, +0x00*BLOW_UP, +0x02*BLOW_UP,  // pattern, y, x
+	(signed char) 0xFF, +0x03*BLOW_UP, +0x00*BLOW_UP,  // pattern, y, x
+	(signed char) 0xFF, +0x01*BLOW_UP, -0x01*BLOW_UP,  // pattern, y, x
+	(signed char) 0xFF, +0x00*BLOW_UP, -0x01*BLOW_UP,  // pattern, y, x
+	(signed char) 0x00, -0x04*BLOW_UP, -0x03*BLOW_UP,  // pattern, y, x
+	(signed char) 0xFF, +0x00*BLOW_UP, +0x05*BLOW_UP,  // pattern, y, x
+	(signed char) 0x00, +0x00*BLOW_UP, +0x01*BLOW_UP,  // pattern, y, x
+	(signed char) 0x01 // endmarker (high bit in pattern not set)
+};
+
+
 // ABC_WIDE
  signed char ABC_0[]=
 {   (signed char) 0xFF, +0x03*BLOW_UP, +0x00*BLOW_UP,  // pattern, y, x
@@ -172,7 +189,19 @@
     (signed char) 0x00, +0x00*BLOW_UP, +0x02*BLOW_UP,  // pattern, y, x
     (signed char) 0x01 // endmarker (high bit in pattern not set)
 };
- signed char ABC_18[]=
+
+// S
+// ------ 1
+// I
+// I 2
+// I
+// ------ 3
+//      I
+//      I 4
+//      I
+// ------ 5
+//   -> 6
+signed char ABC_18[]=
 {   (signed char) 0x00, +0x08*BLOW_UP, +0x04*BLOW_UP,  // pattern, y, x
     (signed char) 0xFF, +0x00*BLOW_UP, -0x04*BLOW_UP,  // pattern, y, x
     (signed char) 0xFF, -0x03*BLOW_UP, +0x00*BLOW_UP,  // pattern, y, x
@@ -182,7 +211,9 @@
     (signed char) 0x00, +0x00*BLOW_UP, +0x06*BLOW_UP,  // pattern, y, x
     (signed char) 0x01 // endmarker (high bit in pattern not set)
 };
- signed char ABC_19[]=
+
+// T
+signed char ABC_19[]=
 {   (signed char) 0x00, +0x00*BLOW_UP, +0x02*BLOW_UP,  // pattern, y, x
     (signed char) 0xFF, +0x08*BLOW_UP, +0x00*BLOW_UP,  // pattern, y, x
     (signed char) 0x00, +0x00*BLOW_UP, -0x02*BLOW_UP,  // pattern, y, x
@@ -722,7 +753,7 @@ const signed char ABC_40[]=
     ABC_28, // !
     ABC_27, // ' ' - "
     ABC_27, // ' ' - #
-    ABC_27, // ' ' - $
+    Folder, // ABC_27, // ' ' - $
     ABC_27, // ' ' - %
     ABC_27, // ' ' - &
     ABC_27, // ' ' - '
@@ -920,6 +951,16 @@ void v_printStringMax(int8_t x, int8_t y, char* string, uint8_t textSize, uint8_
 
 
 
+	if (brightness >= 0)
+	{
+	  brightness = brightness*intensityMul;
+	  if (brightness!=0)
+	  {
+	    if (brightness>intensityMax)brightness=intensityMax;
+	    if (brightness<intensityMin)brightness=intensityMin;
+	    
+	  }
+	}
 
 
 
@@ -980,6 +1021,18 @@ void v_printString(int8_t x, int8_t y, char* string, uint8_t textSize, uint8_t b
 
       int startX = x*128;
       int startY = y*128;
+
+      if (brightness >= 0)
+      {
+	brightness = brightness*intensityMul;
+	if (brightness!=0)
+	{
+	  if (brightness>intensityMax)brightness=intensityMax;
+	  if (brightness<intensityMin)brightness=intensityMin;
+	  
+	}
+      }
+      
       while (*string != 0)
       {
           int8_t* list   = ABC[toupper(*string)-0x20];
@@ -1012,3 +1065,58 @@ void v_printString(int8_t x, int8_t y, char* string, uint8_t textSize, uint8_t b
     ZERO_AND_WAIT();
 }
 
+void v_printString_scale(int8_t x, int8_t y, char* string, uint8_t scale, uint8_t size, uint8_t brightness)
+{
+    if (usePipeline)
+    {
+      int i=0;
+      currentScale = scale;
+#undef SCALEFONT 
+      #define SCALEFONT (size *1.5 )
+      
+      int startX = x*128;
+      int startY = y*128;
+
+      if (brightness >= 0)
+      {
+        brightness = brightness*intensityMul;
+        if (brightness!=0)
+        {
+          if (brightness>intensityMax)brightness=intensityMax;
+          if (brightness<intensityMin)brightness=intensityMin;
+          
+        }
+      }
+      
+      while (*string != 0)
+      {
+          int8_t* list   = ABC[toupper(*string)-0x20];
+          string++;
+          do
+          {
+            if (*list != 0)
+              v_directDraw32Hinted(startX, startY, (*(list+2))*SCALEFONT+startX, (*(list+1))*SCALEFONT+startY, brightness, (commonHints| PL_BASE_FORCE_USE_FIX_SIZE));
+            startX=(*(list+2))*SCALEFONT+startX;
+            startY=(*(list+1))*SCALEFONT+startY;
+            list = list+3;
+            i++;
+          }
+          while (((int8_t) ( *list) )<=0);
+      }
+      return;
+    }
+    v_setBrightness(brightness);
+    ZERO_AND_WAIT();
+    UNZERO();
+    v_setScale(0x7f);
+    v_moveToImmediate8(x, y);
+        v_setScale(scale);
+    while (*string != 0)
+    {
+      int8_t* oneLetterList   = ABC[*string-0x20];
+      string++;
+      v_Draw_VLp(oneLetterList);
+    }
+    ZERO_AND_WAIT();
+#undef SCALEFONT 
+}

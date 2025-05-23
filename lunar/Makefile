@@ -20,17 +20,24 @@ SIMOBJS := $(SIM_DIR)$(BUILD_DIR)display.o $(SIM_DIR)$(BUILD_DIR)vx_interface.o 
 simLib:
 	$(MAKE) -C $(SIM_DIR) -f Makefile BUILD_FOR=$(BUILD_FOR) all
 
-$(BUILD_DIR)sim.o: $(EMU_NAME).c $(SIM_DIR)framework.c
+$(BUILD_DIR)sim.o: $(EMU_NAME).c $(SIM_DIR)framework.c $(SIM_DIR)macro6502.h
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)sim.o -DSINGLE_GAME="\"$(EMU_NAME)\"" -DGAME_INC="\"../$(EMU_NAME)/$(EMU_NAME).c\"" -c $(SIM_DIR)framework.c
 
 $(BUILD_DIR)main.o: main.c  $(EMU_NAME).c 
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)main.o -c main.c -DSINGLE_GAME="\"$(EMU_NAME)\""
 
-$(TARGET): simLib $(OBJS)
+$(TARGET): simLib $(OBJS) $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(SIMOBJS) $(LIBS) 
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)
+	arm-none-eabi-objdump -l -drwCS -D $(BUILD_DIR)$(TARGET_BASE).elf.img > $(BUILD_DIR)$(TARGET_BASE).elf.img.s
+
 ifdef MAKE_IMAGE
 	cp $(TARGET) $(COPY_TARGET1)
 	cp $(TARGET) $(COPY_TARGET2)
+	cp $(TARGET) /media/sf_E_DRIVE
+else
+ifdef SERIAL_TRANSFER
+	sudo ../PiTrexSerial/piserial -d $(SERIAL_PORT_NAME) -o $(IMG_DIR)/$(TARGET) -i $(TARGET) -a 1 -r -t
+endif
 endif

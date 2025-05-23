@@ -180,7 +180,7 @@ int disasm_6502 (word addr)
   sprintf (b, "%s ", suffix [inst_info [opcode].addrmode]);
   b += strlen (b);
 
-//  printf ("%-27s", disbuffer);
+  printf ("%-27s\n", disbuffer);
 
   breakflag = holdbrkflag;
    return (numbytes);

@@ -280,6 +280,7 @@ int _write( int file, char *ptr, int len )
 }
 
 
+
 int _gettimeofday( struct timeval *tv, void *tzvp )
 {
     uint64_t t = RPI_GetSystemTimer()->counter_hi;
@@ -291,3 +292,12 @@ int _gettimeofday( struct timeval *tv, void *tzvp )
     
     return 0;  // return non-zero for error
 } // end _gettimeofday()
+
+uint64_t getSystemTimerNano()
+{
+    uint64_t t = RPI_GetSystemTimer()->counter_hi;
+    t = t<<32;
+    t = t+RPI_GetSystemTimer()->counter_lo;
+    t = t*1000;  // get uptime in nanoseconds
+  
+}

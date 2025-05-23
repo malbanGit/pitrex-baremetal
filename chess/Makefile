@@ -20,7 +20,7 @@ $(BUILD_DIR)platform.o: platform.c
 $(BUILD_DIR)window.o: window.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)window.o -c window.c
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(SIMOBJS) $(LIBS)
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)

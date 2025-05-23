@@ -545,41 +545,42 @@ int translate_inst (int *pc, char *s)
       s += strlen (s);
 
       switch (optab [opcode].bytes)
-	{
-	case 1:
-	  sprintf (s, "      */  ");
-	  s += strlen (s);
-	  break;
-	case 2:
-	  sprintf (s, " %02x   */  ", operand);
-	  s += strlen (s);
-	  break;
-	case 3:
-	  sprintf (s, " %04x */  ", operand);
-	  s += strlen (s);
-	  break;
-	}
+      {
+        case 1:
+          sprintf (s, "      */  ");
+          s += strlen (s);
+          break;
+        case 2:
+          sprintf (s, " %02x   */  ", operand);
+          s += strlen (s);
+          break;
+        case 3:
+          sprintf (s, " %04x */  ", operand);
+          s += strlen (s);
+          break;
+      }
 
-      sprintf (s, "B(%d);  C(%d);  ", optab [opcode].bytes,
-	       optab [opcode].cycles);
+      sprintf (s, "B(%d);  C(%d);  ", optab [opcode].bytes, optab [opcode].cycles);
       s += strlen (s);
 
-      if ((optab [opcode].bytes == 1) || 
-	  (optab [opcode].mode == MODE_REL) ||
-	  (optab [opcode].mode == MODE_IMM))
-	sprintf (s, optab [opcode].mode);
+      if ((optab [opcode].bytes == 1) ||  (optab [opcode].mode == MODE_REL) || 	  (optab [opcode].mode == MODE_IMM))
+        sprintf (s, optab [opcode].mode);
       else
-	sprintf (s, optab [opcode].mode, operand);
+        sprintf (s, optab [opcode].mode, operand);
       s += strlen (s);
 
       if (optab [opcode].op == OP_JSR)
-	sprintf (s, optab [opcode].op, *pc);
+        sprintf (s, optab [opcode].op, *pc);
       else if (optab [opcode].mode == MODE_REL)
-	sprintf (s, optab [opcode].op, rel_addr (*pc, operand));
+        sprintf (s, optab [opcode].op, rel_addr (*pc, operand));
       else if (optab [opcode].mode == MODE_IMM)
-	sprintf (s, optab [opcode].op, operand);
+        sprintf (s, optab [opcode].op, operand);
       else
-	sprintf (s, optab [opcode].op);
+        sprintf (s, optab [opcode].op);
+
+      s += strlen (s);
+        
+      sprintf (s, " _DR(0x%04x);", (*pc)+optab [opcode].bytes);
       s += strlen (s);
     }
 
@@ -597,10 +598,10 @@ void pass1 (void)
   int end;
 
   while (tracecnt)
-    {
-      /* trace */
-      PC = tracearray [--tracecnt];
-      while (valid_inst (PC))
+  {
+    /* trace */
+    PC = tracearray [--tracecnt];
+    while (valid_inst (PC))
 	{
 	  mark_inst (PC);
 	  decode_inst (& PC, & operand, & branch, & end);
@@ -631,16 +632,16 @@ void pass2 (void)
   char buf [80];
 
   while (PC < 0x10000)
-    {
-      while ((PC < 0x10000) && (mark [PC] != 1))
-	PC++;
-      while ((PC < 0x10000) && (mark [PC] == 1))
+  {
+    while ((PC < 0x10000) && (mark [PC] != 1))
+      PC++;
+    while ((PC < 0x10000) && (mark [PC] == 1))
 	{
 	  translate_inst (& PC, buf);
 	  fprintf (stdout, "%s\n", buf);
 	}
-      fprintf (stdout, "             PC = 0x%04x;  continue;\n", PC);
-    }
+    fprintf (stdout, "             PC = 0x%04x;  continue;\n", PC);
+  }
 }
 
 int main (int argc, char *argv[])

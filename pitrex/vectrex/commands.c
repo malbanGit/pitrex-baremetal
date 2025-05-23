@@ -2,6 +2,8 @@
 
 extern int pendingReturnToPiTrex;
 
+int echoOn = 1;
+
 /*
 extern int currentSwitch;
 extern int currentRead;
@@ -28,74 +30,110 @@ void iCommand(void)
 }
 */
 
+#define MAX_STRING_SIZE 256
+#define MAX_FILE_SIZE (1024*1024*10) // 10 MB Max
+unsigned char data[MAX_FILE_SIZE]; 
+void UARTGetString(char *buffer);
+int UARTGetBinaryData(int size, unsigned char *romBuffer);
+int UARTGetAsciiInt();
+
+void filecopyCommand(void)
+{
+  char buffer[MAX_STRING_SIZE]; // Array to store the converted string
+  printf("Pi:Ready"); // expected from opposite, signal that filecopy is ackonlegded
+  
+  int size =  UARTGetAsciiInt();
+  UARTGetString(buffer);
+  printf("Pi:Name '%s'\n",buffer );
+  
+  UARTGetBinaryData(size, data);
+  printf("Pi:Data received\n"); // expected from opposite, signal that filecopy was successfull
+
+      
+  FILE *f;
+  if (!(f = fopen(buffer, "wb")))
+  {
+      printf("Pi:Filecopy buffer - error opening file: %s!\n", buffer);
+      return;
+  }
+  fwrite(data, size, 1, f);
+    
+  fclose(f);
+  printf("Pi:Filecopy written to: %s (%i bytes)!\n", buffer, size);
+}
+
 void resetCommand(void)
 {
+  int *loaderAvailable = (int *)LOADER_AVAILABLE;
+  if (*loaderAvailable != 1)
+  {
+    printf("reset-c: Loader not available -> not resetting...\r\n");
+    return;
+  }
+   if ((settings->flags) &FLAG_LOADER_RUNNING) 
+   {
+    printf("toLoader-c: loader already running!\r\n");
+    return;
+   }
 
-
-
-/*
-    v_removeIRQHandling();
-    void *progSpace = (void *) 0x8000; 
-    char *FILE_NAME = "pitrex.img";
-    
-    FRESULT rc_rd = FR_DISK_ERR;
-    FIL file_object_rd;
-    rc_rd = f_open(&file_object_rd, FILE_NAME, (unsigned char) FA_READ);
-    
-    v_noSound();
-    
-    printf("Loading: %s \r\n", FILE_NAME);
-    unsigned int fsize = 1000000;
-
-    rc_rd = f_read(&file_object_rd, progSpace, fsize, &fsize);
-    if ( rc_rd!= FR_OK)
-    {
-      printf("loaderMain.c: loadAndStart(): File not loaded (%s) (size got = %i)\r\n", FILE_NAME, rc_rd);
-      f_close(&file_object_rd);
-    }
-    else
-    {
-        f_close(&file_object_rd);
-
-        printf("Starting loaded file... \r\n");
-        isb();
-        dsb();
-        dmb();
-        mmu_disable(); 
-        cache_flush(); // flush I/D-cache 
-    // correct start registers and jump to 8000
-    __asm__ __volatile__(
-        "mov r5, #0x0080   \n\t"
-        "ldr r0, [r5]      \n\t"
-        "mov r5, #0x0084   \n\t"
-        "ldr r1, [r5]      \n\t"
-        "mov r5, #0x0088   \n\t"
-        "ldr r2, [r5]      \n\t"
-        "ldr pc, = 0x8000  \n\t"
-      );
-    }
-*/
-
-
-
-
-
-
-
-
-
-
-
-
+  settings->resetType = RESET_TYPE_RESTART_SELECTION; // -> this restarts the last selected file
   if (!isIRQMode)
   {
-    printf("Restarting kernel...\r\n");
-    uint32_t progSapce = LOADER_START;
-    void (*progStart)(void) = (void (*)(void))progSapce;
-    progStart();
+      printf("c: Restarting section...\r\n");
+      settings->loader();
   }
+  printf("c: Reset command issued...\r\n");
   pendingReturnToPiTrex = 1;
 }
+
+void toLoader(void)
+{
+  int *loaderAvailable = (int *)LOADER_AVAILABLE;
+  if (*loaderAvailable != 1)
+  {
+    printf("toLoader-c: Loader not available -> not returning...\r\n");
+    return;
+  }
+   if ((settings->flags) &FLAG_LOADER_RUNNING) 
+   {
+    printf("toLoader-c: loader already running!\r\n");
+    return;
+   }
+  settings->resetType = RESET_TYPE_CONTINUE_LOADER; // -> this restarts the last selected file
+  if (!isIRQMode)
+  {
+      printf("c: going to loader...\r\n");
+      settings->loader();
+  }
+  printf("c: toLoader command issued...\r\n");
+  pendingReturnToPiTrex = 1;
+}
+
+void reBoot(void)
+{
+  int *loaderAvailable = (int *)LOADER_AVAILABLE;
+
+
+  if (*loaderAvailable != 1)
+  {
+    printf("boot-c: Loader not available -> not booting...\r\n");
+    return;
+  }
+
+  settings->resetType = RESET_TYPE_RESTART_BOOT_NAKED; // -> this forces a start of pitrex.img, reloads the loader...
+  if (!isIRQMode)
+  {
+      printf("c: rebooting...\r\n");
+      settings->loader();
+
+//      uint32_t progSapce = *((int *)LOADER_MAIN); // loader soft reset / starts at main()
+//      void (*progStart)(void) = (void (*)(void))progSapce;
+//      progStart();
+  }
+  printf("c: reBoot command issued...\r\n");
+  pendingReturnToPiTrex = 1;
+}
+
 
 void saveCommand(void)
 {
@@ -503,7 +541,11 @@ void helpCommand(void);
 Command commandList[] =
 { 
         {1,"help", "h",             "help             | h               -> display all command\r\n" ,  helpCommand },
-        {1,"reset", "r",            "reset            | r               -> reset to loader\r\n" ,  resetCommand },
+        {1,"reset", "r",            "reset            | r               -> restarts current img (if loader available)\r\n" ,  resetCommand },
+        {1,"toLoader", "tl",        "toLoader         | tl              -> reset to loader\r\n" ,  toLoader },
+        {1,"reBoot", "rb",          "reBoot           | rb              -> reloads pitrex.img, reloads the loader\r\n" ,  reBoot },
+        
+        
         {1,"save", "s",             "save             | s               -> save config\r\n" ,  saveCommand },
         {1,"setMaxStrength", "sms", "setMaxStrength   | sms xx (1-127)  -> set maximum strength for optimal scales\r\n" ,  setMaxStrengthCommand },
         {1,"setCrankyValue", "scv", "setCrankyValue   | scv xx (0-255)  -> set value for additional cranky delay (flaged)\r\n" ,  setCrankyValueCommand },
@@ -531,6 +573,10 @@ Command commandList[] =
         {1,"setClientRefresh","scr","setClientRefresh | scr             -> set Refresh of client program (0 = sync) \r\n" ,  setClientRefreshCommand },
         {1,"outputCycles","oc",     "outputCycles     | oc              -> output cycles used for 1 round (only usefull if larger than Hz) \r\n" ,  outputRoundCyclesCommand },
 
+        {1,"filecopy","fc",         "filecopy         | fc              -> Used for serial file transer \r\n" ,  filecopyCommand },
+        
+        
+        
         {1,"debug","dbg",           "debug            | dbg             -> enter debug mode (if supported)\r\n" ,  debugCommand },
         {0,"", "", "" ,  (void (*)(void)) 0 }
 };
@@ -572,11 +618,9 @@ void v_initDebug()
 {
         commandBufferPointer = commandBuffer;
         commandBufferCounter = 0;
-
-// can be set from user program
         userCommandList = dummyCommandList;
 
-
+        // printf("Command Flushing UART Read\n");
         while (RPI_AuxMiniUartReadPending()) RPI_AuxMiniUartRead();
 }
 
@@ -678,10 +722,16 @@ char *getParameter(int p)
 
 void handleCommand()
 {
-        if (strlen(commandBuffer) == 0) return;
+        if (strlen(commandBuffer) == 0) 
+        {
+	  return;
+        }
 
         char *cmd = getCommand();
-        if (strlen(cmd) == 0) return;
+        if (strlen(cmd) == 0) 
+        {
+	  return;
+        }
         
         int commandListCounter = 0;
         while (commandList[commandListCounter].id != 0)
@@ -712,18 +762,18 @@ void handleCommand()
         commandListCounter = 0;
         while (userCommandList[commandListCounter].id != 0)
         {
-                if (strlen(cmd) != strlen(commandList[commandListCounter].command)) {commandListCounter++;continue;}
+                if (strlen(cmd) != strlen(userCommandList[commandListCounter].command)) {commandListCounter++;continue;}
                 if (strncasecmp(cmd, userCommandList[commandListCounter].command,strlen(userCommandList[commandListCounter].command)) == 0)
                 {
                         userCommandList[commandListCounter].commandHandler();
                         return;
-                }
+                } 
                 commandListCounter++;
         }
         commandListCounter = 0;
         while (userCommandList[commandListCounter].id != 0)
         {
-                if (strlen(cmd) != strlen(commandList[commandListCounter].commandShort)) {commandListCounter++;continue;}
+                if (strlen(cmd) != strlen(userCommandList[commandListCounter].commandShort)) {commandListCounter++;continue;}
                 if (strncasecmp(cmd, userCommandList[commandListCounter].commandShort, strlen(userCommandList[commandListCounter].commandShort)) == 0) 
                 {
                         userCommandList[commandListCounter].commandHandler();
@@ -733,23 +783,158 @@ void handleCommand()
         }
         printf("unkown command: '%s'\r\n",commandBuffer );
 }
+
+// blocking function
+// terminated ("\n") ascii number 
+// 0 = success
+// -1 = error
+int UARTGetAsciiInt()
+{
+  // expect fileSize in ASCII + return
+  int ret = -1; // error
+#define MAXINT_CHAR_SIZE 20
+  char buffer[MAXINT_CHAR_SIZE];
+  int counter = 0;
+  buffer[0] = 0;
+  
+  while (1)
+  {
+    while (RPI_AuxMiniUartReadPending())
+    {
+      //printf("Command reading UART INT\n");
+
+      char r = RPI_AuxMiniUartRead();
+      
+      
+	if (r != '\n')
+	{
+	    if (counter<MAXINT_CHAR_SIZE-1)
+	    {
+		buffer[counter++] = r;
+		buffer[counter] = (char) 0;
+	    }
+	    else return ret; // error
+	}
+	else if (r == 0x03) // CTRL C -> Abort
+	{
+	    return ret; // error
+	}
+	else
+	{
+	  ret = atoi(buffer);
+	  if (ret == 0)
+	    return -1;
+	  printf("Pi:Expecting: %s\n",buffer );
+	  return ret;
+	}
+    }
+  }
+  return ret;
+}
+
+// blocking function
+// terminated ("\n") string
+#define MAX_STRING_SIZE 256
+void UARTGetString(char *buffer)
+{
+  // expect name in ASCII + return
+  int ret = -1; // error
+  int counter = 0;
+  buffer[0] = 0;
+  
+  while (1)
+  {
+    while (RPI_AuxMiniUartReadPending())
+    {
+      // printf("Command reading UART String\n");
+      char r = RPI_AuxMiniUartRead();
+      if (r == '\n')
+      {
+        return;
+      }
+      if (r != '\n')
+      {
+          if (counter<MAX_STRING_SIZE-1)
+          {
+            buffer[counter++] = r;
+            buffer[counter] = (char) 0;
+          }
+          else return; // error
+      }
+    }
+  } 
+}
+
+
+// in nano seconds 
+//uint64_t getSystemTimerNano(); // NOT WORKING!
+//void RPI_WaitMicroSeconds( uint32_t us );
+// #define __CLOCKS_PER_SEC__ ((uint64_t)1000000000)
+
+#define __CLOCKS_PER_SEC__ ((uint64_t)1000000) // in microseconds
+unsigned long long getOtherTimer(); // pi_support.c
+
+
+
+// 0 = ok
+// 1 = error
+int UARTGetBinaryData(int size, unsigned char *romBuffer)
+{
+  int ret = -1;
+  int counter = 0; 
+
+  uint64_t expectedTime = __CLOCKS_PER_SEC__ * ((uint64_t)(size*10)); // 10 bits, 8 data, 1 start one stop bit
+           expectedTime = expectedTime / ((uint64_t)912600); // size is in bytes -> bits, speed of serial is 912600 baud -> bits per second
+  uint64_t timeOutDif = expectedTime*3;
+  if (timeOutDif<__CLOCKS_PER_SEC__) timeOutDif = __CLOCKS_PER_SEC__;
+  
+  uint64_t clockCurrent;
+  uint64_t clockStart;
+  clockCurrent = getOtherTimer();
+  clockStart = clockCurrent;
+  
+  while (1)
+  {
+    while (RPI_AuxMiniUartReadPending())
+    {
+      unsigned char r = (unsigned char) RPI_AuxMiniUartRead();
+
+      romBuffer[counter++] = r;
+      if (counter == size)
+      {
+    //	printf("Pi:Bin transfered.\n");
+        return 0;
+      }
+    }
+    
+    clockCurrent = getOtherTimer();
+    if ((clockCurrent-clockStart)>timeOutDif)
+    {
+      printf("Pi:Recieve Timeout, Missing: %i.\n", (size-counter));
+      return 1;
+    }
+  }
+  return 0; // OK
+}
+
 void handleUARTInterface()
 {
         while (RPI_AuxMiniUartReadPending())
         {
+          // printf("Command reading UART (command queue)\n");
           char r = RPI_AuxMiniUartRead();
 
           if (!browseMode)
           {
-            RPI_AuxMiniUartWrite(r);
+            if (echoOn) RPI_AuxMiniUartWrite(r);
             if (r != '\n')
             {
-                    if (commandBufferCounter<78)
-                    {
-                            *commandBufferPointer++ = r;
-                            *commandBufferPointer = (char) 0;
-                            commandBufferCounter++;
-                    }
+              if (commandBufferCounter<78)
+              {
+                  *commandBufferPointer++ = r;
+                  *commandBufferPointer = (char) 0;
+                  commandBufferCounter++;
+              }
             }
             else
             {
@@ -757,14 +942,13 @@ void handleUARTInterface()
                   {
                           handleCommand();
                   }
-                    commandBufferPointer = commandBuffer;
-                    commandBufferCounter = 0;
+                  commandBufferPointer = commandBuffer;
+                  commandBufferCounter = 0;
             }
           }
           else
           {
-
-            if (r=='r') currentDisplayedBrowseLine = -1; // redisplay
+	    if (r=='r') currentDisplayedBrowseLine = -1; // redisplay
             if (r=='n') currentBrowsline++; // next
             if (r=='N') currentBrowsline+=10; // next
             if (r=='p') currentBrowsline--; // previous

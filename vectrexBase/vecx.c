@@ -1,9 +1,10 @@
+
 #include <stdint.h>
 #include <unistd.h>
 #include "vecx.h"
 
 #include <vectrex/vectrexInterface.h>
-
+void handleUARTInterface();
 
 #include "e6809.h"
 #include "e6522.h"
@@ -12,30 +13,37 @@
 
 #include "bios.i"
 
-// since we use the cycle counter "differently" - we define our
-// own DIRECT setter and getter
+//----
+// for 256k bankswitching via interrupt
+extern void checkBank(void); // from e6552.c
+extern void int_update(void); // from e6552.c
+volatile uint8_t __bcm2835_gpio_lev(uint8_t pin); // from pitrexio-gpio.c this is the interrupt "pin" of the cartridge
+//----
+int _used_bank_size = BANKSIZE;
+int is48kRom = 0;	// these two do bankswitching differently, and/or the normal ROM area is different
+int is256kRom = 0;
 
-#ifdef BANKS_48
-#define BANKSIZE 2
-#else
-#define BANKSIZE 1 
-#endif
 
+
+// set via ini file - 
+int isTerminalAccessAllowed = 0;
+
+
+int isForcedinternalStringDisplay = 0; // additional parameter to do string printing via vectrex library even in "exact" vectrex
+char bootUpName[128];
 
 
 int isShallowRead;
 void(*vecx_render) (void);
 
-//uint8_t cartBig[32768*2*4]; // Vectorblade
-//uint8_t cart[32768];
-
 uint8_t cart[32768*9]; // lineart
-
 
 int is64kBankSwitch = 0;
 int currentBank =3;
 uint8_t ram[1024];
+
 #ifdef FILE_PLAYER
+void writeExtreme(int addr, unsigned char data);
 uint8_t movieRom[1024*1024*20]; // maximum movie size 20 MB
 int movieLength=0;
 #endif
@@ -151,7 +159,7 @@ static uint8_t read8_port_b()
 		/* timer 1 has control of bit 7 */
 		return (uint8_t)((VIA.orb & 0x5f) | VIA.t1pb7 | DAC.compare);
 	}
-	else
+	else 
 	{
 		/* bit 7 is being driven by VIA.orb */
 		return (uint8_t)((VIA.orb & 0xdf) | DAC.compare);
@@ -177,6 +185,7 @@ void write8_port_b(uint8_t data)
 	dac_update();
 }
 
+// direct
 static uint8_t vx_read8(uint16_t address)
 {
 	uint8_t data = 0xff;
@@ -198,6 +207,14 @@ static uint8_t vx_read8(uint16_t address)
 			/* io */
             if (directEmulation)
             {
+			  if ((address & 0xf) == 0xa)
+			  {
+				  VIA.alternate = 1;
+				  VIA.ifr &= 0xfb; /* remove shift register interrupt flag */
+				  VIA.srb = 0;
+				  VIA.srclk = 1;
+				  int_update();
+			  }
               if (isShallowRead)  
               {
                 if ((address &0xf) == 0)
@@ -213,28 +230,29 @@ static uint8_t vx_read8(uint16_t address)
                 data =  V_GET(address);
               }
 #ifdef DIRECT_EMULATION
-#ifndef WAIT_EMULATION
-	      // a T1 "end" 
-	      // must wait even, when not "wait emulation"
-	      // otherwise lines will be TOO short!!!
-	      if ((address &0xf) == (VIA_int_flags&0xf))              
-	      {
-		// reading the Interrupt flags
-		if ((data & 0x40) == 0x40) // if interrupt is set
-		{
-		  // and either rega or reg b might be used to compare it with
-		  if ((CPU.reg_a == 0x40) ||(CPU.reg_b == 0x40) )
-		  {
-		    //        ADD_DELAY_CYCLES(DELAY_AFTER_T1_END_VALUE_DIRECT-2);
-		    setCounter1Mark();
-		    waitCounter1Mark((DELAY_AFTER_T1_END_VALUE_DIRECT-2));
-		  }
-		}
-	      }
-    
+#ifndef WAIT_EMULATION_1 // jitter in FAST
+			  // a T1 "end" 
+			  // must wait even, when not "wait emulation"
+			  // otherwise lines will be TOO short!!!
+			  if ((address &0xf) == (VIA_int_flags&0xf))              
+			  {
+				// reading the Interrupt flags
+				if ((data & 0x40) == 0x40) // if interrupt is set
+				{
+				  // and either rega or reg b might be used to compare it with
+				  if ((CPU.reg_a == 0x40) ||(CPU.reg_b == 0x40) )
+				  {
+					setCounter1Mark();
+					waitCounter1Mark((DELAY_AFTER_T1_END_VALUE_DIRECT-2));
+				  }
+				}
+			  }
 #endif
 #endif              
 #ifdef DIRECT_EMULATION
+			  // if the vectrex program reads buttons
+			  // get the state of the buttons for ourself too
+			  // watching resets
               if (VIA.ddra == 0)
               {
                 if ((VIA.orb & 0x7f) == 0x09)
@@ -242,7 +260,6 @@ static uint8_t vx_read8(uint16_t address)
                   if (snd_select == 0xe)
                   {
                     vectrexButtonState = data;
-//printf("%04x: vectrexButtonState = $%02x\n\r", CPU.reg_pc, vectrexButtonState);
                   }
                 }
               }
@@ -256,14 +273,48 @@ static uint8_t vx_read8(uint16_t address)
 	else if (address < 0xc000)
 	{
 	    /* cartridge */
-	    data = cart[address+currentBank*32768*BANKSIZE];
+	    data = cart[address+currentBank*32768*_used_bank_size];
 	}
 	return data;
 }
 
- 
+// direct
+static void vx_write8(uint16_t address, uint8_t data)
+{
+	if ((address & 0xe000) == 0xe000)
+	{
+		/* rom */
+	}
+	else if ((address & 0xe000) == 0xc000)
+	{
+		/* it is possible for both ram and io to be written at the same! */
 
+		if (address & 0x800)
+		{
+			  // if bedlam
+			  // do not allow write to VecRfsr
+			  // if ((CPU.reg_pc<0x100) && ((address == 0xc83d) || (address == 0xc83e)) ) return;
+			ram[address & 0x3ff] = data;
+		}
 
+		if (address & 0x1000)
+		{
+		  via_write(address, data);
+		}
+	}
+	else if (address < 0xbfff)
+	{
+		/* cartridge */
+    #ifdef FILE_PLAYER
+          writeExtreme(address, data);
+    #endif      
+          
+          
+#ifdef ALLOW_ROM_WRITE          
+        cart[address+currentBank*32768*_used_bank_size] = data;
+#endif
+	}
+}
 
 #ifdef FILE_PLAYER
 int pos = 0;
@@ -288,7 +339,7 @@ void writeExtreme(int addr, unsigned char data)
                 if (movieLength<pos+1024+512) pos = 0;
                 for (int ii=0; ii< 1024+512;ii++)
                 {
-                    cart[(0x4000+ii)+currentBank*32768*BANKSIZE] = movieRom[pos];
+                    cart[(0x4000+ii)+currentBank*32768*_used_bank_size] = movieRom[pos];
 //System.out.println("Extreme bank switch");                    
                     pos++;
                 }
@@ -302,57 +353,12 @@ void writeExtreme(int addr, unsigned char data)
         }
 }
 #endif      
-static void vx_write8(uint16_t address, uint8_t data)
-{
-	if ((address & 0xe000) == 0xe000)
-	{
-		/* rom */
-	}
-	else if ((address & 0xe000) == 0xc000)
-	{
-		/* it is possible for both ram and io to be written at the same! */
 
-		if (address & 0x800)
-		{
-          // if bedlam
-          // do not allow write to VecRfsr
-//          if ((CPU.reg_pc<0x100) && ((address == 0xc83d) || (address == 0xc83e)) ) return;
-          
-			ram[address & 0x3ff] = data;
-		}
-
-		if (address & 0x1000)
-		{
-		  via_write(address, data);
-		}
-	}
-	else if (address < 0xbfff)
-	{
-		/* cartridge */
-    #ifdef FILE_PLAYER
-          writeExtreme(address, data);
-    #endif      
-          
-          
-#ifdef ALLOW_ROM_WRITE          
-        cart[address+currentBank*32768*BANKSIZE] = data;
-#endif
-	}
-}
-int lastX;
-int lastY;
 #ifndef DIRECT_EMULATION
 static void addline(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint8_t color)
 {
   if (directEmulation) return;
   
-/*
- printf("%i, %i, %i, %i, %u\n\r",  x0,  y0,  x1,  y1, cycleCount-lastAddLine);
-lastX = x1;
-lastY = y1;
-
-  lastAddLine = cycleCount;
-*/
 	vectors[vector_draw_cnt].x0 = x0;
 	vectors[vector_draw_cnt].y0 = y0;
 	vectors[vector_draw_cnt].x1 = x1;
@@ -376,7 +382,7 @@ void vecx_reset(void)
 {
 	/* ram */
 	for (int r = 0; r < 1024; r++)
-		ram[r] = (uint8_t)r;//and();
+		ram[r] = (uint8_t)r;
 
 	e8910_reset();
 
@@ -416,7 +422,6 @@ void vecx_reset(void)
     WRMissed = 0;
     isRamping = 0;
     isShallowRead = 0;
-  
 }
  
 static char printbuffer[40];
@@ -424,10 +429,13 @@ int32_t PrintStr(int32_t cycles)
 {
     int x = -1+ (DAC.curr_x-32768/2)/128;
     int y = -(1+ (DAC.curr_y-32768/2)/128);
-
+    
+    signed int xSize =(signed int) ((signed char)vx_read8(0xC82B)); 
+    signed int ySize =(signed int) ((signed char)vx_read8(0xC82A));
+    
     int address = CPU.reg_u;
     int counter=0;
-    unsigned char c = vx_read8(address++);
+    unsigned char c = vx_read8(address++); 
     while ((c & 0x80) != 0x80)
     {
       if (counter < 39)
@@ -451,7 +459,7 @@ int32_t PrintStr(int32_t cycles)
    
     //Vec_Text_Height EQU     $C82A   ;Default text height
     //Vec_Text_Width  EQU     $C82B   ;Default text width
-    cyclesemulated  = v_printStringRaster(x, y, printbuffer, vx_read8(0xC82B), vx_read8(0xC82A), 0x80);
+    cyclesemulated  = v_printStringRaster(x, y, printbuffer,xSize ,ySize , 0x80);
 
     cycles -= cyclesemulated;
     cycleCount += cyclesemulated;
@@ -518,9 +526,8 @@ int32_t PrintStr_d(int32_t cycles, int width, int height, unsigned char *rlines[
     return cycles;
 }
 
-// naturaolly the Wait Recak
-// emulation only works with games which actually USE WaitRecak!
-
+// naturally the Wait Recal
+// emulation only works with games which actually USE WaitRecal!
 void vecx_emulate(int32_t cycles)
 {
 	while (cycles > 0)
@@ -640,6 +647,7 @@ inline static void t2miniStep(int c)
               VIA.ifr &= 0x7f;
           }
           VIA.t2int = 0;
+		  checkBank();
         }
     }
 }
@@ -670,6 +678,7 @@ inline static void t1MiniStep(int c)
         }
         VIA.t1pb7 = 0x80;
         VIA.t1int = 0;
+		checkBank();
     }
 }
 
@@ -732,26 +741,28 @@ inline static void miniStep(int c)
 
                   // reload counter 
                   VIA.t1c = (VIA.t1lh << 8) | VIA.t1ll;
-              }
-              else
-              {
-                  // one shot mode 
+				  checkBank();
+			  }
+			  else
+			  {
+				  // one shot mode 
 
-                  if (VIA.t1int)
-                  {
-                      VIA.ifr |= 0x40;
-                      if ((VIA.ifr & 0x7f) & (VIA.ier & 0x7f))
-                      {
-                          VIA.ifr |= 0x80;
-                      }
-                      else
-                      {
-                          VIA.ifr &= 0x7f;
-                      }
-                      VIA.t1pb7 = 0x80;
-                      VIA.t1int = 0;
-                  }
-              }
+				  if (VIA.t1int)
+				  {
+					  VIA.ifr |= 0x40;
+					  if ((VIA.ifr & 0x7f) & (VIA.ier & 0x7f))
+					  {
+						  VIA.ifr |= 0x80;
+					  }
+					  else
+					  {
+						  VIA.ifr &= 0x7f;
+					  }
+					  VIA.t1pb7 = 0x80;
+					  VIA.t1int = 0;
+					  checkBank();
+				  }
+			  }
           }
           if (VIA.ca2 == 0)
           {
@@ -768,8 +779,57 @@ inline static void miniStep(int c)
             DAC.curr_y += DAC.dy;
           }
     }
-
 }
+
+// only necessary stuff to determine interrupt
+// only needed for bankswitching in 256k roms
+inline static void miniStepShift(int icycles)
+{
+  for (int i=0;i<icycles;i++)
+  {
+    /* shift counter */
+    if (VIA.srb < 8)
+    {
+        switch (VIA.acr & 0x1c)
+        {
+          case 0x00:
+              /* disabled */
+              break;
+          case 0x04:
+              break;
+          case 0x08:
+              break;
+          case 0x0c:
+              break;
+          case 0x10:
+              break;
+          case 0x14:
+              break;
+          case 0x18:
+              /* shift out under system clock control */
+              VIA.alternate = !VIA.alternate;
+              if (VIA.alternate)
+              {
+                      VIA.srb++;
+              }
+              break;
+          case 0x1c:
+              /* shift out under cb1 control */
+              break;
+        }
+
+        if (VIA.srb == 8)
+        {
+            mustWait = mustWait & (0xff -2);
+			VIA.ifr |= 0x04;
+            int_update();
+        }
+    }
+  }
+  return;
+}
+
+
 inline static void miniStep2(int c)
 {
 #ifdef BEDLAM_T2_HANDLING    
@@ -829,6 +889,7 @@ inline static void miniStep2(int c)
 
                   // reload counter 
                   VIA.t1c = (VIA.t1lh << 8) | VIA.t1ll;
+				  checkBank();
               }
               else
               {
@@ -847,6 +908,7 @@ inline static void miniStep2(int c)
                       }
                       VIA.t1pb7 = 0x80;
                       VIA.t1int = 0;
+					  checkBank();
                   }
               }
           }
@@ -866,12 +928,7 @@ inline static void miniStep2(int c)
     }
 }
 
-
-//int fdoExtraWait = 0;
 void v_immediateDraw32Patterned(int8_t xEnd, int8_t yEnd, uint8_t pattern);
-
-//do more bios functions!
-
 
 void Draw_Line_d()
 {
@@ -888,240 +945,250 @@ void Draw_Line_d()
     CPU.reg_pc = 0xf3fb; // End of line draw in draw_line_d
     mustWork = 0;
     cycleCount += 100;
-}
-
-
+} 
+ 
+extern int isVecMania;
+extern unsigned int vDebugTo;
+extern uint16_t old_op;
+extern uint16_t old_pc;
+volatile int singleStep = 0;
 static int NANO_WAIT;
+
 void vecx_direct(int32_t cycles)
 {
-    int ll = 0;
+  int ll = 0;
     NANO_WAIT = (cycleEquivalent-11);
-    while (cycles > 0)
+    while (cycles > 0) 
     {
-        uint16_t icycles;
-        mustWork = 1;
+      // limited debugging with console
+      // might be expanded in the future
+      if (singleStep)
+      {
+		printf("PC: $%04x(%i): $%02x [SHIT: $%02x, T1: $%02x, Enabled: $%02x]\n", old_pc, currentBank, old_op, (VIA.ifr & 0x04), (VIA.ifr & 0x40), VIA.ier & 0x7f);
+	 
+		if (vDebugTo != 0)
+		{
+		  if (vDebugTo == old_pc) vDebugTo =0;
+		}
+		singleStep = 1;
+      }
+
+      uint16_t icycles;
+      mustWork = 1;	// nearly always true, some emulated "PC_TEST" might set it to zero though
 #ifdef PC_TESTS
-        PC_TESTS
+      PC_TESTS // custom PC-Tests... e.g. Vectorblade for Flash saving
 #endif
-//        if (CPU.reg_pc < 0xe000) 
-//        {
-//          printf("%04x:\n\r", CPU.reg_pc);
-//        }
-// VecMania with its YM-Player
-// each round DISABLES Port A of the PSG chip
-// that is why joystick reading return always 0 == all buttons pressed!
-// joystick button reading does not work here! /unless changing reg 7 of PSG, which I will not do)
 
 #ifdef LINEART
 // not implemented is a "real" vecFlash bankswitch
 // but I know the cart :-)
-        if (CPU.reg_pc == 0xc889) // lineart bankswitch
+	if (CPU.reg_pc == 0xc889) // lineart bankswitch
 	{
 	  currentBank = ram[0x81];
-          CPU.reg_pc = 0x002f; // flash start
+	  CPU.reg_pc = 0x002f; // flash start
 	  mustWork = 1;
 	}
 #endif
 
-        if (CPU.reg_pc == 0xf192) //0xF192) // WaitRecal
-        {
-            if (vectrexButtonState == 0x1ff)
-            {
-              // if we have not read the joystick this round
-              // we try to intercept WR
-              vectrexButtonState = ~v_directReadButtons();
-//              {
-//                printf("%04x: (!)vectrexButtonState = = $%02x\n\r", CPU.reg_pc, vectrexButtonState);
-//              } 
-            }
-        }
-//F1F5    Joy_Analog                                              ;
-//F1F8    Joy_Digital           
-	extern int isVecMania;
-	if (isVecMania)
-	{ 
+	if (swapPorts)
+	{
+	  // with swap ports we must intercept joystick and button reading
 	  if (CPU.reg_pc == 0xF1F8) // Joy_Digital
 	  {
-	      void v_readJoystick1Digital1();
-	      v_readJoystick1Digital1();
+extern uint8_t ioDone; // during vectrex emulation this is not reset every round!
+ioDone = 0;
+	      void v_readJoystick1Digital1(unsigned int x1_enabled,unsigned int y1_enabled,unsigned int x2_enabled,unsigned int y2_enabled);
+	      v_readJoystick1Digital1(ram[0xC81F&0x3ff],ram[0xC820&0x3ff],ram[0xC821&0x3ff],ram[0xC822&0x3ff]);
+
+printf("v_readJoystick1Digital1: = %02x\n", currentJoy1X);
+
 	      ram[0xC81B&0x3ff] = currentJoy1X*60;
 	      ram[0xC81C&0x3ff] = currentJoy1Y*60;
+	      if (!isVecMania)
+	      {
+		ram[0xC81D&0x3ff] = currentJoy2X*60;
+		ram[0xC81E&0x3ff] = currentJoy2Y*60;
+	      }
+	      ram[0xC823&0x3ff] = 0;
+	      CPU.reg_pc = 0xF36B; // reset 0 int
+	      mustWork = 0;
+	  }
+	  if (CPU.reg_pc == 0xF1F5) // Joy_Analog
+	  {
+extern uint8_t ioDone; // during vectrex emulation this is not reset every round!
+ioDone = 0;
+	      void v_readJoystick1Analog1(unsigned int x1_enabled,unsigned int y1_enabled,unsigned int x2_enabled,unsigned int y2_enabled);
+	      v_readJoystick1Analog1(ram[0xC81F&0x3ff],ram[0xC820&0x3ff],ram[0xC821&0x3ff],ram[0xC822&0x3ff]);
+printf("v_readJoystick1Analog1: = %02x\n", currentJoy1X);
+
+
+	      ram[0xC81B&0x3ff] = currentJoy1X;
+	      ram[0xC81C&0x3ff] = currentJoy1Y;
+	      if (!isVecMania)
+	      {
+		ram[0xC81D&0x3ff] = currentJoy2X;
+		ram[0xC81E&0x3ff] = currentJoy2Y;
+	      }
+	      ram[0xC823&0x3ff] = 0;
+	      CPU.reg_pc = 0xF36B; // reset 0 int
+	      mustWork = 0;
+	  }
+	  
+	  
+	  if (CPU.reg_pc == 0xF1B4) // Read_Btns_Mask
+	  {
+	    //v_readButtons();
+	  }
+	  if (CPU.reg_pc == 0xF1BA) // Read_Btns
+	  {
+extern uint8_t ioDone; // during vectrex emulation this is not reset every round!
+ioDone = 0;
+
+	    v_readButtons();
+	    
+	      ram[0xC810&0x3ff] = ram[0xC80f&0x3ff]; // Vec_Prev_Btns = Vec_Btn_State
+	      ram[0xC80f&0x3ff] = currentButtonState; // Vec_Btn_State = high active (High active is done in lib)
+	      int current_Low_Active = ~currentButtonState; // low active state
+	      int last_High_Active = ram[0xC810&0x3ff];
+	      int r = current_Low_Active | last_High_Active;
+	      r = ~r; // transition (toggle) state of buttons
+	      ram[0xC811&0x3ff] = r; // to reg A!!!
+	      
+	      ram[0xC812&0x3ff] = r&0x01; // ;Current toggle state of stick 1 button 1
+	      ram[0xC813&0x3ff] = r&0x02; // ;Current toggle state of stick 1 button 2
+	      ram[0xC814&0x3ff] = r&0x04; // ;Current toggle state of stick 1 button 3
+	      ram[0xC815&0x3ff] = r&0x08; // ;Current toggle state of stick 1 button 4
+	      ram[0xC816&0x3ff] = r&0x10; // ;Current toggle state of stick 2 button 1
+	      ram[0xC817&0x3ff] = r&0x20; // ;Current toggle state of stick 2 button 2
+	      ram[0xC818&0x3ff] = r&0x40; // ;Current toggle state of stick 2 button 3
+	      ram[0xC819&0x3ff] = r&0x80; // ;Current toggle state of stick 2 button 4
+	      
+	      CPU.reg_a = r;
+	      CPU.reg_pc = 0xf57d; // RTS - any
+	      mustWork = 0;
+	  }
+	}
+
+
+
+
+	if (CPU.reg_pc == 0xf192) //0xF192) // WaitRecal 
+	{
+		if (vectrexButtonState == 0x1ff) 
+		{
+		  // if we have not read the joystick this round
+		  // we try to intercept WR
+		  vectrexButtonState = ~v_directReadButtons();
+		} 
+	}
+         
+	if (isVecMania)
+	{ 
+	  // VecMania with its YM-Player
+	  // each round DISABLES Port A of the PSG chip
+	  // that is why joystick reading return always 0 == all buttons pressed!
+	  // joystick button reading does not work here! /unless changing reg 7 of PSG, which I will not do)
+
+	  // if enabled mr boston moves with buttons instead of joystick!
+	  if (CPU.reg_pc == 0xF1F8) // Joy_Digital
+	  {
+	      void v_readJoystick1Digital1(unsigned int x1_enabled,unsigned int y1_enabled,unsigned int x2_enabled,unsigned int y2_enabled);
+	      v_readJoystick1Digital1(ram[0xC81F&0x3ff],ram[0xC820&0x3ff],ram[0xC821&0x3ff],ram[0xC822&0x3ff]);
+	      ram[0xC81B&0x3ff] = currentJoy1X*60;
+	      ram[0xC81C&0x3ff] = currentJoy1Y*60;
+	      if (!isVecMania)
+	      {
+			ram[0xC81D&0x3ff] = currentJoy2X*60;
+			ram[0xC81E&0x3ff] = currentJoy2Y*60;
+	      }
 	      ram[0xC823&0x3ff] = 0;
 	      CPU.reg_pc = 0xF36B; // reset 0 int
 	  }
 	}
-
+	
 #ifdef EMULATE_KNOWN_PRINTSTR 
-
-        if (CPU.reg_pc == 0xF495) // printstr
-        {
-            cycles = PrintStr(cycles);
-            icycles = 0;
-        }
-/*
-        if (CPU.reg_pc == 0xF3DF) // Draw_Line_d
-        {
-            Draw_Line_d(cycles);
-            icycles = 0;
-        }
-*/        
-        
-// vectrex on speed gets its
-// own pattern draw routine
-// the title screen looks better :-)
-        else if (CPU.reg_pc == 0xF35B) // Reset_Pen
-        {
-/*
-;-----------------------------------------------------------------------;
-;       F312    Moveto_d                                                ;
-;                                                                       ;
-; This routine uses the current scale factor, and moves the pen to the  ;
-; (y,x) position specified in D register.                               ;
-;                                                                       ;
-; ENTRY DP = $D0                                                        ;
-;       A-reg = Y coordinate                                            ;
-;       B-reg = X coordinate                                            ;
-;                                                                       ;
-;       D-reg trashed                                                   ;
-;-----------------------------------------------------------------------;
-;-----------------------------------------------------------------------;
-;       F308    Moveto_ix_FF                                            ;
-;       F30C    Moveto_ix_7F                                            ;
-;       F30E    Moveto_ix_b                                             ;
-;                                                                       ;
-; These routines force the scale factor to 0xFF, 0X7F, or the           ;
-; A register, and then move the pen to the (y,x) position pointed to    ;
-; by the X-register.  The X-register is then incremented by 2.          ;
-;                                                                       ;
-; ENTRY DP = $D0                                                        ;
-;       X-reg points to the (y,x) coordinate pair                       ;
-;       B-reg contains the scale factor (Moveto_ix_b only)              ;
-;                                                                       ;
-; EXIT: X-reg has been incremented by 2                                 ;
-;                                                                       ;
-;       D-reg trashed                                                   ;
-;-----------------------------------------------------------------------;
-;-----------------------------------------------------------------------;
-;       F35B    Reset_Pen                                               ;
-;                                                                       ;
-;       Reset the pen to the origin.                                    ;
-;                                                                       ;
-; ENTRY DP = $D0                                                        ;
-;                                                                       ;
-;       D-reg trashed                                                   ;
-;-----------------------------------------------------------------------;
-*/
-// not NOT enought zero time
-// not cranky related
-// not cycle equivalent related
-// DELAY_NOW(1000);
-        }
-        
-        else if (CPU.reg_pc == 0xF312) // Moveto_d
+	if (CPU.reg_pc == 0xF495) // printstr
 	{
-/*	  
-;-----------------------------------------------------------------------;
-;       F312    Moveto_d                                                ;
-;                                                                       ;
-; This routine uses the current scale factor, and moves the pen to the  ;
-; (y,x) position specified in D register.                               ;
-;                                                                       ;
-; ENTRY DP = $D0                                                        ;
-;       A-reg = Y coordinate                                            ;
-;       B-reg = X coordinate                                            ;
-;                                                                       ;
-;       D-reg trashed                                                   ;
-;-----------------------------------------------------------------------;
-*/
-UNZERO();
-lastScale = currentScale = VIA.t1ll; // just start the timer
-
-// 
-	  v_moveToImmediate8(CPU.reg_b, CPU.reg_a);
-          CPU.reg_pc = 0xf57d; // RTS - any
-//          CPU.reg_pc = 0xF345; 
-//          CPU.reg_b = 0x40; 
-// printf("M %02x, %02x, %04x \n", CPU.reg_b, CPU.reg_a, currentScale);
-          
-          mustWork = 0;
-
+		cycles = PrintStr(cycles);
+		icycles = 0;
 	}
-        
+	
+	else if (CPU.reg_pc == 0xF35B) // Reset_Pen
+	{
+  
+	}
+	
+	else if (CPU.reg_pc == 0xF312) // Moveto_d
+	{
+	  UNZERO();
+	  lastScale = currentScale = VIA.t1ll; // just start the timer
+	  v_moveToImmediate8(CPU.reg_b, CPU.reg_a);
+		  CPU.reg_pc = 0xf57d; // RTS - any
+		  mustWork = 0;
+	}
+	else if (CPU.reg_pc == 0xF434) // pattern draw_a
+	{
+	  uint8_t pattern = ram[0xC829&0x3ff];
+	  int count = CPU.reg_a;        
+	  uint16_t listStartAdr = (uint16_t) CPU.reg_x;
+	  uint8_t brightness = (uint8_t)DAC.zsh;
 
-        else if (CPU.reg_pc == 0xF434) // pattern draw_a
-        {
-          uint8_t pattern = ram[0xC829&0x3ff];
-          int count = CPU.reg_a;        
-          uint16_t listStartAdr = (uint16_t) CPU.reg_x;
-          uint8_t brightness = (uint8_t)DAC.zsh;
+	  v_setBrightness( brightness);
+	  v_setScaleForced(VIA.t1ll);
+	  CPU.reg_x += 2*(count+1);
 
-          v_setBrightness( brightness);
-          v_setScaleForced(VIA.t1ll);
-          CPU.reg_x += 2*(count+1);
-
-          int x1;
-          int y1;
-          for (;count>=0;count--)
-          {
-            if (listStartAdr<0xc000)
-            {
-              y1 = ((signed char)cart[(listStartAdr++)+currentBank*32768]);
-              x1 = ((signed char)cart[(listStartAdr++)+currentBank*32768]);
-            }
-            else
-            {
-              y1 = ((signed char)rom[((listStartAdr++)&0x1fff)  ]);
-              x1 = ((signed char)rom[((listStartAdr++)&0x1fff)  ]);
-            }
-            v_immediateDraw32Patterned(x1, y1, pattern);
-          }
-//          ZERO_AND_CONTINUE();
-//	  DELAY_NOW(10);
+	  int x1;
+	  int y1;
+	  for (;count>=0;count--)
+	  {
+		if (listStartAdr<0xc000)
+		{
+		  y1 = ((signed char)cart[(listStartAdr++)+currentBank*32768]);
+		  x1 = ((signed char)cart[(listStartAdr++)+currentBank*32768]);
+		}
+		else
+		{
+		  y1 = ((signed char)rom[((listStartAdr++)&0x1fff)  ]);
+		  x1 = ((signed char)rom[((listStartAdr++)&0x1fff)  ]);
+		}
+		v_immediateDraw32Patterned(x1, y1, pattern);
+	  }
 	  ZERO_AND_WAIT();
 
-          CPU.reg_pc = 0xF34F;// check 0 ref 
-          CPU.reg_pc = 0xf57d; // RTS
-          mustWork = 0;
-        }
-        
+	  CPU.reg_pc = 0xF34F;// check 0 ref 
+	  CPU.reg_pc = 0xf57d; // RTS
+	  mustWork = 0;
+	}
+#else // EMULATE_KNOWN_PRINTSTR 
+
+	if (isForcedinternalStringDisplay)
+	{
+	  if (CPU.reg_pc == 0xF495) // printstr
+	  {
+		  cycles = PrintStr(cycles);
+		  icycles = 0; 
+	  }
+	}
+
 #endif
-        if (mustWork)
-        {
-//            isRamping = (( (VIA.acr & 0x80)?(VIA.t1pb7):(VIA.orb & 0x80)) == 0);
-            // skip interrupt handling?
-            // skip interrupt check when ramp is enabled
-            // otherwise the adition cycles will "destroy" correct drawing
-          
-            // todo think of a similar cheat for 3d imager games.
-            // as it is now, they will most likely be VERY slow! 
-//            if ((( CPU.reg_cc & FLAG_I) == 0) && (( (VIA.acr & 0x80)?(VIA.t1pb7):(VIA.orb & 0x80)) != 0))
+	// only do not work e.g. when a subroutine of the BIOS is already done by PiTrex
+	if (mustWork)
+	{
 
-// lightpen interrupt only
-// this does not work for scanlines!          
-// for scanlines - ramping must be "ON"          
-//          if ((( CPU.reg_cc & FLAG_I) == 0) && (( VIA.ier & 2 ) == 2) && ((( (VIA.acr & 0x80)?(VIA.t1pb7):(VIA.orb & 0x80)) != 0)) ))
-          if ((( CPU.reg_cc & FLAG_I) == 0) && (( VIA.ier & 2 ) == 2))
-          {
-                icycles = e6809_sstep(V_GET(0xD00D) & 0x80, 0);
-          }
-          else
-            
-/*            
-#ifdef THE_SPIKE_MUST_FLOW      
-            
-// T1 interrupt (Spike)            
-          if ( (( CPU.reg_cc & FLAG_I) == 0) &&  (( VIA.ier & 0x40 ) == 0x40))
-                icycles = e6809_sstep(VIA.ifr & 0x80, 0);
-            else
-#endif              
+		// Lightpen & Imager working!	  
+		// unsigned int value = __bcm2835_gpio_lev(26); -> this gets the state of the IRQ line directly from the PiZero gpio! -> no time wasted, waiting for VIA!!!
+		if ((( CPU.reg_cc & FLAG_I) == 0) && (( VIA.ier & 2 ) == 2))
+		icycles = e6809_sstep(__bcm2835_gpio_lev(26), 0);
+		else
+		icycles = e6809_sstep(VIA.ifr & 0x80, 0);
 
-// T2 Bedlam runs in a T2 interrup loop with CWAI            
-              
-              
-              icycles = e6809_sstep(0, 0);
-*/            
-                icycles = e6809_sstep(VIA.ifr & 0x80, 0);
-            
+		// for bankswitching with IRQ we need interrupts - also the shiftInterrupt
+		if(is256kRom)
+		{
+		  miniStepShift(icycles);
+		}
+		
+		
  
 #ifdef EMULATE_KNOWN_PRINTSTR
 /*
@@ -1135,110 +1202,98 @@ lastScale = currentScale = VIA.t1ll; // just start the timer
  with wait emulation atm we do not interecpt print_str
  we are by now DAMN exact!!!
 */            
-            miniStep(icycles);
-#ifndef WAIT_EMULATION
-#endif
-            
-//#ifdef WAIT_EMULATION
-//            miniStep(icycles);
-//#else
-//            miniStep2(icycles);
-/*
-             for (uint16_t c = 0; c < icycles; c++)
-            {
-                via_sstep0();
-                dac_sstep();
-                via_sstep1();
-            }
-*/            
-//#endif              
-
-#else
-#ifdef THE_SPIKE_MUST_FLOW      
-  t1MiniStep(icycles);  
+	    miniStep(icycles);
+#else // EMULATE_KNOWN_PRINTSTR
+	    
+	    if (isForcedinternalStringDisplay)
+			miniStep(icycles); // does not include shift 
+	    
+#ifdef THE_SPIKE_MUST_FLOW 
+	    if (!isForcedinternalStringDisplay) // don't do doubles, positioning does not work correctly if doing doubles (logically)
+	      t1MiniStep(icycles);  
+  
 #endif
   
 #ifdef BEDLAM_T2_HANDLING
-  t2miniStep(icycles);
-  
+	    if (!isForcedinternalStringDisplay) // don't do doubles! (bedlamp not working e.g.
+	      t2miniStep(icycles);
 #endif            
 #endif            
-            
             
 #ifdef WAIT_EMULATION   
 
-// TODO
-// EACH VIA READ happens two cycles to early,
-// since the read is "direct" and not delayed
-// since HERE we always wait for "absolut" time (not relative),
-// to be more exact, we could ALLWAYS wait 2 cycles
-// before we do a VIA - READ,
-// this should be always correct! Since 6809 instructions need to cycles to "start"
-// also the read itself would take 2 cycles, so
-// even a CLR <VIA_PortB
-// type instruction would be back to "write" in 4 cycles... and use another 2 cycles for the write
-// -> CORRECT!
+	    // TODO
+	    // EACH VIA READ happens two cycles to early,
+	    // since the read is "direct" and not delayed
+	    // since HERE we always wait for "absolut" time (not relative),
+	    // to be more exact, we could ALLWAYS wait 2 cycles
+	    // before we do a VIA - READ,
+	    // this should be always correct! Since 6809 instructions need two cycles to "start"
+	    // also the read itself would take 2 cycles, so
+	    // even a CLR <VIA_PortB
+	    // type instruction would be back to "write" in 4 cycles... and use another 2 cycles for the write
+	    // -> CORRECT!
 
-              if (viaAccessCounter==0) 
-              {
-                // theoretically only when
-                // ramp active
-                // or the first "X" cycles of zeroing!
-                // zeroing seems to be not relevant (yet???)
+	    if (viaAccessCounter==0) 
+	    {
+	      // theoretically only when
+	      // ramp active
+	      // or the first "X" cycles of zeroing!
+	      // zeroing seems to be not relevant (yet???)
 #ifndef EXACT_WAIT_EMULATION
-                if (( (VIA.acr & 0x80)?(VIA.t1pb7):(VIA.orb & 0x80)) == 0) // only if ramping  // 
+	      if (( (VIA.acr & 0x80)?(VIA.t1pb7):(VIA.orb & 0x80)) == 0) // only if ramping  // 
 #endif                
-                {
-                  waitUntil((icycles)*NANO_WAIT);
-                }
-                  
-                  
-                // TODO
-                // if we don't "overstep" the waiting if no VIA is used (ramp/zero)
-                // THAN
-                // we could sync with VIA for every TWO cylces we wait
-                // with a VIA read!!!
-                // provided we have about 1200 cycles left for syncing!
-              }
-              else if (viaAccessCounter==1) 
-              {
-                // one VIA access takes 2 cycles
-                // so before the wait for the VIA
-                // we wait 2 cycles less!
-                
-                // must not be less than zero!!!
+	      {
+			waitUntil((icycles)*NANO_WAIT);
+	      }
+		
+		
+	      // TODO
+	      // if we don't "overstep" the waiting if no VIA is used (ramp/zero)
+	      // THAN
+	      // we could sync with VIA for every TWO cylces we wait
+	      // with a VIA read!!!
+	      // provided we have about 1200 cycles left for syncing!
+	    }
+	    else if (viaAccessCounter==1) 
+	    {
+	      // one VIA access takes 2 cycles
+	      // so before the wait for the VIA
+	      // we wait 2 cycles less!
+	      
+	      // must not be less than zero!!!
 
-                waitUntil((icycles-2)*NANO_WAIT);
-                V_SET(delayVia[0], delayData[0]);
-                viaAccessCounter=0;
-              }
-              else if (viaAccessCounter==2) // this is something like std <VIA_portB
-              {
-                // This is a "double" write to VIA
-                // the two writes take 4 cycles, so we wait even
-                // less time before we start writing to VIA
+	      waitUntil((icycles-2)*NANO_WAIT);
+	      V_SET(delayVia[0], delayData[0]);
+	      viaAccessCounter=0;
+	    }
+	    else if (viaAccessCounter==2) // this is something like std <VIA_portB
+	    {
+	      // This is a "double" write to VIA
+	      // the two writes take 4 cycles, so we wait even
+	      // less time before we start writing to VIA
 
-                // due to experiments... this must be
-                // 3 cycles less instead of 4
-                // 4 cycles less is too fast, 
-                // e.g. in print rouines 5 font
-                // y integrator is not
-                // completely reset to 0 if it is -4
-                // to replicate the behaviour of the correct vectrex internal timing here use -3!!!
-                
-                // must not be less than zero!!!
-                waitUntil((icycles-3)*NANO_WAIT);
-                V_SET(delayVia[0], delayData[0]);
-                V_SET(delayVia[1], delayData[1]);
-                viaAccessCounter=0;
-              }
-              // reset cycle counter
-              // at the END of the current instruction-> the new one starts
-              PMNC(CYCLE_COUNTER_ENABLE|CYCLE_COUNTER_RESET);
+	      // due to experiments... this must be
+	      // 3 cycles less instead of 4
+	      // 4 cycles less is too fast, 
+	      // e.g. in print rouines 5 font
+	      // y integrator is not
+	      // completely reset to 0 if it is -4
+	      // to replicate the behaviour of the correct vectrex internal timing here use -3!!!
+	      
+	      // must not be less than zero!!!
+	      waitUntil((icycles-3)*NANO_WAIT);
+	      V_SET(delayVia[0], delayData[0]);
+	      V_SET(delayVia[1], delayData[1]);
+	      viaAccessCounter=0;
+	    }
+	    // reset cycle counter
+	    // at the END of the current instruction-> the new one starts
+	    PMNC(CYCLE_COUNTER_ENABLE|CYCLE_COUNTER_RESET);
 #endif            
             cycles -= icycles;
-//            cycleCount += icycles;
         }
+        if (singleStep==1) break;
     }
 }
 

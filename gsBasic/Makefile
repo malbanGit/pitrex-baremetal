@@ -123,7 +123,7 @@ $(BUILD_DIR)Error.o: Error.cpp Error.h
 $(BUILD_DIR)GSBString.o: GSBString.cpp GSBString.h
 	$(CPP) $(CFLAGS) -o $(BUILD_DIR)GSBString.o -c GSBString.cpp
 
-$(TARGET): $(OBJS_BASIC) $(OBJS_VECTREX32)
+$(TARGET): $(OBJS_BASIC) $(OBJS_VECTREX32) $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS_BASIC) $(OBJS_VECTREX32) $(LIBSGCC)	
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)

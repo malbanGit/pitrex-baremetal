@@ -1130,6 +1130,8 @@ void e6809_reset(void)
 }
 
 /* execute a single instruction or handle interrupts and return */
+uint16_t old_op = 0;
+uint16_t old_pc = 0;
 
 uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 {
@@ -1191,7 +1193,13 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		return cycles + 1;
 	}
 
+	
+	
+	
+	
+ 	old_pc = CPU.reg_pc;
 	uint16_t op = pc_vx_read8();
+	old_op = op;
 	uint16_t ea, i0, i1, r;
 
 	switch (op)
@@ -2661,7 +2669,7 @@ uint16_t e6809_sstep(uint16_t irq_i, uint16_t irq_f)
 		break;
 
 	default:
-		printf("unknown page-0 op code: %.2x\n", op);
+		printf("unknown page-0 op code: %.2x, %04x Bank: %i\n", op, old_pc, currentBank);
 		break;
 	}
 

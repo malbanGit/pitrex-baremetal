@@ -28,13 +28,54 @@
 ***********************************************************************/
 
 
+
+
+// #define DEBUG_SBT
+
+#ifdef DEBUG_SBT
+
+#define KEEP_ACCURATE_PC 1
+void dumpregs (void);
+int OPC;
+
 /* instruction byte count macro, for translated code only */
 #ifdef KEEP_ACCURATE_PC
-#define B(val) do { PC += val; } while (0)
+//#define B(val) do {PC += val;} while (0)
+#define B(val) do {OPC=PC;PC += val;} while (0)
 #else
-#define B(val)
+//#define B(val) 
+#define B(val) do {OPC=PC;} while (0)
 #endif
 
+#define _DR(NEW_PC) do { \
+               save_A = A; \
+               save_X = X; \
+               save_Y = Y; \
+               save_flags = flags_to_byte; \
+               save_PC = OPC; \
+               save_totcycles = totcycles; \
+               dumpregs();   \
+               if (totcycles > irq_cycle) goto check_IRQ; \
+               } while (0)
+#else
+
+
+//#define KEEP_ACCURATE_PC 1
+
+#ifdef KEEP_ACCURATE_PC
+#define B(val) do {PC += val;} while (0)
+#else
+#define B(val) 
+#endif
+
+#define _DR(NEW_PC) do { \
+               if (totcycles > irq_cycle) {PC=NEW_PC;goto check_IRQ;} \
+               } while (0)
+              
+#endif
+               
+               
+               
 /* instruction cycle count macro */
 #ifdef NO_CYCLE_COUNT
 #define C(val)
@@ -284,94 +325,94 @@ ABS
   do { \
     word wtemp; \
     if(TST_D) \
+    { \
+      word nib1, nib2; \
+      word result1, result2; \
+      word result3, result4; \
+      wtemp = A; \
+      nib1 = (data) & 0xf;			\
+      nib2 = wtemp & 0xf; \
+      result1 = nib1+nib2+TST_C; /* Add carry */ \
+      if(result1 >= 10) \
       { \
-    word nib1, nib2; \
-    word result1, result2; \
-    word result3, result4; \
-    wtemp = A; \
-    nib1 = (data) & 0xf;			\
-    nib2 = wtemp & 0xf; \
-    result1 = nib1+nib2+TST_C; /* Add carry */ \
-    if(result1 >= 10) \
-      { \
-        result1 = result1 - 10; \
-        result2 = 1; \
+          result1 = result1 - 10; \
+          result2 = 1; \
       } \
+      else \
+        result2 = 0; \
+      nib1 = ((data) & 0xf0) >> 4;		\
+      nib2 = (wtemp & 0xf0) >> 4; \
+      result3 = nib1+nib2+result2; \
+      if(result3 >= 10) \
+      { \
+          result3 = result3 - 10; \
+          result4 = 1; \
+      } \
+      else \
+        result4 = 0; \
+      STO_C (result4); \
+      CLR_V; \
+      wtemp = (result3 << 4) | (result1); \
+      A = wtemp & 0xff; \
+      setflags (A); \
+    } \
     else \
-      result2 = 0; \
-    nib1 = ((data) & 0xf0) >> 4;		\
-    nib2 = (wtemp & 0xf0) >> 4; \
-    result3 = nib1+nib2+result2; \
-    if(result3 >= 10) \
-      { \
-        result3 = result3 - 10; \
-        result4 = 1; \
-      } \
-    else \
-      result4 = 0; \
-    STO_C (result4); \
-    CLR_V; \
-    wtemp = (result3 << 4) | (result1); \
-    A = wtemp & 0xff; \
-    setflags (A); \
-      } \
-    else \
-      { \
-    wtemp = A; \
-    wtemp += TST_C;    /* add carry */ \
-    wtemp += (data);		       \
-    STO_C (wtemp & 0x100); \
-    STO_V ((((A ^ (data)) & 0x80) == 0) && (((A ^ wtemp) & 0x80) != 0)); \
-    A = wtemp & 0xff; \
-    setflags (A); \
-      } \
+    { \
+      wtemp = A; \
+      wtemp += TST_C;    /* add carry */ \
+      wtemp += (data);		       \
+      STO_C (wtemp & 0x100); \
+      STO_V ((((A ^ (data)) & 0x80) == 0) && (((A ^ wtemp) & 0x80) != 0)); \
+      A = wtemp & 0xff; \
+      setflags (A); \
+    } \
   } while (0)
 
 #define DO_SBCI(data) \
   do { \
     word wtemp; \
     if (TST_D) \
-      { \
-    int nib1, nib2; \
-    int result1, result2; \
-    int result3, result4; \
-    wtemp = A; \
-    nib1 = (data) & 0xf;			\
-    nib2 = wtemp & 0xf; \
-    result1 = nib2-nib1-!TST_C; /* Sub borrow */ \
-    if(result1 < 0) \
+    { \
+      int nib1, nib2; \
+      int result1, result2; \
+      int result3, result4; \
+      wtemp = A; \
+      nib1 = (data) & 0xf;			\
+      nib2 = wtemp & 0xf; \
+      result1 = nib2-nib1-!TST_C; /* Sub borrow */ \
+      if(result1 < 0) \
       { \
         result1 += 10; \
         result2 = 1; \
       } \
-    else \
-      result2 = 0; \
-    nib1 = ((data) & 0xf0) >> 4;		\
-    nib2 = (wtemp & 0xf0) >> 4; \
-    result3 = nib2-nib1-result2; \
-    if(result3 < 0) \
+      else \
+        result2 = 0; \
+      nib1 = ((data) & 0xf0) >> 4;		\
+      nib2 = (wtemp & 0xf0) >> 4; \
+      result3 = nib2-nib1-result2; \
+      if(result3 < 0) \
       { \
         result3 += 10; \
         result4 = 1; \
       } \
+      else \
+        result4 = 0; \
+      STO_C (!result4); \
+      CLR_V; \
+      wtemp = (result3 << 4) | (result1); \
+      A = wtemp & 0xff; \
+      setflags (A); \
+    } \
     else \
-      result4 = 0; \
-    STO_C (!result4); \
-    CLR_V; \
-    wtemp = (result3 << 4) | (result1); \
-    A = wtemp & 0xff; \
-    setflags (A); \
-      } \
-    else \
-      { \
-    wtemp = A; \
-    wtemp += TST_C; \
-    wtemp += ((data) ^ 0xff);			\
-    STO_C (wtemp & 0x100); \
-    STO_V ((((A ^ (data)) & 0x80) == 0) && (((A ^ wtemp) & 0x80) != 0)); \
-    A = wtemp & 0xff; \
-    setflags (A); \
-      } \
+    { \
+      wtemp = A; \
+      wtemp += TST_C; \
+      wtemp += ((data) ^ 0xff);			\
+      STO_C (wtemp & 0x100); \
+      STO_V ((((A ^ (data)) & 0x80) == 0) && (((A ^ wtemp) & 0x80) != 0)); \
+      A = wtemp & 0xff; \
+      setflags (A); \
+    } \
   } while (0)
 
   
@@ -550,10 +591,12 @@ ABS
 *
 ***********************************************************************/
 
+// not in translation
 #define DO_JMP   do { PC = addr; } while (0)
+#define TR_JMP   do { PC = addr; _DR(PC); goto restart_sbt; } while (0)
 
-#define TR_JMP   do { PC = addr; continue; } while (0)
 
+// not in translation
 #define DO_JSR \
   do { \
     PC--; \
@@ -572,7 +615,7 @@ ABS
     dopush (((arg) + 2) >> 8, PC); \
     dopush (((arg) + 2) & 0xff, PC);		\
     PC = addr; \
-    continue; \
+    _DR(PC); goto restart_sbt; \
   } while (0)
 
 #define DO_RTI \
@@ -591,7 +634,7 @@ ABS
     byte_to_flags (f); \
     PC = dopop(PC); /* & 0xff */ \
     PC |= dopop(PC) << 8; \
-    continue; \
+    _DR(PC); goto restart_sbt; \
   } while (0)
 
 #define DO_RTS \
@@ -606,7 +649,7 @@ ABS
     PC = dopop(PC); /* & 0xff */ \
     PC |= dopop(PC) << 8; \
     PC++; \
-    continue; \
+    _DR(PC); goto restart_sbt; \
   } while (0)
 
 #if 0
@@ -626,16 +669,16 @@ ABS
   do { \
     int offset; \
     if ((bit) == (sign))			\
-      { \
+    { \
       C(1); \
-    offset = memrd (PC, PC, totcycles); \
-    int pageStart=(PC+1)&0xff00; \
-    if (offset & 0x80) \
-          offset |= 0xff00; \
-    PC = (PC + 1 + offset) & 0xffff; \
-    int pageEnd=PC&0xff00;  \
-    if (pageStart != pageEnd) C(1); \
-      } \
+      offset = memrd (PC, PC, totcycles); \
+      int pageStart=(PC+1)&0xff00; \
+      if (offset & 0x80) \
+            offset |= 0xff00; \
+      PC = (PC + 1 + offset) & 0xffff; \
+      int pageEnd=PC&0xff00;  \
+      if (pageStart != pageEnd) C(1); \
+    } \
     else \
       PC++; \
   } while (0)
@@ -645,10 +688,11 @@ ABS
     if ((bit) == (sign))			\
       { \
         PC = (dest);				\
-        continue; \
+        _DR(PC); goto restart_sbt; \
       } \
   } while (0)
 
+  
 #define DO_BCC dobranch (TST_C, 0)
 #define DO_BCS dobranch (TST_C, 1)
 #define DO_BEQ dobranch (TST_Z, 1)

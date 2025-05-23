@@ -18,7 +18,7 @@ $(BUILD_DIR)ops.o: ops.c tailgunr-ops.c
 $(BUILD_DIR)tailgunner.o: tailgunner.c mdep.i mdep.h
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)tailgunner.o -c tailgunner.c
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(LIBS) 
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)

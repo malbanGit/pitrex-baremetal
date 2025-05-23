@@ -646,14 +646,6 @@ static int starwarsIniHandler(void* user, const char* section, const char* name,
   else 
   {
   }
-/*
- * No special values as of yet
-  if (MATCH("VECTREX_EXACT", "ROM_FILE")) strcpy(romName, value); else 
-  {
-      printf("Ini-Handler, unkown entry: %s = %s", name, value);
-      return 0;  / * unknown section/name, error * /
-  }
-*/  
   return 1;
 }
 
@@ -680,7 +672,7 @@ int main(int argc, char *argv[])
   
   v_setupIRQHandling();
 //  v_setupSMPHandling();
-  v_enableJoystickAnalog(1,1,1,1);
+  v_enableJoystickAnalog(1,1,0,0);
   v_enableSoundOut(1);
   v_enableButtons(1);
   v_enableExtendedSoundOut(1); // plays ayfx / ym in irq

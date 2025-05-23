@@ -4,10 +4,12 @@
 # export PATH=/home/chrissalo/gcc-arm/bin:$PATH
 
 # or zero2, zero1
-BUILD_FOR ?= zero2
+BUILD_FOR ?= zero1
 BASE_DIR ?= ..
 
 MAKE_IMAGE = yes
+SERIAL_TRANSFER = yes
+SERIAL_PORT_NAME = /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_AG0K4MVA-if00-port0
 
 BAREMETAL_DIR := $(BASE_DIR)/pitrex/baremetal/
 VECTREX_DIR := $(BASE_DIR)/pitrex/vectrex/
@@ -38,7 +40,7 @@ endif
 COPY_TARGET1 = /media/sf_ubuntu
 COPY_TARGET2 = /media/sf_E_DRIVE/$(IMG_DIR)
 
-
+LIBS_CHECK := $(LIB_DIR)/libbaremetal.a $(LIB_DIR)/libuspi.a $(LIB_DIR)/libvectrexInterface.a
 LIBS := -lvectrexInterface -luspi -lm -lc $(LIB_DIR)/linkerHeapDefBoot.ld -lbaremetal
 LIBSGCC := -lvectrexInterface -luspi -lm -lsupc++ $(LIB_DIR)/linkerHeapDefBoot.ld -lbaremetal
 
@@ -100,6 +102,7 @@ loader:
 	$(MAKE) -C $(LOADER_DIR) all BUILD_FOR=$(BUILD_FOR)
 
 clean:: dirCheck
+	$(RM) ../sim/$(BUILD_DIR)*.*
 	$(RM) $(BUILD_DIR)*.*
 	$(RM) $(TARGET)
 

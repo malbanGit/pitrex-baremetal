@@ -7,7 +7,7 @@ include ../Rules.mk
 $(BUILD_DIR)hello.o: hello.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)hello.o -c hello.c
 
-hello.img: $(BUILD_DIR)hello.o
+hello.img: $(BUILD_DIR)hello.o $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)hello.elf.img $(BUILD_DIR)hello.o $(LIBS)
 	$(RM) hello.img
 	arm-none-eabi-objcopy $(BUILD_DIR)hello.elf.img -O binary hello.img
@@ -19,7 +19,7 @@ endif
 $(BUILD_DIR)pacman.o: pacman.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)pacman.o -c pacman.c
 
-pacman.img: $(BUILD_DIR)pacman.o
+pacman.img: $(BUILD_DIR)pacman.o $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)pacman.elf.img $(BUILD_DIR)pacman.o $(LIBS)
 	$(RM) pacman.img
 	arm-none-eabi-objcopy $(BUILD_DIR)pacman.elf.img -O binary pacman.img
@@ -31,7 +31,7 @@ endif
 $(BUILD_DIR)window.o: window.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)window.o -c window.c
 
-window.img: $(BUILD_DIR)window.o
+window.img: $(BUILD_DIR)window.o $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)window.elf.img $(BUILD_DIR)window.o $(LIBS)
 	$(RM) window.img
 	arm-none-eabi-objcopy $(BUILD_DIR)window.elf.img -O binary window.img
@@ -44,7 +44,7 @@ endif
 $(BUILD_DIR)maze.o: maze.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)maze.o -c maze.c
 
-maze.img: $(BUILD_DIR)maze.o
+maze.img: $(BUILD_DIR)maze.o $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)maze.elf.img $(BUILD_DIR)maze.o $(LIBS)
 	$(RM) maze.img
 	arm-none-eabi-objcopy $(BUILD_DIR)maze.elf.img -O binary maze.img
@@ -57,7 +57,7 @@ endif
 $(BUILD_DIR)perspective.o: perspective.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)perspective.o -c perspective.c
 
-perspective.img: $(BUILD_DIR)perspective.o
+perspective.img: $(BUILD_DIR)perspective.o $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)perspective.elf.img $(BUILD_DIR)perspective.o $(LIBS)
 	$(RM) perspective.img
 	arm-none-eabi-objcopy $(BUILD_DIR)perspective.elf.img -O binary perspective.img

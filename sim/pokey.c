@@ -54,8 +54,10 @@ POKEY audio has four channels, with two 8-bit I/O locations per channel (AUDFn
 
 #include <stdlib.h>
 #include <stdio.h>
+#ifndef TRANSLATE_ONLY
+  #include <vectrex/vectrexInterface.h>
+#endif
 
-#include <vectrex/vectrexInterface.h>
 
 #include "memory.h"
 #include "pokey.h"

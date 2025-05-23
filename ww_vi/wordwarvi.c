@@ -13868,7 +13868,6 @@ int main(int argc, char *argv[])
   v_setClientHz(50); 
   v_setupIRQHandling();
   v_enableJoystickDigital(1,1,0,0);
-//  v_enableJoystickAnalog(1,1,0,0);
   v_setCustomClipping(1, -13000, Y_LOW_CLIP, 13000, Y_HIGH_CLIP);
 
   sizeX = 1.4;
@@ -14390,7 +14389,7 @@ int main(int argc, char *argv[])
 //    v_playAllSFX();
     v_doSound();    // not needed in IRQ Mode
     v_readButtons(); // not neededin IRQ mode
-    v_readJoystick1Analog(); // not neededin IRQ mode
+    v_readJoystick1Digital();
     v_WaitRecal();
 //printf(".");
       

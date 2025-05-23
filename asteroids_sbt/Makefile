@@ -1,9 +1,10 @@
-BUILD_FOR ?= zero2
-BASE_DIR = ..
+BUILD_FOR ?= zero1
 TARGET_BASE = asteroids_sbt
 TARGET	= $(TARGET_BASE).img
+BASE_DIR = ..
 
 include ../Rules.mk
+
 
 OBJS := 	$(BUILD_DIR)dvg.o $(BUILD_DIR)gmain.o
 
@@ -17,7 +18,7 @@ $(BUILD_DIR)dvg.o: dvg.h dvg.c
 $(BUILD_DIR)gmain.o: game.c gmain.c rom.h sound.i
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)gmain.o -c gmain.c
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS)  $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(LIBS) 
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)

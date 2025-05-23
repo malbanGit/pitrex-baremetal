@@ -11,7 +11,7 @@ OBJS = $(BUILD_DIR)voom-vectrex.o
 $(BUILD_DIR)voom-vectrex.o: voom-vectrex.c voom.h voom.c
 	$(CC) $(CFLAGS) -c voom-vectrex.c -o $(BUILD_DIR)voom-vectrex.o
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(LIBS) 
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)

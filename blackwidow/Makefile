@@ -26,7 +26,7 @@ $(BUILD_DIR)sim.o: $(EMU_NAME).c $(SIM_DIR)framework.c
 $(BUILD_DIR)main.o: main.c  $(EMU_NAME).c 
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)main.o -c main.c -DSINGLE_GAME="\"$(EMU_NAME)\""
 
-$(TARGET): simLib $(OBJS)
+$(TARGET): simLib $(OBJS) $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(SIMOBJS) $(LIBS) 
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)

@@ -20,8 +20,68 @@ void(*via_write8_port_b) (uint8_t data);
 /* update IRQ and bit-7 of the ifr register after making an adjustment to
  * ifr.
  */
+// bit 1 is always correct here
+// the interrupt flag is "interesting"
+volatile uint8_t __bcm2835_gpio_lev(uint8_t pin);
+
+void checkBank()
+{
+  if (!is256kRom) return;
+//        VIA.ifr = VIA.ifr & (0xff-0x20); //remove T2 flag
+  
+  // if VIA interrupt active - that is 0 (null)
+  // than current Bank = current Bank  without 
+
+  int ob = currentBank;
+  
+  if (VIA.ifr & 0x80)
+    currentBank = (currentBank & (0xff-0x02)); // interrupt YES
+  else
+    currentBank = (currentBank | (0x02)); // interrupt NO
+  /*
+   if (ob != currentBank)
+   {
+    printf("Bankswitch from %i to %i occured at: $%04x\n", ob, currentBank, CPU.reg_pc);
+   }
+*/   
+   
+/*
+uint8_t iState = __bcm2835_gpio_lev(26); // read of the IRQ Pin of VIA
+   
+  if (iState)
+    currentBank = (currentBank | (0x02)); // interrupt NO
+  else
+    currentBank = (currentBank & (0xff-0x02)); // interrupt YES
+   if (ob != currentBank)
+   {
+    printf("b) Bankswitch from %i to %i occured at: $%04x\n", ob, currentBank, CPU.reg_pc);
+   }
+*/
+      
+    
+}
+
+
+inline void setPB6FromVectrex(int tobe_via_orb, int tobe_via_ddrb)
+{
+  if (!is64kBankSwitch) return;
+  int npb6 = tobe_via_orb & tobe_via_ddrb & 0x40; // all output (0x40)
+
+  int ob = currentBank;
+
+  if ((tobe_via_ddrb & 0x40) == 0x00)  npb6 = npb6 | 0x40; // all input (0x40)
+  if (npb6) currentBank = (currentBank | (0x01)); else currentBank = (currentBank & (0xff-0x01));
+  /*
+  if (ob != currentBank)
+  {
+    printf("Bankswitch from %i to %i occured at: $%04x\n", ob, currentBank, CPU.reg_pc);
+  }
+  */
+  checkBank();
+}    
+
  
-inline void int_update(void)
+void int_update(void)
 {
     if ((VIA.ifr & 0x7f) & (VIA.ier & 0x7f))
     {
@@ -31,6 +91,7 @@ inline void int_update(void)
     {
         VIA.ifr &= 0x7f;
     }
+    checkBank();
 }
 
 // this is only called in "emulated"
@@ -274,16 +335,6 @@ inline void via_write_emulated(uint16_t address, uint8_t data)
     }
 }
 
-inline void setPB6FromVectrex(int tobe_via_orb, int tobe_via_ddrb)
-{
-  if (!is64kBankSwitch) return;
-  int npb6 = tobe_via_orb & tobe_via_ddrb & 0x40; // all output (0x40)
-
-  if ((tobe_via_ddrb & 0x40) == 0x00)  npb6 = npb6 | 0x40; // all input (0x40)
-  if (npb6) currentBank=3; else currentBank = 2;
-}    
-
-
 inline void via_write_direct(uint16_t address, uint8_t data)
 {
   switch (address & 0xf)
@@ -337,6 +388,7 @@ inline void via_write_direct(uint16_t address, uint8_t data)
         VIA.t1int = 1;
         VIA.t1pb7 = 0;
         int_update();
+	
         break;
     case 0x6:
         /* T1 low order latch */
@@ -521,6 +573,10 @@ inline void via_sstep0(void)
         if (VIA.srb == 8)
         {
             mustWait = mustWait & (0xff -2);
+// enabed again DEC 2024, vor interrupts on shift, bancswitching
+            VIA.ifr |= 0x04;
+            int_update();
+	    
 //            VIA.ifr |= 0x04;
 //            int_update();
         }
@@ -727,55 +783,3 @@ inline void via_reset(void)
     VIA.cb2s = 0;
     VIA.alternate = 1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

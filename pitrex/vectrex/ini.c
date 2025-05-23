@@ -191,6 +191,8 @@ int ini_parse_file(FILE* file, ini_handler handler, void* user)
     return ini_parse_stream((ini_reader)fgets, file, handler, user);
 }
 
+extern char lastAccessedIni[255];
+
 /* See documentation in header file. */
 int ini_parse(const char* filename, ini_handler handler, void* user)
 {
@@ -213,7 +215,7 @@ int ini_parse(const char* filename, ini_handler handler, void* user)
  * Now I load the complete file and replace CR with LF.*/
 #define MAX_INI_SIZE 10000 // 10 k max!
   char buffer[MAX_INI_SIZE+1];
-
+  lastAccessedIni[0]=0;
   FILE *fileRead;
   fileRead = fopen(filename, "rb");
   if (fileRead == 0)
@@ -249,6 +251,8 @@ int ini_parse(const char* filename, ini_handler handler, void* user)
   }
   buffer[len] = 0; 
 
+  strcpy(lastAccessedIni, filename);
+  
   return ini_parse_string( (const char*) buffer, handler, user); 
 }
 

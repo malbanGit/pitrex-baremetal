@@ -235,6 +235,10 @@ volatile static inline uint8_t _bcm2835_gpio_lev(uint8_t pin)
     uint32_t value = _bcm2835_peri_read(paddr);
     return (value & (1 << shift)) ? HIGH : LOW;
 }
+volatile uint8_t __bcm2835_gpio_lev(uint8_t pin)
+{
+  return _bcm2835_gpio_lev(pin);
+}
 
 // READ: For ALT0 (UART0) on 14-15, use 0x24249. For ALT5 (UART1), use 0x12249.
 // GPIO Pins 10-13 = OUTPUT| 14-15 = TTY | 16-19 = INPUT
@@ -280,7 +284,7 @@ unsigned _thisCore (void)			// returns number of current core (0..CORES-1)
 volatile unsigned char vectrexread (unsigned int address)
 {
    
-if ((_is_smp) && (_thisCore () != 1)) printf("Shit hits the fan\n");
+// if ((_is_smp) && (_thisCore () != 1)) printf("Shit hits the fan\n");
       unsigned long shortaddress = (0x30 | (address & 0x0F)) << 7;
     _bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPCLR0/4), 0xFFFFFFFF);    //Set all outputs Low
 
@@ -321,7 +325,7 @@ if ((_is_smp) && (_thisCore () != 1)) printf("Shit hits the fan\n");
 // Returns after write is completed.
 void vectrexwrite (unsigned int address, unsigned char data)
 {
-if ((_is_smp) && (_thisCore () != 1)) printf("Shit hits the fan\n");
+// if ((_is_smp) && (_thisCore () != 1)) printf("Shit hits the fan\n");
     unsigned long shortaddress = (0x30 | (address & 0x0F)) << 7;
     _bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPCLR0/4), 0xFFFFFFFF); //LATCH EN Low  R/#W Low
 

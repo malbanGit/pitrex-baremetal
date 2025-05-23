@@ -27,13 +27,14 @@
 #define CORE2_STATE	(CORE1_STATE+4)
 #define CORE3_STATE	(CORE2_STATE+4)
 
+#define LOADER_AVAILABLE (CORE3_STATE+4)
+//#define LOADER_MAIN (LOADER_AVAILABLE+4)
+
 
 #define CORE_UNKOWN 0
 #define CORE_GRABBED 1
 #define CORE_PARKING 2
 #define CORE_RUNNING 3
-
-
 
 #define __svc_stack_top0 (STACK_LOWEST+0x20000)
 #define __svc_stack_top1 (__svc_stack_top0+0x20000) 

@@ -149,7 +149,7 @@ $(BUILD_DIR)starwars.o: starwars.h starwars.c machine/starwars.c sndhrdw/starwar
 $(BUILD_DIR)aaemain.o: aaemain.h aaemain.c
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)aaemain.o -c aaemain.c
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(LIBS) 
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)

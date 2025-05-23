@@ -3,7 +3,7 @@
  *
  * Copyright 1991-1993, 2003 Hedley Rainnie, Doug Neubauer, and Eric Smith
  *
- * 6502 simulator and debugger by Hedley Rainnie, Doug Neubauer, and Eric Smith
+ * 6502 simulator and debugger by Hedley Rainnie, Doug Neubauer, and Eric Smith 
  * 6502 tranlation by Eric Smith
  * 
  * $Id: framework.c,v 1.1 2018/07/31 01:19:44 pi Exp $
@@ -24,15 +24,23 @@
 #include "debugger.h"
 #include "display.h"
 
+//#define DEBUG_OUT(...) do { if (v_directReadButtons() & 0x08){ disasm_6502(PC);if (!debugf) debugf = fopen("debug-sim.log", "w"); if (debugf) { fprintf(debugf,__VA_ARGS__); fflush(debugf); }} } while(0)
+#define DEBUG_OUT(...) 
 
 #define dobreak(arg) do { \
 			   save_A = A; \
 			   save_X = X; \
 			   save_Y = Y; \
 			   save_flags = flags_to_byte; \
-                           save_PC = PC; \
-                           save_totcycles = totcycles; \
+               save_PC = PC; \
+               save_totcycles = totcycles; \
 			   debugger (arg); \
+               A=save_A; \
+               X=save_X; \
+               Y=save_Y; \
+               flags_to_byte = save_flags; \
+               byte_to_flags (save_flags);\
+               PC = save_PC; \
                          } while (0)
 
 
@@ -139,72 +147,67 @@ void sim_6502 (void)
   byte_to_flags (save_flags);
   PC = save_PC;
   totcycles = save_totcycles;
-
+  
+  stepflag = 0;
+  
   //int currentIRQCycles = 6144;
   while(1) 
-    {
+  {
 #if 1
-      if (stepflag) 
-	dobreak(STEP);
-      else if (breakflag) 
-	dobreak(BREAKPT);
+    if (stepflag) 
+      dobreak(STEP);
+    else if (breakflag) 
+    {
+        printf("BP!!!\n");
+      dobreak(BREAKPT);
+    }
 #endif
 
-      if (game == TEMPEST)
+    if (game == TEMPEST)
+    {
+      if (nextDraw <totcycles)
       {
-        if (nextDraw <totcycles)
-        {
-          avg_draw_vector_list_t();
-          nextDraw = totcycles+30000;
-        }
+        avg_draw_vector_list_t();
+        nextDraw = totcycles+30000;
       }
-
+    }
 
     if (totcycles > irq_cycle)
 	{
-
-{
-
-
-//#define DEBUG_OUT(...) do { if (v_directReadButtons() & 0x08){ disasm_6502(PC);if (!debugf) debugf = fopen("debug-sim.log", "w"); if (debugf) { fprintf(debugf,__VA_ARGS__); fflush(debugf); }} } while(0)
-#define DEBUG_OUT(...) 
-DEBUG_OUT( "%-27s PC=%04x, A=%02x, X=%02x, Y=%02x, SP=%04x, %s, Cyc: %ld\r\n",disbuffer, PC, A, X, Y, SP + 0x100, getFlagString(CC), totcycles);
-}
-      
-      
+      DEBUG_OUT( "%-27s PC=%04x, A=%02x, X=%02x, Y=%02x, SP=%04x, %s, Cyc: %ld\r\n",disbuffer, PC, A, X, Y, SP + 0x100, getFlagString(CC), totcycles);
+check_IRQ: // due to branching
       if (use_nmi)
-	    {
-DEBUG_OUT( "%-27s PC=%04x, A=%02x, X=%02x, Y=%02x, SP=%04x, %s, Cyc: %ld NMI\r\n",disbuffer, PC, A, X, Y, SP + 0x100, getFlagString(CC), totcycles);
+      {
+        DEBUG_OUT( "%-27s PC=%04x, A=%02x, X=%02x, Y=%02x, SP=%04x, %s, Cyc: %ld NMI\r\n",disbuffer, PC, A, X, Y, SP + 0x100, getFlagString(CC), totcycles);
 #ifdef MAGIC_PC
 	      if ((! self_test) && (mem [PC].magic))
 #else
 	      if (! self_test)
 #endif
-		{
-		  /* do NMI */
+          {
+            /* do NMI */
 #ifdef COUNT_INTERRUPTS
-	      int_count += 1;
-	      if ((int_quit) && (int_count >= int_quit))
-;//		exit (0);
+            int_count += 1;
+            if ((int_quit) && (int_count >= int_quit))
+              ;//		exit (0);
 #endif
-		  dopush(PC>>8, PC);
-		  dopush(PC&0xff, PC);
-		  dopush(flags_to_byte, PC);
-		  SET_I;
-		  PC = memrdwd (0xfffa, PC, totcycles);
-		  totcycles += 7;
-//		  handle_input ();
-		}
-	    }
+            dopush(PC>>8, PC);
+            dopush(PC&0xff, PC);
+            dopush(flags_to_byte, PC);
+            SET_I;
+            PC = memrdwd (0xfffa, PC, totcycles);
+            totcycles += 7;
+          }
+	  }
 	  else
-	    {
+	  {
 #ifdef MAGIC_PC
 	      if ((! TST_I) && (mem [PC].magic))
 #else
 	      if (! TST_I)
 #endif
 		{
-DEBUG_OUT( "%-27s PC=%04x, A=%02x, X=%02x, Y=%02x, SP=%04x, %s, Cyc: %ld IRQ\r\n",disbuffer, PC, A, X, Y, SP + 0x100, getFlagString(CC), totcycles);
+          DEBUG_OUT( "%-27s PC=%04x, A=%02x, X=%02x, Y=%02x, SP=%04x, %s, Cyc: %ld IRQ\r\n",disbuffer, PC, A, X, Y, SP + 0x100, getFlagString(CC), totcycles);
 		  /* do IRQ */
 #ifdef COUNT_INTERRUPTS
 	      int_count += 1;
@@ -217,43 +220,41 @@ DEBUG_OUT( "%-27s PC=%04x, A=%02x, X=%02x, Y=%02x, SP=%04x, %s, Cyc: %ld IRQ\r\n
 		  SET_I;
 		  PC = memrdwd (0xfffe, PC, totcycles);
 		  totcycles += 7;
-//		  irq_cycle = 0x7fffffff;
-//		  handle_input ();
 		}
-	    }
-          irq_cycle += 6144;
-	}
+	 }
+     irq_cycle += 6144;
+	}//  if (totcycles > irq_cycle)
 
 #ifdef WATCHDOG_HACK
-      if(PC == 0xcbf9)  /* Hack kludge  to emulate watchdog reset */
+    if(PC == 0xcbf9)  /* Hack kludge  to emulate watchdog reset */
 	{
 	  printf("WATCHDOG RESET lastpc %x tot instr %ld\r\n",PC,icount);
 	  ourexit(1);
 	}
 #endif
+
+// lunar lander mostly ok, but somehow
+// this interferes with landing platforms
+//  they are sometimes drawn WITHIN the lander!
 trans_ok = 0;
-      if ((! stepflag) && trans_ok)
-	switch (PC)
-	  {
-#include GAME_INC
-	  default: break;
-	  }
-if (browseMode)
-{
-    sprintf(simBrowseModeData2, "     PC=%04x, A=%02x, X=%02x, Y=%02x, SP=%04x\r\n", PC, A, X, Y, SP + 0x100);
-}
 
-//if (frame >=887)
-{
-
-DEBUG_OUT( "%-27s PC=%04x, A=%02x, X=%02x, Y=%02x, SP=%04x, %s, Cyc: %ld\r\n",disbuffer, PC, A, X, Y, SP + 0x100, getFlagString(CC), totcycles);
-}
-
-      opcode = memrd (PC, PC, totcycles); PC++;
- 
-          
+    if ((!stepflag) && trans_ok)
+    {
+restart_sbt: // due to branching
+      switch (PC)
+      {
+        #include GAME_INC
+        default: break;
+      }
       
-      switch(opcode) 			/* execute opcode */ 
+    }
+    if (browseMode)
+    {
+        sprintf(simBrowseModeData2, "     PC=%04x, A=%02x, X=%02x, Y=%02x, SP=%04x\r\n", PC, A, X, Y, SP + 0x100);
+    }
+
+    opcode = memrd (PC, PC, totcycles); PC++;
+    switch(opcode) 			/* execute opcode */ 
 	{
 	case 0x69:  /* ADC */  EA_IMM;    DO_ADC;   C( 2);  break;
 	case 0x65:  /* ADC */  EA_ZP;     DO_ADC;   C( 3);  break;

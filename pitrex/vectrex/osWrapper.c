@@ -200,17 +200,20 @@ void outputCurrentDirectory()
        *               FSIZE_t fsize;                  / * File size * /
        *               WORD    fdate;                  / * Modified date * /
        *               WORD    ftime;                  / * Modified time * /
-       *               BYTE    fattrib;                / * File attribute * /
+       *               BYTE    fattrib;                / * File attribute 0x10 for a dir * /
        *               TCHAR   altname[13];            / * Altenative file name * /
        *               TCHAR   fname[_MAX_LFN + 1];    / * Primary file name * /
     } FILINFO;
     */
-    printf("\t %s\t%i\r\n",finfo.fname, finfo.fsize);
+    printf("\t %s\t%i\t%02x\r\n",finfo.fname, finfo.fsize, finfo.fattrib);
     }
   }
   printf("\r\n");
   f_closedir (&dp);
 }
+
+//ERRNO not from ff but from within
+
 FILE *__fopen(const char *filename, const char *mode)
 {
   initFileSystem();
@@ -218,6 +221,7 @@ FILE *__fopen(const char *filename, const char *mode)
 	if (f == 0)
     {
       errno = E_SYSTEM_BOUNDS;
+//printf("_fopen - wrapper error \r\n");
 #ifndef DEBUG_TO_FILE
       printf("_fopen - wrapper error \r\n");
 #endif      
@@ -226,13 +230,15 @@ FILE *__fopen(const char *filename, const char *mode)
 	f->result = FR_DISK_ERR; // default is error :-)
 	changeDirsTo(f);
 	f->result = f_open(&f->file, f->name,  f->modeTranslation);
+//printf("(1) Could not open file %s (%s) \r\n", f->name, getErrorText(f->result));
 	changeDirsBack(f);
 	if (f->result != FR_OK)
 	{
 		f->used = 0;
 		errno = E_FILE_NOT_FOUND;
+//printf("(2) Could not open file %s (%s) \r\n", filename, getErrorText(f->result));
 #ifndef DEBUG_TO_FILE
-		printf("Could not open file %s (%s) \r\n", filename, getErrorText(f->result));
+		printf("(2) Could not open file %s (%s) \r\n", filename, getErrorText(f->result));
 #endif        
 		return 0;
 	}

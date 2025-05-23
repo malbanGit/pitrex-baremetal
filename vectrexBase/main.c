@@ -16,6 +16,11 @@
 #include "edac.h"
 #include "ser.h"
 
+
+// must be same as in loaderMain.c
+#define MAX_VECTREX_FILENAME_LENGTH 127
+
+
 enum
 {
     EMU_TIMER = 20, /* the emulators heart beats at 20 milliseconds */
@@ -26,7 +31,11 @@ enum
 
 static int32_t scl_factor;
 
+
+
 int isVecMania = 0;
+int isCavernRescue = 0;
+int strangeButtonCart = 0;
 
 void loadSelected(int selected);
 void initEmulator();
@@ -35,8 +44,8 @@ int t1EmulationNeeded = 0;
 int doStates=1;
 
 int forceButtons = 0;
-char romName[32];
-char cartName[64];
+char romName[MAX_VECTREX_FILENAME_LENGTH];
+char cartName[MAX_VECTREX_FILENAME_LENGTH+1];
 
 unsigned char flashHS[4096];
 unsigned char flashGS[4096];
@@ -44,6 +53,215 @@ unsigned char flashGS[4096];
 #ifdef FILE_PLAYER
 void loadFile();
 #endif
+
+uint8_t biosBuffer[4096*2]; // 
+
+uint8_t romBuffer[32768*9]; // lineart
+long int bufferState = 0; // 0 = empty, != 0 -> size of buffer
+
+
+extern volatile int singleStep;
+volatile int nextStep = 0;
+
+ 
+int UARTGetAsciiInt();
+int UARTGetBinaryData(int size, unsigned char *romBuffer);
+
+
+void vLoadBios4KCommand(void)
+{
+  // expect fileSize in ASCII + return
+  // after that exactly that amount of bytes
+  int size = UARTGetAsciiInt();
+  if ((size == -1) || (size >4096))
+  {
+      printf("Pi:Illegal Size - load bios4k aborted (%i)!\n", size);
+      return;
+  }
+  
+  bufferState = 0; // reset buffer state 
+  printf("Pi:size=%i\n", size);
+  if (UARTGetBinaryData(size, biosBuffer) != 0) // 0 = ok
+  {
+      printf("Pi:File Load error - load bios4k aborted!\n");
+      return;
+  }  
+  printf("Pi:Binary Data loaded to bios.\n");
+  for (int i=0;i<4096;i++) rom[4096+i] =biosBuffer[i] ;
+}
+
+void vLoadBios8KCommand(void)
+{
+  // expect fileSize in ASCII + return
+  // after that exactly that amount of bytes
+  int size = UARTGetAsciiInt();
+  if ((size == -1) || (size >4096*2))
+  {
+      printf("Pi:Illegal Size - load bios8k aborted (%i)!\n", size);
+      return;
+  }
+  
+  bufferState = 0; // reset buffer state 
+  printf("Pi:size=%i\n", size);
+  if (UARTGetBinaryData(size, biosBuffer) != 0) // 0 = ok
+  {
+      printf("Pi:File Load error - load bios8k aborted!\n");
+      return;
+  }  
+  printf("Pi:Binary Data loaded to bios + minestorm.\n");
+  for (int i=0;i<4096*2;i++) rom[i] =biosBuffer[i] ;
+}
+
+
+void vLoadRomCommand(void)
+{
+  // expect fileSize in ASCII + return
+  // after that exactly that amount of bytes
+  int size = UARTGetAsciiInt();
+  if ((size == -1) || (size >32768*9))
+  {
+      printf("Pi:Illegal Size - load rom aborted (%i)!\n", size);
+      return;
+  }
+  
+  bufferState = 0; // reset buffer state 
+  printf("Pi:size=%i\n", size);
+  if (UARTGetBinaryData(size, romBuffer) != 0) // 0 = ok
+  {
+      printf("Pi:File Load error - load rom aborted!\n");
+      return;
+  }  
+  printf("Pi:Binary Data loaded to buffer\n");
+  bufferState = size;
+  printf("Pi:bufferState (%i, size=%i)\n", bufferState, size);
+}
+
+void vPlayRomCommand(void)
+{
+  if (bufferState == 0)
+  {
+      printf("Pi:Buffer empty! (%i)\n", bufferState);
+      return;
+  }
+  vecx_reset();
+  _used_bank_size = BANKSIZE;
+  is48kRom =0;
+  is256kRom = 0;
+  doStates = 0;
+  
+  void initVectrexBin(unsigned int fsize, uint8_t *loadMem);
+  initVectrexBin(bufferState, romBuffer);
+}
+
+void vDumpRomCommand(void)
+{
+  if (bufferState == 0)
+  {
+      printf("Pi:Buffer empty! (%i)\n", bufferState);
+      return;
+  }
+
+  char *getParameter(int p);
+  char * name = getParameter(0);
+  
+  if (strlen(name) == 0)
+  {
+    printf("Pi:No Name given\n");
+    return;
+  }
+  if (strcmp("Pi:invalid parameter", name) ==0)
+  {
+    printf("Pi:No Name given\n");
+    return;
+  }
+  
+  FILE *f;
+  if (!(f = fopen(name, "wb")))
+  {
+      printf("Pi:dump buffer - error opening file: %s!\n", name);
+      return;
+  }
+  fwrite(romBuffer, bufferState, 1, f);
+    
+  fclose(f);
+  printf("Pi:Buffer written to: %s (%bytes)!\n", name, bufferState);
+}
+
+void vStepCommand(void)
+{
+  nextStep = 1;
+}
+void vNSSCommand(void)
+{
+  singleStep = 0;
+}
+void vSSCommand(void)
+{
+  singleStep = 1;
+}
+
+unsigned int vDebugTo = 0;
+void vRunCommand(void)
+{
+  unsigned int adr = bm_atoi(getParameter(0),10);
+  vDebugTo = adr;
+  singleStep = 1;
+  nextStep = 1;
+}
+
+Command vectrexCommandList[] =
+{
+	{1,"vloadBuffer", "vlb", "vloadBuffer | vlb -> load game into Vectrex game buffer\r\n" ,  vLoadRomCommand },
+	{1,"vdumpBuffer", "vdb", "vdumpBuffer | vdb name -> save buffer to pitrex\r\n" ,  vDumpRomCommand },
+	{1,"vplayBuffer", "vpb", "vplayBuffer | vpb -> play game from Vectrex game buffer\r\n" ,  vPlayRomCommand },
+	{1,"vStep",       "+",   "vStep       | +   -> Do a single step of emulation\r\n" ,  vStepCommand },
+	{1,"vExitStep", "vx",    "vExitStep   | vx  -> singleStep = 0\r\n" ,  vNSSCommand },
+	{1,"vEnterStep", "ve",   "vEnterStep  | ve  -> singleStep = 1\r\n" ,  vSSCommand },
+	{1,"vStepTo", "vst",     "vStepTo     | vst $xxxx  -> run till pc =xxxx\r\n" ,  vRunCommand },
+	
+	{1,"vBios4K", "v4k",     "vBios4K     | v4k name  -> load 4k BIOS to $f000 (direct)\r\n" ,  vLoadBios4KCommand },
+	{1,"vBios8K", "v8k",     "vBios8K     | v8k name  -> load 8k BIOS to $e000 (direct)\r\n" ,  vLoadBios8KCommand },
+	
+	{0,"", "", "" ,  (void (*)(void)) 0 }
+};
+
+void initVectrexBin(unsigned int fsize, uint8_t *loadMem)
+{
+  int c=0;
+  
+  printf("Rom Size: %i\n",fsize);
+  if ((fsize > 49152) && (fsize <= 65536))
+  {
+    is64kBankSwitch = 1; // assuming
+    printf("64k rom loaded, assuming PB6 bankswitching\r\n");
+  }
+  if (fsize == 262144) // vectorblade alike 4 banks
+  {
+     is48kRom = 1;
+     is256kRom = 1;
+     is64kBankSwitch = 1;
+      _used_bank_size = 2;
+     printf("48k - Vecctorblade style!\n");
+  }
+
+  else if ((fsize>32768) && (fsize<65536))
+  {
+      is48kRom = 1;
+      printf("48k (64) Banks! (%i) \n",is48kRom);
+      _used_bank_size = 2;
+  }
+  else
+    printf("32k Banks!\n");
+
+  for (int i=0; i< 32768*9; i++)
+  {
+    cart[i] = loadMem[i];
+  }
+
+  void initRomMemory(int fsize, uint8_t *loadMem);
+  initRomMemory(fsize, loadMem);
+}
+
 
 static int readevents(void)
 {
@@ -74,7 +292,7 @@ static void resize(void)
     int sclx, scly;
     int screenx, screeny;
     int width, height;
-return;
+	return;
 }
 
 
@@ -82,11 +300,12 @@ volatile uint64_t bcm2835_st_read(void); // from pitrexio-gpio.c
 
 #define GET_SYSTEM_TIMER bcm2835_st_read()
  
-
+int orgbetterRasterPositioning; // saving vectrexInterface value for the time "after" vectrex emulation (PiTrex)
 extern uint32_t cycleCount;
 uint32_t cycleCount_mark;
-
 int vectrexResetCount = 0;
+
+void handleUARTInterface();
 
 static void emuloop(void)
 {
@@ -94,60 +313,83 @@ static void emuloop(void)
     cycleCount_mark = 0;
     uint32_t mark = (uint32_t)(GET_SYSTEM_TIMER&0xffffffff);
 
-char stateName[128];
-int c=0;
-  stateName[c++]='s';
-  stateName[c++]='t';
-  stateName[c++]='a';
-  stateName[c++]='t';
-  stateName[c++]='e';
-  stateName[c++]='s';
-  stateName[c++]='/';
-  for (int ii=0;c<50;ii++)
-  {
-    stateName[c++]=cartName[ii];
-    if (cartName[ii]==0) break;
-  }
-
-  // if game was started with button 1 (instead of 4)
-  // the state is loaded!
-  if (getLoadParameter(2)[0] == 1)
-  {
-    if (doStates==1)
-      vecx_load(stateName);
-    // todo init VIA
-  }
+    char stateName[MAX_VECTREX_FILENAME_LENGTH];
+    int c=0;
+    stateName[c++]='s';
+    stateName[c++]='t';
+    stateName[c++]='a';
+    stateName[c++]='t';
+    stateName[c++]='e';
+    stateName[c++]='s';
+    stateName[c++]='/';
+    if (doStates)
+	{
+      for (int ii=0;c<MAX_VECTREX_FILENAME_LENGTH;ii++)
+      {
+		stateName[c++]=cartName[ii];
+		if (cartName[ii]==0) break;
+      }
+	}
+    // if game was started with button 1 (instead of 4)
+    // the state is loaded!
+    if (getLoadParameter(2)[0] == 1)
+    {
+      if (doStates==1)
+      {
+		vecx_load(stateName);
+      }
+      // todo init VIA
+    }
 
     for (;;)
     {
-      //handleUARTInterface();
+      if (isTerminalAccessAllowed) 
+      {
+		handleUARTInterface();
+      }
 #ifdef DIRECT_EMULATION
-          vecx_direct(10000);
+      vecx_direct(10000);
+	  
+	  if (singleStep)
+	  {
+	    if (vDebugTo != 0)
+	    {
+			handleUARTInterface();
+	    }
+	    else
+	    {
+	      nextStep = 0;
+	      while ((nextStep==0) && (singleStep==1))
+	      {
+			handleUARTInterface();
+	      }
+	    }
+	  }
+	  
+	  
     #ifndef DO_NOT_WATCH_VIA_FOR_BUTTONS
             if (vectrexButtonState != 0x1ff)
             {
-//              if ((vectrexButtonState & 0xff) == 0xf0) // only 4 button of joy 1 (Vecmania does something strange and presses all 8! buttons!
-	      
-	     int pressed = 0;
-	     if (isVecMania) pressed = ((vectrexButtonState & 0xff) == 0xf0);
-	     else pressed = ((vectrexButtonState & 0x0f) == 0x00);
-	     
-	     
+			 int pressed = 0;
+			 pressed = ((vectrexButtonState & 0xff) == 0xf0);
+	//	     if (strangeButtonCart) pressed = ((vectrexButtonState & 0xff) == 0xf0);
+	//	     else pressed = ((vectrexButtonState & 0x0f) == 0x00);
 	     
               if (pressed) 
               {
-//printf("Vectrex 1 button press detected $%02x!\r\n", vectrexButtonState);
 
-		vectrexResetCount++;
+				vectrexResetCount++;
                 if (vectrexResetCount == 10) // 1/20 second 
                 {
-                  printf("Vectrex 4 button press detected!\r\n");
+                  printf("Vectrex 4 button press detected %02x!\r\n", vectrexButtonState);
                   if (doStates==1)
                   {
                     printf("Starting to save to: %s\r\n", stateName);
                     vecx_save(stateName);
                     printf("Save done: %s\r\n", stateName);
                   }
+                  betterRasterPositioning = orgbetterRasterPositioning;
+
                   returnToPiTrex();
                 }
               }
@@ -155,28 +397,28 @@ int c=0;
               {
                   if (doStates==1)
                   {
-		    if (isVecMania)
-		    {
-		      if ((vectrexButtonState & 0xff) == 0xff-0x80) // JUST ONLY button 4 joy 2
-		      {
-			vecx_load(stateName);
-		      }
-		      if ((vectrexButtonState & 0x10) == 0xff-0x10) // JUST ONLY button 1 joy 2
-		      {
-			vecx_save(stateName);
-		      }
-		    }
-		    else
-		    {
-		      if ((vectrexButtonState & 0x80) == 0x00) // button 4 joy 2
-		      {
-			vecx_load(stateName);
-		      }
-		      if ((vectrexButtonState & 0x10) == 0x00) // button 1 joy 2
-		      {
-			vecx_save(stateName);
-		      }
-		    }
+					if ((isVecMania) || (isCavernRescue))
+					{
+					  if ((vectrexButtonState & 0xff) == 0xff-0x80) // JUST ONLY button 4 joy 2
+					  {
+						vecx_load(stateName);
+					  }
+					  if ((vectrexButtonState & 0x10) == 0xff-0x10) // JUST ONLY button 1 joy 2
+					  {
+						vecx_save(stateName);
+					  }
+					}
+					else
+					{
+					  if ((vectrexButtonState & 0x80) == 0x00) // button 4 joy 2
+					  {
+						vecx_load(stateName);
+					  }
+					  if ((vectrexButtonState & 0x10) == 0x00) // button 1 joy 2
+					  {
+						vecx_save(stateName);
+					  }
+					}
                   }
                   vectrexResetCount = 0;
               }
@@ -219,6 +461,7 @@ unsigned char settingsBlob[SETTINGS_SIZE];
 // for now INI setting just stupidly overwrite other saved settings!
 static int vectrexIniHandler(void* user, const char* section, const char* name, const char* value)
 {
+  bootUpName[0]=(char)0; // init "no boot title"
   // cascading ini files
   // first check if there are "general" entries
   if (iniHandler(user, section, name, value) == 1) return 1;
@@ -226,8 +469,12 @@ static int vectrexIniHandler(void* user, const char* section, const char* name, 
   
   #define MATCH(s, n) strcmp(section, s) == 0 && strcmp(name, n) == 0
   #define MATCH_NAME(n) strcmp(name, n) == 0
+  if (MATCH("VECTREX_EXACT", "TERMINAL_ACCESS")) {isTerminalAccessAllowed = atoi(value);} else 
+  if (MATCH("VECTREX_EXACT", "INTERNAL_STRING_DISPLAY")) {isForcedinternalStringDisplay = atoi(value);} else 
+  if (MATCH("VECTREX_EXACT", "IS_48_KROM")) {is48kRom = atoi(value); printf("48 - 0\n");} else 
+  if (MATCH("VECTREX_EXACT", "CART_BOOT_FILE")) strcpy(bootUpName, value); else 
 
-  if (MATCH("VECTREX_EXACT", "ROM_FILE")) strcpy(romName, value); else 
+  if (MATCH("VECTREX_EXACT", "ROM_FILE")) strcpy(romName, value); else  
   if (MATCH("VECTREX_EXACT", "HANDLE_STATES")) doStates = atoi(value); else 
   {
       printf("Ini-Handler, unkown entry: %s = %s", name, value);
@@ -236,15 +483,24 @@ static int vectrexIniHandler(void* user, const char* section, const char* name, 
   return 1;
 }
 
-
+// called once from main
 static int init(void)
 {
+  orgbetterRasterPositioning = 0;
   romName[0] = 0;
-  vectrexinit(1);
+  _used_bank_size = BANKSIZE;
+
+  vectrexinit(1); // pitrexio-gpio.c
+  printf("VectrexExact - loaded!");
   v_init();
+
+#ifdef PITREX_DEBUG
+  userCommandList = vectrexCommandList;
+#endif
+
+  
   v_removeIRQHandling();
   usePipeline = 0;
-//  v_loadSettings("vecxDirect", settingsBlob, SETTINGS_SIZE);
   vectrexResetCount = 0;
   forceButtons = 0;
   
@@ -253,6 +509,29 @@ static int init(void)
   {
         printf("vectrex.ini not loaded!\n\r");
   }
+  
+  if (is48kRom == 1)
+    _used_bank_size = 2;
+  orgbetterRasterPositioning = betterRasterPositioning;
+  
+  
+// somehow, the fileplayer does not like this
+// I have no explanation... it looks like the timer is called more than once 	    
+// but I can't find it...
+// also this does only "reset" when the complete PiTrex is resetted - not logical at all!	    
+#ifdef FILE_PLAYER
+  isForcedinternalStringDisplay=0;
+  printf("Forced String display not allowed with movie player.");
+#endif
+  
+  
+  if (isForcedinternalStringDisplay == 1)
+  {
+       printf("Alternate String display enabled.\n\r");
+       betterRasterPositioning = 1;
+  }
+  else 
+       printf("Alternate String display disabled: \n\r", isForcedinternalStringDisplay);
   
   if (romName[0] != 0)
   {
@@ -317,10 +596,10 @@ printf("logOutput: %i\r\n", logOutput);
     emuloop();
 }
 
-char name1[40];
-char name2[40];
-char name3[40];
-char name4[40];
+char name1[MAX_VECTREX_FILENAME_LENGTH];
+char name2[MAX_VECTREX_FILENAME_LENGTH];
+char name3[MAX_VECTREX_FILENAME_LENGTH];
+char name4[MAX_VECTREX_FILENAME_LENGTH];
 
 char *names[] =
 {
@@ -421,22 +700,41 @@ void initEmulator()
 void loadVectrexBin(char *selectedName, uint8_t *loadMem)
 {
   // prepareName
-  char loadName[50];
+  char *loadName;
+  char loadName_r[128+MAX_VECTREX_FILENAME_LENGTH];
   int c=0;
-  loadName[c++]='v';
-  loadName[c++]='e';
-  loadName[c++]='c';
-  loadName[c++]='t';
-  loadName[c++]='r';
-  loadName[c++]='e';
-  loadName[c++]='x';
-  loadName[c++]='/';
-  for (int ii=0;c<50;ii++)
+  
+  
+  if (bootUpName[0] != (char) 0)
   {
-    loadName[c++]=selectedName[ii];
-    cartName[ii]=selectedName[ii];
-    if (selectedName[ii]==0) break;
+      // load a forced rom from filesystem - anywhere it points to!
+    loadName = bootUpName;
+    for (int ii=0;c<MAX_VECTREX_FILENAME_LENGTH;ii++)
+    {
+      cartName[ii]=bootUpName[ii];
+      if (bootUpName[ii]==0) break;
+    }
   }
+  else
+  {
+    loadName = loadName_r;
+    loadName[c++]='v';
+    loadName[c++]='e';
+    loadName[c++]='c';
+    loadName[c++]='t';
+    loadName[c++]='r';
+    loadName[c++]='e';
+    loadName[c++]='x';
+    loadName[c++]='/';
+    
+    for (int ii=0;c<MAX_VECTREX_FILENAME_LENGTH;ii++)
+    {
+      loadName[c++]=selectedName[ii];
+      cartName[ii]=selectedName[ii];
+      if (selectedName[ii]==0) break;
+    }
+  }
+  
 
   printf("Loading: %s \r\n", loadName);
   
@@ -445,40 +743,60 @@ void loadVectrexBin(char *selectedName, uint8_t *loadMem)
   if (f == 0)
   {
             printf("vectrexBase.main.c:loadVectrexBin(): Could not open file %s (%i) \r\n", loadName, errno);
+	    return;
+  }
+  unsigned int fsize = __filelength(f);
+  
+  if ((fsize > 64000) && (fsize < 70000))
+  {
+    is64kBankSwitch = 1; // assuming
+    printf("64k rom loaded, assuming PB6 bankswitching\r\n");
+  }
+  printf("Rom Size: %i\n",fsize);
+
+#ifdef BANKS_48
+  is48kRom = 1;
+  printf("48 - 1\n");
+#endif
+  if (fsize == 262144) // vectorblade alike 4 banks
+  {
+     is48kRom = 1;
+     is256kRom = 1;
+      _used_bank_size = 2;
+      is64kBankSwitch = 1;
+     printf("48k - Vecctorblade style!\n");
+  }
+  else if ((fsize>32768) && (fsize<65536))
+  {
+    printf("48 - 2\n");
+    is48kRom = 1;
+  }
+  
+  if ((is48kRom==1) || (  is256kRom == 1))
+  {
+      printf("48k (64) Banks! (%i) \n",is48kRom);
+      _used_bank_size = 2;
   }
   else
+    printf("32k Banks!\n");
+  
+  int sizeRead = fread(loadMem, 1,fsize , f);
+  fclose(f);
+  if ( sizeRead== 0)
   {
-    unsigned int fsize = __filelength(f);
-    
-    if ((fsize > 64000) && (fsize < 70000))
-    {
-      is64kBankSwitch = 1; // assuming
-      printf("64k rom loaded, assuming PB6 bankswitching\r\n");
-/*
-      for (int r=0;r<32768*2;r++)
-      {
-	loadMem[r+32768*2] = loadMem[r];
-	loadMem[r+32768*4] = loadMem[r];
-	loadMem[r+32768*6] = loadMem[r];
-      }
-*/      
-    }
-#ifdef BANKS_48
-printf("48k (64) Banks!\n");
-#else
-printf("32k Banks!\n");
-#endif
-    
-    int sizeRead = fread(loadMem, 1,fsize , f);
-    fclose(f);
-    if ( sizeRead== 0)
-    {
-        printf("vectrexBase.main.c:loadVectrexBin(): File not loaded (%s)\r\n", loadName);
-        return;
-    }
+      printf("vectrexBase.main.c:loadVectrexBin(): File not loaded (%s)\r\n", loadName);
+      return;
+  }
+  void initRomMemory(int fsize, uint8_t *loadMem);
+  initRomMemory(fsize, loadMem);
+  
+}
+
+void initRomMemory(int fsize, uint8_t *loadMem)
+{
     // file is loaded
     printf("Starting loaded file...\r\n");
-    if (fsize <32768*2)
+    if ((fsize <32768*2) && (is48kRom==0) && (  is256kRom == 0))
     {
         printf("Matching all 8 (32k) banks to loaded bank\r\n");
         // fill all banks with the loaded ROM
@@ -489,7 +807,7 @@ printf("32k Banks!\n");
         }
     }
     else
-    if (fsize <32768*4)
+    if (fsize <32768*4) 
     {
         printf("Matching all 4 (64k) banks to loaded (64k?) bank\r\n");
         // fill all banks with the loaded ROM
@@ -499,12 +817,25 @@ printf("32k Banks!\n");
           loadMem[r+32768*4] = loadMem[r];
           loadMem[r+32768*6] = loadMem[r];
         }
-       
     }
     
-    
- 
-    
+    printf("%04x    ", 0);
+    for (int i=0;i<128;i++)
+    {
+      if ((i%16==0) && (i!=0))
+      {
+	for (int ii=i-16;ii<i;ii++)
+	{
+	  if ((loadMem[ii]>31) && (loadMem[ii]<128))
+	    printf("%c",loadMem[ii]);
+	  else
+	    printf(".");
+	}
+	printf("\n%04x    ", i);
+      }
+      printf("%02x ",loadMem[i]);
+    }
+    printf("\n");
     
     // test for T1 (at the moment SPIKE
     t1EmulationNeeded = 1;
@@ -512,32 +843,83 @@ printf("32k Banks!\n");
     int i=0;
     while (test1[i] != 0xbd)
     {
-      if (loadMem[i] != test1[i])
+      if (loadMem[i] != test1[i])  
       {
         t1EmulationNeeded = 0;
         break;
       }
       i++;
     }
-    isVecMania = 1;                     
-    
-    unsigned char test2[]={0x67, 0x20, 0x47, 0x43, 0x45, 0x20, 0x4e, 0x4f, 0x54, 0x21, 0x80, 0x0f, 0x96, 0xf8, 0x40, 0x2f,
+    int isVecMania1 = 1;                     
+   
+    unsigned char test2a[]={0x67, 0x20, 0x47, 0x43, 0x45, 0x20, 0x4e, 0x4f, 0x54, 0x21, 0x80, 0x0f, 0x96, 0xf8, 0x40, 0x2f,
 			   0x90,0x49,0x54,0x20,0x57,0x41,0x53,0x20,0x57,0x4f,0x52,0x54,0x48,0x20,0x54,0x48,0x45};
     i=0x0;
-    while (test2[i] != 0x48)
+    while (test2a[i] != 0x48)
     {
-    printf("%02x - %02x \n",isVecMania,  loadMem[i]);
-      if (loadMem[i] != test2[i])
+      // printf("%02x - %02x \n",isVecMania,  loadMem[i]);
+      if (loadMem[i] != test2a[i])
       {
-        isVecMania = 0;
+        isVecMania1 = 0;
         break;
       }
       i++;
     }
-    printf("Vecmania: %i\n",isVecMania );
-  }
-}
 
+    int isVecMania2 = 1;  
+    unsigned char test2b[]={0x67, 0x20, 0x47, 0x43, 0x45, 0x20, 0x4e, 0x4f, 0x54, 0x21, 0x80, 0x0fe, 0xe6, 0xf8, 0x40, 0x2f,
+			   0x90,0x49,0x54,0x20,0x57,0x41,0x53,0x20,0x57,0x4f,0x52,0x54,0x48,0x20,0x54,0x48,0x45};
+    i=0x0;
+    while (test2b[i] != 0x48)
+    {
+      // printf("%02x - %02x \n",isVecMania,  loadMem[i]);
+      if (loadMem[i] != test2b[i])
+      {
+        isVecMania2 = 0;
+        break;
+      }
+      i++;
+    }
+    isVecMania = isVecMania2+isVecMania1;                     
+
+    
+    isCavernRescue = 1;
+    unsigned char test3[]={0x67, 0x20, 0x47, 0x43, 0x45, 0x20, 0x32, 0x30, 0x32, 0x32, 0x80, 0xfe, 0xc5, 0xf5, 0x53, 0x20,
+			   0xab,0x43,0x41,0x56,0x45,0x52,0x4e,0x20,0x52,0x45,0x53,0x43,0x55,0x45,0x80,0xfa,0x45};
+    i=0x0;
+    while (test3[i] != 0xfa)
+    {
+      // printf("%02x - %02x \n",isCavernRescue,  loadMem[i]);
+      if (loadMem[i] != test3[i])
+      {
+        isCavernRescue = 0;
+        break;
+      }
+      i++;
+    }
+
+    int isMine3d = 1;  
+    unsigned char test3b[]={0x67, 0x20, 0x47, 0x43, 0x45, 0x20, 0x31, 0x39, 0x38, 0x33, 0x80, 0xed,0x77, 0xf8, 0x50, 0x00, 0xb0,
+			   0x33,0x44,0x20,0x4d,0x49,0x4e,0x45,0x20,0x53,0x54,0x4f,0x52,0x4d,0x80,0x54,0x48,0x45};
+    i=0x0;
+    while (test3b[i] != 0x52)
+    {
+      // printf("%02x - %02x \n",isVecMania,  loadMem[i]);
+      if (loadMem[i] != test3b[i])
+      {
+        isMine3d = 0;
+        break;
+      }
+      i++;
+    }
+    strangeButtonCart = isVecMania+isCavernRescue+isMine3d;
+    
+
+    
+    printf("StrangeButtonCart: %i\n",strangeButtonCart );
+//    printf("Vecmania: %i\n",isVecMania );
+//    printf("isCavernRescue: %i\n",isCavernRescue );
+}
 
 void loadSelected(int selected)
 {
@@ -602,7 +984,7 @@ int fillDirNames(int startWith)
                   int i = currentCounter-startWith;
                   char *nameToFill=names[i];
                   int c=0;
-                  for (; c<39; c++)
+                  for (; c<MAX_VECTREX_FILENAME_LENGTH-1; c++)
                   {
                     nameToFill[c]=finfo->d_name[c];
                     if (nameToFill[c]==0) break;
@@ -621,13 +1003,14 @@ int fillDirNames(int startWith)
     closedir (dp);
     return selected;
 }
+
 #ifdef FILE_PLAYER    
 void loadFile()
 {
   char *selectedName = getLoadParameter(0); // file is always the first parameter
   char *s;
   // prepareName
-  char loadName[255];
+  char loadName[255]; 
 
   int p=0;
   int c=0;

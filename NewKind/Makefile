@@ -82,7 +82,7 @@ $(BUILD_DIR)file.o: file.c file.h config.h elite.h
 $(BUILD_DIR)keyboard.o: keyboard.c keyboard.h
 	$(CC) $(CFLAGS) -c keyboard.c -o $(BUILD_DIR)keyboard.o
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(LIBS) 
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)

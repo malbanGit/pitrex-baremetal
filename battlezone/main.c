@@ -1,4 +1,4 @@
-/*
+/* 
 https://6502disassembly.com/va-battlezone/
 
 
@@ -155,8 +155,9 @@ extern void v_setCustomClipping(int enabled, int x0, int y0, int x1, int y1);
 
 
 // in vx_interface.c
-extern int stramash_config;
 extern int yates_config;
+extern int stramash_config1;
+extern int stramash_config2;
 extern int onlyOnejoystick;
 
 // for now INI setting just stupidly overwrite other saved settings!
@@ -170,9 +171,26 @@ static int bzIniHandler(void* user, const char* section, const char* name, const
   #define MATCH(s, n) strcmp(section, s) == 0 && strcmp(name, n) == 0
   #define MATCH_NAME(n) strcmp(name, n) == 0
   
-  if (MATCH("BATTLE_ZONE", "YATES_INPUT")) yates_config = atoi(value); 
-  if (MATCH("BATTLE_ZONE", "ONLY_ONE_JOYSTICK")) onlyOnejoystick = atoi(value); 
-  if (MATCH("BATTLE_ZONE", "STRAMASH_INPUT")) stramash_config = atoi(value); 
+  if (MATCH("BATTLE_ZONE", "STRAMASH_INPUT_1")) 
+  {
+    stramash_config1 = atoi(value); 
+    printf("BattleZone Joystick config: STRAMASH 1->%i\n", stramash_config1);
+  }
+  if (MATCH("BATTLE_ZONE", "STRAMASH_INPUT_2")) 
+  {
+    stramash_config2 = atoi(value); 
+    printf("BattleZone Joystick config: STRAMASH 2->%i\n", stramash_config2);
+  }
+  if (MATCH("BATTLE_ZONE", "YATES_INPUT")) 
+  {
+    yates_config = atoi(value); 
+    printf("BattleZone Joystick config: YATES -> i%\n", yates_config);
+  }
+  if (MATCH("BATTLE_ZONE", "ONLY_ONE_JOYSTICK")) 
+  {
+    onlyOnejoystick = atoi(value); 
+    printf("BattleZone Joystick config: ONE JOYSTICK -> %i\n", onlyOnejoystick);
+  }
 
   return 1;
 }
@@ -844,6 +862,7 @@ int checkForSpecialVectors(VectorPipelineBase ** cpbPointer,VectorPipeline **plP
       printf("Saving List...\n\r");
       saveList(cpb, singleInRange[dipLanguageSetting].count, singleEnemySave,0,0x30);
       vpInit_singleEnemy = 1;
+      printf("...done.\n\r");
     }
     return CV_SPECIAL_NONE; // do not skip
   }
@@ -862,6 +881,7 @@ int checkForSpecialVectors(VectorPipelineBase ** cpbPointer,VectorPipeline **plP
       printf("Saving List right...\n\r");
       saveList(cpb, enemyRight[dipLanguageSetting].count, rightEnemySave,-31,0x30);
       vpInit_rightEnemy = 1;
+      printf("...done.\n\r");
     }
     return CV_SPECIAL_NONE; // do not skip
   }
@@ -879,6 +899,7 @@ int checkForSpecialVectors(VectorPipelineBase ** cpbPointer,VectorPipeline **plP
       printf("Saving List left...\n\r");
       saveList(cpb, enemyLeft[dipLanguageSetting].count, leftEnemySave,-24,0x30);
       vpInit_leftEnemy = 1;
+      printf("...done.\n\r");
     }
     return CV_SPECIAL_NONE; // do not skip
   }
@@ -896,6 +917,7 @@ int checkForSpecialVectors(VectorPipelineBase ** cpbPointer,VectorPipeline **plP
       printf("Saving List rear...\n\r");
       saveList(cpb, enemyRear[dipLanguageSetting].count, rearEnemySave,-33,0x30);
       vpInit_rearEnemy = 1;
+      printf("...done.\n\r");
     }
     return CV_SPECIAL_NONE; // do not skip
   }
@@ -914,6 +936,7 @@ int checkForSpecialVectors(VectorPipelineBase ** cpbPointer,VectorPipeline **plP
       printf("Saving List motion...\n\r");
       saveList(cpb, motionText[dipLanguageSetting].count, motionSave, 0,0x30);
       vpInit_motion = 1;
+      printf("...done.\n\r");
     }
     return CV_SPECIAL_NONE; // do not skip
   }
@@ -931,6 +954,7 @@ int checkForSpecialVectors(VectorPipelineBase ** cpbPointer,VectorPipeline **plP
       printf("Saving List press Start...\n\r");
       saveList(cpb, pressStartText[dipLanguageSetting].count, pressStartSave, 0,0x10);
       vpInit_pressStart = 1;
+      printf("...done.\n\r");
     }
     return CV_SPECIAL_NONE; // do not skip
   }
@@ -1226,16 +1250,24 @@ void bzInputHandler()
   if ((currentButtonState & 0x01) && (currentButtonState & 0x08))
     enterDip = 1;
   
-  if (stramash_config)
-  {
-	switches [0].leftfwd = (currentJoy1Y>JOYSTICK_CENTER_MARGIN) || (currentJoy1X>JOYSTICK_CENTER_MARGIN);
-	switches [0].leftrev = (currentJoy1Y<-JOYSTICK_CENTER_MARGIN) || (currentJoy1X<-JOYSTICK_CENTER_MARGIN);
-	switches [0].rightfwd = (currentButtonState & 0x01)?1:0; // button 1 port 1
-	switches [0].rightrev = (currentButtonState & 0x02)?1:0; // button 2 port 1
-	switches [0].fire = (currentButtonState & 0x04)?1:0; // button 3 port 1
-	switches [0].fire = (currentButtonState & 0x08)?1:0; // button 4 port 1
-  }
-
+      if (stramash_config1)
+      {
+        switches [0].leftfwd = (currentJoy1Y>JOYSTICK_CENTER_MARGIN);
+        switches [0].leftrev = (currentJoy1Y<-JOYSTICK_CENTER_MARGIN);
+        switches [0].rightfwd = (currentButtonState & 0x01)?1:0; // button 1 port 1
+        switches [0].rightrev = (currentButtonState & 0x02)?1:0; // button 2 port 1
+        switches [0].fire = (currentButtonState & 0x04)?1:0; // button 3 port 1
+        switches [0].fire |= (currentButtonState & 0x08)?1:0; // button 4 port 1
+      }
+      else if (stramash_config2)
+      {
+        switches [0].leftfwd = (currentJoy2Y>JOYSTICK_CENTER_MARGIN);
+        switches [0].leftrev = (currentJoy2Y<-JOYSTICK_CENTER_MARGIN);
+        switches [0].rightfwd = (currentButtonState & 0x10)?1:0; // button 1 port 1
+        switches [0].rightrev = (currentButtonState & 0x20)?1:0; // button 2 port 1
+        switches [0].fire = (currentButtonState & 0x40)?1:0; // button 3 port 1
+        switches [0].fire |= (currentButtonState & 0x80)?1:0; // button 4 port 1
+      }
   else if (yates_config)
   {
     switches [0].leftfwd = (currentButtonState & 0x10)?1:0; // button 1 port 2
@@ -1296,6 +1328,10 @@ void bzInputHandler()
 
 int main(int argc, char *argv[])
 {
+  vectrexinit(1);
+  v_init();
+  v_noSound();
+
   int smallwindow = 1;
   int use_pixmap = 1;
   int line_width = 0;

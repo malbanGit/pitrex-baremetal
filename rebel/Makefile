@@ -11,7 +11,7 @@ OBJS = $(BUILD_DIR)rdefender.o
 $(BUILD_DIR)rdefender.o: rdefender.c 
 	$(CC) $(CFLAGS) -c rdefender.c -o $(BUILD_DIR)rdefender.o
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(LIBS) 
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)

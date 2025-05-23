@@ -1,4 +1,4 @@
-BUILD_FOR ?= zero2
+BUILD_FOR ?= zero1
 BASE_DIR = ../..
 TARGET	= $(LIB_DIR)/libbaremetal.a
 BAREMETALLIB=yes

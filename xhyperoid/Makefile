@@ -36,7 +36,7 @@ $(BUILD_DIR)sound.o: sound.c sound.h
 $(BUILD_DIR)svga.o: svga.c
 	$(CC) $(CFLAGS) -c svga.c -o $(BUILD_DIR)svga.o
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(LIBS) 
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)

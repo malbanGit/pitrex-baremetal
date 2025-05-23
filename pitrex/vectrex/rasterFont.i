@@ -45,6 +45,9 @@ Char_Table_End: FDB     $0020,$0050,$F898,$6800,$1040,$0000,$8000,$8080
                 FDB     $0020,$6020,$0000,$0038,$8288,$0000,$00FE,$FFFE
 */
 
+int betterRasterPositioning = 0;
+
+
 // ASCI bitmap data
 // starting with SPACE = 0x20
 // up to XXX = 0x6f
@@ -352,32 +355,35 @@ unsigned char *alternate_raster5[]=
 // use BIdriections ONLY if strlen < 'about 20' otherwise it will even with good settings look "shaky"
 int v_printStringBiRasterFont(int8_t x, int8_t y, char* _string, int8_t xSize, int8_t ySize, unsigned char delimiter, unsigned char *rlines[], int bidrectional)
 {
+    int cycles = 1811 -3*234;
     if (rlines == 0) rlines = rasterlines;
-	int cycles = 1811 -3*234;
-	// I don't know WHY - we sometimes need this!
 
-    if (!usePipeline)
-      I_SET(VIA_port_b, 0x80); // disable ramp, mux = y integrator, enable mux
+    // I don't know WHY - we sometimes need this!
+    if (!usePipeline) I_SET(VIA_port_b, 0x80); // disable ramp, mux = y integrator, enable mux
 
-	ySize=ySize+(ySize>>2)+(ySize>>3);
+    ySize=ySize+(ySize>>2)+(ySize>>3);
 
-	int8_t yoffset = 0;
-	int8_t movementScale = 0x7f;
-	int halfOffset =0;
+    int8_t yoffset = 0;
+    int8_t movementScale = 0x7f;
+    int halfOffset =0;
 
 #define BORDER_TO_HALFING 64
-
+ 
+  //if (betterRasterPositioning==0)
+  {
 //  if ((ABS(x)<BORDER_TO_HALFING) && (ABS(((int)y)-((int)ySize*7))<BORDER_TO_HALFING))
     if ((ABS(x)<BORDER_TO_HALFING) && (ABS(y)<BORDER_TO_HALFING))
-	{
-	  movementScale = 0x7f>>1;
-	  x=x<<1;
-	  y=y<<1;
-	}
-	if (ABS(ySize*7)<BORDER_TO_HALFING) 
-	{
-	  halfOffset = 1;
-	}
+    {
+      movementScale = 0x7f>>1;
+      x=x<<1;
+      y=y<<1;
+    }
+    if (ABS(ySize*7)<BORDER_TO_HALFING) 
+    {
+      halfOffset = 1;
+    }
+  }
+
 
     if (usePipeline)
     {
@@ -424,13 +430,25 @@ int v_printStringBiRasterFont(int8_t x, int8_t y, char* _string, int8_t xSize, i
 
 	while (currentRasterline!=0)
 	{
-        ZERO_AND_WAIT();
         unsigned char* string = (unsigned char*)_string;
+		ZERO_AND_WAIT();
 		UNZERO();
 
 		// move to position
 		v_setScale(movementScale);
 		v_moveToImmediate8(x, y);
+		
+		if (betterRasterPositioning==1)
+		{
+		  ZERO_AND_WAIT();
+		  UNZERO();
+
+		  // move to position
+		  v_setScale(movementScale);
+		  v_moveToImmediate8(x, y);
+		}
+		
+		
 
 		// move to line in String (only y-movement)
 		if (yoffset!=0)

@@ -13,10 +13,45 @@
 #define IMG_FILE_PREFIX "piZero1/"
 #endif
 
+// must be same as in vectrex/main.c
+#define MAX_VECTREX_FILENAME_LENGTH 127
+
+#define MAX_V_FILES 1000
+#define MAX_V_DIRS 100
+#define MAX_LOAD (1024*1024*100) // 100 MB
+
+
 
 
 GlobalMemSettings **settingsPointer;
-GlobalMemSettings loaderSettings;
+GlobalMemSettings loaderSettings
+=
+{
+  0, // flags
+  0, // loader main
+  0, // orientation
+  0, // lastSelection
+  "                                                                                                                               ", // parameter 1
+  "                                                                                                                               ", // parameter 2
+  "                                                                                                                               ", // parameter 3
+  "                                                                                                                               ", // parameter 4
+  LOADER_STARTING // resetType;
+};
+
+int *loaderAvailable = (int *)LOADER_AVAILABLE;
+//int *loaderMain = (int *)LOADER_MAIN;
+
+
+char subdirectoryPath[MAX_VECTREX_FILENAME_LENGTH];
+char _dirsInDir[MAX_V_DIRS][MAX_VECTREX_FILENAME_LENGTH];
+char _filesInDir[MAX_V_FILES+MAX_V_DIRS][MAX_VECTREX_FILENAME_LENGTH];
+char *dirsInDir[MAX_V_DIRS];
+char *filesInDir[MAX_V_FILES+MAX_V_DIRS];
+char fileTypes[MAX_V_FILES+MAX_V_DIRS];
+int currentSelectedItem = 0;
+int currentSelectedItem2 = 0;
+
+
 
 typedef struct MenuItemNew {
   int id;
@@ -36,6 +71,7 @@ typedef struct MenuItemNew {
 } MenuItemNew;
 MenuItemNew *currentMenuItem;
 
+void ensureMainPath();
 
 
 void cleanup_before_linux (void)
@@ -50,10 +86,27 @@ void cleanup_before_linux (void)
 	cache_flush(); /* flush I/D-cache */
 }
 
-char *filesInDir[1000][40];
-int currentSelectedItem = 0;
-int currentSelectedItem2 = 0;
-#define MAX_LOAD (1024*1024*100) // 100 MB
+void startWithCurrentSettings()
+{
+    loaderSettings.flags &= 255-FLAG_LOADER_RUNNING;
+    isb();
+    dsb();
+    dmb();
+    cleanup_before_linux();
+  __asm__ __volatile__(
+      "mov r5, #0x4000000   \n\t"
+      "sub r5, r5, #100 \n\t"
+      "ldr r0, [r5]      \n\t"
+
+      "add r5, r5, #4 \n\t"
+      "ldr r1, [r5]      \n\t"
+
+      "add r5, r5, #4 \n\t"
+      "ldr r2, [r5]      \n\t"
+
+      "ldr pc, = 0x8000  \n\t"
+    );
+}
 
 // for dev only
 void reloadLoader()
@@ -62,12 +115,15 @@ void reloadLoader()
 #if RASPPI != 1 
     v_removeMultiCore();
 #endif    
-    void *progSpace = (void *) 0x8000; 
 #if RASPPI != 1 
     char *FILE_NAME = "pitrex7.img";
 #else
     char *FILE_NAME = "pitrex.img";
 #endif    
+    void *progSpace = (void *) 0x8000; 
+
+    ensureMainPath();
+    
     FRESULT rc_rd = FR_DISK_ERR;
     FIL file_object_rd;
     rc_rd = f_open(&file_object_rd, FILE_NAME, (unsigned char) FA_READ);
@@ -77,55 +133,31 @@ void reloadLoader()
     printf("Loading: %s \r\n", FILE_NAME);
     unsigned int fsize = MAX_LOAD;
 
+
     rc_rd = f_read(&file_object_rd, progSpace, fsize, &fsize);
     if ( rc_rd!= FR_OK)
     {
-      printf("loaderMain.c: loadAndStart(): File not loaded (%s) (size got = %i)\r\n", FILE_NAME, rc_rd);
+      printf("loaderMain.c: reloadLoader(): File not loaded (%s) (error got = %i)\r\n", FILE_NAME, rc_rd);
       f_close(&file_object_rd);
     }
     else
     {
         f_close(&file_object_rd);
 
-        printf("Starting loaded file... \r\n");
-        isb();
-        dsb();
-        dmb();
-        cleanup_before_linux();
-	// correct start registers and jump to 8000
-/*	  
-	__asm__ __volatile__(
-	  "movw r5, ((0x4000000-100) & 0xffff)\n\t" // R0_STORE
-	  "movt r5, ((0x4000000-100) >> 16)\n\t"
-	    "ldr r0, [r5]      \n\t"
-	  "movw r5, ((0x4000000-100+4) & 0xffff)\n\t" // R1_STORE
-	  "movt r5, ((0x4000000-100+4) >> 16)\n\t"
-	    "ldr r1, [r5]      \n\t"
-	  "movw r5, ((0x4000000-100+8) & 0xffff)\n\t" // R2_STORE
-	  "movt r5, ((0x4000000-100+8) >> 16)\n\t"
-	    "ldr r2, [r5]      \n\t"
-	    "ldr pc, = 0x8000  \n\t"
-	  );
-*/	    
-	__asm__ __volatile__(
-	    "mov r5, #0x4000000   \n\t"
-	    "sub r5, r5, #100 \n\t"
-	    "ldr r0, [r5]      \n\t"
-
-	    "add r5, r5, #4 \n\t"
-	    "ldr r1, [r5]      \n\t"
-
-	    "add r5, r5, #4 \n\t"
-	    "ldr r2, [r5]      \n\t"
-
-	    "ldr pc, = 0x8000  \n\t"
-	  );
+        printf("Booting with %s... \r\n", FILE_NAME);
+	*loaderAvailable=0;
+	//*loaderMain = (int)0;
+	startWithCurrentSettings();
     }
 }
 
 
+char dirBuffer[MAX_VECTREX_FILENAME_LENGTH*2];
+
 void loadAndStart(MenuItemNew *item, int button)
 {
+    ensureMainPath();
+
     v_removeIRQHandling();
 #if RASPPI != 1 
     v_removeMultiCore();
@@ -176,12 +208,15 @@ void loadAndStart(MenuItemNew *item, int button)
             char *parameter = item->param1;
             if (item->id == 9999)
             {
-              parameter = (char *) &(filesInDir[currentSelectedItem][0]);
+              dirBuffer[0] = 0;
+              strcat(dirBuffer,subdirectoryPath);
+              strcat(dirBuffer,"/");
+              strcat(dirBuffer,filesInDir[currentSelectedItem]);
+              parameter = dirBuffer;
             }
             while (*parameter != (char) 0)
             {
               loaderSettings.parameter1[c++] =  (unsigned char) *parameter;
-printf("Parameter 1 Dec Value = %i\n", (unsigned char) *parameter);  
               parameter++;
 	      
               if (c==126) break;
@@ -205,34 +240,17 @@ printf("Parameter 1 Dec Value = %i\n", (unsigned char) *parameter);
           {
               loaderSettings.parameter1[0] = currentSelectedItem2;
           }
-          
-          
-          
-          
           loaderSettings.parameter2[c]= (unsigned char) 0;
 
           printf("Starting loaded file... \r\n");
-          isb();
-          dsb();
-          dmb();
-          cleanup_before_linux();
-	  // correct start registers and jump to 8000
-	  
-	__asm__ __volatile__(
-	    "mov r5, #0x4000000   \n\t"
-	    "sub r5, r5, #100 \n\t"
-	    "ldr r0, [r5]      \n\t"
-
-	    "add r5, r5, #4 \n\t"
-	    "ldr r1, [r5]      \n\t"
-
-	    "add r5, r5, #4 \n\t"
-	    "ldr r2, [r5]      \n\t"
-
-	    "ldr pc, = 0x8000  \n\t"
-	  );
-	  
-	  
+          printf("Debug Info: Core 0 state: %i\n", *((unsigned int *)CORE0_STATE));
+          printf("Debug Info: Core 1 state: %i\n", *((unsigned int *)CORE1_STATE));
+          printf("Debug Info: Core 2 state: %i\n", *((unsigned int *)CORE2_STATE));
+          printf("Debug Info: Core 3 state: %i\n", *((unsigned int *)CORE3_STATE));
+          
+          loaderSettings.flags |= FLAG_SELECTION_MADE;
+          
+          startWithCurrentSettings();
       }
     }
 }
@@ -298,6 +316,9 @@ void drawPitrex();
 void initTestRoms();
 
 int skipWave = 0;
+#if RASPPI != 1 
+int useSMP = 0; // use piZero SMP if available (loader)
+#endif
 // for now INI setting just stupidly overwrite other saved settings!
 static int loaderIniHandler(void* user, const char* section, const char* name, const char* value)
 {
@@ -306,6 +327,12 @@ static int loaderIniHandler(void* user, const char* section, const char* name, c
   {
     skipWave = atoi(value);
   }
+#if RASPPI != 1 
+  if (MATCH_NAME("USE_SMP")) 
+  {
+    useSMP = atoi(value);
+  }
+#endif
   return 1;
 }
 
@@ -346,10 +373,6 @@ void handleVectrexOutputSMP();
 void goHavoc();    
 #endif
 
-
-
-
-
 /** Main function - we'll never return from here */
 int main(int argc, char *argv[])
 {
@@ -359,43 +382,71 @@ int main(int argc, char *argv[])
     printf("core2entered: %X (%p), State: %i\r\n", *((unsigned int *)CORE2_ENTERED), CORE2_ENTERED, *((unsigned int *)CORE2_STATE));
     printf("core3entered: %X (%p), State: %i\r\n", *((unsigned int *)CORE3_ENTERED), CORE3_ENTERED, *((unsigned int *)CORE3_STATE));
 #endif     
-    
-    resetImportantStuff();
-  printf("Loader starting...\r\n");
-  printf("BSS start: %X, end: %X\r\n", &__bss_start__, &__bss_end__);
-
-  settingsPointer = (GlobalMemSettings **)SETTING_STORE;
-  *settingsPointer = &loaderSettings;
-  printf("SettingPointer: %08x, settings: %0x08\r\n", settingsPointer, &loaderSettings);
- 
-  unsigned int arm_ram = lib_bcm2835_vc_get_memory(BCM2835_VC_TAG_GET_ARM_MEMORY) / 1024 / 1024;	///< MB
-  unsigned int gpu_ram = lib_bcm2835_vc_get_memory(BCM2835_VC_TAG_GET_VC_MEMORY) / 1024 / 1024;	///< MB
-  printf("Pi ARM memory: %iMB\n", arm_ram);
-  printf("Pi GPU memory: %iMB\n", gpu_ram);
-    
-
+  *loaderAvailable=1;
+  resetImportantStuff();
+  int rebootPending = 0;
   
-  tweakVectors();
-
-  printf("Start mounting fs...\r\n");
-  FRESULT result = f_mount(&fat_fs, (const TCHAR *) "0:", (unsigned char) 1);
-  if (result != FR_OK) 
+  if (loaderSettings.resetType == LOADER_STARTING)
   {
-    vectrexinit(1); // pitrex
-    v_init(); // vectrex interface
-    printf("loaderMain.c: loaderMain(): NO filesystem...!\r\n");
-    printf("loaderMain.c: loaderMain(): f_mount failed! %d\r\n", (int) result);
-    v_error("MOUNT FAILED");
+      subdirectoryPath[0] = 0;
+      loaderSettings.flags = 0;
   }
   else
-  { 
-      printf("FAT filesystem found!\r\n");
+  {
+    printf("Restarting loader...\n");
+    if (loaderSettings.resetType == RESET_TYPE_CONTINUE_LOADER)
+    {
+      // just continue
+    }
+    else if (loaderSettings.resetType == RESET_TYPE_RESTART_SELECTION)
+    {
+      if (loaderSettings.flags &= FLAG_SELECTION_MADE)
+	startWithCurrentSettings();
+    }
+    else if (loaderSettings.resetType == RESET_TYPE_RESTART_BOOT_NAKED)
+    {
+      rebootPending = 1;
+    }
+   
+  }
+  loaderSettings.flags |= FLAG_LOADER_RUNNING;
+  
+  {
+    settingsPointer = (GlobalMemSettings **)SETTING_STORE;
+    *settingsPointer = &loaderSettings;
+
+    printf("Loader starting...\r\n");
+    printf("BSS start: %X, end: %X\r\n", &__bss_start__, &__bss_end__);
+    printf("SettingPointer: %08x, settings: %08x\r\n", settingsPointer, &loaderSettings);
+
+    unsigned int arm_ram = lib_bcm2835_vc_get_memory(BCM2835_VC_TAG_GET_ARM_MEMORY) / 1024 / 1024;	///< MB
+    unsigned int gpu_ram = lib_bcm2835_vc_get_memory(BCM2835_VC_TAG_GET_VC_MEMORY) / 1024 / 1024;	///< MB
+    printf("Pi ARM memory: %iMB\n", arm_ram);
+    printf("Pi GPU memory: %iMB\n", gpu_ram);
+    
+    tweakVectors();
+
+    printf("Start mounting fs...\r\n");
+    FRESULT result = f_mount(&fat_fs, (const TCHAR *) "0:", (unsigned char) 1);
+    if (result != FR_OK) 
+    {
+      vectrexinit(1); // pitrex
+      v_init(); // vectrex interface
+      printf("loaderMain.c: loaderMain(): NO filesystem...!\r\n");
+      printf("loaderMain.c: loaderMain(): f_mount failed! %d\r\n", (int) result);
+      v_error("MOUNT FAILED");
+    }
+    else
+    { 
+	printf("FAT filesystem found!\r\n");
+    }
+
+    vectrexinit(1); // pitrex
+    printf("gpio init done!\r\n");
+    v_init(); // vectrex interface
+    printf("Loader: init done!\r\n");
   }
 
-  vectrexinit(1); // pitrex
-  printf("gpio init done!\r\n");
-  v_init(); // vectrex interface
-  printf("Loader: init done!\r\n");
   
   int ymloaded;
   int s = 0;
@@ -404,7 +455,9 @@ int main(int argc, char *argv[])
   char *ss[] = {"PITREX"};
   
   
-  if (loaderSettings.loader == (void (*)(void)) main)
+  printf("\r\nSettingPointer: %08x, settings: %08x\r\n", loaderSettings.loader, (void (*)(void)) main);
+
+  if (loaderSettings.flags & FLAG_IN_MENU)
   {
     printf("Loader is reinitializing...\r\n");
     initMenu();
@@ -414,10 +467,12 @@ int main(int argc, char *argv[])
   else
   {
     printf("Loader is initializing...\r\n");
-    loaderSettings.loader = (void (*)(void)) main;
     ini_parse("loader.ini", loaderIniHandler, 0);
+
+    loaderSettings.loader = (void (*)(void)) main;
+    loaderSettings.lastSelection = 0;
     
-    if (!skipWave)
+    if ((!skipWave) && (rebootPending==0))
     {
       loadAndPlayRAW();
       v_init(); // vectrex interface
@@ -438,14 +493,12 @@ int main(int argc, char *argv[])
 
     v_setHardClipping(1, 1, 1, _clipminX,_clipminY, _clipmaxX,_clipmaxY);
     
-    
-    
-    
     fall = 0;
     blow=100;
     
     while(1)
     {
+      
       fall-=4;
       
       _clipminY += fall;
@@ -487,7 +540,7 @@ int main(int argc, char *argv[])
 //      asm volatile ("sev");
      
       
-      
+      if (rebootPending) break;
     }
     v_removeIRQHandling();  
     v_setCustomClipping(0, -14000, -14000, 14000, 14000);
@@ -498,8 +551,11 @@ int main(int argc, char *argv[])
     if (ymloaded) v_playYM();      
   }
 
+  if (rebootPending)
+    reloadLoader(); 
+  
   v_enableJoystickAnalog(1,1,0,0);
-//  v_enableJoystickDigital(1,1,0,0);
+  v_enableJoystickDigital(0,0,0,0);
   
 //  v_setupIRQHandling();  
   v_enableSoundOut(1);
@@ -508,7 +564,22 @@ int main(int argc, char *argv[])
   v_disableReturnToLoader();
 //  loadRAW("notReverse.raw");
 //  v_playIRQSample(sampleBuffer, sampleSize, 10000, PLAY_LOOP);     
+
+
+#if RASPPI != 1 
+  if ((isSMPMode == 1) && (useSMP==0))
+  {
+    pendingDisableMultiCore = 1;
+  }
+  else
+  if ((isSMPMode == 0) && (useSMP==1))
+  {
+    v_setupSMPHandling();
+  }
+#endif
+
   
+  loaderSettings.flags |= FLAG_IN_MENU;
   while(1)
   {
     v_WaitRecal();
@@ -635,7 +706,20 @@ void initMenu()
   selectionMade = 0;
   currentMenuItem = &vectrexMenu;
   initTestRoms();
-  loadFileNames();
+
+  if (subdirectoryPath[0]!=0)
+  {
+    char dirBuffer[MAX_VECTREX_FILENAME_LENGTH*2];
+    dirBuffer[0] = 0;
+    strcat(dirBuffer, "vectrex"); // starting path
+    strcat(dirBuffer,"/");
+    strcat(dirBuffer,subdirectoryPath);
+    loadFileNames(dirBuffer);
+  }
+  else
+  {
+    loadFileNames("vectrex");
+  }
   scrollReset = 1;
 }
 //////////////////////////////////////////
@@ -646,7 +730,7 @@ MenuItemNew vectrexMenu;
 MenuItemNew settingsMenu =
 {
   0,    // ID
-  "SETTINGS",    // no name
+  "PLEASE ENTER SETTINGS",    // no name
   0,    // no start directory
   0,    // no start image
   0,    // no parameter
@@ -908,9 +992,9 @@ MenuItemNew rebelMenu =
 MenuItemNew testMenu =
 {
   309,    // ID
-  "TEST (DEMO)",    // no name
+  "VTERM",    // no name
   0,    // no start directory
-  IMG_FILE_PREFIX "test.img",    // no start image
+  IMG_FILE_PREFIX "vterm.img",    // no start image
   0,    // no parameter
   0,    // no parameter
   0, // icon
@@ -958,7 +1042,8 @@ MenuItemNew speedMenu =
   102,    // ID
   "",
   0,    // directory 
-  "",    // no start image
+//  "",    // no start image
+  IMG_FILE_PREFIX "vectrexspeedy.img",    // no start image
   "",    // no parameter
   0,    // no parameter
   vecxSpeedList, // icon
@@ -1131,7 +1216,7 @@ MenuItemNew exactMenu =
   107,    // ID
   "",    // no name
   0,    // directory
-  "",    // no start image
+  IMG_FILE_PREFIX "vectrexexact.img",    // no start image
   "",    // no parameter
   0,    // no parameter
   vecxExactList, // icon
@@ -1545,7 +1630,7 @@ MenuItemNew lunarMenu =
   &redBaronMenu,    // ! left must be set
   &gravitarMenu,    // ! right must be set
   0,    // scrolltext
-  {"","","","","WORK IN PROGRESS!","NO SOUND!",  0},    // no text
+  {"","","","","WORKING GOOD!","",  0},    // no text
 };
 MenuItemNew spaceDuelMenu;
 MenuItemNew gravitarMenu =
@@ -2101,14 +2186,6 @@ MenuItemNew eleminatorMenu =
 };
 
 
-
-
-
-
-
-
-
-
 MenuItemNew aaeMenu;
 
 
@@ -2129,9 +2206,6 @@ MenuItemNew aaeMenu =
   0,    // scrolltext
   {"","","","","", 0},    // no text
 };
-
-
-
 
 MenuItemNew blablaMenu;
 MenuItemNew badAppleMenu =
@@ -2575,74 +2649,174 @@ void displayMenuItem(MenuItemNew *m)
 
 
 // return 1 on true
-int isNameOk(char *n)
+int isNameOk(dirent *finfo)
 {
+  char *n = finfo->d_name;
+	  
   int len = strlen(n);
   if (*n=='.') return 0; // exclude all files starting with a .
   
   if (strcasecmp(".bin", n+len-4) == 0) return 1;
+  if (finfo->d_type == DT_DIR) return 1;
   return 0;
   
 }
 
-// return 0 on ok
-int loadFileNames()
+// loads all files in the given Dir (sub directory from here)
+// into: nameToFill -> names
+//     : fileTypes -> types
+// filenames are only accepted if they end in ".bin" (not case sensitive)
+// directories are also accepted with any name
+
+// Comparison function for qsort
+int compareStrings(const void *a, const void *b) 
 {
-    char *vectrexDir = "vectrex";
-    if (chdir(vectrexDir)<0)
+    const char **strA = (const char **)a;
+    const char **strB = (const char **)b;
+    return strcmp(*strA, *strB);
+}
+
+void ensureMainPath()
+{
+  chdir("0:/");
+}
+
+
+// return 0 on ok
+int loadFileNames(char *dir)
+{
+//    outputCurrentDirectory();
+//    char *vectrexDir = "vectrex";
+
+    if (chdir(dir)<0)
     {
-        printf("loaderMain.c: loadFileNames(): NO vectrex directory found...!\r\n");
+        printf("loaderMain.c: loadFileNames(): NO '%s' directory found...!\r\n", dir);
         return -1;
     }
   
     char buf[256];
     if (getcwd (buf,256)==0)
     {
-      printf("loaderMain.c: loadFileNames(): f_getcwd failed (%i) \r\n", errno);
-      chdir("..");
+      printf("loaderMain.c: loadFileNames(): f_getcwd failed (%i), '%s' \r\n", errno, dir);
+    
+      ensureMainPath();
       return -1;
     }
+//printf("Dir: %s\n", buf);    
+    
 
     DIR *dp;
     dp = opendir (buf);
     if (dp == 0)
     {
-      printf("loaderMain.c: loadFileNames(): opendir failed (%i) \r\n", errno);
-      chdir("..");
+      printf("loaderMain.c: loadFileNames(): opendir failed (%i), '%s'\r\n", errno, dir);
+      ensureMainPath();
       return -2;
     }
     dirent *finfo;
-    int i = 0;
+    int d = 0;
+    int f = 0;
+    
+    // init pointers for sorting
+    for (int i=0;i<MAX_V_FILES; i++)
+      filesInDir[i] = &_filesInDir[i][0];
+    for (int i=0;i<MAX_V_DIRS; i++)
+
+      dirsInDir[i] = &_dirsInDir[i][0];
+
+
+//int count = 0;
+    
     do
     {
       finfo =  readdir(dp);
+//printf("FileInfoCount: %i - ", count++);
       if (finfo != 0)
       {
-        if (isNameOk(finfo->d_name))
+        if (isNameOk(finfo))
         {
-          char *nameToFill=(char *) &(filesInDir[i][0]);
-          int c=0;
-          for (; c<39; c++)
-          {
-            nameToFill[c]=finfo->d_name[c];
-            if (nameToFill[c]==0) break;
-          }
-          nameToFill[c]=0;
-          i++;
+	  if (finfo->d_type == DT_DIR)
+	  {
+//printf("Dir: %s - \n", finfo->d_name);
+
+
+
+	    // skip known names
+	    if (strcmp(finfo->d_name, "bios") == 0) continue;
+	    if (strcmp(finfo->d_name, "movies") == 0) continue;
+	    if (strcmp(finfo->d_name, "waves") == 0) continue;
+
+	    // allow valid vectrex file directories
+	    // if (strcmp(finfo->d_name, "original") == 0) continue;
+	    // if (strcmp(finfo->d_name, "demos") == 0) continue;
+	    
+	    char *nameToFill=(char *) &(_filesInDir[d][0]);
+	    int c=0;
+	    for (; c<MAX_VECTREX_FILENAME_LENGTH-1; c++)
+	    {
+	      nameToFill[c]=finfo->d_name[c];
+	      if (nameToFill[c]==0) break;
+	    }
+	    nameToFill[c]=0;
+	    d++;
+	  }
+	  else
+	  {
+//printf("File: %s - \n", finfo->d_name);
+	    char *nameToFill=(char *) &(_dirsInDir[f][0]);
+	    int c=0;
+	    for (; c<MAX_VECTREX_FILENAME_LENGTH-1; c++)
+	    {
+	      nameToFill[c]=finfo->d_name[c];
+	      if (nameToFill[c]==0) break;
+	    }
+	    nameToFill[c]=0;
+//printf("File Read: %s\n", &(_dirsInDir[f][0]));
+	    f++;
+	  }
         }
+        else
+	{
+//printf("Name not Ok: '%s'\n", finfo->d_name);
+	  
+	}
       }
     } while (finfo != 0);
     closedir (dp);
-    chdir("..");
-/*    
-    for(int i=0; i<1000; i++)
+    
+    
+//outputCurrentDirectory();
+    
+    
+    
+    ensureMainPath();
+    
+    // sort directories
+    qsort(filesInDir, d, sizeof(const char *), compareStrings);
+    
+    // sort files
+    qsort(dirsInDir, f, sizeof(const char *), compareStrings);
+    
+    // put them all into one array
+    for (int i=0;i<f;i++)
     {
-      if (filesInDir[i][0] != 0)
-      {
-        printf("%s\n\r",filesInDir[i]);
-      }
+      filesInDir[d+i] = dirsInDir[i];
     }
-*/    
+
+    // correct file types
+    for (int i=0;i<d;i++)
+    {
+      fileTypes[i] = DT_DIR;
+    }
+    for (int i=0;i<f;i++)
+    {
+      fileTypes[d+i] = DT_REG;
+    }
+    
+    for (int i=d+f; i<MAX_V_DIRS+MAX_V_FILES;i++)
+    {
+	filesInDir[i][0] = 0;
+    }
     return 0;
 }
 
@@ -2737,13 +2911,87 @@ int loadFileNames()
     0,
   };
 
+void oneSubDirIn()
+{
+  if (fileTypes[currentSelectedItem] != DT_DIR) return;
+
+  strcat(subdirectoryPath,"/");
+  strcat(subdirectoryPath,filesInDir[currentSelectedItem]);
+
+  char dirBuffer[MAX_VECTREX_FILENAME_LENGTH*2];
+  dirBuffer[0] = 0;
+  strcat(dirBuffer, "vectrex"); // starting path
+  strcat(dirBuffer,"/");
+  strcat(dirBuffer,subdirectoryPath);
+  loadFileNames(dirBuffer);
+  currentSelectedItem = 0;
+}
+
+void oneSubDirOut()
+{
+  int i;
+  char lastSelection[MAX_VECTREX_FILENAME_LENGTH];
+
+//printf("OrgSub: %s\n", subdirectoryPath);  
+  for (i=strlen(subdirectoryPath);i>=0;i--)
+  {
+    if (subdirectoryPath[i]=='/')
+    {
+      subdirectoryPath[i]=0;
+      break;
+    }
+  }
+//printf("Reduced: '%s'\n", subdirectoryPath);  
+  
+  int c=0;
+  do
+  {
+    i++;
+    lastSelection[c++] = subdirectoryPath[i];
+    
+  } while (subdirectoryPath[i] != 0);
+//printf("lastSelection: %s\n", lastSelection);  
+  
+  
+  char dirBuffer[MAX_VECTREX_FILENAME_LENGTH*2];
+  dirBuffer[0] = 0;
+  strcat(dirBuffer, "vectrex"); // starting path
+  strcat(dirBuffer,"/");
+  strcat(dirBuffer,subdirectoryPath);
+  
+  if (dirBuffer[strlen(dirBuffer)-1]=='/') dirBuffer[strlen(dirBuffer)-1]=0;
+
+//printf("DirLoading: %s\n", dirBuffer);  
+
+  loadFileNames(dirBuffer);
+
+  // find selected item
+  c = 0;
+  currentSelectedItem = 0;
+  while (c<MAX_V_FILES+MAX_V_DIRS)
+  {
+    if (strcmp(filesInDir[c], lastSelection) ==0 )
+    {
+//printf("SelectionFound: %s\n", filesInDir[c]);  
+	currentSelectedItem = c;
+	break;
+    }
+    c++;
+    
+  }
+//printf("Done\n");  
+  
+}
+    
+  
+  
 #define TIMING_MAX 25
 int timingAnalog=TIMING_MAX;
   
 void displayMenu()
 {
   displayMenuItem(currentMenuItem);
-  
+  int currentType = DT_DIR-1;
   
   // vectrex exact menu select
   if (currentMenuItem->id == 9999)
@@ -2752,19 +3000,64 @@ void displayMenu()
     int itemDisplayStart = currentSelectedItem-2;
 
     if ((itemDisplayStart>=0) && (filesInDir[itemDisplayStart+0][0] != 0))
-      v_printString(-40, yPos -0*18, (char *) &(filesInDir[itemDisplayStart][0]), 5, 0x18);
+    {
+      if (fileTypes[itemDisplayStart+0] == DT_DIR)
+      {
+	char __buff[256];
+	sprintf(__buff,"$ %s", (char *) &(filesInDir[itemDisplayStart][0]));
+	v_printString(-51, yPos -0*18, __buff, 5, 0x18);
+      }
+      else
+	v_printString(-40, yPos -0*18, (char *) &(filesInDir[itemDisplayStart][0]), 5, 0x18);
+    } 
 
     if ((itemDisplayStart+1>=0) && (filesInDir[itemDisplayStart+1][0] != 0))
-      v_printString(-40, yPos-1*18, (char *) &(filesInDir[itemDisplayStart+1][0]), 5, 0x28);
+    {
+      if (fileTypes[itemDisplayStart+1] == DT_DIR)
+      {
+	char __buff[256];
+	sprintf(__buff,"$ %s", (char *) &(filesInDir[itemDisplayStart+1][0]));
+	v_printString(-51, yPos -1*18, __buff, 5, 0x28);
+      }
+      else
+	v_printString(-40, yPos-1*18, (char *) &(filesInDir[itemDisplayStart+1][0]), 5, 0x28);
+    }  
 
     if (filesInDir[itemDisplayStart+2][0] != 0)
-      v_printString(-40, yPos-2*18, (char *) &(filesInDir[itemDisplayStart+2][0]), 5, 0x4f);
+    {
+      if (fileTypes[itemDisplayStart+2] == DT_DIR)
+      {
+	char __buff[256];
+	sprintf(__buff,"$ %s", (char *) &(filesInDir[itemDisplayStart+2][0]));
+	v_printString(-51, yPos -2*18, __buff, 5, 0x4f);
+      }
+      else
+	v_printString(-40, yPos-2*18, (char *) &(filesInDir[itemDisplayStart+2][0]), 5, 0x4f);
+    }  
     
     if (filesInDir[itemDisplayStart+3][0] != 0)
-      v_printString(-40, yPos-3*18, (char *) &(filesInDir[itemDisplayStart+3][0]), 5, 0x28);
+    {
+      if (fileTypes[itemDisplayStart+3] == DT_DIR)
+      {
+	char __buff[256];
+	sprintf(__buff,"$ %s", (char *) &(filesInDir[itemDisplayStart+3][0]));
+	v_printString(-51, yPos -3*18, __buff, 5, 0x28);
+      }
+      else
+	v_printString(-40, yPos-3*18, (char *) &(filesInDir[itemDisplayStart+3][0]), 5, 0x28);
+    }  
     
     if (filesInDir[itemDisplayStart+4][0] != 0)
-      v_printString(-40, yPos-4*18, (char *) &(filesInDir[itemDisplayStart+4][0]), 5, 0x18);
+    {
+      if (fileTypes[itemDisplayStart+4] == DT_DIR)
+      {
+	char __buff[256];
+	sprintf(__buff,"$ %s", (char *) &(filesInDir[itemDisplayStart+4][0]));
+	v_printString(-51, yPos -4*18, __buff, 5, 0x18);
+      }
+      else
+	v_printString(-40, yPos-4*18, (char *) &(filesInDir[itemDisplayStart+4][0]), 5, 0x18);
+    }  
   }
 
   // aae menu select
@@ -2842,30 +3135,40 @@ void displayMenu()
   else if (currentJoy1Y < -50) currentJoy1Y = -1;
   else currentJoy1Y = 0;
   
-  
-  
-  
-  
-
   // only "main" menu follows  
   if ((currentJoy1X==1) && (selectionMade==0))
   {
-    if (currentMenuItem->right != 0)
-    {
-      currentMenuItem = currentMenuItem->right;
+      if (currentMenuItem->id == 9999)
+      {
+	oneSubDirIn();
+      }
+      else
+      {
+        if (currentMenuItem->right != 0)
+	{
+	  currentMenuItem = currentMenuItem->right;
+	}
+      }
       scrollReset = 1;
-    }
-    selectionMade = 1;
+      selectionMade = 1;
   }
   
   if ((currentJoy1X==-1) && (selectionMade==0))
   {
-    if (currentMenuItem->left != 0)
-    {
-      currentMenuItem = currentMenuItem->left;
+      if ((currentMenuItem->id == 9999) && (strlen(subdirectoryPath)!=0))
+      {
+	oneSubDirOut();
+      }
+      else
+      {
+	if (currentMenuItem->left != 0)
+	{
+	  currentMenuItem = currentMenuItem->left;
+	  scrollReset = 1;
+	}
+      }
       scrollReset = 1;
-    }
-    selectionMade = 1;
+      selectionMade = 1;
   }
 
   
@@ -2885,7 +3188,7 @@ void displayMenu()
       currentMenuItem = currentMenuItem->parent;
       scrollReset = 1;
     }
-    selectionMade = 1;
+    selectionMade = 1; 
   }
 
   if ((ABS(currentJoy1Y)==0) && (ABS(currentJoy1X)==0)) selectionMade =0;
@@ -2894,10 +3197,13 @@ void displayMenu()
   {
     if (currentMenuItem->img != 0)
     {
-      loadAndStart(currentMenuItem, 4);
+      if (!((currentMenuItem->id == 9999) && (fileTypes[currentSelectedItem] == DT_DIR)) )
+	loadAndStart(currentMenuItem, 4);
     }
     if (currentMenuItem->id == 0)
     {
+      while ((v_directReadButtons()&0x0f) == (0x08));
+      
       v_SettingsGUI(1);
       v_saveIni("vectrexInterface.ini");
     }
@@ -2909,10 +3215,13 @@ void displayMenu()
       loadAndStart(currentMenuItem, 1);
     }
   }  
+/*  ENABLE ONLY FOR DEBUGGING THE LOADER!
+ * otherwise e.g. a spinner in port 2 will reset the loader!
   if ((currentButtonState&0xff) == (0x10)) // exactly button 1 pad 2
   {
     reloadLoader();
-  }  
+  }
+*/  
 }
 #if 0
 void v_printBitmapUni(unsigned char *bitmapBlob, int width, int height, int sizeX, int x, int y);
@@ -3682,7 +3991,7 @@ const signed char HavocText[]={
 	(signed char) 0xE3, (signed char) 0xF4, (signed char) 0xE3, (signed char) 0xF6,	// y0, x0, y1, x1
 	(signed char) 0xE3, (signed char) 0xF4, (signed char) 0xE5, (signed char) 0xF4,	// y0, x0, y1, x1
 	(signed char) 0xE5, (signed char) 0xF4, (signed char) 0xE5, (signed char) 0xF6,	// y0, x0, y1, x1
-	(signed char) 0xE5, (signed char) 0xF6, (signed char) 0xE5, (signed char) 0xF4,	// y0, x0, y1, x1
+	(signed char) 0xE5, (signed char) 0xF6, (signed char) 0xE5, (signed char) 0xF4,	// y0, x0, y1, x140
 	(signed char) 0xE3, (signed char) 0xF6, (signed char) 0xE5, (signed char) 0xF6,	// y0, x0, y1, x1
 	(signed char) 0xE5, (signed char) 0xF6, (signed char) 0xE5, (signed char) 0xF8,	// y0, x0, y1, x1
 	(signed char) 0xE5, (signed char) 0xF8, (signed char) 0xE5, (signed char) 0xF8,	// y0, x0, y1, x1
@@ -3944,7 +4253,7 @@ void goHavoc()
     v_readJoystick1Analog(); // not neededin IRQ mode
 
     v_WaitRecal();
-
+40
     while ((((volatile unsigned char)currentButtonState&0x0f)) == (0x08)) 
     {
       extern VectorPipeline tmp_VPL[MAX_PIPELINE];

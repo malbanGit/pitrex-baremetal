@@ -5,8 +5,11 @@
 #include <stdbool.h>
 #include <time.h> 
 #include "pitrexio-gpio.h"
-
 #include "globalVars.h"
+
+
+
+
 
 #define SD_WRITE_SUPPORT
 extern volatile int printSemaphore;
@@ -1628,7 +1631,17 @@ typedef struct {
   } pi_vectors;
 
 // 0x0000008c is a pointer to a structur of->
-typedef struct {
+#define LOADER_STARTING 0
+//#define RESET_TYPE_RESTART_LOADER 1
+#define RESET_TYPE_RESTART_SELECTION 2
+#define RESET_TYPE_RESTART_BOOT_NAKED 3
+#define RESET_TYPE_CONTINUE_LOADER 4
+
+#define FLAG_IN_MENU 1
+#define FLAG_SELECTION_MADE 2
+#define FLAG_LOADER_RUNNING 4
+  
+  typedef struct {
   unsigned char flags;
   void (*loader)(void);
   unsigned char orientation;
@@ -1637,6 +1650,7 @@ typedef struct {
   char parameter2[127];
   char parameter3[127];
   char parameter4[127];
+  int resetType;
 } GlobalMemSettings;
 
 extern GlobalMemSettings *settings;

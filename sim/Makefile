@@ -30,3 +30,4 @@ $(BUILD_DIR)pokey.o: pokey.c pokey.h memory.h
 
 $(BUILD_DIR)vx_interface.o: vx_interface.c game.h memory.h display.h
 	$(CC) $(CFLAGS) -c vx_interface.c -o $(BUILD_DIR)vx_interface.o
+

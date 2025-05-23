@@ -1,5 +1,49 @@
 #pragma once
 
+#define SUPPORT_SAMPLES
+#define MULTI_SAMPLES
+
+//#define ENABLE_SAMPLE_MIXER // sounds shitty - but works!
+
+// if defined, all printf outputs 
+// are also written in a log printf.log
+// (as long as the file system is activated)
+
+// !! see also pi_support.h !!!
+#ifndef NO_DEBUG
+#define DEBUG_TO_FILE
+#endif
+
+// a word on those macros
+// PLAY_SAMPLE()
+// PLAY_SAMPLE_IGNORE_A()
+// Both macros (or at least one of them) must be called every "sample rate" fractions of a second in order
+// to play a clear sample.
+// this is NOT guranteeable with a vectrex
+// I squeeze the macros in wherever I can.
+// Sample playing (during drawing) is only implemented for IRQ/SMP pipelines.
+// Technically...
+// Each sample is passed to the vectrex hardware using PortA of the VIA.
+// Port A is used during vector drawing and MUST not be changed during drawing.
+// Also for optimization purposes the pipeline generator KNOWS what port A contains.
+// And if it can reuse the value - it will refrain from setting it, and thus save a couple of vectrex cycles.
+// The first macro PLAY_SAMPLE() plays a sample and ensures that port A
+// is set to the same value as it was before playing the sample.
+// As the name says PLAY_SAMPLE_IGNORE_A() - ignores the old A value and does not restore it.
+// That is all the difference.
+//
+// NOTE:
+// For some reason SMP output is more more "touchy" when playing samples
+// Meaning - vectors start shaking slightly when playing samples.
+// Perhaps I am still ignoring "Port A" still on to many occasions
+//
+// NOTE 2:
+// Since I use the same pipeline sources for "normal" pipeline (not IRQ/SMP)
+// The macros are for that case redefined to be "empty"
+
+
+
+
 /*
 extern int currentSwitch;
 extern int currentRead;
@@ -13,12 +57,6 @@ extern int currentt1Counter;
 // I don'T relly undertstand, since the Mhz is the same... but fuck it...
 #define RASPPI3_CYCLE_OFFSET 7
 
-// if defined, all printf outputs 
-// are also written in a log printf.log
-// (as long as the file system is activated)
-#ifndef NO_DEBUG
-#define DEBUG_TO_FILE
-#endif
 
 #include <stddef.h>
 #include <stdint.h>
@@ -29,70 +67,70 @@ extern int currentt1Counter;
 
 #ifdef DEBUG_TO_FILE
 extern FILE *__debugf;
-
 extern volatile unsigned int isSMPMode;
-#if RASPPI != 1 
+extern int uartOutput;
+extern int logOutput;
+extern volatile unsigned int vCritical;
 
-extern volatile int printSemaphore;
-#define printf(...) do \
-{ \
-  int __ss = errno;\
-  if (isSMPMode){ while (printSemaphore);\
-  printSemaphore=1;}\
-  char __buff[256];\
-  sprintf(__buff,__VA_ARGS__);\
-  fprintf(stdout,__buff); \
-  if (logOutput)\
-  { \
-    if (!__debugf) {__debugf = fopen("../../../printf.log", "a"); \
-      {if (!__debugf) __debugf = fopen("../../printf.log", "a"); \
-         {if (!__debugf) __debugf = fopen("../printf.log", "a"); \
-            if (!__debugf) __debugf = fopen("printf.log", "a"); }}}\
-    if (__debugf) \
+
+  #if RASPPI != 1 
+
+  extern volatile int printSemaphore;
+    #define printf(...) do \
     { \
-      fprintf(__debugf,__buff); \
-      fflush(__debugf); \
-    } \
-  }\
-  errno=__ss;printSemaphore=0;} while(0)
+      int __ss = errno;\
+      if (isSMPMode){ while (printSemaphore);\
+      printSemaphore=1;}\
+      char __buff[256];\
+      sprintf(__buff,__VA_ARGS__);\
+      if (uartOutput) {fprintf(stdout,__buff);} \
+      if (logOutput)\
+      { \
+        if (!__debugf) {__debugf = fopen("../../../printf.log", "a"); \
+          {if (!__debugf) __debugf = fopen("../../printf.log", "a"); \
+            {if (!__debugf) __debugf = fopen("../printf.log", "a"); \
+                if (!__debugf) __debugf = fopen("printf.log", "a"); }}}\
+        if (__debugf) \
+        { \
+          fprintf(__debugf,__buff); \
+          fflush(__debugf); \
+        } \
+      }\
+      errno=__ss;printSemaphore=0;} while(0)
 
-#else
+  #else // #if RASPPI != 1 
 
-#define printf(...) do \
-{ \
-  int __ss = errno;\
-  char __buff[256];\
-  sprintf(__buff,__VA_ARGS__);\
-  fprintf(stdout,__buff); \
-  if (logOutput)\
-  { \
-    if (!__debugf) {__debugf = fopen("../../../printf.log", "a"); \
-      {if (!__debugf) __debugf = fopen("../../printf.log", "a"); \
-         {if (!__debugf) __debugf = fopen("../printf.log", "a"); \
-            if (!__debugf) __debugf = fopen("printf.log", "a"); }}}\
-    if (__debugf) \
+    #define printf(...) do \
     { \
-      fprintf(__debugf,__buff); \
-      fflush(__debugf); \
-    } \
-  }\
-  errno=__ss;} while(0)
+      int __ss = errno;\
+      char __buff[256];\
+      sprintf(__buff,__VA_ARGS__);\
+      if (uartOutput) {fprintf(stdout,__buff);} \
+      if (logOutput)\
+      { \
+        if (!__debugf) {__debugf = fopen("../../../printf.log", "a"); \
+          {if (!__debugf) __debugf = fopen("../../printf.log", "a"); \
+            {if (!__debugf) __debugf = fopen("../printf.log", "a"); \
+                if (!__debugf) __debugf = fopen("printf.log", "a"); }}}\
+        if (__debugf) \
+        { \
+          fprintf(__debugf,__buff); \
+          fflush(__debugf); \
+        } \
+      }\
+      errno=__ss;} while(0)
 
-#endif
-  
-  
-  
-  
-  
-  
-  
-  
-#endif
+  #endif // #if RASPPI != 1 
+#endif // #ifdef DEBUG_TO_FILE
 
 
 // used in VECX
 #define DELAY_AFTER_T1_END_VALUE_DIRECT 8
 #define DELAY_Y_SET_DIRECT 2
+
+
+// default 0, if 1, then the first line of raster draw is "better" since it does a double zero!
+extern int betterRasterPositioning;
 
 
 void v_init(); // also mounts sd card
@@ -122,7 +160,9 @@ int v_getRefresh();
 
 void v_removeIRQHandling();
 void v_setupIRQHandling();
+void v_irqForceBreakMikroSeconds(int c); // vterm serial communication break
 
+void v_enableSerialCommands(int yesNo);
 void v_enableExtendedSoundOut(int yesNo);
 void v_enableSoundOut(int yesNo);
 void v_enableButtons(int yesNo);
@@ -137,6 +177,8 @@ void v_enablePipelineCleanup(int e);
 void v_clearPipeline();
 #endif
 
+
+extern int serialCommandsAllowed;
 extern int extendedIRQSound; // also plays sfx and ym in IRQ if available
 extern int irqSound;
 extern int irqButtons;
@@ -150,10 +192,13 @@ void v_WaitRecal();
 void v_WaitRecal_direct();
 void v_resetDetection();
 void v_calibrate();
+
 uint8_t v_directReadButtons();
 uint8_t v_readButtons();
 void v_readJoystick1Digital();
 void v_readJoystick1Analog();
+
+
 void v_printString(int8_t x, int8_t y, char* string, uint8_t textSize, uint8_t brightness);
 void v_printStringMax(int8_t x, int8_t y, char* string, uint8_t textSize, uint8_t brightness, int maxchars);
 int v_printStringRaster(int8_t x, int8_t y, char* _string, int8_t xSize, int8_t ySize, unsigned char delimiter);
@@ -200,18 +245,25 @@ void v_noSound_channel(int c);
 
 void v_playDirectSampleAll(char *ymBufferLoad, int fsize, int rate);
 void v_doSound();
+int v_isPlayingSFX(int channel);
+int v_isPlayingSFXSound(int channel, unsigned char *buffer);
 void v_playSFXCont(unsigned char *buffer, int channel, int loop);
 void v_playSFXStop(unsigned char *buffer, int channel);
+void v_playSFXStopForced(int channel);
 void v_playSFXStart(unsigned char *buffer, int channel, int loop);
+void v_playSFXLoudness(int channel, float mul); // multiply the amplitude with "mul"
 
+int play_sfx1();
+int play_sfx2();
+int play_sfx3();
 void v_playAllSFX();
+
 void v_initYM(unsigned char *ymBuffer, uint16_t length, int loop);
+int v_loadYM(unsigned char *FILE_NAME, int len ,char *dest, char *loadbuf);
 int v_playYM();
 int v_stopYM();
 void v_setymPos(int i);
 int v_isYMPlaying();
-
-int v_loadYM(unsigned char *FILE_NAME, int len ,char *dest, char *loadbuf);
 
 
 void v_writePSG_double_buffered(uint8_t reg, uint8_t data);
@@ -220,16 +272,15 @@ void v_writePSG(uint8_t reg, uint8_t data);
 uint8_t v_readPSG_double_buffered(uint8_t reg);
 uint8_t v_readPSG_buffered(uint8_t reg);
 uint8_t v_readPSG(uint8_t reg);
-int play_sfx1();
-int play_sfx2();
-int play_sfx3();
 void v_PSG_writeDoubleBuffer();
 
 void v_playIRQSample(char *buf, int size, int rate, int mode);
 char *v_getSamplePlaying();
 void v_stopSamplePlaying();
-
 int v_loadRAW(const char *filename, unsigned char *largeEnoughBuffer);
+
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -249,6 +300,7 @@ extern int browseMode;
 extern int currentBrowsline;
 extern int currentDisplayedBrowseLine;
 extern int logOutput;
+extern int uartOutput;
 
 void v_error(char *message); // halts the program and displays an the message on the vectrex!
 void v_errori(char *message, int i);
@@ -271,6 +323,8 @@ extern int16_t currentYSH; // Y SH
 extern int16_t currentZSH; // Brightness
 extern int v_dotDwell;
 
+
+
 // todo
 typedef enum {
   CRANKY_CRANKY_VIA_B_DELAY_B0 = 0,               ///<
@@ -284,6 +338,14 @@ typedef enum {
 } CrankyFlags;
 
 extern CrankyFlags crankyFlag;
+
+extern uint8_t YSH_A_DELAY; 
+extern uint8_t YSH_B_DELAY; 
+extern uint8_t XSH_A_DELAY; 
+extern uint8_t XSH_B_DELAY; 
+extern uint8_t BEAM_ON_DELAY;
+extern uint8_t BEAM_OFF_DELAY;
+
 extern uint8_t DELAY_ZERO_VALUE; // 70 // probably less, this can be adjusted, by max x position, the nearer to the center the less waits
 extern uint8_t DELAY_AFTER_T1_END_VALUE;
 extern uint8_t DELAY_AFTER_XSH_VALUE;
@@ -294,13 +356,18 @@ extern uint8_t SCALE_STRENGTH_DIF;
 extern uint8_t MAX_USED_STRENGTH;
 extern uint8_t MAX_CONSECUTIVE_DRAWS;
 extern uint8_t MINSCALE; //#define MINSCALE 5 //15 to low might interfere with switching shift states to soon -> shift stalling
+extern unsigned int MAXSCALE; // not supported yet!
 extern uint8_t beamOffBetweenConsecutiveDraws;
 extern uint8_t useDoubleTimer;
 extern uint8_t usePipeline;
 extern uint8_t keepDotsTogether;
 extern uint8_t bufferType; // 0 = none, 1 = double buffer, 2 = auto buffer (if pipeline is empty -> use previous (battlezone!)
-extern uint8_t calibrationValue; // tut calibration
 extern uint8_t optimizationON;
+extern uint8_t swapPorts;
+extern uint8_t doAngleOptimization;
+extern uint8_t doOverlappingOptimization;
+extern uint8_t angleValue; 
+extern uint8_t iniOverwrite;
 extern uint8_t consecutiveDraws; // how many lines/moves were drawn/made directly after another! (without zeroing)
 extern uint8_t orientation;
 extern unsigned int cycleEquivalent;
@@ -310,6 +377,7 @@ extern int16_t offsetX;
 extern int16_t offsetY;
 extern float sizeX;
 extern float sizeY;
+extern int inSettings;
 
 extern int Vec_Loop_Count;
 extern unsigned int piCounterMark;
@@ -340,6 +408,9 @@ extern unsigned char lastPortA;
 #define VIA_cntl      ((unsigned short) 0xD00C) // VIA control register
 #define VIA_int_flags ((unsigned short) 0xD00D) // VIA interrupt flags register
 #define VIA_int_enable ((unsigned short) 0xD00E)    // VIA interrupt enable register
+
+
+
 
 #define MAX(A,B) ((A)>(B)?(A):(B))
 #define ABS(A) ((A)>0?(A):(-(A)))
@@ -530,16 +601,22 @@ do {\
 // usually the beam (~BLANK) is switched using the SHIFT register
 // but using other VIA settings the BEAM can also be switched on/off using the
 // CNTL register
-//#define BEAM_LIGHT_BY_SHIFT 1 //
-#define BEAM_LIGHT_BY_CNTL 1
+#define BEAM_LIGHT_BY_SHIFT 1 
+//#define BEAM_LIGHT_BY_CNTL 1
 
 #ifdef BEAM_LIGHT_BY_SHIFT
+//#define SWITCH_BEAM_ON4() SET_SHIFT_REG(0x1f)
+#define SWITCH_BEAM_ON4() SET_SHIFT_REG(0x1+2+4+8+16)
 #define SWITCH_BEAM_ON() SET_SHIFT_REG(0xff)
+#define SWITCH_BEAM_OFF4() SET_SHIFT_REG(0x80+0x40+0x20+0x10)
+#define SWITCH_BEAM_OFF8() SET_SHIFT_REG(0xfe)
 #define SWITCH_BEAM_OFF() SET_SHIFT_REG(0x00)
 #endif
 #ifdef BEAM_LIGHT_BY_CNTL
+#define SWITCH_BEAM_ON4() SET(VIA_cntl, 0xee)
 #define SWITCH_BEAM_ON() SET(VIA_cntl, 0xee)
 #define SWITCH_BEAM_OFF() SET(VIA_cntl, 0xce)
+#define SWITCH_BEAM_OFF4() SET(VIA_cntl, 0xce)
 #endif
 
 
@@ -587,7 +664,9 @@ do { \
 #define SET_OPTIMAL_SCALE(a,b) \
     do {lastScale = currentScale;currentScale = GET_OPTIMAL_SCALE(a,b); \
     if (currentScale <= MINSCALE) currentScale = MINSCALE;\
+    if (currentScale > MAXSCALE) currentScale = MAXSCALE;\
     } while (0)
+    
     
 #define GET_OPTIMAL_SCALE_SMS(a,b,sms) ((MAX(ABS(a), ABS(b))+(sms-1))/sms)
 
@@ -595,6 +674,7 @@ do { \
 #define SET_OPTIMAL_SCALE_SMS(a,b,sms) \
     do {lastScale = currentScale;currentScale = GET_OPTIMAL_SCALE_SMS(a,b, sms); \
     if (currentScale <= MINSCALE) currentScale = MINSCALE;\
+    if (currentScale > MAXSCALE) currentScale = MAXSCALE;\
     } while (0)
 
 #define UNZERO() SET(VIA_cntl, 0xCE) // disable zeroing, otherwise no positioning can be done
@@ -741,7 +821,7 @@ do { \
 #define OFFSET_TIMER_OVERHEAD 24// # of cycles "wasted" by function calling etc
 
 
-
+// written to from user space
 typedef struct {
   int yStart;
   int xStart;
@@ -823,6 +903,8 @@ typedef enum {
   PL_DEFLOK_AFTER      = (8192*2)*2*2*2*2
 } ActionFlags;
 
+
+// used for drawing in hyper space
 typedef struct {
   VectorActions type;
   int flags;
@@ -860,13 +942,15 @@ extern int commonHints; // hints that are allways applied to the next "inserted"
 
 inline static void v_resetIntegratorOffsets0()
 {
-//  printf("CALIBRATION 0\r\n");
+
+  //  printf("CALIBRATION 0\r\n");
   I_SET (VIA_port_b, 0x81);
   DELAY_PORT_B_BEFORE_PORT_A();
   I_SET (VIA_port_a, 0x00);
   ADD_DELAY_CYCLES(4);
   I_SET (VIA_port_b, 0x80);
   ADD_DELAY_CYCLES(6);
+  
   // reset integrators
   I_SET (VIA_port_b, 0x82);    // mux=1, enable mux - integrator offset = 0
   ADD_DELAY_CYCLES(6);
@@ -882,6 +966,8 @@ extern int (*checkExternal)(VectorPipelineBase **, VectorPipeline **, int *, int
 #define CV_SPECIAL_NONE 0
 #define CV_SPECIAL_SKIP 1
 #define CV_SPECIAL_DEFLOK 2
+#define CV_SPECIAL_NEXT 3
+
 #define CV_SPECIAL_AFTER 0x80
 void saveScreenshot(void);
 
@@ -1005,14 +1091,6 @@ void itemListSetPos(int x, int y);
 
 void v_setupSMPHandling();
 void v_removeMultiCore();
-
-
-
-
-
-
-
-
 
 
 

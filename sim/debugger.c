@@ -308,11 +308,12 @@ static void formatdump(byte a, byte x, byte y, byte p, byte s)
   flagstr[5] = (p & Z_BIT) ? 'Z' : 'z';
   flagstr[6] = (p & C_BIT) ? 'C' : 'c';
   flagstr[7] = 0;
-  printf("A:%02x X:%02x Y:%02x %s SP:1%02x", a, x, y, flagstr, s);
+  printf("PC:%04x A:%02x X:%02x Y:%02x %s SP:1%02x",save_PC, a, x, y, flagstr, s);
 }
 
 
-static void dumpregs (void)
+void dumpregs (void)
+//static void dumpregs (void)
 {
     disasm_6502 (save_PC);
     formatdump(save_A, save_X, save_Y, save_flags, SP);
@@ -615,6 +616,8 @@ static int reg_cmd (int argc, char *argv[])
     save_flags = val;
   else if (strcasecmp (argv [1], "s") == 0)
     SP = val;
+  else if (strcasecmp (argv [1], "pc") == 0)
+    save_PC = val;
   else
     {
       printf ("invalid register\r\n");
@@ -861,8 +864,9 @@ int debugger (int type)
     }
 
     fflush(stdout);
-  dumpregs();
-  printf("\r\n");
+
+    dumpregs();
+    printf("\r\n");
     fflush(stdout);
 
   while((! traceflag) && (! runflag))

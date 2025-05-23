@@ -13,7 +13,7 @@ $(BUILD_DIR)cineops.o: cineops.c cinedbg.i  cineops.i  startframe.i
 $(BUILD_DIR)cinemu.o: cinemu.c cines.h
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)cinemu.o -c cinemu.c
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(SIMOBJS) $(LIBS) \
 	
 	$(RM) $(TARGET)

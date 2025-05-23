@@ -21,12 +21,22 @@
 #include "../vectrexBase/edac.h"
 
 extern uint8_t cart[32768*9]; 
+extern char bootUpName[128];
 void loadVectrexBin(char *selectedName, uint8_t *loadMem);
 
 // if 1 is returned, the normal vecx init is also run!
 static inline int customInit()
 {
   char *p = getLoadParameter(0);
+  
+  if (bootUpName[0] != (char) 0)
+  {
+      // using the same function - but load a "forced" Cart
+      loadVectrexBin(getLoadParameter(0), cart);
+      return 0;
+  }
+  printf("LOADING: %s\n", p);
+  
   if (p == 0) return 1;
   if (*p == 0) return 1;
   loadVectrexBin(getLoadParameter(0), cart);

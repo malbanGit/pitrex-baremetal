@@ -218,6 +218,10 @@ void vecx_load(char *name)
     fread(&directEmulation, sizeof(directEmulation), 1, f);
     fread(&currentBank, sizeof(currentBank), 1, f);
     fread(&is64kBankSwitch, sizeof(is64kBankSwitch), 1, f);
+
+    fread(&is48kRom, sizeof(is48kRom), 1, f);
+    fread(&is256kRom, sizeof(is256kRom), 1, f);
+
     fclose(f);
     printf("Vectrex load state: %s - done!\r\n", name);
 }
@@ -275,6 +279,10 @@ void vecx_save(char *name)
     fwrite(&directEmulation, sizeof(directEmulation), 1, f);
     fwrite(&currentBank, sizeof(currentBank), 1, f);
     fwrite(&is64kBankSwitch, sizeof(is64kBankSwitch), 1, f);
+
+    fwrite(&is48kRom, sizeof(is48kRom), 1, f);
+    fwrite(&is256kRom, sizeof(is256kRom), 1, f);
+
     printf("vecx_save() - state information written\r\n");
     fclose(f);
     printf("Vectrex save state: %s - done!\r\n", name);

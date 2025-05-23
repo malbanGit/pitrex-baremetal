@@ -1,4 +1,4 @@
-BUILD_FOR ?= zero2
+BUILD_FOR ?= zero1
 BASE_DIR = ..
 TARGET_BASE = vectrexlineart
 TARGET	= $(TARGET_BASE).img
@@ -28,11 +28,16 @@ $(BUILD_DIR)e6809.o: $(VECX_DIR)e6809.c $(VECX_DIR)e6809.h $(VECX_DIR)vecx.h $(V
 $(BUILD_DIR)vecx.o: $(VECX_DIR)vecx.c $(VECX_DIR)vecx.h $(VECX_DIR)e6809.h $(VECX_DIR)e6522.h $(VECX_DIR)e8910.h $(VECX_DIR)edac.h $(VECX_DIR)bios.i $(VECTREX_DIR)vectrexInterface.h vectrexConfig.h
 	$(CC) $(CFLAGS) -I. -o $(BUILD_DIR)vecx.o -c $(VECX_DIR)vecx.c
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(LIBS) 
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)
+
 ifdef MAKE_IMAGE
 	cp $(TARGET) $(COPY_TARGET1)
 	cp $(TARGET) $(COPY_TARGET2)
+else
+ifdef SERIAL_TRANSFER
+	sudo ../PiTrexSerial/piserial -d $(SERIAL_PORT_NAME) -o $(IMG_DIR)/$(TARGET) -i $(TARGET) -a 1
+endif
 endif

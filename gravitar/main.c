@@ -41,6 +41,10 @@ void setDimensions(int offsetx, int offsety, int mulx, int muly);
 
 int main(int argc, char *argv[])
 {
+  vectrexinit(1);
+  v_init();
+  v_noSound();
+
   int smallwindow = 1;
   int use_pixmap = 1;
   int line_width = 0;

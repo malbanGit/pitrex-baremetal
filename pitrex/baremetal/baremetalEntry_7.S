@@ -72,22 +72,24 @@ reset_callee:
     
 // check if this is the first time
 // check with "global" vars
-//    ldr r3, =#PI_INIT
-//    ldr r5, [r3]
-//    cmp r5, #MAGIC_INIT_NUMBER
-//    beq already_started_once
-    
+    ldr r3, =#PI_INIT
+    ldr r5, [r3]
+    cmp r5, #MAGIC_INIT_NUMBER
+    beq already_started_once
+
+
+    mov r5, #MAGIC_INIT_NUMBER
+    str r5, [r3]
+ 
+/*
+// whatever this is - it seems not to work as expected, cores are being reinit    
     mov r3, #0x0000
     ldr r3,[r3]
-    
     ldr r4, =_start
     ldr r4,[r4]
-    
     SUBS r3, r3,r4
     beq already_started_once
-    
-//    mov	r5, #MAGIC_INIT_NUMBER
-//    str r5, [r3]
+*/    
     
     // save boot parameter for later use
     ldr r5,=#R0_STORE
@@ -101,24 +103,33 @@ reset_callee:
     mov	r4, #0
     ldr r3, =#CORE0_ENTERED
     str r4, [r3]
+
     ldr r3, =#CORE1_ENTERED
     str r4, [r3]
+
     ldr r3, =#CORE2_ENTERED
     str r4, [r3]
+
     ldr r3, =#CORE3_ENTERED
     str r4, [r3]
+
     ldr r3, =#CORE1_STATE
     str r4, [r3]
+
     ldr r3, =#CORE2_STATE
     str r4, [r3]
+
     ldr r3, =#CORE3_STATE
     str r4, [r3]
 
     mov	r4, #CORE_RUNNING
     ldr r3, =#CORE0_STATE
     str r4, [r3]
+/* this branch GREATLY increases boot up time, sometimes even to endless... ????
+    b multicore_park
     
-    
+.align 4
+*/    
 .global multicore_start
 multicore_start:
 already_started_once:    
@@ -138,7 +149,7 @@ already_started_once:
     add lr, pc, #4
     .word 0xE12EF30E	// MSR ELR_hyp,lr  , this register is not know when ARMv6 compiling
     .word 0xE160006E    // ERET this instruction is not know when Armv6 compiling
-    
+
 .global multicore_park
 multicore_park:
     // read cpu id, stop slave cores
@@ -182,8 +193,6 @@ isCore1:  // cpu id == 1
     msr CPSR_c,#CPSR_MODE_SVR|CPSR_IRQ_INHIBIT|CPSR_FIQ_INHIBIT	@ Supervisor Mode
     ldr r0, =__svc_stack_top1
     mov sp, r0
-    
-
     
     @ "https://www.raspberrypi.org/forums/viewtopic.php?f=63&t=155830"
     @ enable access to cycle counter register
@@ -261,7 +270,7 @@ parkCore_stub_start:
 
 	mrc	p15, 0, r4, c0, c0, 5		// read MPIDR 
 	and	r4, r4, #3 // #CORES-1		// get CPU ID   
-	lsl	r4,r4, #2			// calc as offset from core 0 global vars
+	lsl	r4,r4, #2			// * 4 calc as offset from core 0 global vars
 	
 	movw	r1, #(CORE0_ENTERED & 0xffff)	// load address of ENTERED global var
 	movt	r1, #(CORE0_ENTERED >>16)
@@ -292,7 +301,7 @@ parkCore_stub_start:
 	beq	0b
 
 	str	r3, [r7, r6]			@ Clear mailbox
-	mov	r4, #CORE_RUNNING		// declare core as parking
+	mov	r4, #CORE_RUNNING		// declare core as running
 	str	r4, [r2]
 	
 @ Jump to address given in Mailbox

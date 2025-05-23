@@ -16,7 +16,7 @@ $(BUILD_DIR)objects.o: objects.c
 $(BUILD_DIR)hershey_font.o: hershey_font.c hershey_font.h
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)hershey_font.o -c hershey_font.c
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(LIBS) 
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)

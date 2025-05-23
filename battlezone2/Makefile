@@ -139,7 +139,7 @@ $(BUILD_DIR)entityWreckage.o: entityWreckage.cpp  entityWreckage.h
 $(BUILD_DIR)controls.o: controls.cpp  controls.h
 	$(CPP) $(CFLAGS) -o $(BUILD_DIR)controls.o -c controls.cpp 
 
-$(TARGET): $(OBJS) 
+$(TARGET): $(OBJS)  $(LIBS_CHECK)
 	$(CPP) $(CFLAGS) -o $(BUILD_DIR)$(TARGET_BASE).elf.img $(OBJS) $(LIBSGCC)	
 	$(RM) $(TARGET)
 	arm-none-eabi-objcopy $(BUILD_DIR)$(TARGET_BASE).elf.img -O binary $(TARGET)
