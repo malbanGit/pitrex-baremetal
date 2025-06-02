@@ -44,7 +44,7 @@ static aux_t* auxillary = (aux_t*)AUX_BASE;
 
 int receiveCount = 0;
 
-#define PRINT_BUFFER_SIZE 10000
+#define PRINT_BUFFER_SIZE 100000
 static char sbuffer[PRINT_BUFFER_SIZE];
 int soffset = 0;
 
@@ -104,13 +104,36 @@ static char _outbuffer[PRINT_BUFFER_SIZE];
   } while(0)
 */  
 
-#define DEBUG_START 
-#define DEBUG_END 
+//#define DEBUG_START 
+//#define DEBUG_END 
 #define DEBUG_OUT
 #define DEBUG_OUT2
 #define DEBUG_OUT3
+#define DEBUG_OUT4
 
 
+#define DEBUG_START do {soffset=0;sbuffer[0]=0;} while (0)
+#define DEBUG_END do {soffset=0;FILE_OUT(sbuffer);sbuffer[0]=0;} while (0)
+#define DEBUG_OUT2(...) \
+  do {\
+  soffset+=snprintf(sbuffer+soffset, PRINT_BUFFER_SIZE-soffset,__VA_ARGS__);\
+  } while(0)
+#define DEBUG_OUT3(...) \
+  do {\
+  soffset+=snprintf(sbuffer+soffset, PRINT_BUFFER_SIZE-soffset,__VA_ARGS__);\
+  } while(0)
+#define DEBUG_OUT4(...) \
+  do {\
+  soffset+=snprintf(sbuffer+soffset, PRINT_BUFFER_SIZE-soffset,__VA_ARGS__);\
+  } while(0)
+
+
+#define DEBUG_OUT
+#define DEBUG_OUT2
+#define DEBUG_OUT3
+#define DEBUG_OUT4
+  
+  
 //general: highest bit set -> then lowest 5 bits are a counter 
 // 1xxc cccc
 // 4 commands that can be countered
@@ -141,10 +164,97 @@ static char _outbuffer[PRINT_BUFFER_SIZE];
 #define VTERM_DOTS              (0b10000000) // 100  ???? DOTS collection of dots, count in command, then count pairs of X Y
 #define VTERM_SINGLE_LINES      (0b11100000) // 111 - SINGLE LINES    1-31 times 4 values for x0,y0,x1,y1
   
+
+// Function for packing/unpacking etc
+int compare_buffers(const unsigned char* a, const unsigned char* b, int length);
+int miniLZ4_compress(const unsigned char* src, int srcSize, unsigned char* dst, int dstCapacity);
+int miniLZ4_decompress(const unsigned char* src, int compressedSize, unsigned char* dst, int dstCapacity);
+int huffman_compress(const unsigned char* input, int length, unsigned char* output, int outMax);
+int huffman_decompress(const unsigned char* input, int length, unsigned char* output, int outMax);
+int dif   (const unsigned char* prevBuffer, int prevBufferLength, const unsigned char* src, int srcSize,        unsigned char* dst, int dstCapacity);
+int undiff(const unsigned char* prevBuffer, int prevBufferLength, const unsigned char* src, int compressedSize, unsigned char* dst, int dstCapacity);
+
+
+// -------------------
+// generated after ~350 frames
+const unsigned char lunar_huffman_bitlengths[256] = {
+  4,   2,   3,   4,   6,   5,   7,   6,   9,   7,   7,   6,   7,   7,   7,   8,
+ 10,   8,   9,  10,   9,   8,   7,   7,   6,   7,   5,   5,   7,   8,   8,   8,
+  9,   8,   9,   9,  10,  10,  10,  10,  10,   9,  10,  11,  10,  10,   9,   9,
+  9,   9,  10,  10,   9,  10,  10,  10,  10,  10,  10,   9,  10,  11,  11,  12,
+ 11,   6,  10,  10,   9,   9,  10,   9,   9,  10,  10,  10,  10,   9,  10,   9,
+  9,   9,   9,   9,  10,  10,   8,  10,  10,  10,  10,  10,   9,   9,   9,  10,
+ 11,  12,  12,  12,  12,  12,  12,  11,  10,  11,  10,  11,  12,  12,  12,  12,
+ 12,  12,  11,  11,  10,  10,  10,  10,  10,  11,   9,  12,   9,   6,  10,  10,
+  9,  10,   8,   9,   8,  10,  12,  12,  12,  12,  11,  10,  11,  10,  11,  11,
+ 12,  12,  11,   9,   9,   9,  10,  10,   9,   9,   9,   9,   9,   9,   9,   9,
+ 10,  10,   9,   9,   9,  11,  12,  11,  12,  12,  12,  12,  12,  12,  12,  12,
+ 12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,
+ 12,  12,  12,  11,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  11,
+ 11,  11,  11,  10,  10,  10,  10,  10,  10,  10,   9,  10,  10,  10,  10,  10,
+ 10,  11,  11,  12,  12,  12,  11,  11,  11,  11,  12,  12,  12,  12,  12,  12,
+ 12,  12,  12,  12,  12,  11,  12,  11,  11,  11,   8,  10,  11,   9,   9,   7,
+};
+const unsigned char starwars_huffman_bitlengths[256] = {
+  3,   3,   3,   5,   6,   5,   5,   5,   6,   6,   6,   7,   7,   7,   7,   8,
+  8,   8,   8,   8,   8,   8,   6,   6,   8,   9,   9,   9,   8,   8,   9,   9,
+  7,   9,   9,   9,   9,   9,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,
+  9,  10,  10,  10,  10,  10,  10,  11,  10,  11,  11,  10,  11,  10,  10,   9,
+ 10,  10,  11,  11,  11,  11,  11,  11,  11,  10,  11,  11,  11,  11,  11,  11,
+ 11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  10,  11,  11,  11,  11,  11,
+ 11,  11,  11,  10,  10,  11,  10,  10,  11,  11,  11,  11,  10,  10,  11,  11,
+  9,  11,  11,  11,  11,  10,  11,  11,  10,  10,  11,  10,  11,   8,  11,  11,
+ 10,  10,  10,  10,  10,  11,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,
+ 10,  10,  10,  10,  11,  10,  10,  10,  11,  10,  10,  10,  11,  10,  11,  10,
+ 10,  11,   8,   9,  10,  10,  10,   9,  10,  10,  11,  10,  10,  10,  10,  11,
+ 11,  11,  11,  11,  11,  11,  11,  10,  11,  11,  11,  11,  11,  11,  11,  10,
+ 11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  10,  10,  10,  10,
+ 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,
+ 10,  10,   9,  10,   9,  10,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,
+  9,   9,   9,   8,   8,   8,   8,   8,   8,   7,   7,   7,   6,   6,   6,   5,
+
+};
+
+
+
+
+
+
+
+unsigned char recieveBuffer[20000];
+unsigned char unpackBuffer[20000];
+signed char readBuffer[100000];
+int readBufferLength=0;
+int diffError = 0;
+#define NEXTBYTE readBuffer[readpos++]
+
+
+// DIFF
+static int hasPrevBuffer = 0;
+static unsigned char prevBuffer[100000];
+static int prevBufferLength = 0;
+
+// Bit 0b0000 ddmm : mm 00 = full data, 01 = half delta, 10 = full delta
+//                   dd 00 = no dif, 01 = dif (previous buffer must be available), 10 = dif with Huffman (fixed, depending on game - or general)
+//                   Hufman is chosen in the beginning with MAME communication  
+int dataMode = 0;
+unsigned char *fixedHuffman=NULL; // pointer to game dependend Huffman dictionary
+  
+  
   
 void v_printString_scale(int8_t x, int8_t y, char* string, uint8_t scale, uint8_t size, uint8_t brightness);
 int UARTGetBinaryData(int size, unsigned char *romBuffer);
 void UARTGetString(char *buffer);
+
+
+
+
+
+
+
+
+
+
 
 int getOne8BitValue()
 {
@@ -264,6 +374,12 @@ int tryToConnect()
       v_setClientHz(currentMameRefresh); // should be negotiated with mame
 //      v_setRefresh(currentMameRefresh);
 
+      
+      if (strcasecmp(currentMameName, "llander")) 
+          fixedHuffman= (uint8_t *)lunar_huffman_bitlengths;
+      if (strcasecmp(currentMameName, "starwars")) 
+          fixedHuffman= (uint8_t *)starwars_huffman_bitlengths;
+      
 
       DEBUG_OUT("Vectrex Herz set: %i\n",currentMameRefresh);
       return VTERM_CONNECTED;
@@ -315,38 +431,123 @@ int vt_UARTGetBinaryDataChunk(int size, unsigned char *romBuffer)
       romBuffer[counter++] = r;
       if (counter == size)
       {
-      DEBUG_OUT2("ok\n", (size-counter));
+      DEBUG_OUT2("ok: %i, %i\n", (size-counter), counter);
         return 0;
       }
     }
     if ((getOtherTimer()-clockStart)>timeOutDif)
     {
-      DEBUG_OUT2("Timeout, missing: %i.\n", (size-counter));
+      FILE_OUT("Timeout, missing: %i.\n", (size-counter));
       return (size-counter);
     }
   }
   return size+1; // NOK
 }
 
-unsigned char readBuffer[100000];
-int readBufferLength=0;
-#define NEXTBYTE readBuffer[readpos++]
-
 // 8 bit only
 int receiveData()
 {
   vt_setTimerStart();
+
+
+// Bit 0b0000 ddmm : mm 00 = full data, 01 = half delta, 10 = full delta
+//                   dd 00 = no dif, 01 = dif (previous buffer must be available), 10 = dif with Huffman (fixed, depending on game - or general)
+//                   Hufman is chosen in the beginning with MAME communication  
+  dataMode = getOne8BitValue();
   int hi = getOne8BitValue();
   int lo = getOne8BitValue();
+  
+  int lineMode = dataMode&0b0000011;
   int size = 256*hi+lo;
   soffset=0;
-  DEBUG_OUT2("Expecting size: %i\n", size);
+  DEBUG_OUT4("Data mode: %i\n", dataMode);
+  DEBUG_OUT4("Expecting size: %i\n", size);
   
   vt_setTimerStart();
-  vt_UARTGetBinaryDataChunk(size, readBuffer);
+  unsigned char *finalBuffer=readBuffer;
 
-  DEBUG_OUT("Receive time: %f\n", vt_getTimerDifMilli());
+  if ((dataMode & 0b00001100) == 0)
+  {
+    DEBUG_OUT4("Expecting unpacked data\n");
+    // not packed
+    vt_UARTGetBinaryDataChunk(size, readBuffer);
+  }
+  else
+  {
+    unsigned char *workBuffer=recieveBuffer;
+    int workSize = size;
+    DEBUG_OUT4("Expecting packed data (%i)\n",size );
+    int loadDif = vt_UARTGetBinaryDataChunk(size, recieveBuffer);
+    DEBUG_OUT4("Packed data received: %i\n", loadDif);
 
+DEBUG_OUT4("\n<%04x: ", 0);
+    for (int i=0;i<size; i++) 
+{
+  DEBUG_OUT4("$%02x ", (unsigned char) recieveBuffer[i]);
+  if (((i+1)%16) == 0) {DEBUG_OUT4("\n<%04x: ", i+1);DEBUG_END;}
+}
+
+    
+    
+       // packed
+    if ((dataMode & 0b00001000) == 0b00001000)
+    {
+       // Huffman
+       workSize = huffman_decompress((const unsigned char*)recieveBuffer, size, (unsigned char *)unpackBuffer, 100000);
+       workBuffer=unpackBuffer;
+       DEBUG_OUT4("UnHuf Size: %i\n", workSize);
+       size = workSize;
+       finalBuffer=workBuffer;
+       
+       // attention!
+       // JUST Huffman ist not supported!
+       // readbuffer is not filled!
+    }
+    if ((dataMode & 0b00000100) == 0b00000100)
+    {
+       // undiff
+        int undiffedSize = undiff(
+            (const unsigned char*) prevBuffer, prevBufferLength,
+            (const unsigned char*) workBuffer, workSize, 
+            (unsigned char*) readBuffer, 100000);
+        DEBUG_OUT4("\nUNDIF Size: %i\n", undiffedSize);
+        size = undiffedSize;
+        finalBuffer=readBuffer;
+        
+        if (undiffedSize<0)
+        {
+          FILE_OUT("Diff Error!\n");
+          diffError = 1;
+          DEBUG_OUT4("Prev Buffer\n");
+          for (int i=0;i<prevBufferLength; i++) 
+          {
+            DEBUG_OUT4("$%02x ", (unsigned char) prevBuffer[i]);
+            if (((i+1)%16) == 0) DEBUG_OUT4("\n");
+          }
+
+          DEBUG_OUT4("\nReceived (worksize = %i)\n", workSize);
+DEBUG_OUT4("\n>%04x: ", 0);
+          for (int i=0;i<workSize; i++) 
+          {
+            DEBUG_OUT4("$%02x ", (unsigned char) recieveBuffer[i]);
+            if (((i+1)%16) == 0) {DEBUG_OUT4("\n>%04x: ", i+1);DEBUG_END;}
+          }
+          
+          DEBUG_OUT2("DIF breakoff\n");
+          DEBUG_END;
+          prevBufferLength = 0;
+          return VTERM_CONNECTED;
+        }
+    }
+  }
+
+  DEBUG_OUT2("\nReceive time: %f\n", vt_getTimerDifMilli());
+
+  // previous buffer is always the real big one thing!
+  for (int i=0;i<size; i++) prevBuffer[i] = finalBuffer[i];
+  prevBufferLength = size;
+  hasPrevBuffer = 1;
+  
   int readpos = 0;
   while (1)
   {
@@ -359,7 +560,7 @@ int receiveData()
     uint32_t startTime = v_micros();
     DEBUG_OUT3("\n(%i): ", readpos, readBuffer[readpos]);
     DEBUG_OUT3(" $%02x ", readBuffer[readpos]);
-    unsigned char r = NEXTBYTE;
+    signed char r = NEXTBYTE;
 
     unsigned char command=0;
     unsigned char count=0;
@@ -375,7 +576,87 @@ int receiveData()
       data = r & (0b00001111);
       command = r & (0b11110000);
     }
+    signed char x0=0;
+    signed char x1=0;
+    signed char y0=0;
+    signed char y1=0;
+// 0 = default line with xy coordinates
+// 1 = line delta, second coordinate as delta
+// 2 = full delta, even start coordinates as delta from the last known position
+
     
+//    something still wrong with LINE_DATA_TYPE = 1
+//    LINE_DATA_TYPE = 2 untested
+
+
+    signed char lx=0;
+    signed char ly=0;
+
+// each of these must leave with
+// x0, y0 absolute coordinates!    
+#define RECEIVE_COORD0 \
+do{ \
+    if (lineMode==0) \
+    { \
+        x0 = ((signed char)(NEXTBYTE));               \
+        y0 = ((signed char)(NEXTBYTE));  \
+        DEBUG_OUT3(" $%02x ", x0);               \
+        DEBUG_OUT3(" $%02x ", y0);               \
+    } \
+    else if (lineMode==1) \
+    { \
+        x0 = ((signed char)(NEXTBYTE));               \
+        y0 = ((signed char)(NEXTBYTE));  \
+        DEBUG_OUT3(" $%02x ", x0);               \
+        DEBUG_OUT3(" $%02x ", y0);               \
+        lx = x0;                                           \
+        ly = y0;                                           \
+    } \
+    else if (lineMode==2) \
+    { \
+        x0 = ((signed char)(NEXTBYTE));               \
+        y0 = ((signed char)(NEXTBYTE));  \
+        DEBUG_OUT3(" $%02x ", x0);               \
+        DEBUG_OUT3(" $%02x ", y0);               \
+        x0 = ((signed char)(x0+lx));               \
+        y0 = ((signed char)(x0+ly));  \
+        lx = x0;                                           \
+        ly = y0;                                           \
+    } \
+}while (0)
+
+#define RECEIVE_COORD1 \
+do{ \
+    if (lineMode==0) \
+    { \
+        x1 = ((signed char)(NEXTBYTE));               \
+        y1 = ((signed char)(NEXTBYTE));  \
+        DEBUG_OUT3(" $%02x ", x1);               \
+        DEBUG_OUT3(" $%02x ", y1);               \
+    } \
+    else if (lineMode==1) \
+    { \
+        x1 = ((signed char)(NEXTBYTE));               \
+        y1 = ((signed char)(NEXTBYTE));  \
+        DEBUG_OUT3(" $%02x ", x1);               \
+        DEBUG_OUT3(" $%02x ", y1);               \
+        x1 = ((signed char)(lx+x1));               \
+        y1 = ((signed char)(ly+y1));  \
+    } \
+    else if (lineMode==2) \
+    { \
+        x1 = ((signed char)(NEXTBYTE));               \
+        y1 = ((signed char)(NEXTBYTE));  \
+        DEBUG_OUT3(" $%02x ", x1);               \
+        DEBUG_OUT3(" $%02x ", y1);               \
+        x1 = ((signed char)(lx+x1));               \
+        y1 = ((signed char)(ly+y1));  \
+        lx = x1;                                           \
+        ly = y1;                                           \
+    } \
+}while (0)
+    
+   
     
     switch (command)
     {
@@ -389,123 +670,73 @@ int receiveData()
       }
       case VTERM_DOT:
       {
-    DEBUG_OUT3("DOT ");
-    DEBUG_OUT3(" $%02x ", readBuffer[readpos]);
-        int x0 = ((signed char)NEXTBYTE)*128;
-    DEBUG_OUT3(" $%02x ", readBuffer[readpos]);
-        int y0 = ((signed char)NEXTBYTE)*128;
-        v_directDraw32(x0,y0,x0,y0, termBrightness);
+        DEBUG_OUT3("DOT ");
+        RECEIVE_COORD0;
+        x1=x0;
+        y1=y0;
+        v_directDraw32(x0*128,y0*128,x1*128,y1*128, termBrightness);
       break;
       }
       case VTERM_DOTS:
       {
-    DEBUG_OUT2("DOTS (%i)", count);
+        DEBUG_OUT2("DOTS (%i)", count);
         count-=1; // first full vector definition is "part" of the count
-    DEBUG_OUT3(" $%02x ", readBuffer[readpos]);
-        int x0 = ((signed char)NEXTBYTE)*128;
-    DEBUG_OUT3(" $%02x ", readBuffer[readpos]);
-        int y0 = ((signed char)NEXTBYTE)*128;
-        v_directDraw32(x0,y0,x0,y0, termBrightness);
+        RECEIVE_COORD0;
+        x1=x0;
+        y1=y0;
+        v_directDraw32(x0*128,y0*128,x1*128,y1*128, termBrightness);
         for (int i=0;i<count;i++)
         {
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-          x0 = ((signed char)NEXTBYTE)*128;
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-          y0 = ((signed char)NEXTBYTE)*128;
-          v_directDraw32(x0,y0,x0,y0, termBrightness);
+          RECEIVE_COORD0;
+          x1=x0;
+          y1=y0;
+          v_directDraw32(x0*128,y0*128,x1*128,y1*128, termBrightness);
         }          
       break;
       }     
       case VTERM_SINGLE_LINE:
       {
-    DEBUG_OUT2("LINE ");
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-        int x0 = ((signed char)NEXTBYTE)*128;
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-        int y0 = ((signed char)NEXTBYTE)*128;
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-        int x1 = ((signed char)NEXTBYTE)*128;
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-        int y1 = ((signed char)NEXTBYTE)*128;
-        v_directDraw32(x0,y0,x1,y1, termBrightness);
+        DEBUG_OUT2("LINE ");
+        RECEIVE_COORD0;
+        RECEIVE_COORD1;
+        v_directDraw32(x0*128,y0*128,x1*128,y1*128, termBrightness);
       break;
       }
       case VTERM_SINGLE_LINES:
       {
-    DEBUG_OUT2("LINES (%i)", count);
+        DEBUG_OUT2("LINES (%i)", count);
         count-=1; // first full vector definition is "part" of the count
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-        int x0 = ((signed char)NEXTBYTE)*128;
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-        int y0 = ((signed char)NEXTBYTE)*128;
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-        int x1 = ((signed char)NEXTBYTE)*128;
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-        int y1 = ((signed char)NEXTBYTE)*128;
-        v_directDraw32(x0,y0,x1,y1, termBrightness);
+        RECEIVE_COORD0;
+        RECEIVE_COORD1;
+        v_directDraw32(x0*128,y0*128,x1*128,y1*128, termBrightness);
         for (int i=0;i<count;i++)
         {
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-          int x0 = ((signed char)NEXTBYTE)*128;
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-          int y0 = ((signed char)NEXTBYTE)*128;
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-          int x1 = ((signed char)NEXTBYTE)*128;
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-          int y1 = ((signed char)NEXTBYTE)*128;
-          v_directDraw32(x0,y0,x1,y1, termBrightness);
+          RECEIVE_COORD0;
+          RECEIVE_COORD1;
+          v_directDraw32(x0*128,y0*128,x1*128,y1*128, termBrightness);
         }          
       break;
       }     
-  
-      
-      
-      
       case VTERM_START_OF_PATH:
       {
-    DEBUG_OUT2("PATH (%i)", count);
+        DEBUG_OUT2("PATH (%i)", count);
         count-=1; // first full vector definition is "part" of the count
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-        int x0 = ((signed char)NEXTBYTE)*128;
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-        int y0 = ((signed char)NEXTBYTE)*128;
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-        int x1 = ((signed char)NEXTBYTE)*128;
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-        int y1 = ((signed char)NEXTBYTE)*128;
-        v_directDraw32(x0,y0,x1,y1, termBrightness);
+        RECEIVE_COORD0;
+        RECEIVE_COORD1;
+        v_directDraw32(x0*128,y0*128,x1*128,y1*128, termBrightness);
         
         for (int i=0;i<count;i++)
         {
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-          int x2 = ((signed char)NEXTBYTE)*128;
-    DEBUG_OUT2(" $%02x ", readBuffer[readpos]);
-          int y2 = ((signed char)NEXTBYTE)*128;
-          v_directDraw32(x1,y1,x2,y2, termBrightness);
-          x1 = x2;
-          y1 = y2;
+          x0=x1;
+          y0=y1;
+          RECEIVE_COORD1;
+          v_directDraw32(x0*128,y0*128,x1*128,y1*128, termBrightness);
         }          
         break;
       }
-/*      
-      case VTERM_DOT:
-      {
-//    DEBUG_OUT("DOT ");
-//    DEBUG_OUT(" $%02x ", readBuffer[readpos]);
-        int x0 = ((signed char)NEXTBYTE)*128;
-//    DEBUG_OUT(" $%02x ", readBuffer[readpos]);
-        int y0 = ((signed char)NEXTBYTE)*128;
-        v_directDraw32(x0,y0,x0,y0, termBrightness);
-        break;
-      }
-*/      
       case VTERM_END_LIST:
       {
         DEBUG_OUT2("LIST END\n");
-/*        
-        After this -> a crash!
-        stack or program corrupted? -> when full "debug" - at least at some time... - what do I know???
-*/        
         return VTERM_CONNECTED;
       }
       
@@ -516,14 +747,15 @@ int receiveData()
         break;
       }
     }
-    
     if (v_micros()-startTime>TIME_OUT_VALUE)
     {
    //   DEBUG_OUT("VTerm Timeout ignoring\n");
    //   return VTERM_NO_CONNECTED;
     }
   }
-  DEBUG_OUT("VTerm Error receiving\n");
+  
+  
+  FILE_OUT("VTerm Error receiving\n");
   return VTERM_NO_CONNECTED;
 }
 
@@ -563,12 +795,25 @@ void RPI_AuxMiniUartWriteTimed(char c)
 
 int waitRecalGot = 0;
 int waitRecalFailed = 0;
+#define _ERR_ 1
+#define _ACK_ 255
+
 int waitForStartSignal()
 {
   uint32_t startTime = v_micros();
   while (1)
   {
-    RPI_AuxMiniUartWriteTimed('k');
+    if (diffError)
+    {
+      RPI_AuxMiniUartWriteTimed(_ERR_);
+      diffError = 0;
+    }
+    else
+    {
+      RPI_AuxMiniUartWriteTimed(_ACK_);
+    }
+    
+    
     RPI_AuxMiniUartWriteTimed(currentButtonState);
     RPI_AuxMiniUartWriteTimed(currentJoy1X);
     RPI_AuxMiniUartWriteTimed(currentJoy1Y);
@@ -629,7 +874,7 @@ int main(int argc, char **argv)
   v_setClientHz(50); // should be negotiated with mame
  
   
-  v_setupIRQHandling();
+//  v_setupIRQHandling();
 //  v_removeIRQHandling();  
   
   #if RASPPI != 1 
@@ -645,7 +890,7 @@ int main(int argc, char **argv)
   v_enableSoundOut(0);
   v_enableButtons(1); // allow "return to pi"
   useDoubleTimer = 1;
-  v_setCustomClipping(1, -16000, -14000, 14400, 15000);
+  v_setCustomClipping(1, -16000, -15000, 14400, 16000);
   keepDotsTogether = 1;
 
   int pv = 0;
@@ -677,8 +922,9 @@ int main(int argc, char **argv)
     {
       state = receiveData();
     }
-    DEBUG_OUT("Round End!\n");
+    DEBUG_OUT2("Round End!\n");
     DEBUG_END;
   }
   return 0;
 }
+#include "unpacker.c"

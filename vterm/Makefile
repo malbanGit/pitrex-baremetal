@@ -1,11 +1,11 @@
-BUILD_FOR ?= zero1
+BUILD_FOR ?= zero2
 BASE_DIR = ..
 TARGET	= vterm.img
 
 include ../Rules.mk
 
-$(BUILD_DIR)vterm.o: vterm.c
-	$(CC) $(CFLAGS) -o $(BUILD_DIR)vterm.o -c vterm.c
+$(BUILD_DIR)vterm.o: vterm.c unpacker.c
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)vterm.o -c vterm.c 
 
 vterm.img: $(BUILD_DIR)vterm.o $(LIBS_CHECK)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)vterm.elf.img $(BUILD_DIR)vterm.o $(LIBS)
