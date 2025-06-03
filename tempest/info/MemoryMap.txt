@@ -1,0 +1,295 @@
+
+
+Tempest Memory Locations
+Copyright 1999 by Arcade Gameshop Corporation
+
+
+Updated 09/17/2004 by Josh McCormick.
+
+Memory information follows:
+RAM 0000 = General game status (values unknown)
+RAM 0001 = Seems to be some sort of screen/game mode
+RAM 0004 = Regularly incrementing counter, single byte. Used as decrementing counter in BCD mode for level selection screen.
+RAM 0005 = Player input mode
+>> 00 During attract, C0 during gameplay, 80 during high score entry.
+RAM 0006 = Number of game credits.
+>> If greater than 28h (40 decimal), code will reduce to 28h.
+RAM 0007 = Regularly incrementing timer, 0-FF. (FF to FF ~= 1 second)
+RAM 0008 = Shadow register for 0C00 (see Theory of Operation)
+RAM 0009 = Shadow of 0D00, but EOR'd with 02 and not updated after bootup
+
+RAM 000D = ??? for coin cointer "A" and cancelled out by tilt.
+RAM 000E = ??? for coin cointer "B" and cancelled out by tilt.
+RAM 000F = ??? for coin cointer "C" and cancelled out by tilt.
+RAM 0010 = ??? for coin cointer "A".
+RAM 0011 = ??? for coin cointer "B".
+RAM 0012 = ??? for coin cointer "C".
+RAM 0013 = Countdown timer to hold closed hardware coin cointer "A".
+RAM 0014 = Countdown timer to hold closed hardware coin cointer "B".
+RAM 0015 = Countdown timer to hold closed hardware coin cointer "C".
+
+RAM 0029 = Scratchpad area
+RAM 002A = Scratchpad area
+RAM 002B = Scratchpad area
+RAM 002C = Scratchpad area
+RAM 002D = Scratchpad area
+RAM 002E = Scratchpad area
+RAM 0037 = Scratchpad area
+
+RAM 003D = Current player up. (0=player 1, 1=player 2)
+
+RAM 003E = Something to do with player 1 in two player mode?
+RAM 003F = Something to do with player 2 in two player mode?
+
+RAM 0040 = Lowest two digits of player 1's score
+RAM 0041 = Next two digits of player 1's score
+RAM 0042 = Highest two digits of player 1's score
+RAM 0043 = Lowest two digits of player 2's score
+RAM 0044 = Next two digits of player 2's score
+RAM 0045 = Highest two digits of player 2's score
+>> If a player one's score is "19870", then 0040=70h, 0041=98h, and 0042=01h.
+>> The highest possible score is 999999, after which is wraps around to 0 with no ill effects.
+
+RAM 0046 = Level for Player 1
+RAM 0047 = Level for Player 2
+RAM 0048 = Lives for Player 1
+RAM 0049 = Lives for Player 2
+
+RAM 004C = Button bitmap. *Current status at this very moment.*
+RAM 004D = Same as 004C, but with button de-bounce logic applied.
+RAM 004E = Button bitmap: 8=superzapper, 10=fire, 20=Player 1, 40=Player 2 NOTE: Basically like 004C except when the values are read from the hardware, they are AND'd in, so that you can have input "pending".
+RAM 004F = Same as 004D.
+RAM 0050 = Spinner position change since last read (00-FF)
+RAM 0051 = Player's position in the tunnel (00-FF)
+RAM 0053 = Regularly incrementing timer, 0-F. If it reaches > 7F, interrupt routine will force a BREAK.
+RAM 009F = Current level - 1 (starting level = 0)
+RAM 00A1 = LED status write (hardware is updated via interrupt). 3=unlit, 1=player 1 lit, 2=player 2 lit, 0=both lit.
+RAM 00A6 = Number of enemy shots in play (0,1,2).
+RAM 00B4 = X/Y axis flip state.
+>> $8=x flipped. $10=y flipped. $18=xy flipped. Used for cocktail mode.
+RAM 00Cn = Game sound related variables. Shadow for Pokey #1 #60Cn?
+RAM 00Dn = Game sound related variables. Shadow for Pokey #2 #60Dn?
+RAM 0102 = This is the choice selected by player #1 to begin on.
+>> Note that it isn't the actual LEVEL number, but the number of the choice selected.
+>> That is: level 1=0, level 3=2, level 5=3, etc. Not linear. Based on table at $91FE.
+RAM 0103 = Same as $0102, but for Player 2.
+
+RAM 0108 = Number of enemies INSIDE the tube
+RAM 0109 = Number of enemies at the TOP of the tube
+
+RAM 0114 = Seems to be $FF everytime a completely new screen is being created. Otherwise $00 or $01. Still kind of unknown.
+RAM 0116 = Enemy death sequences in progress?
+RAM 0117 = Hardware cocktail detection.
+>> 10=cocktail. 00=upright.
+RAM 0118 = Speed of enemy bullets.
+>> FF=Ultra Slow. D0=Ultra Fast. Value is FC on level 1 and FA on level 81.
+RAM 011B = Copy protection variable? Errors at score greater than 17k if not set to 0.
+RAM 011C = Programming constant? Used in indexing. # of enemies possible - 1
+RAM 0126 = Highest level the player can start a new game on
+
+RAM 0129 = Proportion of Flippers to release into the tunnel.
+RAM 012A = Proportion of Pulsar to release into the tunnel.
+RAM 012B = Proportion of Tankers to release into the tunnel.
+RAM 012C = Proportion of Spikers to release into the tunnel.
+RAM 012D = Proportion of Fuseballs to release into the tunnel.
+
+RAM 012E = Max # of Flippers to allow in tunnel.
+RAM 012F = Max # of Pulsars to allow in tunnel.
+RAM 0130 = Max # of Tankers to allow in tunnel.
+RAM 0131 = Max # of Spikers to allow in tunnel.
+RAM 0132 = Max # of Fuseballs to allow in tunnel.
+
+RAM 0133 = Informational counter, updated each time a vector machine GO is done by the interrupt handler.
+>> Seems to be zero'd out when a new screen is presented.
+RAM 0135 = Number of shots (0-8) the player has active on the screen.
+
+RAM 013D = Without exceeding the ratios, the # of additional Flippers we can have in the tunnel.
+RAM 013E = Without exceeding the ratios, the # of additional Pulsars we can have in the tunnel.
+RAM 013F = Without exceeding the ratios, the # of additional Tankers we can have in the tunnel.
+RAM 0140 = Without exceeding the ratios, the # of additional Spikers we can have in the tunnel.
+RAM 0141 = Without exceeding the ratios, the # of additional Fuseballs we can have in the tunnel.
+
+RAM 0142 = Number of Flippers currently in the tunnel.
+RAM 0143 = Number of Pulsars currently in the tunnel.
+RAM 0144 = Number of Tankers currently in the tunnel.
+RAM 0145 = Number of Spikers currently in the tunnel.
+RAM 0146 = Number of Fuseballs currently in the tunnel.
+
+RAM 014D= Used in displaying animated Tempest logo. [logo front distance?]
+RAM 014E= Used in displaying animated Tempest logo. [logo back distance?]
+
+RAM 015A = Height of the spikes to create for this level. (Only valid for certain levels, like 1,9,11,14,16...).
+RAM 015B = Number of enemies to create for this level. Maybe other functions. (Only valid for certain levels, like 1,9,11,14,16...).
+
+RAM 0165 = Movement rate (UPWARDS) for Flippers.
+RAM 0166 = Movement rate (UPWARDS) for Pulsars.
+RAM 0167 = Movement rate (UPWARDS) for Tankers.
+RAM 0168 = Movement rate (UPWARDS) for Spikers.
+RAM 0169 = Movement rate (UPWARDS) for Fuseballs.
+>> Movement rates: FF=very slow, F0=very fast
+
+RAM 01D0 = End of CPU stack. Interrupt handler will issue a BREAK if the stack grows beyond this point.
+RAM 01FF = Start of CPU stack (grows downwards towards 01D0)
+
+RAM 0200 = Player's position in tunnel -1
+>> Values 0-F only.
+RAM 0201 = Player's position in the tunnel
+>> (segment 0-F, 80 or 81 means the player is dead)
+RAM 0202 = Y position of (player? Top of tunnel?) Usually = 10
+
+RAM 0243 = Countdown timer before enemy #1 appears.
+RAM 0244 = Countdown timer before enemy #2 appears.
+RAM 02.. = Countdown timer before enemy #.. appears.
+RAM 0281 = Countdown timer before enemy #63 appears.
+RAM 0282 = Countdown timer before enemy #64 appears.
+>> "00" = no enemy to release. "01" = put onto tunnel whenever possible.
+
+RAM 0283 - Movement and type for enemy #7?
+RAM 0284 - Movement and type enemy #6?
+RAM 0285 - Movement and type enemy #5?
+RAM 0286 - Movement and type enemy #4?
+RAM 0287 - Movement and type enemy #3?
+RAM 0288 - Movement and type enemy #2?
+RAM 0289 - Movement and type enemy #1?
+>> For the above, the low three bits contains the enemy TYPE
+>> (1=flipper, 2=pulsar, 3=tanker, 4=spiker, 5=fuseball).
+>> The higher bits contains the enemy MOVEMENT type.
+>> (0=no adjustment, 8=clockwise, C=counter clockwise, other values possible but unknown).
+
+RAM 028A - More movement information for enemy #7?
+RAM 028B - More movement information for enemy #6?
+RAM 028C - More movement information for enemy #5?
+RAM 028D - More movement information for enemy #4?
+RAM 028E - More movement information for enemy #3?
+RAM 028F - More movement information for enemy #2?
+RAM 0290 - More movement information for enemy #1?
+
+RAM 02AD = Segment that player's bullet #1 is firing down - 1.
+RAM 02AE = Segment that player's bullet #2 is firing down - 1.
+RAM 02AF = Segment that player's bullet #3 is firing down - 1.
+RAM 02B0 = Segment that player's bullet #4 is firing down - 1.
+RAM 02B1 = Segment that player's bullet #5 is firing down - 1.
+RAM 02B2 = Segment that player's bullet #6 is firing down - 1.
+RAM 02B3 = Segment that player's bullet #7 is firing down - 1.
+RAM 02B4 = Segment that player's bullet #8 is firing down - 1.
+
+RAM 02B9 = Segment of #1 enemy - 1 (values 0-F only)
+RAM 02BA = Segment of #2 enemy - 1 (values 0-F only)
+RAM 02BB = Segment of #3 enemy - 1 (values 0-F only)
+RAM 02BC = Segment of #4 enemy - 1 (values 0-F only)
+RAM 02BD = Segment of #5 enemy - 1 (values 0-F only)
+RAM 02BE = Segment of #6 enemy - 1 (values 0-F only)
+RAM 02BF = Segment of #7 enemy - 1 (values 0-F only)
+
+RAM 02C0 = Segment that player's bullet #1 is firing down.
+RAM 02C1 = Segment that player's bullet #2 is firing down.
+RAM 02C2 = Segment that player's bullet #3 is firing down.
+RAM 02C3 = Segment that player's bullet #4 is firing down.
+RAM 02C4 = Segment that player's bullet #5 is firing down.
+RAM 02C5 = Segment that player's bullet #6 is firing down.
+RAM 02C6 = Segment that player's bullet #7 is firing down.
+RAM 02C7 = Segment that player's bullet #8 is firing down.
+
+RAM 02D3 = Y position of player's bullet #1.
+RAM 02D4 = Y position of player's bullet #2.
+RAM 02D5 = Y position of player's bullet #3.
+RAM 02D6 = Y position of player's bullet #4.
+RAM 02D7 = Y position of player's bullet #5.
+RAM 02D8 = Y position of player's bullet #6.
+RAM 02D9 = Y position of player's bullet #7.
+RAM 02DA = Y position of player's bullet #8.
+
+RAM 02DB = Y position of enemy's bullet #2.
+RAM 02DC = Y position of enemy's bullet #1.
+
+RAM 02DF = Height of enemy 7 in tunnel. (0=null, ef=bottom?, 10=top)
+RAM 02E0 = Height of enemy 6 in tunnel. (0=null, ef=bottom?, 10=top)
+RAM 02E1 = Height of enemy 5 in tunnel. (0=null, ef=bottom?, 10=top)
+RAM 02E2 = Height of enemy 4 in tunnel. (0=null, ef=bottom?, 10=top)
+RAM 02E3 = Height of enemy 3 in tunnel. (0=null, ef=bottom?, 10=top)
+RAM 02E4 = Height of enemy 2 in tunnel. (0=null, ef=bottom?, 10=top)
+RAM 02E5 = Height of enemy 1 in tunnel. (0=null, ef=bottom?, 10=top)
+
+RAM 030A = Image # for death #8? May have other purposes.
+RAM 030B = Image # for death #7? May have other purposes.
+RAM 030C = Image # for death #6? May have other purposes.
+RAM 030D = Image # for death #5? May have other purposes.
+RAM 030E = Image # for death #4? May have other purposes.
+RAM 030F = Image # for death #3? May have other purposes.
+RAM 0310 = Image # for death #2? May have other purposes.
+RAM 0311 = Image # for death #1? May have other purposes.
+>> Seems to cover death sequences for enemies and for player.
+>> Also used in displaying bonus points for killing fuseball.
+>> Slot #1 seems to fill up first, then #2, #3, and so on...
+
+RAM 03AA = # of times the Super Zapper has been used (0-2)
+RAM 03AB = Number of enemies at the bottom, yet to appear.
+
+RAM 03AC = Height of spike in tunnel segment 0.
+RAM 03AD = Height of spike in tunnel segment 1.
+RAM 03 . . = Height of spike in tunnel segment _.
+RAM 03BA = Height of spike in Tunnel segment E.
+RAM 03BB = Height of spike in Tunnel segment F.
+
+RAM 03BC = Same as 03AA, but for the inactive player. [zapper]
+RAM 03BD = Same as 03AB, but for the inactive player. [enemies left]
+RAM 03BE = Same as 03AC, but for the inactive player. [spike #0 height]
+RAM 03BE = Same as 03AD, but for the inactive player. [spike #1 height]
+RAM 03 . . = Same as 03.., but for the inactive player. [spike #. height]
+RAM 03C7 = Same as 03BB, but for the inactive player. [spike #F height]
+>> This is used to facilitate the swap between players in two player mode.
+
+RAM 0406 = Seconds the machine has been on (least significant byte)
+RAM 0407 = Seconds the machine has been on (middle significant byte)
+RAM 0408 = Seconds the machine has been on (most significant byte)
+
+RAM 0409 = Seconds the machine was played (least significant byte)
+RAM 040A = Seconds the machine was played (middle significant byte)
+RAM 040B = Seconds the machine was played (most significant byte)
+
+RAM 040C = Number of one player games (least significant byte)
+RAM 040D = Number of one player games (middle significant byte)
+RAM 040D = Number of one player games (most significant byte)
+
+RAM 040F = Number of two player games (least significant byte)
+RAM 0410 = Number of two player games (middle significant byte)
+RAM 0411 = Number of two player games (most significant byte)
+
+RAM 0415 = Unknown. Vector state?
+RAM 0416 = Unknown. Vector state?
+RAM 0417 = Unknown. Vector state?
+RAM 0418 = Unknown. Vector state?
+RAM 0419 = Unknown. Vector state?
+RAM 041A = Unknown. Vector state?
+RAM 041B = Unknown. Vector state?
+RAM 041C = Unknown. Vector state?
+RAM 041D = Unknown. Vector state?
+
+RAM 0455 = Copy protection variable? errors at 17k if not 0?
+
+RAM 0600 = Player's ranking (updated just before high score screen)
+
+RAM 0605 = Timer.
+>> Used as a second timer when entering a high score.
+>> Used as a countdown timer from 14 on level selection screen (14 ticks=1 second).
+
+RAM 0606 = Initial #3 for the eighth highest score.
+RAM 0607 = Initial #2 for the eighth highest score.
+RAM 0608 = Initial #1 for the eighth highest score.
+RAM 06 . . = Initial #.. for the ............ highest score.
+RAM 0618 = Initial #3 for the second highest score.
+RAM 0619 = Initial #2 for the second highest score.
+RAM 061A = Initial #1 for the second highest score.
+RAM 061B = Initial #3 for the highest score.
+RAM 061C = Initial #2 for the highest score.
+RAM 061D = Initial #1 for the highest score.
+
+RAM 061E = Begining of scores in high score table. Extends through $071D.
+RAM 0718 = Lowest two digits of the second highest score.
+RAM 0719 = Middle two digits of the second highest score.
+RAM 071A = Highest two digits of the second highest score.
+RAM 071B = Lowest two digits of the highest score.
+RAM 071C = Middle two digits of the highest score.
+RAM 071D = Highest two digits of the highest score.
+
+ 
