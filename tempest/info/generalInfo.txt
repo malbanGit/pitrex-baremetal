@@ -1,0 +1,26 @@
+General code locations:
+NOTE: These are v1 ROMS. To be corrected.
+
+$980c = Sound played when zooming out of level
+$9851 = Zooming out of level upon completion
+$993c = Enemy count? Coming up into the tube?
+$9986 = Enemies coming up into the tube?
+$9C11 = Enemy behavior at the top of the tube?
+$A1B5 = Death of player code
+$A1c1 = Control of which enemy type comes from tube?
+$A1c8 = Behavior of enemies at the top of tube?
+ROM 115 Offset 36c = Death explosion animation of player
+ROM 115 Offset 4fd = Death of player code
+ROM 115 Offset 5f0 = "Avoid Spikes" at the end of a level
+ROM 115 Offset 64e = "High Score Victory" explosion at end of game
+ROM 116 Offset 055 = Superzapper handling
+ROM 117 Offset 1fc = Start of game level selection
+ROM 119 Offset 7bd = Check DIP settings to see if "freeze mode" enabled
+ROM 120 Offset 031 = Decrease game credits by one
+ROM 120 Offset 1b5 = Decrease player's lives by one
+ROM 120 Offset 7fe = Increase game credits by one
+ROM 120 Offset 2ef = Increase player's lives by one
+ROM 122 Offset 31e = Hardware initialization
+ROM at D704 = Non-maskable interrupt routine
+ROM at D704 = Maskable interrupt routine
+ROM AT D93f = First code executed upon system reset
