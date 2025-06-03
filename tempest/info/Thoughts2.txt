@@ -1,0 +1,40 @@
+
+
+The Future of the Tempest Code Project
+by Josh McCormick, February 2000
+--------------------------------
+
+Someone wrote to me regarding the Tempest Code Project and asked what I saw happening regarding the future of Tempest. I thought I would share my response (software and hardware) with the group and see what feedback exists out there --
+
+I see a lot happening in Tempest's future. The obvious side of this is the software. And the obvious side of the software is modifying the existing game. From what I've dug out of the code so far, it isn't going to be halfway difficult to make some good changes. Here are a few of the simple ideas:
+As the level of difficulty increases, the player is no longer on the edge of the tube, but goes inside the tube. This gives them less time to respond, and a slightly worse visual cue on how close the enemies are. Most of the game logic is already here. He re are two snapshots, one playing the game outside the tube, and one playing the game inside the tube:
+
+inside (https://arcarc.xmission.com/Web%20Archives/ionpool.net%20(Dec-31-2020)/arcade/tempest_code_project/temp1.gif)
+outside (https://arcarc.xmission.com/Web%20Archives/ionpool.net%20(Dec-31-2020)/arcade/tempest_code_project/temp2.gif)
+
+A few wrinkles in the code here and there have to be ironed out to do
+this, but nothing serious. It looks like they may have had this very idea when they were creating the game. It is possible to play with the behavior of the various enemies to a wide degree. You can control how fast they come up the tube. You can control what directions they move. A lot of this can be changed with little effort to put an experienced player into a frenzy. (Heck, just a 2x fast green spiker would be a bitch.)
+
+There are also little things that can be played with, like the Superzapper duration and number of shots. The number shots a player can have on screen at once. The speed the player moves at. I personally like the idea of hitting the slam on the coin door for the Superzapper, but I don't think anyone else would. :)
+
+One of the greatest areas of improvement in Tempest, IMHO, is the sound.
+The Atari hardware is capable of so much better. In fact, I'd like to sneak in a few digitized samples here and there when I get the chance. Something cool for the logo would be a whispered voice to say "Tempest" in the same manner it is said for the TV show "Sliders".
+
+But also on the software side are the new games. But I'm hoping that the major downfall of the Tempest hardware (the X-axis only spinner control) doesn't force everyone down the road of Pong, Arkanoid, and something akin the home computer game "Threshold" . Major Havoc made very good use of the simple controls, and I'm hoping that people will be innovative when they start programming the platform.
+
+My real hope for Tempest is beyond the software.
+What I hope to see Tempest turned into is the successor to the Vectrex. An at-home color vector "game console" system. Mind you, an expensive one.
+
+Two ideas on the hardware side (the first coming from Christopher Candreva the Vector mailing list, and if you are reading this) would facilitate this:
+
+Clay's Tempest multigame is good. But it isn't cost effective if you expect to be plugging in new games now and again. What I'd like to see happen is someone (Clay, specifically) build a cartridge system for the Tempest hardware. It would allow for Tempest owners to have access to the latest software, and it gives software authors the possibility of a minor reward for their efforts.
+
+In addition, it could allow for bank selecting which would make digitized sounds (which are incredibly memory hungry) realistic for use in those games. Not to mention more complex software. Imagine if your game ROM contains each shape, rendered at 18 positions on each axis, for a total of ~6000 unique viewing angles. Nice graphics, right? 32k of ROM is great, but wonders can be done with 128k, or 256k, and almost as cheap. The other hardware change I'd like to see is the addition of a joystick. There are enough inputs left on the Pokey chips (3 slots on Pokey #1 and 4 slots on Pokey #2) to make this a simple reality. My personal preference here is for them to be wired into a simple DB-9 male connector that conforms to the pinouts of the Atari joystick. Atari joysticks are very cheap, and this way, someone could either mount a real arcade joystick on their Tempest control panel (blasphemy!) or having a less intrusive Atari joystick running out the back. But more importantly, it opens up the door to creating (or porting... Space Duel?) games that allow up-down-left-right binary movement.
+
+An alternative joystick idea would be to interface the standard PC joystick into the Pokey. It would allow for analog up-down-left-right movement and for *two* fire buttons. The problem there is slightly increased complexity in coding (joystick calibration and handling analog movement instead of digital movement). The disadvantages might be outweighed, though.
+
+Anyhow, this is just some of the low hanging fruit that is out there.
+
+There are a lot of possibilities for this platform. If you don't mind, I'll cross-post this to #rgvac and get some feedback on this.
+
+ 
