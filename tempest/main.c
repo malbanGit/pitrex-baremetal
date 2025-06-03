@@ -1,4 +1,8 @@
 /*
+https://github.com/historicalsource/tempest
+https://arcarc.xmission.com/Web%20Archives/ionpool.net%20(Dec-31-2020)/arcade/tempest_code_project/tempest_code_project.html
+
+
  * main.c: Atari Vector game simulator
  *
  * Copyright 1991-1993, 1996, 2003 Hedley Rainnie, Doug Neubauer, and Eric Smith
