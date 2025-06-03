@@ -24,3 +24,109 @@ ROM 122 Offset 31e = Hardware initialization
 ROM at D704 = Non-maskable interrupt routine
 ROM at D704 = Maskable interrupt routine
 ROM AT D93f = First code executed upon system reset
+
+
+
+
+Subject: VECTOR: New Tempest code hacking
+Date: Wed, 09 Apr 2003 12:10:16 -0500
+From: Tom McClintock
+To: vectorlist
+
+Since the Tempest code project has been sitting on my servers for some
+time, I get sporadic e-mails from people about it (even though, yeah,
+I'm just hosting the files).
+
+Anyway, I recently received some e-mails from a gentleman who has been
+digging about in the code. He's produced a 'new' annotated disassembly
+of the game code - although he is not done with it.
+
+For anyone that is interested, here is a link to the most current
+commented code. He suggested it will get updated somewhat frequently.
+http://216.46.5.1:18804/
+
+BTW, I don't think his debugger is very portable, so you probably
+shouldn't even ask for it ;) However, he suggested that if you would
+like to contact him and discuss the Tempest code, please do so. His
+e-mail address is: mouse {a t]Rodents.Montreal.QC.CA
+
+Here are some of his comments and some cool bits of Tempest code.
+--------------------
+
+"In particular, I wrote a highly flexible disassembler that makes a very
+useful tool for this sort of "disassemble and uncompile" work.
+
+I do not actually own a unit yet :-(, so I'm playing with the [XMAME]
+engine, severely hacked to display over my house LAN to a SPARC
+display, with the spinner input taken through a somewhat arcane
+protocol from the parallel port (I have a real knob I built interface
+circuitry for).
+
+...As I designed the
+remote-display protocol, it is driven off the vector display lists.
+Rather than extend it to carry rasters as well, I just made my
+interface do displaying by creating its own display lists. Rather than
+design my own vector font, I used the one that was already there. (To
+the extent that I could; I had to design a few more characters.)
+
+...I've hacked on my MAME emulator so
+that it now has some fairly nice dynamic debugging capabilities in it.
+I have a program to take screenshots off a cg6, which is what I'm using
+to display it; two screenshots
+
+[ I've mirrored them here:
+http://www.ionpool.net/arcade/tempest_code_project/tempest_debugger1.gif
+
+http://www.ionpool.net/arcade/tempest_code_project/tempest_debugger2.gif]
+
+The former shows the debugger interface, the
+latter the game running with some watches set. This allows me to do
+things like set breakpoints (the red address in the code listing at the
+right of the debugger snapshot indicates a breakpoint), single-step,
+patch RAM values or CPU registers, that sort of thing.
+
+...Eventually I'd like to uncompile Tempest far enough to
+extract the algorithms and reimplement it in pure C, so I can ditch the
+MAME emulator engine.
+
+Here's a rough summary of the more interesting things I've found so far:
+
+- At 9181 and following is some code is some code which looks as though
+it's the code run to start a new level during attract mode.
+
+- At 91b5 is code to load the starting-level bonus into $29/$2a/$2b.
+It uses the table starting at 91c6; the table is the bonuses in BCD
+with the low 00 not stored (that comes from the lda at 91b7).
+
+- I've managed to deduce some of the layout of the table that runs from
+9607 through 9676 and related stuff.
+
+- aaf5 is a routine that takes a number in A in binary and converts it
+to two-digit BCD, which is left in A, $29, and $2c. It keeps only
+the low two digits.
+
+- c98c appears to be a routine called to go up a level.
+
+- The 8 bytes from caf1 through caf8 appear to be the low two digits of
+the score values of something (speculation: various enemies). The 8
+bytes from caf9 through cb00 appear to be the high two digits ditto.
+
+- df09 appends a video RTS, and df10 a video HALT, to the video list
+being built.
+
+- df19 appends a video JSR appropriate to the digit in the low four
+bits of A; if the C bit is set, zeros turn into spaces, and the C bit
+is cleared if the digit is nonzero.
+
+- df53 appends a zero-length line to the video list being built.
+
+- df5f increments the video list pointer according to how much stuff
+has been appended.
+
+- dfb1 appends a multidigit number to the video list being built; Y
+holds the length of the number, in two-digit pairs, and A holds the
+zero-page address of the lowest two digits."
+
+-----------------------
+
+tm
