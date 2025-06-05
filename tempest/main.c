@@ -1,6 +1,62 @@
 /*
 https://github.com/historicalsource/tempest
 https://arcarc.xmission.com/Web%20Archives/ionpool.net%20(Dec-31-2020)/arcade/tempest_code_project/tempest_code_project.html
+https://github.com/Threetwosevensixseven/ayfxedit-improved
+;
+; POKEY DEFINITIONS
+;
+AUDF1	=POKEY
+AUDC1	=POKEY+1
+AUDCTL	=POKEY+8
+ALLPOT	=POKEY+8
+RANDOM	=POKEY+0A
+POTGO	=POKEY+0B
+SKCTL	=POKEY+0F
+AUDF2	=POKEY2
+AUDC2	=POKEY2+1
+AUD2CTL	=POKEY2+8
+ALLPO2	=POKEY2+8
+RANDO2	=POKEY2+0A
+POTGO2	=POKEY2+0B
+SKCTL2	=POKEY2+0F
+
+CPEXPL:	LDA I,SIDDI		;PLAYER DIES
+	JMP SNDON
+ -> 
+CCB0 A9:5F      LDA:imm    #5F
+CCB2 4C:C3 CC   JMP:abs    $CCC3
+
+
+
+;EXPLOSION SOUND
+;
+T51F:	.BYTE 0C0,8,4,10
+	.BYTE 0,0
+T51A:	.BYTE 0A6,20,0F8,4
+	.BYTE 0,0
+T52F:	.BYTE 40,8,4,10
+	.BYTE 0,0
+T52A:	.BYTE 0A6,20,0FE,4
+	.BYTE 0,0
+
+CBD1 C0:08      CPY:imm    #08
+CBD3 04:        Illegal Opcode
+CBD4 10:00      BPL:rel    Branch->$CBD6
+CBD6 00:        BRK:imp    BREAK
+CBD7 A6:20      LDX:zp     Zp RAM 0020
+CBD9 F8:        SED:imp    Set Decimal
+CBDA 04:        Illegal Opcode
+CBDB 00:        BRK:imp    BREAK
+CBDC 00:        BRK:imp    BREAK
+CBDD 40:        RTI:imp    Ret from Int
+CBDE 08:        PHP:imp    Push P
+CBDF 04:        Illegal Opcode
+CBE0 10:00      BPL:rel    Branch->$CBE2
+CBE2 00:        BRK:imp    BREAK
+CBE3 A6:20      LDX:zp     Zp RAM 0020
+CBE5 FE:04 00   INC:abs,x  $0004,X
+CBE8 00:        BRK:imp    BREAK
+
 
 
  * main.c: Atari Vector game simulator
