@@ -1,3 +1,8 @@
+# Use UART (PL011) or Mini UART
+# pass a defition of  -DUSE_PL011_UART=1 to compiler to Use PL011
+# if not then Mini UART
+
+
 # I prefer "handmade" make files, it is a little bit of more worktime to start with
 # but I can read them, others can, and I know what they do!
 #
@@ -25,7 +30,8 @@ IMG_DIR := piZero2
 
 CFLAGS := -fuse-ld=bfd -Ofast -I$(INC_DIR_PITREX)  -I$(INC_DIR_USPI) -L$(LIB_DIR) \
 	-mhard-float -mfloat-abi=hard -mfpu=neon-fp-armv8 -march=armv8-a -mtune=cortex-a53 \
-	-ffreestanding -nostartfiles -DPITREX_DEBUG -DRASPPI=3 
+	-ffreestanding -nostartfiles -DPITREX_DEBUG -DRASPPI=3 -DUSE_PL011_UART=1
+
 else
 BUILD_DIR_PURE := build
 BUILD_DIR := $(BUILD_DIR_PURE)/
@@ -34,10 +40,11 @@ IMG_DIR := piZero1
 
 CFLAGS := -fuse-ld=bfd -Ofast -I$(INC_DIR_PITREX)  -I$(INC_DIR_USPI) -L$(LIB_DIR) \
 	-mfloat-abi=hard -mfpu=vfp -march=armv6zk -mtune=arm1176jzf-s \
-	-ffreestanding -nostartfiles -DPITREX_DEBUG -DRASPPI=1
+	-ffreestanding -nostartfiles -DPITREX_DEBUG -DRASPPI=1 -DUSE_PL011_UART=1
 endif
 
-COPY_TARGET1 = /media/sf_ubuntu
+COPY_TARGET0 = /media/sf_ubuntu
+COPY_TARGET1 = $(COPY_TARGET0)/$(IMG_DIR)
 COPY_TARGET2 = /media/sf_E_DRIVE/$(IMG_DIR)
 
 LIBS_CHECK := $(LIB_DIR)/libbaremetal.a $(LIB_DIR)/libuspi.a $(LIB_DIR)/libvectrexInterface.a

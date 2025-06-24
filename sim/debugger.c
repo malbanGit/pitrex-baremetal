@@ -804,16 +804,16 @@ char *readline(char *prompt)
   char inbuf [MAX_LINE];
   if (prompt)
   {
-    while (*prompt != 0) RPI_AuxMiniUartWrite(*prompt++);
+    while (*prompt != 0) RPI_AuxUartWrite(*prompt++);
     fflush(stdout);
   }
   while (1)
   {
-    while (RPI_AuxMiniUartReadPending())
+    while (RPI_AuxUartReadPending())
     {
-      char r = RPI_AuxMiniUartRead();
+      char r = RPI_AuxUartRead();
 
-        RPI_AuxMiniUartWrite(r);
+        RPI_AuxUartWrite(r);
         if (r != '\n')
         {
                 if (commandBufferCounter<MAX_LINE-2)

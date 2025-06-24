@@ -2156,6 +2156,8 @@ void handleVectorRequest(int type, int x, int y)
 {
 }
 Command *userCommandList;
+
+#include "uart.c"
 #ifdef PITREX_DEBUG
 #include "commands.c"
 #endif

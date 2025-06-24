@@ -27,9 +27,41 @@ extern int __bss_end__;
 // https://www.raspberrypi.org/documentation/hardware/raspberrypi/bcm2835/BCM2835-ARM-Peripherals.pdf
 // https://www.keil.com/support/man/docs/armasm/armasm_dom1359731126962.htm
 
-#define isb() asm volatile ("mcr p15, #0, %[zero], c7, c5,  #4" : : [zero] "r" (0) )
-#define dsb() asm volatile ("mcr p15, #0, %[zero], c7, c10, #4" : : [zero] "r" (0) )
-#define dmb() asm volatile ("mcr p15, #0, %[zero], c7, c10, #5" : : [zero] "r" (0) )
+
+// from circle
+// #define InvalidateInstructionCache() asm volatile ("mcr p15, 0, %0, c7, c5,  0" : : "r" (0) : "memory")
+// NOTE: Data cache operations include a DataSyncBarrier
+// #define InvalidateDataCache()	asm volatile ("mcr p15, 0, %0, c7, c6,  0\n" \
+//					      "mcr p15, 0, %0, c7, c10, 4\n" : : "r" (0) : "memory")
+//#define CleanDataCache()	asm volatile ("mcr p15, 0, %0, c7, c10, 0\n" \
+//					      "mcr p15, 0, %0, c7, c10, 4\n" : : "r" (0) : "memory")
+
+
+
+
+#define isb() asm volatile ("mcr p15, #0, %[zero], c7, c5,  #4" : : [zero] "r" (0) ) // FlushPrefetchBuffer
+#define dsb() asm volatile ("mcr p15, #0, %[zero], c7, c10, #4" : : [zero] "r" (0) ) // DataSyncBarrier
+#define dmb() asm volatile ("mcr p15, #0, %[zero], c7, c10, #5" : : [zero] "r" (0) ) // DataMemBarrier
+
+/*
+//
+// Barriers
+//
+#define DataSyncBarrier()	asm volatile ("mcr p15, 0, %0, c7, c10, 4" : : "r" (0) : "memory")
+#define DataMemBarrier() 	asm volatile ("mcr p15, 0, %0, c7, c10, 5" : : "r" (0) : "memory")
+
+#define InstructionSyncBarrier() FlushPrefetchBuffer()
+#define InstructionMemBarrier()	FlushPrefetchBuffer()
+
+// According to the "BCM2835 ARM Peripherals" document pg. 7 the BCM2835
+// requires to insert barriers before writing and after reading to/from
+// a peripheral for in-order processing of data transferred on the AXI bus.
+#define PeripheralEntry()	DataSyncBarrier()
+#define PeripheralExit()	DataMemBarrier()
+*/
+
+
+
 
 #define invalidate_instruction_cache()	asm volatile ("mcr p15, #0, %[zero], c7, c5,  #0" : : [zero] "r" (0) )
 #define flush_prefetch_buffer()		asm volatile ("mcr p15, #0, %[zero], c7, c5,  #4" : : [zero] "r" (0) )
@@ -83,13 +115,36 @@ static inline void cache_flush(void)
 #define dmb() asm volatile ("dmb" ::: "memory")
 #define imb	isb 
 
+
+
+
+
+
 #define invalidate_instruction_cache()	asm volatile ("mcr p15, #0, %[zero], c7, c5,  #0" : : [zero] "r" (0) : "memory")
 #define flush_prefetch_buffer()		asm volatile ("isb" ::: "memory")
+
+// Circle
+#define FlushPrefetchBuffer()	asm volatile ("mcr p15, 0, %0, c7, c5,  4" : : "r" (0) : "memory")
+#define InstructionSyncBarrier() FlushPrefetchBuffer()
+#define InstructionMemBarrier()	FlushPrefetchBuffer()
+
 #define flush_branch_target_cache() 	asm volatile ("mcr p15, #0, %[zero], c7, c5,  #6" : : [zero] "r" (0) : "memory")
 
 extern void invalidate_data_cache(void) __attribute__ ((optimize (3)));
 extern void clean_data_cache(void) __attribute__ ((optimize (3)));
 extern void invalidate_data_cache_l1_only(void) __attribute__ ((optimize (3)));
+
+
+
+// Circle: 
+// NOTE: Data cache operations include a DataSyncBarrier
+#define InvalidateDataCache()	asm volatile ("mcr p15, 0, %0, c7, c6,  0\n" \
+					      "mcr p15, 0, %0, c7, c10, 4\n" : : "r" (0) : "memory")
+#define CleanDataCache()	asm volatile ("mcr p15, 0, %0, c7, c10, 0\n" \
+					      "mcr p15, 0, %0, c7, c10, 4\n" : : "r" (0) : "memory")
+
+
+
 
 //
 // Cache control
@@ -429,12 +484,20 @@ extern void lib_bcm2835_gpio_fsel(const uint8_t, const uint8_t);
 
 
 
-
-
 #define RPI_GPIO_BASE       ( PERIPHERAL_BASE + 0x200000UL )
 
 
-
+typedef enum {
+    FS_INPUT  = 0b000,
+    FS_OUTPUT = 0b001,
+    FS_ALT5   = 0b010,
+    FS_ALT4   = 0b011,
+    FS_ALT0   = 0b100,
+    FS_ALT1   = 0b101,
+    FS_ALT2   = 0b110,
+    FS_ALT3   = 0b111
+} rpi_gpio_alt_function_t;
+/*
 
 typedef enum {
     FS_INPUT = 0,
@@ -446,7 +509,7 @@ typedef enum {
     FS_ALT2,
     FS_ALT3,
     } rpi_gpio_alt_function_t;
-
+*/
 /* A mask to be able to clear the bits in the register before setting the
    value we require */
 #define FS_MASK     (7)
@@ -769,28 +832,15 @@ typedef struct {
     } aux_t;
 
 extern aux_t* RPI_GetAux( void );
-extern void RPI_AuxMiniUartInit( int baud, int bits , int mhz);
-extern void RPI_AuxMiniUartWrite( char c );
+extern void RPI_AuxUartInit( int baud, int bits , int mhz);
 
-extern char RPI_AuxMiniUartRead();
-extern int RPI_AuxMiniUartReadPending();
-extern void RPI_AuxMiniUartFlush();
+extern int RPI_Aux_UartWritePossible();
+extern void RPI_AuxUartWrite( char c );
 
+extern int RPI_AuxUartReadPending();
+extern char RPI_AuxUartRead();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+extern void RPI_AuxUartFlush();
 
 
 

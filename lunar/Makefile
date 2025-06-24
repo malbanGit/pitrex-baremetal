@@ -33,7 +33,6 @@ $(TARGET): simLib $(OBJS) $(LIBS_CHECK)
 	arm-none-eabi-objdump -l -drwCS -D $(BUILD_DIR)$(TARGET_BASE).elf.img > $(BUILD_DIR)$(TARGET_BASE).elf.img.s
 
 ifdef MAKE_IMAGE
-	cp $(TARGET) $(COPY_TARGET1)
 	cp $(TARGET) $(COPY_TARGET2)
 	cp $(TARGET) /media/sf_E_DRIVE
 else

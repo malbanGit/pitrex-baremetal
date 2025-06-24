@@ -1551,7 +1551,7 @@ int v_saveIniTo(char *filename)
   fprintf(iniOut,"\n"); 
   
   fprintf(iniOut,"; UART_OUTPUT: \n"); 
-  fprintf(iniOut,"; if different than 0 - then printf does not output to UART (serial)\n"); 
+  fprintf(iniOut,"; if 0 - then printf does not output to UART (serial)\n"); 
   fprintf(iniOut,"UART_OUTPUT = %i\n", uartOutput); 
   fprintf(iniOut,"\n"); 
 

@@ -1093,5 +1093,22 @@ void v_setupSMPHandling();
 void v_removeMultiCore();
 
 
+////////////////////////////////////////////////////////////////
+// UART Transport
+#define MRP_CHUNK_SIZE    128
+#define MRP_MAX_RETRIES   5
+
+#define MRP_START_DATA    0xA5
+#define MRP_ACK           0xAC
+#define MRP_NACK          0xAF			
 
 
+int readUart(unsigned char *data);
+bool sendByte(unsigned char c);
+bool getByteBlocking(unsigned char *c);
+bool getBytes(unsigned char* data, int len);
+bool getBytes2(unsigned char* data, int len);
+unsigned char crc8(const unsigned char* data, unsigned char len);
+int getOne8BitValue();
+void UARTWriteTimed(char c, int timeOut);
+int getOne8BitValueTimed(int timeOut);

@@ -526,7 +526,11 @@ int play_sfx1()
 //  printf("2 sfx_status_1 %d\n",sfx_status_1);
   if (!SFX_STATUS) return 0;
 
-  uint8_t b = *SFX_POINTER++;
+  static uint8_t b;
+  static uint8_t enable;
+  static uint8_t volume;
+
+  b = *SFX_POINTER++;
 
   if (b == 0xd0)
   {
@@ -542,7 +546,7 @@ int play_sfx1()
         SFX_POINTER_ORG = 0;
         SFX_STATUS = 0;
         v_writePSG_double_buffered(PSG_CHANNEL+8, 0);
-        uint8_t enable = v_readPSG_double_buffered(7);
+        enable = v_readPSG_double_buffered(7);
         enable = enable | (1<<PSG_CHANNEL); // channel 0
         enable = enable | (1<<(3+PSG_CHANNEL)); // channel 0
         v_writePSG_double_buffered(7, enable);
@@ -561,11 +565,15 @@ int play_sfx1()
     // noise frequency
     v_writePSG_double_buffered(6, *SFX_POINTER++);
   }
-  uint8_t volume = b&0xf;
-  volume = (uint8_t) (((float)volume)*sfx_mul_1);
+  volume = b&0xf;
+//  volume = (uint8_t) (((float)volume)*sfx_mul_1);
+
+  if (sfx_mul_1<1)
+    volume = volume*sfx_mul_1;
+
   if (volume>0x0f) volume = 0x0f;
   v_writePSG_double_buffered(PSG_CHANNEL+8, volume);
-  uint8_t enable = v_readPSG_double_buffered(7);
+  enable = v_readPSG_double_buffered(7);
   if ((b & (1 << 4)) == (1 << 4))
   {
     // disable tone
@@ -605,8 +613,11 @@ int play_sfx2()
 {
   if (!SFX_STATUS) return 0;
 //  printf("Playing 2\n");
+  static uint8_t b;
+  static uint8_t enable;
+  static uint8_t volume;
 
-  uint8_t b = *SFX_POINTER++;
+  b = *SFX_POINTER++;
 
   if (b == 0xd0)
   {
@@ -622,7 +633,7 @@ int play_sfx2()
         SFX_POINTER_ORG = 0;
         SFX_STATUS = 0;
         v_writePSG_double_buffered(PSG_CHANNEL+8, 0);
-        uint8_t enable = v_readPSG_double_buffered(7);
+        enable = v_readPSG_double_buffered(7);
         enable = enable | (1<<PSG_CHANNEL); // channel 0
         enable = enable | (1<<(3+PSG_CHANNEL)); // channel 0
         v_writePSG_double_buffered(7, enable);
@@ -641,11 +652,17 @@ int play_sfx2()
     // noise frequency
     v_writePSG_double_buffered(6, *SFX_POINTER++);
   }
-  uint8_t volume = b&0xf;
-  volume = (uint8_t) (((float)volume)*sfx_mul_2);
+  volume = b&0xf;
+
+  if (sfx_mul_2<1)
+    volume = volume*sfx_mul_2;
+//  volume = (uint8_t) (((float)volume)*sfx_mul_2);
   if (volume>0x0f) volume = 0x0f;
+
+
+
   v_writePSG_double_buffered(PSG_CHANNEL+8, volume);
-  uint8_t enable = v_readPSG_double_buffered(7);
+  enable = v_readPSG_double_buffered(7);
   if ((b & (1 << 4)) == (1 << 4))
   {
     // disable tone
@@ -671,8 +688,6 @@ int play_sfx2()
   return 1;
 }
 
-
-
 #undef PSG_CHANNEL
 #undef SFX_STATUS
 #undef SFX_POINTER
@@ -687,7 +702,11 @@ int play_sfx3()
   if (!SFX_STATUS) return 0;
 //  printf("Playing 3\n");
 
-  uint8_t b = *SFX_POINTER++;
+  static uint8_t b;
+  static uint8_t enable;
+  static uint8_t volume;
+
+  b = *SFX_POINTER++;
 
   if (b == 0xd0)
   {
@@ -703,7 +722,8 @@ int play_sfx3()
         SFX_POINTER_ORG = 0;
         SFX_STATUS = 0;
         v_writePSG_double_buffered(PSG_CHANNEL+8, 0);
-        uint8_t enable = v_readPSG_double_buffered(7);
+        enable = v_readPSG_double_buffered(7);
+
         enable = enable | (1<<PSG_CHANNEL); // channel 0
         enable = enable | (1<<(3+PSG_CHANNEL)); // channel 0
         v_writePSG_double_buffered(7, enable);
@@ -722,11 +742,19 @@ int play_sfx3()
     // noise frequency
     v_writePSG_double_buffered(6, *SFX_POINTER++);
   }
-  uint8_t volume = b&0xf;
-  volume = (uint8_t) (((float)volume)*sfx_mul_3);
+  volume = b&0xf;
+
+//  ???
+  //  volume = (uint8_t) (((float)volume)*sfx_mul_3);
+
+  if (sfx_mul_3<1)
+    volume = volume*sfx_mul_3;
+  
   if (volume>0x0f) volume = 0x0f;
+
+
   v_writePSG_double_buffered(PSG_CHANNEL+8, volume);
-  uint8_t enable = v_readPSG_double_buffered(7);
+  enable = v_readPSG_double_buffered(7);
   if ((b & (1 << 4)) == (1 << 4))
   {
     // disable tone

@@ -1,4 +1,4 @@
-BUILD_FOR ?= zero2
+BUILD_FOR ?= zero
 BASE_DIR = ../..
 ifeq ($(BUILD_FOR),zero2)
 TARGET	= pitrex7.img loader.pit
@@ -61,7 +61,7 @@ loader.pit: loaderObjects  $(LIBS_CHECK)
 	dd if=loader.img of=loader.pit ibs=1 skip=67076096
 	rm loader.img
 ifdef MAKE_IMAGE
-	cp loader.pit /media/sf_ubuntu
+	cp loader.pit /media/sf_ubuntu/$(IMG_DIR)
 	cp loader.pit /media/sf_E_DRIVE/$(IMG_DIR)
 else
 ifdef SERIAL_TRANSFER

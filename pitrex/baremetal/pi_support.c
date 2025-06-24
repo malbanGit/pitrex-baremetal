@@ -201,7 +201,7 @@ aux_t* RPI_GetAux( void )
     return auxillary;
 }
 
-void RPI_AuxMiniUartInit( int baud, int bits , int mhz)
+static inline void RPI_AuxMiniUartInit( int baud, int bits , int mhz)
 {
     volatile int i;
 // baud = 115200 ;
@@ -253,38 +253,265 @@ void RPI_AuxMiniUartInit( int baud, int bits , int mhz)
     /* Disable flow control,enable transmitter and receiver! */
     auxillary->MU_CNTL = AUX_MUCNTL_TX_ENABLE | AUX_MUCNTL_RX_ENABLE;
 }
-void RPI_AuxMiniUartWrite( char c )
+
+// not possible != 0
+// possible = 0
+static inline int RPI_AuxMiniUartWritePossible()
+{
+  return (( auxillary->MU_LSR & AUX_MULSR_TX_EMPTY ) == 0 );
+}
+
+// blocking, till write is possible
+static inline void RPI_AuxMiniUartWrite( char c )
 {
     /* Wait until the UART has an empty space in the FIFO */
-    while( ( auxillary->MU_LSR & AUX_MULSR_TX_EMPTY ) == 0 ) { }
+    while (RPI_AuxMiniUartWritePossible()) 
+    { 
+      ;// wait       
+    }
 
     /* Write the character to the FIFO for transmission */
     auxillary->MU_IO = c;
 }
 
-// blocking till char read
-char RPI_AuxMiniUartRead()
-{
-    while (1 == 1) 
-    {
-	    if (auxillary->MU_LSR & AUX_MULSR_DATA_READY)
-		    break;
-    }
-    return auxillary->MU_IO;
-}
-
 // 0 not pending
 // != 0 some data pending on IO to read
-int RPI_AuxMiniUartReadPending()
+static inline int RPI_AuxMiniUartReadPending()
 {
     return (auxillary->MU_LSR & AUX_MULSR_DATA_READY);
 }
 
-void RPI_AuxMiniUartFlush()
+// blocking till char read
+static inline char RPI_AuxMiniUartRead()
+{
+    while (1 == 1) 
+    {	
+      if (RPI_AuxMiniUartReadPending()) break;
+    }
+    return auxillary->MU_IO;
+}
+
+
+static inline void RPI_AuxMiniUartFlush()
 {
 //  while ((auxillary->MU_STAT & AUX_MUSTAT_TX_DONE));
 //    while ( ((volatile uint32_t)readRegister(UartRegister::FR)) & (1 << 3) ) ; // bit 3 == Tx Fifo BUSY flag
 }
+
+/*
+/// 13.4 Register View
+typedef struct {
+	__IO uint32_t DR;			///< 0x00, Data Register
+	__IO uint32_t RSRECR;		///< 0x04, Receive status register/error clear register
+	__IO uint32_t PAD[4];		///< 0x08, Padding
+	__IO uint32_t FR;			///< 0x18, Flag register
+	__IO uint32_t RES1;			///< 0x1C, Reserved
+	__IO uint32_t ILPR;			///< 0x20, not in use
+	__IO uint32_t IBRD;			///< 0x24
+	__IO uint32_t FBRD;			///< 0x28
+	__IO uint32_t LCRH;			///< 0x2C
+	__IO uint32_t CR;			///< 0x30
+	__IO uint32_t IFLS;			///< 0x34
+	__IO uint32_t IMSC;			///< 0x38
+	__IO uint32_t RIS;			///< 0x3C
+	__I uint32_t MIS;			///< 0x40
+	__IO uint32_t ICR;			///< 0x44
+	__IO uint32_t DMACR;		///< 0x48
+} BCM2835_PL011_TypeDef;
+*/
+
+#define UART0 ((BCM2835_PL011_TypeDef*)(BCM2835_PL011_BASE))
+
+
+// bits and hz not used
+// bits assumed 8
+// hz assumed to be default 48Mhz
+static inline void RPI_AuxPL011UartInit( int baud, int bits , int hz)
+{
+    volatile int i;
+
+    // UART0 has its own clock - it was never changed - so we assume the default here
+    hz = 48000000;
+    dsb();
+    // Disable UART0
+    UART0->CR = 0;
+
+    // === GPIO Function Setup ===
+    RPI_SetGpioPinFunction(RPI_GPIO14, FS_ALT0);  // TXD0 = ALT0
+    RPI_SetGpioPinFunction(RPI_GPIO15, FS_ALT0);  // RXD0 = ALT0
+
+    // Pull-up/down disable for GPIO14+15
+    void udelay(uint32_t d);
+
+    RPI_GetGpio()->GPPUD = 0;
+    udelay(150);
+//    for (i = 0; i < 150; i++) { }
+    RPI_GetGpio()->GPPUDCLK0 = (1 << 14) | (1 << 15);
+    udelay(150);
+//    for (i = 0; i < 150; i++) { }
+    RPI_GetGpio()->GPPUDCLK0 = 0;
+    udelay(150);
+
+    // === Baud rate divisor calculation ===
+    uint64_t scaled_div = ((uint64_t)hz * 64 + baud * 8) / (16 * baud);
+    uint32_t ibrd = scaled_div / 64;
+    uint32_t fbrd = scaled_div % 64;    
+    
+    
+    UART0->IBRD = ibrd;
+    UART0->FBRD = fbrd;
+
+    // 8-bit, FIFO enabled
+    UART0->LCRH = (1 << 4) | (1 << 5) | (1 << 6);  // 8N1, FIFO
+
+    // Clear interrupts
+    UART0->ICR = 0x7FF;
+
+    // Mask all interrupts.
+    UART0->IMSC = (1 << 1) | (1 << 4) | (1 << 5) | (1 << 6) | (1 << 7) | (1 << 8) | (1 << 9) | (1 << 10);
+    
+    // Disable flow control explicitly (optional safety)
+    UART0->CR &= ~((1 << 14) | (1 << 15));  // CTSEN / RTSEN
+
+    // Enable UART0, TX and RX
+    UART0->CR = (1 << 0) | (1 << 8) | (1 << 9); // UARTEN, TXE, RXE
+    dmb();
+/*
+    FILE_OUT("[UART DEBUG] IBRD=%u FBRD=%u\r\n", ibrd, fbrd);
+
+    FILE_OUT("[UART DEBUG] CR=0x%08X LCRH=0x%08X\r\n", UART0->CR, UART0->LCRH);
+
+    uint32_t gpfsel1 = RPI_GetGpio()->GPFSEL1;
+    FILE_OUT( "[UART DEBUG] GPFSEL1=0x%08X (TX func=%u RX func=%u)\r\n",
+            gpfsel1, (gpfsel1 >> 12) & 7, (gpfsel1 >> 15) & 7);
+
+    FILE_OUT( "[UART DEBUG] UART clock=%u baud=%u\r\n", uartclk_hz, baud);
+    FILE_OUT( "[UART DEBUG] UART BASE=$%08x\r\n", UART0);
+*/     
+    
+    
+}
+
+// not possible != 0
+// possible = 0
+static inline int RPI_AuxPL011UartWritePossible()
+{
+  // Wait until the transmit FIFO is not full (bit 5 = TXFF)
+  return (UART0->FR & (1 << 5));
+}
+
+// blocking, till write is possible
+static inline void RPI_AuxPL011UartWrite( char c )
+{
+    // Wait until the transmit FIFO is not full (bit 5 = TXFF)
+    while (RPI_AuxPL011UartWritePossible()) 
+    { 
+      ;// wait 
+    }
+
+    // Write the character to the data register
+    UART0->DR = c;
+}
+
+// 0 not pending
+// != 0 some data pending on IO to read
+static inline int RPI_AuxPL011UartReadPending()
+{
+    // If RXFE (bit 4) is 0, data is available to read
+    return (UART0->FR & (1 << 4)) == 0;
+  
+}
+
+// blocking till char read
+static inline char RPI_AuxPL011UartRead()
+{
+    // Wait until the receive FIFO is not empty (bit 4 = RXFE)
+    while (!RPI_AuxPL011UartReadPending()) 
+    {
+        // wait
+    }
+
+    // Read and return the received character
+    return (char)(UART0->DR & 0xFF);
+}
+
+
+static inline void RPI_AuxPL011UartFlush()
+{
+/*  
+    // Wait until the transmit FIFO is empty and UART is idle
+    while (!(UART0->FR & (1 << 7))) {
+        // Wait for TXFE (bit 7) = 1: Transmit FIFO empty
+    }
+
+    // Wait until the transmission has fully completed
+    while (UART0->FR & (1 << 3)) {
+        // Wait for BUSY (bit 3) = 0: UART not transmitting
+    }
+*/  
+  
+}
+
+void RPI_AuxUartInit( int baud, int bits , int hz)
+{
+#ifdef USE_PL011_UART
+  RPI_AuxPL011UartInit(baud, bits, hz);
+#else
+  ddöledldS
+  RPI_AuxMiniUartInit(baud, bits, hz);
+#endif
+}
+
+// not possible != 0
+// possible = 0
+int RPI_Aux_UartWritePossible()
+{
+#ifdef USE_PL011_UART
+  return RPI_AuxPL011UartWritePossible();
+#else
+  return RPI_AuxMiniUartWritePossible();
+#endif
+  
+}
+
+// blocking, till write is possible
+void RPI_AuxUartWrite( char c )
+{
+#ifdef USE_PL011_UART
+  RPI_AuxPL011UartWrite(c);
+#else
+  RPI_AuxMiniUartWrite(c);
+#endif
+}
+
+// 0 not pending
+// != 0 some data pending on IO to read
+int RPI_AuxUartReadPending()
+{
+#ifdef USE_PL011_UART
+  return RPI_AuxPL011UartReadPending();
+#else
+  return RPI_AuxMiniUartReadPending();
+#endif
+}
+char RPI_AuxUartRead()
+{
+#ifdef USE_PL011_UART
+  return RPI_AuxPL011UartRead();
+#else
+  return RPI_AuxMiniUartRead();
+#endif
+}
+void RPI_AuxUartFlush()
+{
+#ifdef USE_PL011_UART
+  RPI_AuxPL011UartFlush();
+#else
+  RPI_AuxMiniUartFlush();
+#endif
+}
+
+
 /*
 idle = 1 (transmit done
 AUX_MU_STAT_REG
@@ -1075,6 +1302,7 @@ CB
 								///< 31   27   23   19   15   11   7    3
 								///<   28   24   20   16   12    8    4    0
 	    *(page_table+entry) = entry << 20 | 0x00412;	///< 0000 0000 0000 0000 0000 0100 0001 0010
+//	    *(page_table+entry) = entry << 20 | 0x00012;	///< 0000 0000 0000 0000 0000 0000 0001 0010
     }
     
     
@@ -1431,10 +1659,26 @@ void __attribute__ ((noreturn)) __attribute__ ((naked)) parkCore1()
   // branch to GLOBAL part routine
   // asm volatile ("\tb CORE1_PARK\n");
 }
-
-
-
 #endif
+
+/*
+PiTrex starting...
+Raspberry Pi Zero 2
+Serial: Mini UART 921600 Baud 8n1
+Speed arm: 1000000000, core: 250000000
+BSS start: 36174, end: 36734
+Pi ARM memory: 448MB
+Pi GPU memory: 64MB
+Page table at: 0x4000
+Page table end at: 0x8000
+CPU core 1 responded
+CPU core 1 started
+Core 1 initialized
+FAT filesystem found!
+
+*/
+
+#define _BAUD_ 921600
 
 void firstInit()
 {
@@ -1442,10 +1686,32 @@ void firstInit()
     lib_bcm2835_vc_set_clock_rate(BCM2835_VC_CLOCK_ID_ARM, 1000000000);
     int32_t arm_clock = lib_bcm2835_vc_get_clock_rate(BCM2835_VC_CLOCK_ID_ARM);
     int32_t core_clock = lib_bcm2835_vc_get_clock_rate(BCM2835_VC_CLOCK_ID_CORE);
-//    RPI_AuxMiniUartInit( 115200, 8, core_clock);
-    RPI_AuxMiniUartInit( 921600, 8, core_clock);
+    RPI_AuxUartInit( _BAUD_, 8, core_clock);
+/*
+    RPI_AuxPL011UartInit( _BAUD_, 8, core_clock);
+    RPI_AuxPL011UartWrite('H'); 
+    RPI_AuxPL011UartWrite('H'); 
+    RPI_AuxPL011UartWrite('H'); 
+    RPI_AuxPL011UartWrite('H'); 
+    RPI_AuxPL011UartWrite('H'); 
+    RPI_AuxPL011UartWrite('\n');
+*/    
+    
     /* Print to the UART using the standard libc functions */
     printf("PiTrex starting...\r\n" );
+    
+#if RASPPI != 1
+    printf("Raspberry Pi Zero 2\r\n" );
+#else
+    printf("Raspberry Pi Zero 1\r\n" );
+#endif    
+#ifdef USE_PL011_UART
+    printf("Serial: UART (PL011) %i Baud 8n1\r\n", _BAUD_);
+#else
+    printf("Serial: Mini UART _BAUD_ Baud 8n1\r\n", _BAUD_);
+#endif
+
+
     printf("Speed arm: %i, core: %i\r\n", arm_clock, core_clock);
     printf("BSS start: %X, end: %X\r\n", &__bss_start__, &__bss_end__);
 }

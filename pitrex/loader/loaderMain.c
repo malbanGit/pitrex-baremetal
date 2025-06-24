@@ -376,7 +376,23 @@ void goHavoc();
 /** Main function - we'll never return from here */
 int main(int argc, char *argv[])
 {
-#if RASPPI != 1
+#define FILE_OUT(...) do \
+  { \
+    { \
+      if (!__debugf) {__debugf = fopen("../../../printf.log", "a"); \
+        {if (!__debugf) __debugf = fopen("../../printf.log", "a"); \
+          {if (!__debugf) __debugf = fopen("../printf.log", "a"); \
+              if (!__debugf) __debugf = fopen("printf.log", "a"); }}}\
+      if (__debugf) \
+      { \
+        fprintf(__debugf,__VA_ARGS__); \
+        fflush(__debugf); \
+      } \
+    }\
+  } while(0)
+  
+
+  #if RASPPI != 1
     printf("core0entered: %X (%p), State: %i\r\n", *((unsigned int *)CORE0_ENTERED), CORE0_ENTERED, *((unsigned int *)CORE0_STATE));
     printf("core1entered: %X (%p), State: %i\r\n", *((unsigned int *)CORE1_ENTERED), CORE1_ENTERED, *((unsigned int *)CORE1_STATE));
     printf("core2entered: %X (%p), State: %i\r\n", *((unsigned int *)CORE2_ENTERED), CORE2_ENTERED, *((unsigned int *)CORE2_STATE));

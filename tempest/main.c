@@ -58,6 +58,77 @@ CBE5 FE:04 00   INC:abs,x  $0004,X
 CBE8 00:        BRK:imp    BREAK
 
 
+Table of Calculated Addresses: Chatty
+Label   Address
+
+CPEXPL  $CCB0; player dies
+SBOING  $CCB5; Cursor moves
+SAUSON  $CCB9; Score Sound
+ESLSON  $CCBD; Enemy Shot
+CCEXPL  $CCC1; Explosion 
+CIEXPL  $CCC1
+EXSNON  $CCC1
+
+; sound routines
+- SNDON   $CCC3 - sounds only when not in attract mode!
+- FSNDON  $CCC5
+- NWSNON  $CCE8
+
+
+SLAUNC  $CCE9; launch sound, player fire
+SOUTS2  $CCED; thrust on tube
+SOUTS3  $CCF1; thrust in space
+SELICO  $CCF5; enemy line destruction sound
+SSLAMS  $CCF9; slam sound
+S3SWAR  $CCFD; 3 second warning
+PULSTR  $CD01; pulsation ON
+PULSTO  $CD05; Pulsation OFF
+
+Colors: from file: ALCOMN.MAC
+;
+;COLORS
+;
+BLUE=6
+BLULET  =7
+GREEN=5
+RED=3
+YELLOW=1
+WHITE=0
+PURPLE=2
+TURQOI=4
+WELCOL=BLUE         ;WELL
+CURCOL=YELLOW           ;CURSOR
+ICHCOL=WHITE            ;ENEMY SHOTS
+PCHCOL=YELLOW           ;PLAYER SHOTS
+INVCOL=RED          ;INVADERS
+LETCOL=GREEN            ;LETTERS
+DEPCOL=WELCOL
+EXPCOL=WHITE            ;EXPLOSION
+FLICOL=RED          ;FLIPPERS
+TANCOL=PURPLE           ;TANKER
+TRACOL=GREEN            ;TRALERS
+ZAPCOL=WHITE            ;SUPER ZAP
+FRED    =0C
+FBLUE   =0B
+FGREEN  =07
+HRED    =0D
+ZWHITE  =FRED&FBLUE&FGREEN
+ZYELLO  =FRED&FGREEN
+ZPURPL  =FRED&FBLUE
+ZRED    =FRED
+ZTURQOI =FGREEN&FBLUE
+ZGREEN  =FGREEN
+ZBLUE   =FBLUE
+ZBLACK  =0F
+PSHCTR  =8      ;PLAYER SOT CENTER
+PDIWHI  =9          ;PLAYER DEATH EXPLOSION COLORS
+PDIYEL  =10.
+PDIRED  =11.
+NYMCOL  =12.            ;NYMPHE
+FLASH   =15.            ;CHANGES EVERY 4 MO.
+    .PAGE
+    .SBTTL VARIABLES-CONTROL    
+    
 
  * main.c: Atari Vector game simulator
  *
@@ -95,7 +166,186 @@ CBE8 00:        BRK:imp    BREAK
 
 #include <vectrex/vectrexInterface.h>
 
+unsigned char playerShot_alt1_data[]=
+{
+    0xEC, 0xE2, 0x00, 0x00, 0xAD, 0xBE, 0x00, 0xAC, 0xAA, 0x00, 
+    0xAB, 0x99, 0x00, 0xAC, 0x88, 0x00, 0xAB, 0x77, 0x00, 0xD0, 
+    0x20, 
+};
+unsigned char playerShot_alt2_data[]=
+{
+    0xEF, 0x80, 0x00, 0x0A, 0xAF, 0x00, 0x01, 0xAE, 0x80, 0x01, 
+    0xAE, 0x00, 0x02, 0xAD, 0x80, 0x02, 0xAD, 0x00, 0x03, 0xAE, 
+    0x80, 0x01, 0xAE, 0x40, 0x01, 0xAD, 0x00, 0x01, 0xA8, 0xC0, 
+    0x00, 0xA8, 0x80, 0x00, 0xA8, 0x60, 0x00, 0xD0, 0x20, 
+};
 
+unsigned char cursorMove_alt1_data[]=
+{
+    0xEB, 0x28, 0x00, 0x1E, 0x89, 0x88, 0x89, 0xA6, 0x29, 0x00, 
+    0xA5, 0x28, 0x00, 0x84, 0x83, 0xA8, 0x01, 0x00, 0xD0, 0x20, 
+
+};
+unsigned char cursorMove_alt2_data[]=
+{
+    0xEF, 0x20, 0x00, 0x1E, 0xA8, 0x60, 0x00, 0xAF, 0x20, 0x00, 
+    0xA8, 0x60, 0x00, 0xAC, 0x20, 0x00, 0xA4, 0x60, 0x00, 0xD0, 
+    0x20, 
+};
+
+// RAM addresses for Tempest
+
+// 00 During attract, C0 during gameplay, 80 during high score entry.
+/*
+MATRACT =80     ;D7: 0=ATTRACT  1=GAME
+MGTMOD  =40     ;D6: 0=NO TIME;START ALLOWED
+                ;  : 1GAME TIMER RUNNING
+                ;  : PRESS START NOT ALLOWED
+*/                
+//STATUS FLAGS
+#define QSTATUS 0x0005 
+
+/*
+;
+;QSTATE CODES (ROUTAD INDICES)
+;
+CNEWGA  =0 -> new game
+CNEWLI  =2
+CPLAY   =4 -> well near enough and player "playing"
+CENDLI  =6
+CENDGA  =8
+CPAUSE  =0A
+CNEWAV  =0C -> next state is CNEWV2
+CENDWAV =0E
+CHISCHK =10
+CDLADR  =14
+CGETINI =12
+CNOTFOU =CDLADR
+CREQRAT =CDLADR+2
+CNEWV2  =CREQRAT+2 ; new wave after first init
+
+CLOGO   =CNEWV2+2       ;LOGO INIT
+CINIRAT =CLOGO+2
+CNWLF2  =CINIRAT+2
+CDROP   =CNWLF2+2       ;DROP MODE
+CSYSTM  =CDROP+2
+CBOOM   =CSYSTM+2       ;BOOM STATE
+
+
+;
+;STATE ROUTINE ADDRESS
+;
+ROUTAD: .WORD NEWGAM-1      ;NEW GAME
+    .WORD NEWLIF-1      ;NEW LIFE (AFTER LOSING A BASE)
+    .WORD PLAY-1        ;PLAY
+    .WORD ENDLIF-1      ;LIFE LOST
+    .WORD ENDGAM-1      ;END OF GAME
+    .WORD PAUSE-1       ;PAUSE
+    .WORD 0         ;NEW WAVE (AFTER SHOOTING ALL INVADERS)
+    .WORD ENDWAV-1      ;END OF WAVE
+    .WORD HISCHK-1      ;CHECK FOR HI SCORES
+    .WORD GETINI-1      ;GET HI SCORE INITIALS
+    .WORD DLADR-1       ;DISPLAY HI SCORE TABLE
+    .WORD PRORAT-1      ;REQUEST PLAYER RATE
+    .WORD NEWAV2-1      ;NEW WAVE PART 2
+    .WORD LOGINI-1      ;LOGO INIT
+    .WORD INIRAT-1      ;MONSTER DELAY/DISPLAY
+    .WORD NEWLF2-1      ;NEW LIFE PART 2
+    .WORD PLDROP-1      ;DROP MODE
+    .WORD SYSTEM-1      ;END WAVE CLEAN UP AFTER BONUS
+    .WORD PRBOOM-1      ;BOOM
+ROUTEN:
+
+*/
+// ;CONTAINS CODE FOR STATE ROUTINE (INDEX INTO ROUTAD)
+#define QSTATE 0x0000 
+
+
+/*
+;
+;DISPLAY STATE CODES
+CDPLAY  =0          ;PLAY
+CDSYST  =2          ;SYSTEM CONFIGURATION
+CDREQRA =8          ;REQUEST RANK
+CDPLPL  =0E         ;PLAY PLAYER WARNING
+
+CDGOVR  =0C         ;GAME OVER PLAYER MSG
+CDHITB  =0A         ;HI SCORE TABLE
+CDGETI  =6          ;GET INITIALS
+CDBOOM  =4          ;BOOM DISPLAY
+CDPRST  =CDPLPL+2       ;"PRESS START"
+CD2GAM  =CDLOGP+2   ;"2 GAME MIN"
+CDBOXP  =CDPRST+2       ;LOGO BOX
+CDLOGP  =CDBOXP+2       ;LOGO ITSELF
+
+DROUTAD:
+    .WORD DENORM-1      ;GAME PLAY - TOP OF WELL, DOWN THE TUBE
+    .WORD DSPSYS-1      ;SYSTEM CONFIGURATION
+    .WORD DSBOOM-1      ;GAME PLAY - BOOM
+    .WORD GETDSP-1      ;DATA ENTRY - HI SCORE INITIALS
+    .WORD RQRDSP-1      ;DATA ENTRY - RANKING
+    .WORD LDRDSP-1      ;INFO ONLY - HI SCORE TABLE
+    .WORD DGOVER-1      ;            GAME OVER PLAYER X
+    .WORD DPLPLA-1      ;            PLAY PLAYER X
+    .WORD DPRSTA-1      ;"PRESS START"
+    .WORD BOXPRO-1      ;LOGO BOX
+    .WORD LOGPRO-1      ;LOGO
+    .WORD D2GAME-1      ;2 GAME MINIMUM
+*/
+// ;DISPLAY STATE
+#define QDSTATE 0x0001 
+
+
+inline unsigned char getTempestByte(int adr)
+{
+  // direct read, not triggering any emulation thingy
+  return mem[adr].cell;
+}
+
+
+void tempestCallback(int type)
+{
+  if (type == 999) // openPage callback
+  {
+    int gameState = getTempestByte(QSTATE); // status bit 7 not set
+    
+    // adjust emulation / display parameters
+    // according to game state
+    
+    // eg respect "many" dots in "BOOM"
+    
+    return;
+  }
+  
+  int attractMode = ((getTempestByte(QSTATUS) & 0x80) == 0); // status bit 7 not set
+
+
+  if (attractMode) return; // no sound in attract mode
+  
+  switch (type)
+  {
+    case TEMP_SOUND_LAUNCH_PLAYER_FIRE: {v_playSFXStart(playerShot_alt1_data, 0, 0);break;}
+    case TEMP_SOUND_CURSOR_MOVES: {v_playSFXStart(cursorMove_alt1_data, 1, 0);break;}
+
+
+    case TEMP_SOUND_PLAYER_DIES: {break;}
+    case TEMP_SOUND_SCORE: {break;}
+    case TEMP_SOUND_ENEMY_SHOT: {break;}
+    case TEMP_SOUND_ENEMY_EXPLOSTION: {break;}
+    case TEMP_SOUND_THRUST_ON_TUBE: {break;}
+    case TEMP_SOUND_THRUST_ON_SPACE: {break;}
+    case TEMP_SOUND_LINE_DESTRUCTION: {break;}
+    case TEMP_SOUND_SLAM: {break;}
+    case TEMP_SOUND_3S_WARNING: {break;}
+    case TEMP_SOUND_PUKSATION_ON: {break;}
+    case TEMP_SOUND_PUKSATION_OFF: {break;}
+    default:
+      break;
+  }
+
+}
+    
+    
 char gameMemory[4*65536];
 void setDimensions(int offsetx, int offsety, int mulx, int muly);
 
@@ -119,6 +369,7 @@ int main(int argc, char *argv[])
   v_enableSoundOut(1);
   v_enableButtons(1);
   v_enableJoystickAnalog(1,1,0,0);    
+  gameCallback = tempestCallback;
   
   keepDotsTogether = 1;
 
@@ -127,9 +378,15 @@ int main(int argc, char *argv[])
   mem = (elem *) gameMemory;
   game = pick_game (SINGLE_GAME);
 
+  
+  
  // srand(getpid());
   setup_game();
 
+  // from pokey.c
+  void enablePokeyOutput(int e);
+  enablePokeyOutput(0); // false
+  
   save_PC = (memrd(0xfffd,0,0) << 8) | memrd(0xfffc,0,0);
   save_A = 0;
   save_X = 0;

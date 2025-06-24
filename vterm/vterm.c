@@ -40,7 +40,6 @@ Anderes
 #define ONCE_PER_ROUND (1000000/50)
 #define TIME_OUT_VALUE (3*ONCE_PER_ROUND)
 int termBrightness = 0x7f;
-static aux_t* auxillary = (aux_t*)AUX_BASE;
 
 int receiveCount = 0;
 
@@ -110,6 +109,10 @@ static char _outbuffer[PRINT_BUFFER_SIZE];
 #define DEBUG_OUT2
 #define DEBUG_OUT3
 #define DEBUG_OUT4
+#define DEBUG_OUT5
+
+#define DEBUG_END2
+#define DEBUG_END3
 
 
 #define DEBUG_START do {soffset=0;sbuffer[0]=0;} while (0)
@@ -240,6 +243,8 @@ static int prevBufferLength = 0;
 int dataMode = 0;
 unsigned char *fixedHuffman=NULL; // pointer to game dependend Huffman dictionary
   
+
+  
   
   
 void v_printString_scale(int8_t x, int8_t y, char* string, uint8_t scale, uint8_t size, uint8_t brightness);
@@ -252,42 +257,249 @@ void UARTGetString(char *buffer);
 
 
 
-
-
-
-
-int getOne8BitValue()
+/* TIMING */
+#define __CLOCKS_PER_SEC__ ((uint64_t)1000000) // in microseconds
+unsigned long long getOtherTimer(); // pi_support.c
+uint64_t clockCurrent;
+uint64_t clockStart;
+void inline vt_setTimerStart()
 {
-  while (1)
-  {
-    if (auxillary->MU_LSR & AUX_MULSR_RX_OVERRUN)
-      DEBUG_OUT("UART INPUT BUFFER OVERRUN!\n");
-
-    while (RPI_AuxMiniUartReadPending())
-    {
-      unsigned char r = (unsigned char) RPI_AuxMiniUartRead();
-      receiveCount++      ;
-      DEBUG_OUT("\nR: $%02x(%i) ",r, receiveCount);  
-      return r;
-    }
-  }
-  return 1000; // anything > 255 is 'error'
-} 
-
-// blocking till char read
-static inline unsigned char RPI_AuxMiniUartReadInlined()
-{
-    while (!(auxillary->MU_LSR & AUX_MULSR_DATA_READY));
-    return auxillary->MU_IO;
+  clockStart = getOtherTimer();
 }
-static inline void UARTGetBinaryDataForced(int size, unsigned char *romBuffer)
+uint64_t inline vt_getTimerDifMicro()
+{
+  clockCurrent = getOtherTimer();
+  return clockCurrent-clockStart;
+}
+double inline vt_getTimerDifMilli()
+{
+  return ((double)vt_getTimerDifMicro())/((double)1000.0);
+}
+double inline vt_getTimerDifSeconds()
+{
+  return ((double)vt_getTimerDifMilli())/((double)1000.0);
+}
+/* TIMING END*/
+
+
+
+
+
+// 0 = ok
+// 0 != error
+int vt_UARTGetBinaryDataChunk(int size, unsigned char *romBuffer)
 {
   int counter = 0; 
-  while (counter != size)
+  uint64_t clockStart;
+  uint64_t expectedTime = __CLOCKS_PER_SEC__ * ((uint64_t)(size*10)); // 10 bits, 8 data, 1 start, 1 stop bit
+  expectedTime = expectedTime / ((uint64_t)912600); // size is in bytes -> bits, speed of serial is 912600 baud -> bits per second
+  uint64_t timeOutDif = expectedTime*1.1f; // tolerance
+  clockStart = getOtherTimer();
+  while (1)
   {
-    romBuffer[counter++] = RPI_AuxMiniUartReadInlined();
+    unsigned char data;
+    while (readUart(&data))
+    {
+      romBuffer[counter++] = data;
+      if (counter == size)
+      {
+        DEBUG_OUT2("ok: %i, %i\n", (size-counter), counter);
+        return 0;
+      }
+    }
+    if ((getOtherTimer()-clockStart)>timeOutDif)
+    {
+      FILE_OUT("Timeout, missing: %i.\n", (size-counter));
+      return (size-counter);
+    }
   }
+  return size+1; // NOK
 }
+
+
+
+// only one ACK
+int mrp_receive_blocknotwokring(unsigned char* buffer, int maxlen, int* out_len) 
+{
+    int expected_len = 0;
+    unsigned char retries = 0;
+    while (retries++ < MRP_MAX_RETRIES)  
+    {
+        unsigned char crc; 
+        unsigned char lo;
+        unsigned char hi;
+
+        getByteBlocking(&hi);
+        getByteBlocking(&lo);
+
+        getByteBlocking(&crc);
+        expected_len = hi*256+lo;
+
+// TODO!!!        es "verschwinden" daten beim ersten try - mitten in dem "getBytes"
+/*        
+        for (int i=0; i< expected_len; i++)
+        {
+          getByteBlocking(buffer+i);
+        }
+*/        
+        sendByte(MRP_ACK); 
+DEBUG_OUT4("Stupid Ack Sent\n");
+        
+        // Read chunk payload
+        if (!getBytes2(buffer, expected_len))
+        {
+DEBUG_OUT4("length: %i, crc: %i\n", expected_len, crc);
+DEBUG_OUT5("GetBytes = false (%i)\n", expected_len);
+/*
+for (int i=0;i<expected_len;i++)
+  DEBUG_OUT4("$%02x ", (unsigned char) buffer[i]);
+*/
+DEBUG_OUT4("\n");
+DEBUG_END3;
+  
+
+            sendByte(MRP_NACK); 
+            continue;
+        }
+        
+        
+DEBUG_OUT4("length: %i, crc: %i\n", expected_len, crc);
+DEBUG_OUT4("GetBytes = true\n");
+        
+        // CRC check
+        if (crc != crc8(buffer, expected_len)) 
+        {
+DEBUG_OUT5("Error: CRC mismatch %i != %i\n", crc, crc8(buffer, expected_len));
+DEBUG_END3;
+            sendByte(MRP_NACK); 
+            continue;
+        }
+        sendByte(MRP_ACK); 
+DEBUG_OUT2("Receive block successfull!...\n");
+DEBUG_END2;
+        *out_len = expected_len;
+        return 1;
+    }
+DEBUG_OUT5("Error: Max retries reached...\n");
+DEBUG_END3;
+  diffError = 1;
+  return 0;
+}
+
+// 0 error
+// 1 success
+// very secure and clean
+// but slow, each ACK takes about 15ms
+// 1500 byte = 12*15ms
+// VERY SLOW!
+int mrp_receive_block(unsigned char* buffer, int maxlen, int* out_len) {
+    unsigned char seq = 0;
+    int offset = 0;
+    int expected_len = 0;
+    unsigned char retries = 0;
+    while (retries++ < MRP_MAX_RETRIES)  
+    {
+        unsigned char b;
+
+        // Wait for Start Byte
+        do 
+        {
+            getByteBlocking(&b);
+//DEBUG_OUT4("Byte received: $%02x\n", b);
+        } while (b != MRP_START_DATA);
+ 
+        // Read packet header
+        unsigned char pkt_seq, chunk_len, crc;
+        getByteBlocking(&pkt_seq);
+DEBUG_OUT4("Seq: %i\n", pkt_seq);
+        getByteBlocking(&chunk_len);
+DEBUG_OUT4("chunk_len: %i\n", chunk_len);
+        getByteBlocking(&crc);
+DEBUG_OUT4("crc: %i\n", crc);
+
+/*
+ * Opposite is not expecting to get ACK or NACK
+        if (chunk_len > MRP_CHUNK_SIZE) 
+        {
+DEBUG_OUT4("Chunk Len to large!\n");
+            sendByte(MRP_NACK); 
+            sendByte(pkt_seq);
+            continue;
+        }
+*/
+        // Read chunk payload
+        unsigned char chunk[MRP_CHUNK_SIZE];
+        if (!getBytes(chunk, chunk_len))
+        {
+
+DEBUG_OUT5("GetBytes = false (%i)\n", chunk_len);
+DEBUG_END3;
+          sendByte(MRP_NACK); sendByte(pkt_seq);
+            continue;
+        }
+DEBUG_OUT4("GetBytes = true\n");
+        
+        // CRC check
+        if (crc != crc8(chunk, chunk_len)) {
+DEBUG_OUT5("Error: CRC mismatch %i != %i\n", crc, crc8(chunk, chunk_len));
+DEBUG_END3;
+          sendByte(MRP_NACK); sendByte(pkt_seq);
+            continue;
+        }
+
+        // Sequence check
+        if (pkt_seq != seq) {
+DEBUG_OUT5("Error: Sequence mismatch %i != %i\n", pkt_seq, seq);
+DEBUG_END3;
+          sendByte(MRP_NACK); sendByte(pkt_seq);
+            continue;
+        }
+        if (seq == 0) {
+            // Extract total expected length from first two bytes
+            expected_len = ((int)chunk[0] << 8) | chunk[1];
+            if (expected_len > maxlen) 
+            {
+DEBUG_OUT5("Error: Data would overflow buffer...\n");
+DEBUG_END3;
+              return 0;
+            }
+
+            unsigned char data_bytes = chunk_len - 2;
+            for (unsigned char i = 0; i < data_bytes; i++)
+                buffer[i] = chunk[2 + i];
+            offset = data_bytes;
+        } 
+        else 
+        {
+            if (offset + chunk_len > expected_len) 
+            {
+DEBUG_OUT5("Error: More data than expected... %i != %i\n", offset + chunk_len , expected_len);
+DEBUG_END3;
+              return 0;
+            }
+            for (unsigned char i = 0; i < chunk_len; i++)
+                buffer[offset + i] = chunk[i];
+            offset += chunk_len;
+        }
+
+        sendByte(MRP_ACK); sendByte(seq);
+        seq++;
+
+        if (offset >= expected_len) 
+        {
+DEBUG_OUT2("Receive block successfull!...\n");
+DEBUG_END2;
+            *out_len = expected_len;
+            return 1;
+        }
+        retries = 0;
+        continue;
+    }
+DEBUG_OUT5("Error: Leaving Receive without a cause...\n");
+DEBUG_END3;
+  return 0;
+}
+
 
 int tryToConnect()
 {
@@ -316,9 +528,9 @@ int tryToConnect()
     }
     
     int stringEnd=0; // make sure string is terminated with a "\n"
-    while (RPI_AuxMiniUartReadPending())
+    while (RPI_AuxUartReadPending())
     {
-      char r = RPI_AuxMiniUartRead();
+      char r = RPI_AuxUartRead();
       if (r == '\n')
       {
         DEBUG_OUT("String end Found: %s\n, buffer");
@@ -386,62 +598,6 @@ int tryToConnect()
     }
   } 
   return VTERM_NO_CONNECTED;
-}
-
-/* TIMING */
-#define __CLOCKS_PER_SEC__ ((uint64_t)1000000) // in microseconds
-unsigned long long getOtherTimer(); // pi_support.c
-uint64_t clockCurrent;
-uint64_t clockStart;
-void inline vt_setTimerStart()
-{
-  clockStart = getOtherTimer();
-}
-uint64_t inline vt_getTimerDifMicro()
-{
-  clockCurrent = getOtherTimer();
-  return clockCurrent-clockStart;
-}
-double inline vt_getTimerDifMilli()
-{
-  return ((double)vt_getTimerDifMicro())/((double)1000.0);
-}
-double inline vt_getTimerDifSeconds()
-{
-  return ((double)vt_getTimerDifMilli())/((double)1000.0);
-}
-/* TIMING END*/
-
-// 0 = ok
-// 1 = error
-int vt_UARTGetBinaryDataChunk(int size, unsigned char *romBuffer)
-{
-  int counter = 0; 
-  uint64_t clockStart;
-  uint64_t expectedTime = __CLOCKS_PER_SEC__ * ((uint64_t)(size*10)); // 10 bits, 8 data, 1 start, 1 stop bit
-  expectedTime = expectedTime / ((uint64_t)912600); // size is in bytes -> bits, speed of serial is 912600 baud -> bits per second
-  uint64_t timeOutDif = expectedTime*1.1f; // tolerance
-
-  clockStart = getOtherTimer();
-  while (1)
-  {
-    while (RPI_AuxMiniUartReadPending())
-    {
-      unsigned char r = (unsigned char) RPI_AuxMiniUartRead();
-      romBuffer[counter++] = r;
-      if (counter == size)
-      {
-      DEBUG_OUT2("ok: %i, %i\n", (size-counter), counter);
-        return 0;
-      }
-    }
-    if ((getOtherTimer()-clockStart)>timeOutDif)
-    {
-      FILE_OUT("Timeout, missing: %i.\n", (size-counter));
-      return (size-counter);
-    }
-  }
-  return size+1; // NOK
 }
 
 // 8 bit only
@@ -760,38 +916,7 @@ do{ \
 }
 
 
-int getOne8BitValueTimed()
-{
-  uint32_t startTime = v_micros();
-  while (1)
-  {
-    while (RPI_AuxMiniUartReadPending())
-    {
-      return (unsigned char) RPI_AuxMiniUartRead();
-    }
-    if (v_micros()-startTime>TIME_OUT_VALUE)
-    {
-      break;
-    }
-  }
-  return 1000; // anything > 255 is 'error'
-} 
 
-void RPI_AuxMiniUartWriteTimed(char c)
-{
-    uint32_t startTime = v_micros();
-    /* Wait until the UART has an empty space in the FIFO */
-    while( ( auxillary->MU_LSR & AUX_MULSR_TX_EMPTY ) == 0 ) 
-    { 
-      if (v_micros()-startTime>TIME_OUT_VALUE)
-      {
-        DEBUG_OUT("Write Byte timeout!\n");
-        return;
-      }
-    }
-    /* Write the character to the FIFO for transmission */
-    auxillary->MU_IO = c;
-}
 
 int waitRecalGot = 0;
 int waitRecalFailed = 0;
@@ -805,21 +930,21 @@ int waitForStartSignal()
   {
     if (diffError)
     {
-      RPI_AuxMiniUartWriteTimed(_ERR_);
+      UARTWriteTimed(_ERR_, TIME_OUT_VALUE);
       diffError = 0;
     }
     else
     {
-      RPI_AuxMiniUartWriteTimed(_ACK_);
+      UARTWriteTimed(_ACK_,TIME_OUT_VALUE);
     }
     
     
-    RPI_AuxMiniUartWriteTimed(currentButtonState);
-    RPI_AuxMiniUartWriteTimed(currentJoy1X);
-    RPI_AuxMiniUartWriteTimed(currentJoy1Y);
+    UARTWriteTimed(currentButtonState, TIME_OUT_VALUE);
+    UARTWriteTimed(currentJoy1X, TIME_OUT_VALUE);
+    UARTWriteTimed(currentJoy1Y, TIME_OUT_VALUE);
 
 
-    int v = getOne8BitValueTimed();
+    int v = getOne8BitValueTimed(TIME_OUT_VALUE);
 
     // trying to detect MAME shutdown
     if (v==1000)

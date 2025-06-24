@@ -261,7 +261,7 @@ int _wait( int *status )
 
 void outbyte( char b )
 {
-    RPI_AuxMiniUartWrite( b );
+    RPI_AuxUartWrite( b );
 }
 
 /* Write to a file. libc subroutines will use this system routine for output to

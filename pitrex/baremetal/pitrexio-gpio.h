@@ -6,6 +6,17 @@
 #define PITREXIO_GPIO_H
 
 
+
+#ifdef USE_PL011_UART
+#undef USE_MINI_UART
+#else
+#define USE_MINI_UART 1
+#endif
+
+
+
+
+
 // PiTrex Discrete Read & Write Functions, via Raspberry Pi GPIO:
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

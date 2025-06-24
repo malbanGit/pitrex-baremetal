@@ -1,41 +1,31 @@
-
-
+extern unsigned int roundCycles;
 extern int pendingReturnToPiTrex;
+extern volatile int pendingDisableInterrupts;
+extern volatile int pendingEnableInterrupts;
+extern volatile int pendingDisableMultiCore;
+extern volatile int pendingEnableMultiCore;
+extern uint32_t waitClientHzWait;
 
 int echoOn = 1;
+static char commandBuffer[80];
+static char *commandBufferPointer;
+static int commandBufferCounter;
 
-/*
-extern int currentSwitch;
-extern int currentRead;
-extern int currentWrite;
-extern int currentWait;
-extern int currentStage;
-extern int currentT1;
-extern int currentt1Counter;
-void iCommand(void)
+char parameter1[10];
+char parameter2[10];
+char parameter3[10];
+char parameter4[10];
+char parameter5[10];
+char command[10];
+
+char *paramters[] = 
 {
-    printf("SMP debug values\r\n");
-    printf("currentSwitch: %i \r\n", currentSwitch);
-    printf("currentRead: %i \r\n", currentRead);
-    printf("currentWrite: %i \r\n", currentWrite);
-    printf("currentWait: %i \r\n", currentWait);
-    printf("currentStage: %i \r\n", currentStage);
-    printf("currentT1: %08x \r\n", currentT1);
-    printf("currentt1Counter: %i \r\n", currentt1Counter);
-    printf("irqButtons: %i \r\n", irqButtons);
-    printf("irqSound: %i \r\n", irqSound);
-    printf("irqJoyAnalog: %i \r\n", irqJoyAnalog);
-    printf("irqJoyDigital: %i \r\n", irqJoyDigital);
-    printf("currentButtonState: %i \r\n", currentButtonState);
-}
-*/
-
-#define MAX_STRING_SIZE 256
-#define MAX_FILE_SIZE (1024*1024*10) // 10 MB Max
-unsigned char data[MAX_FILE_SIZE]; 
-void UARTGetString(char *buffer);
-int UARTGetBinaryData(int size, unsigned char *romBuffer);
-int UARTGetAsciiInt();
+        parameter1,
+        parameter2,
+        parameter3,
+        parameter4,
+        parameter5
+};
 
 void filecopyCommand(void)
 {
@@ -61,7 +51,6 @@ void filecopyCommand(void)
   fclose(f);
   printf("Pi:Filecopy written to: %s (%i bytes)!\n", buffer, size);
 }
-
 void resetCommand(void)
 {
   int *loaderAvailable = (int *)LOADER_AVAILABLE;
@@ -85,7 +74,6 @@ void resetCommand(void)
   printf("c: Reset command issued...\r\n");
   pendingReturnToPiTrex = 1;
 }
-
 void toLoader(void)
 {
   int *loaderAvailable = (int *)LOADER_AVAILABLE;
@@ -108,7 +96,6 @@ void toLoader(void)
   printf("c: toLoader command issued...\r\n");
   pendingReturnToPiTrex = 1;
 }
-
 void reBoot(void)
 {
   int *loaderAvailable = (int *)LOADER_AVAILABLE;
@@ -133,8 +120,6 @@ void reBoot(void)
   printf("c: reBoot command issued...\r\n");
   pendingReturnToPiTrex = 1;
 }
-
-
 void saveCommand(void)
 {
   printf("Saving config...\r\n");
@@ -158,7 +143,6 @@ void setMaxStrengthCommand(void)
   
   MAX_USED_STRENGTH = sms;
 }
-
 void setCrankyValueCommand(void)
 {
   unsigned int c = bm_atoi(getParameter(0),10);
@@ -194,7 +178,6 @@ void setRefreshCommand(void)
   
   v_setRefresh(c);
 }
-
 void setMaximumConsecutiveDrawsCommand(void)
 {
   unsigned int c = bm_atoi(getParameter(0),10);
@@ -263,8 +246,6 @@ void setCycleEQCommand(void)
   
   setCycleEquivalent(c);
 }
-
-
 void setOrientationCommand(void)
 {
   unsigned int c = bm_atoi(getParameter(0),10);
@@ -299,7 +280,6 @@ void setMyDebugCommand(void)
   
   myDebug = c;
 }
-
 // pstate is used in wait recal!
 void setPipelineCommand(void)
 {
@@ -318,7 +298,6 @@ void setPipelineCommand(void)
   
   usePipeline = c;
 }
-
 void setDoubleTimerCommand(void)
 {
   unsigned int c = bm_atoi(getParameter(0),10);
@@ -336,8 +315,6 @@ void setDoubleTimerCommand(void)
   
   useDoubleTimer = c;
 }
-
-
 void setBeamOffInDrawCommand(void)
 {
   unsigned int c = bm_atoi(getParameter(0),10);
@@ -372,7 +349,6 @@ void setScaleStrengthCommand(void)
   
   SCALE_STRENGTH_DIF = c;
 }
-
 void setMinimumScaleCommand(void)
 {
   unsigned int c = bm_atoi(getParameter(0),10);
@@ -407,8 +383,6 @@ void setBufferTypeCommand(void)
   
   bufferType = c;
 }
-extern volatile int pendingDisableInterrupts;
-extern volatile int pendingEnableInterrupts;
 void irqCommand(void)
 {
   unsigned int c = bm_atoi(getParameter(0),10);
@@ -443,10 +417,6 @@ void irqCommand(void)
     }
   }
 }
-
-extern volatile int pendingDisableMultiCore;
-extern volatile int pendingEnableMultiCore;
-
 void smpCommand(void)
 {
   unsigned int c = bm_atoi(getParameter(0),10);
@@ -471,8 +441,6 @@ void smpCommand(void)
     v_setupSMPHandling();
   }
 }
-
-
 void setZeroDifMaxCommand(void)
 {
   unsigned int c = bm_atoi(getParameter(0),10);
@@ -490,9 +458,6 @@ void setZeroDifMaxCommand(void)
   
   resetToZeroDifMax = c;
 }
-
-extern uint32_t waitClientHzWait;
-
 void setClientRefreshCommand(void)
 {
   unsigned int c = bm_atoi(getParameter(0),10);
@@ -511,18 +476,14 @@ void setClientRefreshCommand(void)
   clientHz = c;
   waitClientHzWait = 0;
 }
-
 void getPipelineCount(void)
 {
     printf("Pipeline size: %i \r\n", lastPLSize);
 }
-
-extern unsigned int roundCycles;
 void outputRoundCyclesCommand(void)
 {
   printf("Cycles used last round: %i (%i)\r\n", roundCycles/666, clientRate);
 }
-
 void setBrowseModeCommand(void)
 {
   printf("Entering browse mode\r\n");
@@ -536,7 +497,6 @@ void debugCommand(void)
   printf("Entering debug mode\r\n");
   executeDebugger(3);// break
 }
-
 void helpCommand(void);
 Command commandList[] =
 { 
@@ -580,8 +540,6 @@ Command commandList[] =
         {1,"debug","dbg",           "debug            | dbg             -> enter debug mode (if supported)\r\n" ,  debugCommand },
         {0,"", "", "" ,  (void (*)(void)) 0 }
 };
-
-
 Command dummyCommandList[] =
 {
         {0,"", "", "" ,  (void (*)(void)) 0 }
@@ -607,13 +565,6 @@ void helpCommand(void)
                 commandListCounter++;
         }
 }
-
-
-
-
-static char commandBuffer[80];
-static char *commandBufferPointer;
-static int commandBufferCounter;
 void v_initDebug()
 {
         commandBufferPointer = commandBuffer;
@@ -621,9 +572,8 @@ void v_initDebug()
         userCommandList = dummyCommandList;
 
         // printf("Command Flushing UART Read\n");
-        while (RPI_AuxMiniUartReadPending()) RPI_AuxMiniUartRead();
+        while (RPI_AuxUartReadPending()) RPI_AuxUartRead();
 }
-
 // increases the pointer until it stays on the first character after the first space
 char *skipPastSpace(char *p)
 {
@@ -634,7 +584,6 @@ char *skipPastSpace(char *p)
         while (*p == ' ') p++;
         return p;
 }
-
 // copies from source to destination, until the first space/0
 // changed source is return, placed after SPACE
 char *untilSpace(char *source, char *destination)
@@ -647,22 +596,6 @@ char *untilSpace(char *source, char *destination)
         *destination = (char)0;
         return source;
 }
-
-char parameter1[10];
-char parameter2[10];
-char parameter3[10];
-char parameter4[10];
-char parameter5[10];
-char command[10];
-
-char *paramters[] = 
-{
-        parameter1,
-        parameter2,
-        parameter3,
-        parameter4,
-        parameter5
-};
 // max 5
 char *getCommandParameter(int parameterNo)
 {
@@ -709,7 +642,6 @@ char *getCommand()
   place = untilSpace(place, command);
   return command;
 }
-
 char *getParameter(int p)
 {
   if ((p<0)||(p>4))
@@ -719,7 +651,6 @@ char *getParameter(int p)
   fillParameters();
   return paramters[p];
 }
-
 void handleCommand()
 {
         if (strlen(commandBuffer) == 0) 
@@ -783,150 +714,16 @@ void handleCommand()
         }
         printf("unkown command: '%s'\r\n",commandBuffer );
 }
-
-// blocking function
-// terminated ("\n") ascii number 
-// 0 = success
-// -1 = error
-int UARTGetAsciiInt()
-{
-  // expect fileSize in ASCII + return
-  int ret = -1; // error
-#define MAXINT_CHAR_SIZE 20
-  char buffer[MAXINT_CHAR_SIZE];
-  int counter = 0;
-  buffer[0] = 0;
-  
-  while (1)
-  {
-    while (RPI_AuxMiniUartReadPending())
-    {
-      //printf("Command reading UART INT\n");
-
-      char r = RPI_AuxMiniUartRead();
-      
-      
-	if (r != '\n')
-	{
-	    if (counter<MAXINT_CHAR_SIZE-1)
-	    {
-		buffer[counter++] = r;
-		buffer[counter] = (char) 0;
-	    }
-	    else return ret; // error
-	}
-	else if (r == 0x03) // CTRL C -> Abort
-	{
-	    return ret; // error
-	}
-	else
-	{
-	  ret = atoi(buffer);
-	  if (ret == 0)
-	    return -1;
-	  printf("Pi:Expecting: %s\n",buffer );
-	  return ret;
-	}
-    }
-  }
-  return ret;
-}
-
-// blocking function
-// terminated ("\n") string
-#define MAX_STRING_SIZE 256
-void UARTGetString(char *buffer)
-{
-  // expect name in ASCII + return
-  int ret = -1; // error
-  int counter = 0;
-  buffer[0] = 0;
-  
-  while (1)
-  {
-    while (RPI_AuxMiniUartReadPending())
-    {
-      // printf("Command reading UART String\n");
-      char r = RPI_AuxMiniUartRead();
-      if (r == '\n')
-      {
-        return;
-      }
-      if (r != '\n')
-      {
-          if (counter<MAX_STRING_SIZE-1)
-          {
-            buffer[counter++] = r;
-            buffer[counter] = (char) 0;
-          }
-          else return; // error
-      }
-    }
-  } 
-}
-
-
-// in nano seconds 
-//uint64_t getSystemTimerNano(); // NOT WORKING!
-//void RPI_WaitMicroSeconds( uint32_t us );
-// #define __CLOCKS_PER_SEC__ ((uint64_t)1000000000)
-
-#define __CLOCKS_PER_SEC__ ((uint64_t)1000000) // in microseconds
-unsigned long long getOtherTimer(); // pi_support.c
-
-
-
-// 0 = ok
-// 1 = error
-int UARTGetBinaryData(int size, unsigned char *romBuffer)
-{
-  int ret = -1;
-  int counter = 0; 
-
-  uint64_t expectedTime = __CLOCKS_PER_SEC__ * ((uint64_t)(size*10)); // 10 bits, 8 data, 1 start one stop bit
-           expectedTime = expectedTime / ((uint64_t)912600); // size is in bytes -> bits, speed of serial is 912600 baud -> bits per second
-  uint64_t timeOutDif = expectedTime*3;
-  if (timeOutDif<__CLOCKS_PER_SEC__) timeOutDif = __CLOCKS_PER_SEC__;
-  
-  uint64_t clockCurrent;
-  uint64_t clockStart;
-  clockCurrent = getOtherTimer();
-  clockStart = clockCurrent;
-  
-  while (1)
-  {
-    while (RPI_AuxMiniUartReadPending())
-    {
-      unsigned char r = (unsigned char) RPI_AuxMiniUartRead();
-
-      romBuffer[counter++] = r;
-      if (counter == size)
-      {
-    //	printf("Pi:Bin transfered.\n");
-        return 0;
-      }
-    }
-    
-    clockCurrent = getOtherTimer();
-    if ((clockCurrent-clockStart)>timeOutDif)
-    {
-      printf("Pi:Recieve Timeout, Missing: %i.\n", (size-counter));
-      return 1;
-    }
-  }
-  return 0; // OK
-}
-
 void handleUARTInterface()
 {
-        while (RPI_AuxMiniUartReadPending())
+        while (RPI_AuxUartReadPending())
         {
           // printf("Command reading UART (command queue)\n");
-          char r = RPI_AuxMiniUartRead();
+          char r = RPI_AuxUartRead();
 
           if (!browseMode)
           {
-            if (echoOn) RPI_AuxMiniUartWrite(r);
+            if (echoOn) RPI_AuxUartWrite(r);
             if (r != '\n')
             {
               if (commandBufferCounter<78)

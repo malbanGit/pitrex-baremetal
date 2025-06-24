@@ -1249,25 +1249,32 @@ void bzInputHandler()
 
   if ((currentButtonState & 0x01) && (currentButtonState & 0x08))
     enterDip = 1;
-  
-      if (stramash_config1)
-      {
-        switches [0].leftfwd = (currentJoy1Y>JOYSTICK_CENTER_MARGIN);
-        switches [0].leftrev = (currentJoy1Y<-JOYSTICK_CENTER_MARGIN);
-        switches [0].rightfwd = (currentButtonState & 0x01)?1:0; // button 1 port 1
-        switches [0].rightrev = (currentButtonState & 0x02)?1:0; // button 2 port 1
-        switches [0].fire = (currentButtonState & 0x04)?1:0; // button 3 port 1
-        switches [0].fire |= (currentButtonState & 0x08)?1:0; // button 4 port 1
-      }
-      else if (stramash_config2)
-      {
-        switches [0].leftfwd = (currentJoy2Y>JOYSTICK_CENTER_MARGIN);
-        switches [0].leftrev = (currentJoy2Y<-JOYSTICK_CENTER_MARGIN);
-        switches [0].rightfwd = (currentButtonState & 0x10)?1:0; // button 1 port 1
-        switches [0].rightrev = (currentButtonState & 0x20)?1:0; // button 2 port 1
-        switches [0].fire = (currentButtonState & 0x40)?1:0; // button 3 port 1
-        switches [0].fire |= (currentButtonState & 0x80)?1:0; // button 4 port 1
-      }
+
+  if (stramash_config1)
+  {
+    switches [0].leftfwd = (currentJoy1Y>JOYSTICK_CENTER_MARGIN);
+    switches [0].leftrev = (currentJoy1Y<-JOYSTICK_CENTER_MARGIN);
+    switches [0].rightfwd = (currentButtonState & 0x01)?1:0; // button 1 port 1
+    switches [0].rightrev = (currentButtonState & 0x02)?1:0; // button 2 port 1
+    switches [0].fire = (currentButtonState & 0x04)?1:0; // button 3 port 1
+    switches [0].fire |= (currentButtonState & 0x08)?1:0; // button 4 port 1
+
+    // addition
+    start1 = currentButtonState & 0x04;  // button 3 on port 1
+  }
+  else if (stramash_config2)
+  {
+    switches [0].leftfwd = (currentJoy2Y>JOYSTICK_CENTER_MARGIN);
+    switches [0].leftrev = (currentJoy2Y<-JOYSTICK_CENTER_MARGIN);
+    switches [0].rightfwd = (currentButtonState & 0x10)?1:0; // button 1 port 1
+    switches [0].rightrev = (currentButtonState & 0x20)?1:0; // button 2 port 1
+    switches [0].fire = (currentButtonState & 0x40)?1:0; // button 3 port 1
+    switches [0].fire |= (currentButtonState & 0x80)?1:0; // button 4 port 1
+
+    // addition
+    start1 = currentButtonState & 0x40;  // button 3 on port 2
+    
+  }
   else if (yates_config)
   {
     switches [0].leftfwd = (currentButtonState & 0x10)?1:0; // button 1 port 2

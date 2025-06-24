@@ -1,0 +1,28 @@
+CC		= gcc
+CFLAGS		= -Wall -O3 -DUSE_READLINE -DUSE_HISTORY -DTRANSLATE_ONLY
+
+
+
+all: translator
+
+translator.o: translator.c game.h memory.h
+	$(CC) $(CFLAGS) -o translator.o -c translator.c
+game.o: game.c game.h memory.h display.h sim6502.h mathbox.h pokey.h
+	$(CC) $(CFLAGS) -o game.o -c game.c 
+memory.o: memory_org.c game.h memory.h
+	$(CC) $(CFLAGS) -o memory.o -c memory_org.c 
+display.o: display.c game.h memory.h display.h
+	$(CC) $(CFLAGS) -o display.o -c display.c
+no_interface.o: no_interface.c display.h
+	$(CC) $(CFLAGS) -o no_interface.o -c no_interface.c
+mathbox.o: mathbox.c mathbox.h
+	$(CC) $(CFLAGS) -o mathbox.o -c mathbox.c
+pokey.o: pokey_org.c pokey.h memory.h
+	$(CC) $(CFLAGS) -o pokey.o -c pokey_org.c
+
+
+translator: translator.o game.o memory.o display.o no_interface.o mathbox.o pokey.o Makefile
+	$(CC) $(CFLAGS) -o translator translator.o game.o memory.o display.o no_interface.o mathbox.o pokey.o
+
+clean:
+	rm -f translator *.o

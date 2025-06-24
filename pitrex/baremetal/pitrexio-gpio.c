@@ -240,12 +240,19 @@ volatile uint8_t __bcm2835_gpio_lev(uint8_t pin)
   return _bcm2835_gpio_lev(pin);
 }
 
+
 // READ: For ALT0 (UART0) on 14-15, use 0x24249. For ALT5 (UART1), use 0x12249.
 // GPIO Pins 10-13 = OUTPUT| 14-15 = TTY | 16-19 = INPUT
 // WRITE: For ALT0 (UART0) on 14-15, use 0x9264249. For ALT5 (UART1), use 0x9252249.
 // UART 1
-#define PIN_READ_DEF1 do{_bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPFSEL1/4), 0x12249);_bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPFSEL2/4), 0x8000);} while(0)
-#define PIN_WRITE_DEF1 do{_bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPFSEL1/4), 0x9252249);_bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPFSEL2/4), 0x8249);} while(0)
+
+#ifdef USE_PL011_UART
+  #define PIN_READ_DEF1 do{_bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPFSEL1/4), 0x24249);_bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPFSEL2/4), 0x8000);} while(0)
+  #define PIN_WRITE_DEF1 do{_bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPFSEL1/4), 0x9264249);_bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPFSEL2/4), 0x8249);} while(0)
+#else // Mini Uart
+  #define PIN_READ_DEF1 do{_bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPFSEL1/4), 0x12249);_bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPFSEL2/4), 0x8000);} while(0)
+  #define PIN_WRITE_DEF1 do{_bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPFSEL1/4), 0x9252249);_bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPFSEL2/4), 0x8249);} while(0)
+#endif
 
 #define INIT_VIA_READ1 \
     do \
@@ -506,9 +513,14 @@ int vectrexinit (char viaconfig)
      //NOTE: This will disable other functions of these GPIO pins (except for the serial terminal on the UART)
       //Input/Output Modes:
      _bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPFSEL0/4), 0x9240000);    // GPIO Pins 0-5   = INPUT | 6-9   = OUTPUT
-     _bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPFSEL1/4), 0x24249);
      _bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPFSEL2/4), 0x8000);       // GPIO Pins 20-24 = INPUT | 25    = OUTPUT | 26-29 = INPUT
 
+  #ifdef USE_PL011_UART
+      _bcm2835_peri_write((bcm2835_gpio + BCM2835_GPFSEL1/4), 0x24249);  // ALT0 → UART0 (PL011)
+  #else
+      _bcm2835_peri_write((bcm2835_gpio + BCM2835_GPFSEL1/4), 0x12249);  // ALT5 → mini UART
+  #endif
+     
      //Output Levels:
      _bcm2835_peri_write ((bcm2835_gpio + BCM2835_GPCLR0/4), 0xFFFFDFFF);    //Set all outputs Low except R/#W
      bcm2835_gpio_set_pud (27, BCM2835_GPIO_PUD_UP);  // Enable Pull-Up on #HALT
